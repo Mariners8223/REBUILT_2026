@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.commands.Drive.DriveCommand;
 
 import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 
 
@@ -28,6 +29,8 @@ public class RobotContainer {
         driveBase = new DriveBase();
 
         configureDriveBindings();
+
+        SmartDashboard.putNumber("Shooter Speed", 0.0);
         
     }
 

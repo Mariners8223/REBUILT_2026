@@ -4,13 +4,14 @@
 
 package frc.robot.subsystems.Shooter.ShooterTest;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Shooter.ShooterTest.ShooterTestIO.ShooterInputsTest;
 
 public class ShooterTest extends SubsystemBase {
   private final ShooterTestIO io;
   private final ShooterInputsTest inputs = new ShooterInputsTest();
-  
   /** Creates a new ShooterTest. */
   public ShooterTest(ShooterTestIO io) {
     this.io = io;
@@ -20,10 +21,14 @@ public class ShooterTest extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     io.update(inputs);
+    Logger.processInputs("ShooterTest", inputs);
+
+    setDutyCycle(inputs.sliderValue);
   }
-  public void setDutyCycle(double speedPercentage)
+  
+  public void setDutyCycle(double speed)
   {
-    io.setdutycycle(speedPercentage);
+    io.setDutyCycle(speed);
   }
 
   public void stop()

@@ -11,11 +11,13 @@ import org.littletonrobotics.junction.AutoLog;
 /** Add your docs here. */
 public interface ShooterTestIO {
     @AutoLog
-    class ShooterInputsTest{
-        
+    public static class ShooterInputsTest{
+        public double speed = 0.0;
+        public double sliderValue = 0.0;
     }
-    void setDutyCycle(double speedPercentage);//between 1 and -1
+    void setDutyCycle(double speed);//between 1 and -1
     void stop ();//dutyCycle = 0
+    double getSpeed();
     void update(ShooterInputsTest inputs);
     
 } 
