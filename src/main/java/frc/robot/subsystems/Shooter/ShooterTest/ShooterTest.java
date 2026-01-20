@@ -21,9 +21,9 @@ public class ShooterTest extends SubsystemBase {
     // This method will be called once per scheduler run
     io.update(inputs);
   }
-  public void setDutyCycle(double speedPercentage)
+  public void setDutyCycle(double speed)
   {
-    io.setdutycycle(speedPercentage);
+    io.setdutycycle(speed);
   }
 
   public void stop()
