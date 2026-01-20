@@ -5,6 +5,10 @@
 package frc.robot.subsystems.Shooter.ShooterTest;
 
 import org.littletonrobotics.junction.AutoLog;
+import org.littletonrobotics.junction.LogTable;
+import org.littletonrobotics.junction.inputs.LoggableInputs;
+
+import frc.robot.subsystems.Shooter.ShooterTest.ShooterTestConstants.Motor1;
 
 
 
@@ -12,12 +16,14 @@ import org.littletonrobotics.junction.AutoLog;
 public interface ShooterTestIO {
     @AutoLog
     public static class ShooterInputsTest{
-        public double speed = 0.0;
-        public double sliderValue = 0.0;
-    }
+
+        public double speed;
+        public double sliderValue;
+        }
+    
     void setDutyCycle(double speed);//between 1 and -1
     void stop ();//dutyCycle = 0
     double getSpeed();
-    void update(ShooterInputsTest inputs);
+    void Update(ShooterInputsTest inputs);
     
 } 

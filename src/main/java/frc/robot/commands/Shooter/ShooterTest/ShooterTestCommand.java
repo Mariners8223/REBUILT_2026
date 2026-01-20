@@ -5,12 +5,20 @@
 package frc.robot.commands.Shooter.ShooterTest;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.Shooter.ShooterTest.ShooterTest;
+import frc.robot.subsystems.Shooter.ShooterConstants;
+
+
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ShooterTestCommand extends Command {
   /** Creates a new ShooterTestCommand. */
-  public ShooterTestCommand() {
+  private final ShooterTest ShooterTest;
+  private final ShooterConstants constants = new ShooterConstants();
+  public ShooterTestCommand(ShooterTest shooterTest) {
     // Use addRequirements() here to declare subsystem dependencies.
+    ShooterTest = shooterTest;
+    addRequirements(shooterTest);
   }
 
   // Called when the command is initially scheduled.
@@ -20,7 +28,7 @@ public class ShooterTestCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    setDutyCycle(speed);//TODO: fix this shit
+    ShooterTest.setDutyCycle(constants.speed);//TODO: fix this shit
   }
 
   // Called once the command ends or is interrupted.

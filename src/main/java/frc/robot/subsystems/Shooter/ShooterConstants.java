@@ -5,10 +5,9 @@
 package frc.robot.subsystems.Shooter;
 
 /** Add your docs here. */
-public static class ShooterConstants {
+public class ShooterConstants {
 
-    public static ShooterMotor{
-        public static final 
-    }
+    public static final double speed = 1;
+    
 
 }

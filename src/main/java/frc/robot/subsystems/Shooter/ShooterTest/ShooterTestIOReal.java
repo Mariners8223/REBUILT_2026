@@ -7,6 +7,7 @@ package frc.robot.subsystems.Shooter.ShooterTest;
 
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystems.Shooter.ShooterIO;
 import frc.robot.subsystems.Shooter.ShooterTest.ShooterTestConstants.Motor2;
 import frc.robot.subsystems.Shooter.ShooterTest.ShooterTestIO.ShooterInputsTest;
 import frc.util.MarinersController.MarinersTalonFX;
@@ -14,11 +15,11 @@ import frc.util.MarinersController.MarinersController.ControlMode;
 
 
 /** Add your docs here. */
-public class ShooterTestIOReal {
+public class ShooterTestIOReal implements ShooterTestIO{
 
 
     private final MarinersTalonFX Motor1;
-    private final MarinersTalonFX Moter2;
+    private final MarinersTalonFX Motor2;
 
 
     public ShooterTestIOReal(){
@@ -33,6 +34,7 @@ public class ShooterTestIOReal {
                                                     ShooterTestConstants.Motor1.GEAR_RATION);
         motor.setMotorInverted(ShooterTestConstants.Motor1.IS_INVERTED);
         motor.setMotorIdleMode(true);
+        return motor;
     }
 
 
@@ -42,6 +44,7 @@ public class ShooterTestIOReal {
                                                     ShooterTestConstants.Motor2.GEAR_RATION);
         motor.setMotorInverted(ShooterTestConstants.Motor2.IS_INVERTED);
         motor.setMotorIdleMode(true);
+        return motor;
     }
 
 

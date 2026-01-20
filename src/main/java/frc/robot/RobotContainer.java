@@ -7,7 +7,9 @@ import frc.robot.commands.Drive.DriveCommand;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.DriveTrain.DriveBase;
-
+import frc.robot.commands.Shooter.ShooterTest.ShooterTestCommand;
+import frc.robot.subsystems.Shooter.*;
+import frc.robot.subsystems.Shooter.ShooterTest.ShooterTest;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -17,6 +19,7 @@ import frc.robot.subsystems.DriveTrain.DriveBase;
  */
 public class RobotContainer {
     public static DriveBase driveBase;
+    public static ShooterTest shooterTest;
 
     public static CommandPS5Controller driveController;
     public static CommandXboxController driveXboxController;
@@ -27,6 +30,7 @@ public class RobotContainer {
         driveXboxController = new CommandXboxController(0);
 
         driveBase = new DriveBase();
+        shooterTest = new ShooterTest();
 
         configureDriveBindings();
 
@@ -39,6 +43,7 @@ public class RobotContainer {
         new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(new StartEndCommand(() ->
             driveBase.setDefaultCommand(new DriveCommand(driveBase, driveXboxController)),
             driveBase::removeDefaultCommand).ignoringDisable(true));
+        driveController.cross().whileTrue(new ShooterTestCommand(shooterTest));
    }
    
 
