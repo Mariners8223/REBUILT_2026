@@ -21,7 +21,7 @@ public interface ShooterTestIO{
         double sliderValue;
     }
     
-    void setDutyCycle(double sliderValue);//between 1 and -1
+    void setDutyCycle(double speed);//between 1 and -1
     void stop ();//dutyCycle = 0
     double getSpeed();
     void Update(ShooterInputsTest inputs);

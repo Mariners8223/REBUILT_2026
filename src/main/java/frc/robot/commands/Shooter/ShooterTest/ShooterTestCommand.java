@@ -12,7 +12,7 @@ import frc.robot.subsystems.Shooter.ShooterConstants;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ShooterTestCommand extends Command {
-  /** Creates a new ShooterTestCommand. */
+/** Creates a new ShooterTestCommand. */
   private final ShooterTest ShooterTest;
   private final ShooterConstants constants = new ShooterConstants();
   public ShooterTestCommand(ShooterTest shooterTest) {

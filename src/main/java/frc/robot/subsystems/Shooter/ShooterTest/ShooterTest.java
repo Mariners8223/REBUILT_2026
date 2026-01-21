@@ -34,9 +34,9 @@ public class ShooterTest extends SubsystemBase {
     setDutyCycle(inputs.sliderValue);
   }
   
-  public void setDutyCycle(double sliderValue)
+  public void setDutyCycle(double speed)
   {
-    io.setDutyCycle(sliderValue);
+    io.setDutyCycle(speed);
   }
 
   public void stop()
