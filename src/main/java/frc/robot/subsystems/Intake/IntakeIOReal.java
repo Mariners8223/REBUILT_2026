@@ -9,7 +9,7 @@ public class IntakeIOReal implements IntakeIO{
     private final MarinersSparkBase topMotor;
     private final MarinersSparkBase bottomMotor;
 
-    public intakeIOReal()
+    public IntakeIOReal()
     {
         this.positionMotor = configurePositionMotor();
         this.topMotor = configureTopMotor();
