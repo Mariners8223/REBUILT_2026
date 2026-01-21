@@ -28,7 +28,7 @@ public class ShooterTestCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    ShooterTest.setDutyCycle(constants.speed);//TODO: fix this shit
+    ShooterTest.setDutyCycle(constants.speed);
   }
 
   // Called once the command ends or is interrupted.

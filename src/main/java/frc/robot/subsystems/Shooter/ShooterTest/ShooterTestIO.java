@@ -13,15 +13,15 @@ import frc.robot.subsystems.Shooter.ShooterTest.ShooterTestConstants.Motor1;
 
 
 /** Add your docs here. */
-public interface ShooterTestIO {
+public interface ShooterTestIO{
     @AutoLog
-    public static class ShooterInputsTest{
+    class ShooterInputsTest{
 
-        public double speed;
-        public double sliderValue;
-        }
+        double speed;
+        double sliderValue;
+    }
     
-    void setDutyCycle(double speed);//between 1 and -1
+    void setDutyCycle(double sliderValue);//between 1 and -1
     void stop ();//dutyCycle = 0
     double getSpeed();
     void Update(ShooterInputsTest inputs);

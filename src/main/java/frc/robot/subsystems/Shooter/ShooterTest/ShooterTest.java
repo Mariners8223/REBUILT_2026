@@ -16,8 +16,8 @@ import frc.robot.subsystems.Shooter.ShooterTest.ShooterTestIO.ShooterInputsTest;
 
 public class ShooterTest extends SubsystemBase {
   private final ShooterTestIO io;
-  //private final ShooterInputsAutoLogged inputs = new ShooterInputsAutoLogged();
-  private final ShooterInputsTest inputs = new ShooterInputsTest();
+  private final ShooterInputsTestAutoLogged inputs = new ShooterInputsTestAutoLogged();
+  //private final ShooterInputsTest inputs = new ShooterInputsTest();
   /** Creates a new ShooterTest. */
   public ShooterTest() {
     this.io = new ShooterTestIOReal();
@@ -29,14 +29,14 @@ public class ShooterTest extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     io.Update(inputs);
-    //Logger.processInputs("ShooterTest", inputs);
+    Logger.processInputs("ShooterTest", inputs);
 
     setDutyCycle(inputs.sliderValue);
   }
   
-  public void setDutyCycle(double speed)
+  public void setDutyCycle(double sliderValue)
   {
-    io.setDutyCycle(speed);
+    io.setDutyCycle(sliderValue);
   }
 
   public void stop()

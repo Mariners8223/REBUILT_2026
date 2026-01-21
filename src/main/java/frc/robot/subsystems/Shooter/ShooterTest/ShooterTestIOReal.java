@@ -5,7 +5,7 @@
 
 package frc.robot.subsystems.Shooter.ShooterTest;
 
-
+import java.lang.Math;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Shooter.ShooterIO;
 import frc.robot.subsystems.Shooter.ShooterTest.ShooterTestConstants.Motor2;
@@ -62,6 +62,8 @@ public class ShooterTestIOReal implements ShooterTestIO{
     public void Update(ShooterInputsTest inputs) {
         inputs.speed = Motor1.getVelocity();
         inputs.sliderValue = SmartDashboard.getNumber("Shooter Slider", 0.0);
+        if(inputs.sliderValue > 1) inputs.sliderValue = 1;
+        if(inputs.sliderValue < -1) inputs.sliderValue = -1;
     }
 }
 
