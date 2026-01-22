@@ -23,8 +23,8 @@ public class RobotContainer {
     public static CommandPS5Controller driveController;
     public static CommandXboxController driveXboxController;
 
-    public static MarinersSparkBase shooterMotor1;
-    public static MarinersSparkBase shooterMotor2;
+    public static MarinersTalonFX shooterMotor1;
+    public static MarinersTalonFX shooterMotor2;
     public static MarinersTalonFX kickerMotor1;
     public static MarinersTalonFX kickerMotor2;
 
@@ -33,18 +33,18 @@ public class RobotContainer {
         driveController = new CommandPS5Controller(1);
         driveXboxController = new CommandXboxController(0);
 
-        driveBase = new DriveBase();
+        // driveBase = new DriveBase();
 
-        configureDriveBindings();
+        // configureDriveBindings();
 
 
-        shooterMotor1 = new MarinersSparkBase("Shooter Motor 1", ControllerLocation.MOTOR, 0, true, MotorType.SPARK_MAX);
-        shooterMotor2 = new MarinersSparkBase("Shooter Motor 2", ControllerLocation.MOTOR, 1, true, MotorType.SPARK_MAX);
+        shooterMotor1 = new MarinersTalonFX("Shooter Motor 1", ControllerLocation.MOTOR, 12);
+        shooterMotor2 = new MarinersTalonFX("Shooter Motor 2", ControllerLocation.MOTOR, 23);
         shooterMotor2.setMotorAsFollower(shooterMotor1, true);
 
-        kickerMotor1 = new MarinersTalonFX("Kicker Motor 1", ControllerLocation.MOTOR, 2);
-        kickerMotor2 = new MarinersTalonFX("Kicker Motor 2", ControllerLocation.MOTOR, 3);
-        kickerMotor2.setMotorAsFollower(kickerMotor1, false);
+        // kickerMotor1 = new MarinersTalonFX("Kicker Motor 1", ControllerLocation.MOTOR, 2);
+        // kickerMotor2 = new MarinersTalonFX("Kicker Motor 2", ControllerLocation.MOTOR, 3);
+        // kickerMotor2.setMotorAsFollower(kickerMotor1, false);
         
     }
 

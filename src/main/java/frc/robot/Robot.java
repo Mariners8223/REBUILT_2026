@@ -82,7 +82,7 @@ public class Robot extends LoggedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    
+        RobotContainer.shooterMotor1.setReference(0.5, ControlMode.DutyCycle);
     }
   
 
@@ -104,8 +104,10 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    System.out.println("Periodic");
+    System.out.println("Shooter Speed " + SmartDashboard.getNumber("Shooter Speed", 0));
     RobotContainer.shooterMotor1.setReference(SmartDashboard.getNumber("Shooter Speed", 0), ControlMode.DutyCycle);
-    RobotContainer.kickerMotor1.setReference(SmartDashboard.getNumber("Kicker Speed", 0), ControlMode.DutyCycle);
+    // RobotContainer.kickerMotor1.setReference(SmartDashboard.getNumber("Kicker Speed", 0), ControlMode.DutyCycle);
   }
 
   @Override
