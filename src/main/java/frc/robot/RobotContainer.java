@@ -39,11 +39,11 @@ public class RobotContainer {
 
 
         shooterMotor1 = new MarinersSparkBase("Shooter Motor 1", ControllerLocation.MOTOR, 0, true, MotorType.SPARK_MAX);
-        shooterMotor2 = new MarinersSparkBase("Shooter Motor 2", ControllerLocation.MOTOR, 0, true, MotorType.SPARK_MAX);
+        shooterMotor2 = new MarinersSparkBase("Shooter Motor 2", ControllerLocation.MOTOR, 1, true, MotorType.SPARK_MAX);
         shooterMotor2.setMotorAsFollower(shooterMotor1, true);
 
-        kickerMotor1 = new MarinersTalonFX("Kicker Motor 1", ControllerLocation.MOTOR, 0);
-        kickerMotor2 = new MarinersTalonFX("Kicker Motor 2", ControllerLocation.MOTOR, 0);
+        kickerMotor1 = new MarinersTalonFX("Kicker Motor 1", ControllerLocation.MOTOR, 2);
+        kickerMotor2 = new MarinersTalonFX("Kicker Motor 2", ControllerLocation.MOTOR, 3);
         kickerMotor2.setMotorAsFollower(kickerMotor1, false);
         
     }
