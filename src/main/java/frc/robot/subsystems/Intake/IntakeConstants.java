@@ -14,6 +14,8 @@ public class IntakeConstants {
         public static final boolean IS_BRUSHLESS = false;
         public static final MotorType MOTOR_TYPE = MotorType.SPARK_FLEX;
         public static final boolean IS_INVERTED = false;
+        public static final double VOLTAGE = 0;
+        public static final double POSITION_TOLERANCE = 0;
     }
 
     public static class TopMotor
@@ -23,6 +25,7 @@ public class IntakeConstants {
         public static final boolean IS_BRUSHLESS = false;
         public static final MotorType MOTOR_TYPE = MotorType.SPARK_FLEX;
         public static final boolean IS_INVERTED = false; 
+        public static final double VOLTAGE = 0;
     }
 
     public class BottomMotor
@@ -32,6 +35,7 @@ public class IntakeConstants {
         public static final boolean IS_BRUSHLESS = false;
         public static final MotorType MOTOR_TYPE = MotorType.SPARK_FLEX;
         public static final boolean IS_INVERTED = false;   
+        public static final double VOLTAGE = 0;
     }
     
 }
