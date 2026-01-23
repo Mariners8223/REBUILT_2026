@@ -41,6 +41,7 @@ public class RobotContainer {
         shooterMotor1 = new MarinersTalonFX("Shooter Motor 1", ControllerLocation.MOTOR, 12);
         shooterMotor2 = new MarinersTalonFX("Shooter Motor 2", ControllerLocation.MOTOR, 23);
         shooterMotor2.setMotorAsFollower(shooterMotor1, true);
+        shooterMotor1.startPIDTuning();
 
         // kickerMotor1 = new MarinersTalonFX("Kicker Motor 1", ControllerLocation.MOTOR, 2);
         // kickerMotor2 = new MarinersTalonFX("Kicker Motor 2", ControllerLocation.MOTOR, 3);
