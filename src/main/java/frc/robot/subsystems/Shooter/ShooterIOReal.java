@@ -6,10 +6,12 @@ package frc.robot.subsystems.Shooter;
 
 import static edu.wpi.first.units.Units.Meter;
 import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Minute;
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.LinearVelocity;
 import frc.util.MarinersController.MarinersController;
@@ -78,20 +80,18 @@ public class ShooterIOReal implements ShooterIO {
     }
 
     public void update(ShooterInputs inputs){
-        inputs.shooterVelocity = AngularVelocity.ofRelativeUnits(getShooterVelocity(), RPM);
+        inputs.shooterVelocity = RPM.of(getShooterVelocity());
 
-        LinearVelocity shooterLinearVelocity = LinearVelocity.ofRelativeUnits(
-            getShooterVelocity() * ShooterConstants.SHOOTER_WHEEL_CIRCUMFERENCE.in(Meter),
-            MetersPerSecond
+        LinearVelocity shooterLinearVelocity = Meter.per(Minute).of(
+            getShooterVelocity() * ShooterConstants.SHOOTER_WHEEL_CIRCUMFERENCE.in(Meter)
         );
         inputs.shooterLinearVelocity = shooterLinearVelocity;
 
         
-        inputs.kickerVelocity = AngularVelocity.ofRelativeUnits(getKickerVelocity(), RPM);
+        inputs.kickerVelocity = RPM.of(getKickerVelocity());
 
-        LinearVelocity kickerLinearVelocity = LinearVelocity.ofRelativeUnits(
-            getKickerVelocity() * ShooterConstants.KICKER_WHEEL_CIRCUMFERENCE.in(Meter),
-            MetersPerSecond
+        LinearVelocity kickerLinearVelocity = Meter.per(Minute).of(
+            getKickerVelocity() * ShooterConstants.KICKER_WHEEL_CIRCUMFERENCE.in(Meter)
         );
         inputs.kickerLinearVelocity = kickerLinearVelocity;
 

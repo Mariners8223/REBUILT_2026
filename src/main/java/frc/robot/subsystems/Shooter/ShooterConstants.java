@@ -9,9 +9,13 @@ import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.units.MomentOfInertiaUnit;
+import edu.wpi.first.units.measure.Acceleration;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.LinearAcceleration;
 import edu.wpi.first.units.measure.Mass;
+import edu.wpi.first.units.measure.MomentOfInertia;
 import frc.util.PIDFGains;
 import frc.util.MarinersController.MarinersController.ControllerLocation;
 
@@ -31,6 +35,7 @@ public class ShooterConstants {
             0
         );
         public static final double GEAR_RATIO = 0;
+        public static final double GEAR_REDUCTION = 1 / GEAR_RATIO;
 
         public static final int MOTOR_1_ID = 0;
         public static final int MOTOR_2_ID = 0;
@@ -66,22 +71,42 @@ public class ShooterConstants {
         public static Distance HUB_CIRCUMSCRIBED_CIRCLE_DIAMETER = Inches.of(47);
     }
 
+    public static final Distance SHOOTER_HEIGHT = Centimeter.of(40);
+    public static final Angle SHOOTER_ANGLE = Degree.of(75);
+    public static final LinearAcceleration ACCELERATION_DUE_TO_GRAVITY = MetersPerSecondPerSecond.of(9.8);
+    
+
     public static final Distance SHOOTER_WHEEL_RADIUS = Centimeter.of(10);
     public static final Distance SHOOTER_WHEEL_CIRCUMFERENCE = SHOOTER_WHEEL_RADIUS.times(2 * Math.PI);
     public static final Mass SHOOTER_WHEEL_MASS = Kilogram.of(0.5);
-    public static final Angle SHOOTER_ANGLE = Degree.of(75);
+    public static final MomentOfInertia SHOOTER_MOMENT_OF_INERTIA = KilogramSquareMeters.of(1);
 
 
     public static final Distance KICKER_WHEEL_RADIUS = Centimeter.of(10);
     public static final Distance KICKER_WHEEL_CIRCUMFERENCE = KICKER_WHEEL_RADIUS.times(2 * Math.PI);
+    public static final double KICKER_MOMENT_OF_INERTIA = 0;
 
     public static final Pose3d POSITION = new Pose3d(
         new Translation3d(0, 0, 0), new Rotation3d(0, 0, 0)
     );
 
     public static class Calculations{
-        public double requiredLinearVelocity(double distance){
-            
+        public double requiredLinearVelocity(Distance distance){
+            /*  h = y0 + tan(alpha) * d - (g / (2 * (v * cos(alpha))^2)) * d^2
+                h - Hub Height
+                d - Distance from centre of Hub
+                y0 - Height of Shooter from ground
+                alpha - Launch Angle
+                g - Acceleration due to Gravity
+            */
+
+            double cos = Math.cos(SHOOTER_ANGLE.in(Radian));
+            double sin = Math.sin(SHOOTER_ANGLE.in(Radian));
+
+            double denominator = 2 * cos * (distance.baseUnitMagnitude() * sin - (HUB_CONSTANTS.HUB_HEIGHT.minus(SHOOTER_HEIGHT)).in(Meter) * cos);
+            double numerator = ACCELERATION_DUE_TO_GRAVITY.baseUnitMagnitude() * (distance.times(distance)).baseUnitMagnitude();
+
+            return numerator / denominator;
         }
     }
 }

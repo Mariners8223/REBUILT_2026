@@ -4,20 +4,83 @@
 
 package frc.robot.subsystems.Shooter;
 
+import static edu.wpi.first.units.Units.KilogramSquareMeters;
+import static edu.wpi.first.units.Units.Meter;
+import static edu.wpi.first.units.Units.Minute;
+import static edu.wpi.first.units.Units.RPM;
+
+import java.lang.reflect.Method;
+
+import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+import edu.wpi.first.wpilibj.simulation.FlywheelSim;
+import edu.wpi.first.wpilibj.simulation.LinearSystemSim;
 import frc.util.MarinersController.MarinersSimMotor;
+import frc.util.MarinersController.MarinersController.ControlMode;
 
 /** Add your docs here. */
 public class ShooterIOSim implements ShooterIO{
-    MarinersSimMotor shooterMotor1;
-    MarinersSimMotor shooterMotor2;
-    MarinersSimMotor kickerMotor;
+    FlywheelSim flywheel;
 
-    // public ShooterIOSim(){
-    //     shooterMotor1 = new MarinersSimMotor(
-    //         "ShooterMotor1",
-    //         DCMotor.
-    //     )
-    // }
+    MarinersSimMotor kickerMotors;
+
+
+    public ShooterIOSim(){
+        flywheel = new FlywheelSim(
+            LinearSystemId.createFlywheelSystem(
+                DCMotor.getKrakenX60(2), 
+                ShooterConstants.SHOOTER_MOMENT_OF_INERTIA.in(KilogramSquareMeters), 
+                ShooterConstants.SHOOTER_MOTOR.GEAR_REDUCTION
+            ),
+            DCMotor.getKrakenX60(2),
+            0.0001, 0.0001
+        );
+
+        kickerMotors = new MarinersSimMotor(
+            "Kicker Motors", 
+            DCMotor.getFalcon500(2),
+            ShooterConstants.KICKER_MOTOR.GEAR_RATIO,
+            ShooterConstants.KICKER_MOMENT_OF_INERTIA
+        );
+    }
+
+    public double getShooterVelocity(){
+        return flywheel.getAngularVelocityRPM();
+    }
+    public void setShooterVelocity(double targetVelocity){
+        flywheel.setInput(targetVelocity);
+    }
+
+    public double getKickerVelocity(){
+        return kickerMotors.getVelocity() / 60;
+    }
+    public void setKickerVelocity(double targetVelocity){
+        kickerMotors.setReference(targetVelocity, ControlMode.Velocity);
+    }
+    public void setKickerDutyCycle(double targetDutyCycle){
+        kickerMotors.setDutyCycle(targetDutyCycle);
+    }
+
+    public void update(ShooterInputs inputs){
+        inputs.shooterVelocity = RPM.of(getShooterVelocity());
+
+        LinearVelocity shooterLinearVelocity = Meter.per(Minute).of(
+            getShooterVelocity() * ShooterConstants.SHOOTER_WHEEL_CIRCUMFERENCE.in(Meter)
+        );
+        inputs.shooterLinearVelocity = shooterLinearVelocity;
+
+        
+        inputs.kickerVelocity = RPM.of(getKickerVelocity());
+
+        LinearVelocity kickerLinearVelocity = Meter.per(Minute).of(
+            getKickerVelocity() * ShooterConstants.KICKER_WHEEL_CIRCUMFERENCE.in(Meter)
+        );
+        inputs.kickerLinearVelocity = kickerLinearVelocity;
+
+        inputs.pose = ShooterConstants.POSITION;
+    }
 }
