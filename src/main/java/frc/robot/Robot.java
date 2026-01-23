@@ -50,6 +50,7 @@ public class Robot extends LoggedRobot {
       // autonomous chooser on the dashboard.
       
       SmartDashboard.putNumber("Shooter Speed", 0.0);
+      SmartDashboard.putNumber("Kicker Speed", 0.0);
 
       m_robotContainer = new RobotContainer();
 
@@ -103,6 +104,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void teleopPeriodic() {
       RobotContainer.shooterMotor1.setReference(SmartDashboard.getNumber("Shooter Speed", 0), ControlMode.Velocity);
+      RobotContainer.kickerMotor1.setReference(SmartDashboard.getNumber("Kicker Speed", 0), ControlMode.DutyCycle);
   }
 
   @Override
