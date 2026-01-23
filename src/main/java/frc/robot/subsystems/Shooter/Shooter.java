@@ -5,14 +5,9 @@
 package frc.robot.subsystems.Shooter;
 
 import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Minute;
 import static edu.wpi.first.units.Units.RPM;
-import static edu.wpi.first.units.Units.RotationsPerSecond;
 
-import edu.wpi.first.units.DistanceUnit;
-import edu.wpi.first.units.LinearVelocityUnit;
-import edu.wpi.first.units.Units.*;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;

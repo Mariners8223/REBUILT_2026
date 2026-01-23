@@ -9,11 +9,11 @@ import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.units.MomentOfInertiaUnit;
-import edu.wpi.first.units.measure.Acceleration;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearAcceleration;
+import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.Mass;
 import edu.wpi.first.units.measure.MomentOfInertia;
 import frc.util.PIDFGains;
@@ -91,22 +91,33 @@ public class ShooterConstants {
     );
 
     public static class Calculations{
-        public double requiredLinearVelocity(Distance distance){
+        public LinearVelocity requiredLinearVelocity(Distance distance){
             /*  h = y0 + tan(alpha) * d - (g / (2 * (v * cos(alpha))^2)) * d^2
                 h - Hub Height
                 d - Distance from centre of Hub
                 y0 - Height of Shooter from ground
                 alpha - Launch Angle
                 g - Acceleration due to Gravity
+
+                v - Launch Velocity
+
+                Solve for v:
+                v^2 = g*d^2 / (2 * cos(alpha) * (x*sin(alpha) - (h-y0)*cos(alpha)))
             */
 
             double cos = Math.cos(SHOOTER_ANGLE.in(Radian));
             double sin = Math.sin(SHOOTER_ANGLE.in(Radian));
+            double height_differential = (HUB_CONSTANTS.HUB_HEIGHT.minus(SHOOTER_HEIGHT)).in(Meter);
 
-            double denominator = 2 * cos * (distance.baseUnitMagnitude() * sin - (HUB_CONSTANTS.HUB_HEIGHT.minus(SHOOTER_HEIGHT)).in(Meter) * cos);
             double numerator = ACCELERATION_DUE_TO_GRAVITY.baseUnitMagnitude() * (distance.times(distance)).baseUnitMagnitude();
+            double denominator = 2 * cos * (distance.baseUnitMagnitude() * sin - height_differential * cos);
+            double final_solution = Math.sqrt(numerator / denominator);
 
-            return numerator / denominator;
+            return MetersPerSecond.of(final_solution);
+        }
+
+        public AngularVelocity requiredAngularVelocity(LinearVelocity launchVelocity){
+            return RadiansPerSecond.zero(); // TODO: Find Function 
         }
     }
 }

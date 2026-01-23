@@ -5,19 +5,13 @@
 package frc.robot.subsystems.Shooter;
 
 import static edu.wpi.first.units.Units.Meter;
-import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Minute;
 import static edu.wpi.first.units.Units.RPM;
-import static edu.wpi.first.units.Units.RotationsPerSecond;
 
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.LinearVelocity;
 import frc.util.MarinersController.MarinersController;
 import frc.util.MarinersController.MarinersTalonFX;
 import frc.util.MarinersController.MarinersController.ControlMode;
-import frc.util.MarinersController.MarinersController.ControllerLocation;
 
 /** Add your docs here. */
 public class ShooterIOReal implements ShooterIO {

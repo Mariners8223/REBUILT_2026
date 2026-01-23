@@ -9,16 +9,10 @@ import static edu.wpi.first.units.Units.Meter;
 import static edu.wpi.first.units.Units.Minute;
 import static edu.wpi.first.units.Units.RPM;
 
-import java.lang.reflect.Method;
-
-import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
-import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.LinearVelocity;
-import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
-import edu.wpi.first.wpilibj.simulation.LinearSystemSim;
 import frc.util.MarinersController.MarinersSimMotor;
 import frc.util.MarinersController.MarinersController.ControlMode;
 
