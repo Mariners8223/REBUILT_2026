@@ -9,9 +9,11 @@ import static edu.wpi.first.units.Units.Minute;
 import static edu.wpi.first.units.Units.RPM;
 
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
+import frc.robot.subsystems.Shooter.ShooterConstants.SHOOTER_MOTOR;
 
 public class Shooter extends SubsystemBase {
     private final ShooterIO io; 
@@ -22,35 +24,47 @@ public class Shooter extends SubsystemBase {
         io = Robot.isReal() ? new ShooterIOReal() : new ShooterIOSim();
     }
 
-    AngularVelocity getShooterVelocity(){ 
+    public AngularVelocity getShooterVelocity(){ 
         return inputs.shooterVelocity; 
     }
-    LinearVelocity getShooterLinearVelocity(){
+    public LinearVelocity getShooterLinearVelocity(){
         return inputs.shooterLinearVelocity;
     }
 
-    void setShooterVelocity(AngularVelocity targetVelocity){ 
+    public void setShooterVelocity(AngularVelocity targetVelocity){ 
         io.setShooterVelocity(targetVelocity.in(RPM)); 
     }
-    void setShooterLinearVelocity(LinearVelocity targetVelocity){
+    public void setShooterLinearVelocity(LinearVelocity targetVelocity){
         double targetAngularVelocity = targetVelocity.in(Meters.per(Minute)) / ShooterConstants.SHOOTER_WHEEL_CIRCUMFERENCE.in(Meters);
         io.setShooterVelocity(targetAngularVelocity);
     }
 
     
-    AngularVelocity getKickerVelocity(){ 
+    public AngularVelocity getKickerVelocity(){ 
         return inputs.kickerVelocity;
     }
-    LinearVelocity getKickerLinearVelocity(){
+    public LinearVelocity getKickerLinearVelocity(){
         return inputs.kickerLinearVelocity;
     }
 
-    void setKickerVelocity(AngularVelocity targetVelocity){ 
+    public void setKickerVelocity(AngularVelocity targetVelocity){ 
         io.setKickerVelocity(targetVelocity.in(RPM)); 
     }
-    void setKickerLinearVelocity(LinearVelocity targetVelocity){
+    public void setKickerLinearVelocity(LinearVelocity targetVelocity){
         double targetAngularVelocity = targetVelocity.in(Meters.per(Minute)) / ShooterConstants.KICKER_WHEEL_CIRCUMFERENCE.in(Meters);
         io.setShooterVelocity(targetAngularVelocity);
+    }
+
+
+    public void setShooterVelocityByDistance(Distance distance){
+        setShooterVelocity(ShooterConstants.Calculations.requiredAngularVelocity(distance));
+    }
+    public boolean isAtRequiredVelocity(Distance distance){
+        return ShooterConstants.Calculations.epsilonEquals(
+            getShooterVelocity(), 
+            ShooterConstants.Calculations.requiredAngularVelocity(distance),
+            ShooterConstants.SHOOTER_ANGULAR_VELOCITY_TOLERANCE
+        );
     }
 
 

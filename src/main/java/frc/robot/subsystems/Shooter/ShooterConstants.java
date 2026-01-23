@@ -9,6 +9,8 @@ import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Unit;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
@@ -81,6 +83,9 @@ public class ShooterConstants {
     public static final Mass SHOOTER_WHEEL_MASS = Kilogram.of(0.5);
     public static final MomentOfInertia SHOOTER_MOMENT_OF_INERTIA = KilogramSquareMeters.of(1);
 
+    public static final AngularVelocity SHOOTER_ANGULAR_VELOCITY_TOLERANCE = RPM.of(100);
+    
+
 
     public static final Distance KICKER_WHEEL_RADIUS = Centimeter.of(10);
     public static final Distance KICKER_WHEEL_CIRCUMFERENCE = KICKER_WHEEL_RADIUS.times(2 * Math.PI);
@@ -91,7 +96,7 @@ public class ShooterConstants {
     );
 
     public static class Calculations{
-        public LinearVelocity requiredLinearVelocity(Distance distance){
+        public static LinearVelocity requiredLinearVelocity(Distance distance){
             /*  h = y0 + tan(alpha) * d - (g / (2 * (v * cos(alpha))^2)) * d^2
                 h - Hub Height
                 d - Distance from centre of Hub
@@ -116,8 +121,18 @@ public class ShooterConstants {
             return MetersPerSecond.of(final_solution);
         }
 
-        public AngularVelocity requiredAngularVelocity(LinearVelocity launchVelocity){
+        public static AngularVelocity requiredAngularVelocity(LinearVelocity launchVelocity){
             return RadiansPerSecond.zero(); // TODO: Find Function 
+        }
+
+        public static AngularVelocity requiredAngularVelocity(Distance distance){
+            return requiredAngularVelocity(
+                requiredLinearVelocity(distance)
+            );
+        }
+
+        public static <U extends Unit> boolean epsilonEquals(Measure<U> unit1, Measure<U> unit2, Measure<U> tolerance){
+            return Math.abs(unit1.baseUnitMagnitude() - unit2.baseUnitMagnitude()) <= tolerance.baseUnitMagnitude();
         }
     }
 }

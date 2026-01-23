@@ -34,6 +34,7 @@ public class ShooterIOReal implements ShooterIO {
             ShooterConstants.SHOOTER_MOTOR.GEAR_RATIO
             );
         shooterMotor1.setMotorInverted(ShooterConstants.SHOOTER_MOTOR.MOTOR_1_IS_INVERTED);
+        shooterMotor1.setMotorIdleMode(false);
 
         shooterMotor2 = new MarinersTalonFX(
             "Shooter Motor 2", ShooterConstants.SHOOTER_MOTOR.CONTROLLER_LOCATION,
