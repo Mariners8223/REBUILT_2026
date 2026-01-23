@@ -24,46 +24,39 @@ public class Shooter extends SubsystemBase {
 
     /** Creates a new Shooter. */
     public Shooter() {
-        // io = Robot.isReal() ? new ShooterIOReal() : new ShooterIOSim();
+        io = Robot.isReal() ? new ShooterIOReal() : new ShooterIOSim();
     }
 
     AngularVelocity getShooterVelocity(){ 
-        return getShooterVelocity(); 
+        return inputs.shooterVelocity; 
     }
     LinearVelocity getShooterLinearVelocity(){
-        // LinearVelocity shooterLinearVelocity = LinearVelocity.ofRelativeUnits(
-        //     getShooterVelocity().in(RotationsPerSecond) * ShooterConstants.shooterWheelCircumference.in(Meters),
-        //     MetersPerSecond
-        // );
-        // return shooterLinearVelocity;
-
-        return getShooterLinearVelocity();
+        return inputs.shooterLinearVelocity;
     }
 
     void setShooterVelocity(AngularVelocity targetVelocity){ 
         io.setShooterVelocity(targetVelocity.in(RPM)); 
     }
     void setShooterLinearVelocity(LinearVelocity targetVelocity){
-        double targetAngularVelocity = targetVelocity.in(Meters.per(Minute)) / ShooterConstants.shooterWheelCircumference.in(Meters);
+        double targetAngularVelocity = targetVelocity.in(Meters.per(Minute)) / ShooterConstants.SHOOTER_WHEEL_CIRCUMFERENCE.in(Meters);
         io.setShooterVelocity(targetAngularVelocity);
     }
 
     
-    AngularVelocity getTriggerVelocity(){ 
-        return getTriggerVelocity(); 
+    AngularVelocity getKickerVelocity(){ 
+        return inputs.kickerVelocity;
     }
-    LinearVelocity getTriggerLinearVelocity(){
-        return getTriggerLinearVelocity();
+    LinearVelocity getKickerLinearVelocity(){
+        return inputs.kickerLinearVelocity;
     }
 
-    void setTriggerVelocity(AngularVelocity targetVelocity){ 
-        io.setTriggerVelocity(targetVelocity.in(RPM)); 
+    void setKickerVelocity(AngularVelocity targetVelocity){ 
+        io.setKickerVelocity(targetVelocity.in(RPM)); 
     }
-    void setTriggerLinearVelocity(LinearVelocity targetVelocity){
-        double targetAngularVelocity = targetVelocity.in(Meters.per(Minute)) / ShooterConstants.triggerWheelRadius.in(Meters);
+    void setKickerLinearVelocity(LinearVelocity targetVelocity){
+        double targetAngularVelocity = targetVelocity.in(Meters.per(Minute)) / ShooterConstants.KICKER_WHEEL_CIRCUMFERENCE.in(Meters);
         io.setShooterVelocity(targetAngularVelocity);
     }
-
 
 
     @Override

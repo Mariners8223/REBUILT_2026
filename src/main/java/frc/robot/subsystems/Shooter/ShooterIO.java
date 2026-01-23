@@ -17,8 +17,8 @@ public interface ShooterIO {
         AngularVelocity shooterVelocity; // RPM
         LinearVelocity shooterLinearVelocity; // m/s
 
-        AngularVelocity triggerVelocity; // RPM
-        LinearVelocity triggerLinearVelocity; // m/s
+        AngularVelocity kickerVelocity; // RPM
+        LinearVelocity kickerLinearVelocity; // m/s
 
         Pose3d pose;
     }
@@ -26,9 +26,9 @@ public interface ShooterIO {
     double getShooterVelocity();
     void setShooterVelocity(double targetVelocity);
 
-    double getTriggerVelocity();
-    void setTriggerVelocity(double targetVelocity);
-    void setTriggerDutyCycle(double targetDutyCycle);
+    double getKickerVelocity();
+    void setKickerVelocity(double targetVelocity);
+    void setKickerDutyCycle(double targetDutyCycle);
 
     void update(ShooterInputs inputs);
 }
