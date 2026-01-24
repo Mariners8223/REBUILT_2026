@@ -5,7 +5,10 @@ import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.commands.Drive.DriveCommand;
 
 import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.DriveTrain.DriveBase;
+import frc.util.PIDFGains;
 import frc.util.MarinersController.MarinersSparkBase;
 import frc.util.MarinersController.MarinersTalonFX;
 import frc.util.MarinersController.MarinersController.ControllerLocation;
@@ -25,8 +28,8 @@ public class RobotContainer {
 
     public static MarinersTalonFX shooterMotor1;
     public static MarinersTalonFX shooterMotor2;
-    public static MarinersTalonFX kickerMotor1;
-    public static MarinersTalonFX kickerMotor2;
+    public static MarinersSparkBase kickerMotor1;
+    public static MarinersSparkBase kickerMotor2;
 
 
     public RobotContainer() {
@@ -37,15 +40,18 @@ public class RobotContainer {
 
         // configureDriveBindings();
 
+        
 
         shooterMotor1 = new MarinersTalonFX("Shooter Motor 1", ControllerLocation.MOTOR, 12);
         shooterMotor2 = new MarinersTalonFX("Shooter Motor 2", ControllerLocation.MOTOR, 23);
         shooterMotor2.setMotorAsFollower(shooterMotor1, true);
+        shooterMotor1.setFeedForward(0);
+        shooterMotor1.setPIDF(new PIDFGains(0, 0, 0));
         shooterMotor1.startPIDTuning();
 
-        kickerMotor1 = new MarinersTalonFX("Kicker Motor 1", ControllerLocation.MOTOR, 2);
-        kickerMotor2 = new MarinersTalonFX("Kicker Motor 2", ControllerLocation.MOTOR, 3);
-        kickerMotor2.setMotorAsFollower(kickerMotor1, false);
+        kickerMotor1 = new MarinersSparkBase("Kicker Motor 1", ControllerLocation.MOTOR, 16, true, MotorType.SPARK_FLEX);
+        kickerMotor2 = new MarinersSparkBase("Kicker Motor 2", ControllerLocation.MOTOR, 14, true, MotorType.SPARK_FLEX);
+        kickerMotor2.setMotorAsFollower(kickerMotor1, true);
         
     }
 
