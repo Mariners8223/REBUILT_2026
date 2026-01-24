@@ -24,8 +24,6 @@ public interface IntakeIO
 
     double getCurrentPosition();
 
-    boolean isAtDesiredPosition();
-
     void resetAllMotorsEncoder();
 
     void Update(IntakeInputs inputs);

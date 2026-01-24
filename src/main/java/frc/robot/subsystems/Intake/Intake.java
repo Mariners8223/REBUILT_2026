@@ -51,11 +51,6 @@ public class Intake extends SubsystemBase{
         return this.desiredPosition;
     }
 
-    public boolean isAtDesiredPosition()
-    {
-        return currentPosition == desiredPosition;
-    }
-
     @Override
     public void periodic() {
         io.Update(inputs);
