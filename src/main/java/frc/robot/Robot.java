@@ -104,8 +104,6 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-      RobotContainer.shooterMotor1.setReference(SmartDashboard.getNumber("Shooter Velocity", 0), ControlMode.Velocity);
-      RobotContainer.kickerMotor1.setReference(SmartDashboard.getNumber("Kicker Speed", 0), ControlMode.DutyCycle);
   }
 
   @Override
