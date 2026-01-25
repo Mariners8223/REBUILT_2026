@@ -25,6 +25,7 @@ public interface ShooterIO {
 
     double getShooterVelocity();
     void setShooterVelocity(double targetVelocity);
+    void setShooterDutyCycle(double targetDutyCycle);
 
     double getKickerVelocity();
     void setKickerVelocity(double targetVelocity);

@@ -63,6 +63,9 @@ public class ShooterIOReal implements ShooterIO {
     public void setShooterVelocity(double targetVelocity){
         shooterMotor1.setReference(targetVelocity, ControlMode.Velocity);
     }
+    public void setShooterDutyCycle(double targetDutyCycle){
+        shooterMotor1.setReference(targetDutyCycle, ControlMode.DutyCycle);
+    }
 
     public double getKickerVelocity(){
         return kickerMotor1.getVelocity();
