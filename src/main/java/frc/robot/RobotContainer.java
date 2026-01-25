@@ -16,7 +16,7 @@ import frc.robot.subsystems.DriveTrain.DriveBase;
  */
 public class RobotContainer {
     public static DriveBase driveBase;
-
+    public static Robot robot;
     public static CommandPS5Controller driveController;
     public static CommandXboxController driveXboxController;
 
@@ -24,6 +24,12 @@ public class RobotContainer {
     public RobotContainer() {
         driveController = new CommandPS5Controller(1);
         driveXboxController = new CommandXboxController(0);
+<<<<<<< Updated upstream
+=======
+        driveBase = new DriveBase();
+        isuff = new isuff();
+        configureDriveBindings();
+>>>>>>> Stashed changes
 
         driveBase = new DriveBase();
 
@@ -33,9 +39,18 @@ public class RobotContainer {
 
 
     public void configureDriveBindings(){
+<<<<<<< Updated upstream
         new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(new StartEndCommand(() ->
             driveBase.setDefaultCommand(new DriveCommand(driveBase, driveXboxController)),
             driveBase::removeDefaultCommand).ignoringDisable(true));
+=======
+       new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(new StartEndCommand(() ->
+       driveBase.setDefaultCommand(new DriveCommand(driveBase, driveXboxController)),
+       driveBase::removeDefaultCommand).ignoringDisable(true));
+       driveController.options().onTrue(driveBase.resetOnlyDirection());
+      
+       driveXboxController.y().whileTrue(new MoveIsuff(isuff)).whileFalse(new Stopisuff(isuff));
+>>>>>>> Stashed changes
    }
    
 
