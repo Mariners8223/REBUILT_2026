@@ -5,8 +5,10 @@ import edu.wpi.first.wpilibj2.command.button.*;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.Drive.DriveCommand;
 
+import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Volt;
 
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.RobotState;
 import frc.robot.subsystems.DriveTrain.DriveBase;
@@ -45,7 +47,7 @@ public class RobotContainer {
     }
 
     public Distance distanceFromHub(){
-        return driveBase.getPose().minus(Constants.FieldConstants.HUB_POSITION);
+        return Meters.of(driveBase.getPose().getTranslation().getDistance(Constants.FieldConstants.HUB_POSITION));
     }
 
 
