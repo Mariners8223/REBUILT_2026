@@ -11,6 +11,7 @@ import static edu.wpi.first.units.Units.Volt;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterSysID;
@@ -44,6 +45,7 @@ public class RobotContainer {
         // configureDriveBindings();
         configureSysIDConfig();
         
+        SmartDashboard.putNumber("Shooter Velocity", 0);
     }
 
     public Distance distanceFromHub(){
@@ -58,20 +60,8 @@ public class RobotContainer {
    }
 
    public void configureSysIDConfig(){
-        driveXboxController.y().whileTrue(shooterSysID.getShooterQuasistatic(Direction.kForward));
-        driveXboxController.a().whileTrue(shooterSysID.getShooterQuasistatic(Direction.kReverse));
 
-        driveXboxController.b().whileTrue(shooterSysID.getShooterDynamic(Direction.kForward));
-        driveXboxController.x().whileTrue(shooterSysID.getShooterDynamic(Direction.kReverse));
 
-        driveXboxController.povUp().whileTrue(
-            new StartEndCommand(
-                () -> shooter.setShooterVoltage(Volt.of(4)),
-                () -> shooter.setShooterVoltage(Volt.zero()),
-                shooter)
-        );
-   }
-   
-
+}
 
 }

@@ -39,6 +39,8 @@ public class ShooterIOReal implements ShooterIO {
         shooterMotor1.setStaticFeedForward(ShooterConstants.SHOOTER_MOTOR.Ks);
         shooterMotor1.setFeedForward(ShooterConstants.SHOOTER_MOTOR.Kv);
 
+        shooterMotor1.startPIDTuning();
+
         shooterMotor2 = new MarinersTalonFX(
             "Shooter Motor 2", ShooterConstants.SHOOTER_MOTOR.CONTROLLER_LOCATION,
             ShooterConstants.SHOOTER_MOTOR.MOTOR_2_ID);

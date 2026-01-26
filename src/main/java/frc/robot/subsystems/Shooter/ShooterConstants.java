@@ -27,8 +27,8 @@ public class ShooterConstants {
     public static class SHOOTER_MOTOR{
         public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
         public static final PIDFGains PID = new PIDFGains(
-            0.078958,
-            0,
+            0.15,
+            0.7,
             0,
             0,
             0,
