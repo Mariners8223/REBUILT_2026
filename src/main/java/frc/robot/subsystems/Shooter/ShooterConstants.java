@@ -27,7 +27,7 @@ public class ShooterConstants {
     public static class SHOOTER_MOTOR{
         public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
         public static final PIDFGains PID = new PIDFGains(
-            0,
+            0.078958,
             0,
             0,
             0,
@@ -36,14 +36,19 @@ public class ShooterConstants {
             0,
             0
         );
-        public static final double GEAR_RATIO = 0;
+
+        public static final double Ks = 0.10794;
+        public static final double Kv = 0.11656;
+        public static final double Ka = 0.01793;
+
+        public static final double GEAR_RATIO = 1;
         public static final double GEAR_REDUCTION = 1 / GEAR_RATIO;
 
-        public static final int MOTOR_1_ID = 0;
-        public static final int MOTOR_2_ID = 0;
+        public static final int MOTOR_1_ID = 12;
+        public static final int MOTOR_2_ID = 23;
 
         public static final boolean MOTOR_1_IS_INVERTED = false;
-        public static final boolean MOTOR_2_IS_INVERTED = false;
+        public static final boolean MOTOR_2_IS_INVERTED = true;
     }
 
     public static class KICKER_MOTOR{

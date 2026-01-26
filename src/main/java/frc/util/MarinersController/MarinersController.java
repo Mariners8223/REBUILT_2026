@@ -416,7 +416,7 @@ public abstract class MarinersController {
         try {
             setpointLock.lock();
 
-            if (RobotState.isDisabled()) {
+            if (RobotState.isDisabled() && !(this.controlMode == ControlMode.Follower)) {
                 controlMode = ControlMode.Stopped;
                 stopMotorOutput();
             }

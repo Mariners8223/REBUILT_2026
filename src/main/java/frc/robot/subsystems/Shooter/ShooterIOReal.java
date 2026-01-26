@@ -23,7 +23,7 @@ public class ShooterIOReal implements ShooterIO {
 
     public ShooterIOReal(){
         configureShooterMotors();
-        configureKickerMotors();
+        // configureKickerMotors();
     }
 
     //#region Configuration
@@ -35,6 +35,9 @@ public class ShooterIOReal implements ShooterIO {
             );
         shooterMotor1.setMotorInverted(ShooterConstants.SHOOTER_MOTOR.MOTOR_1_IS_INVERTED);
         shooterMotor1.setMotorIdleMode(false);
+
+        shooterMotor1.setStaticFeedForward(ShooterConstants.SHOOTER_MOTOR.Ks);
+        shooterMotor1.setFeedForward(ShooterConstants.SHOOTER_MOTOR.Kv);
 
         shooterMotor2 = new MarinersTalonFX(
             "Shooter Motor 2", ShooterConstants.SHOOTER_MOTOR.CONTROLLER_LOCATION,
@@ -63,6 +66,9 @@ public class ShooterIOReal implements ShooterIO {
     public void setShooterVelocity(double targetVelocity){
         shooterMotor1.setReference(targetVelocity, ControlMode.Velocity);
     }
+    public void setShooterVoltage(double voltage){
+        shooterMotor1.setVoltage(voltage);
+    }
 
     public double getKickerVelocity(){
         return kickerMotor1.getVelocity();
@@ -72,6 +78,9 @@ public class ShooterIOReal implements ShooterIO {
     }
     public void setKickerDutyCycle(double targetDutyCycle){
         kickerMotor1.setReference(targetDutyCycle, ControlMode.DutyCycle);
+    }
+    public void setKickerVoltage(double voltage){
+        kickerMotor1.setVoltage(voltage);
     }
 
     public void update(ShooterInputs inputs){
@@ -83,13 +92,13 @@ public class ShooterIOReal implements ShooterIO {
         inputs.shooterLinearVelocity = shooterLinearVelocity;
 
         
-        inputs.kickerVelocity = RPM.of(getKickerVelocity());
+        // inputs.kickerVelocity = RPM.of(getKickerVelocity());
 
-        LinearVelocity kickerLinearVelocity = Meter.per(Minute).of(
-            getKickerVelocity() * ShooterConstants.KICKER_WHEEL_CIRCUMFERENCE.in(Meter)
-        );
-        inputs.kickerLinearVelocity = kickerLinearVelocity;
+        // LinearVelocity kickerLinearVelocity = Meter.per(Minute).of(
+        //     getKickerVelocity() * ShooterConstants.KICKER_WHEEL_CIRCUMFERENCE.in(Meter)
+        // );
+        // inputs.kickerLinearVelocity = kickerLinearVelocity;
 
-        inputs.pose = ShooterConstants.POSITION;
+        // inputs.pose = ShooterConstants.POSITION;
     }
 }

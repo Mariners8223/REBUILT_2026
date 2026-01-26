@@ -7,10 +7,12 @@ package frc.robot.subsystems.Shooter;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Minute;
 import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearVelocity;
+import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.Shooter.ShooterConstants.SHOOTER_MOTOR;
@@ -38,6 +40,9 @@ public class Shooter extends SubsystemBase {
         double targetAngularVelocity = targetVelocity.in(Meters.per(Minute)) / ShooterConstants.SHOOTER_WHEEL_CIRCUMFERENCE.in(Meters);
         io.setShooterVelocity(targetAngularVelocity);
     }
+    public void setShooterVoltage(Voltage voltage){
+        io.setShooterVoltage(voltage.in(Volts));
+    }
 
     
     public AngularVelocity getKickerVelocity(){ 
@@ -53,6 +58,9 @@ public class Shooter extends SubsystemBase {
     public void setKickerLinearVelocity(LinearVelocity targetVelocity){
         double targetAngularVelocity = targetVelocity.in(Meters.per(Minute)) / ShooterConstants.KICKER_WHEEL_CIRCUMFERENCE.in(Meters);
         io.setShooterVelocity(targetAngularVelocity);
+    }
+    public void setKickerVoltage(Voltage voltage){
+        io.setKickerVoltage(voltage.in(Volts));
     }
 
 
