@@ -44,6 +44,10 @@ public class RobotContainer {
         
     }
 
+    public Distance distanceFromHub(){
+        return driveBase.getPose().minus(Constants.FieldConstants.HUB_POSITION);
+    }
+
 
     public void configureDriveBindings(){
         new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(new StartEndCommand(() ->

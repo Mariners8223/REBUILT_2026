@@ -15,7 +15,6 @@ import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
-import frc.robot.subsystems.Shooter.ShooterConstants.SHOOTER_MOTOR;
 
 public class Shooter extends SubsystemBase {
     private final ShooterIO io; 
@@ -33,6 +32,9 @@ public class Shooter extends SubsystemBase {
         return inputs.shooterLinearVelocity;
     }
 
+    public void stopShooter(){
+        io.setShooterDutyCycle(0);
+    }
     public void setShooterVelocity(AngularVelocity targetVelocity){ 
         io.setShooterVelocity(targetVelocity.in(RPM)); 
     }
