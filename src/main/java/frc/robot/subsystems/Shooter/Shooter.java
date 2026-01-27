@@ -7,6 +7,7 @@ package frc.robot.subsystems.Shooter;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Minute;
 import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -36,7 +37,7 @@ public class Shooter extends SubsystemBase {
         io.setShooterDutyCycle(0);
     }
     public void setShooterVelocity(AngularVelocity targetVelocity){ 
-        io.setShooterVelocity(targetVelocity.in(RPM)); 
+        io.setShooterVelocity(targetVelocity.in(RotationsPerSecond)); 
     }
     public void setShooterLinearVelocity(LinearVelocity targetVelocity){
         double targetAngularVelocity = targetVelocity.in(Meters.per(Minute)) / ShooterConstants.SHOOTER_WHEEL_CIRCUMFERENCE.in(Meters);
@@ -55,7 +56,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public void setKickerVelocity(AngularVelocity targetVelocity){ 
-        io.setKickerVelocity(targetVelocity.in(RPM)); 
+        io.setKickerVelocity(targetVelocity.in(RotationsPerSecond)); 
     }
     public void setKickerLinearVelocity(LinearVelocity targetVelocity){
         double targetAngularVelocity = targetVelocity.in(Meters.per(Minute)) / ShooterConstants.KICKER_WHEEL_CIRCUMFERENCE.in(Meters);

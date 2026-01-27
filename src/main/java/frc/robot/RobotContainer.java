@@ -2,14 +2,12 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.Drive.DriveCommand;
 
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Volt;
 
 import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.DriveTrain.DriveBase;
@@ -45,7 +43,13 @@ public class RobotContainer {
         // configureDriveBindings();
         configureSysIDConfig();
         
-        SmartDashboard.putNumber("Shooter Velocity", 0);
+        driveController.cross().whileTrue(
+            new StartEndCommand(
+                () -> shooter.setKickerVoltage(Volt.of(3)),
+                () -> shooter.setKickerVoltage(Volt.of(0)),
+                shooter
+            )
+        );
     }
 
     public Distance distanceFromHub(){

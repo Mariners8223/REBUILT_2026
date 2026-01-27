@@ -10,8 +10,10 @@ import static edu.wpi.first.units.Units.RPM;
 
 import edu.wpi.first.units.measure.LinearVelocity;
 import frc.util.MarinersController.MarinersController;
+import frc.util.MarinersController.MarinersSparkBase;
 import frc.util.MarinersController.MarinersTalonFX;
 import frc.util.MarinersController.MarinersController.ControlMode;
+import frc.util.MarinersController.MarinersSparkBase.MotorType;
 
 /** Add your docs here. */
 public class ShooterIOReal implements ShooterIO {
@@ -23,7 +25,7 @@ public class ShooterIOReal implements ShooterIO {
 
     public ShooterIOReal(){
         configureShooterMotors();
-        // configureKickerMotors();
+        configureKickerMotors();
     }
 
     //#region Configuration
@@ -44,21 +46,21 @@ public class ShooterIOReal implements ShooterIO {
         shooterMotor2 = new MarinersTalonFX(
             "Shooter Motor 2", ShooterConstants.SHOOTER_MOTOR.CONTROLLER_LOCATION,
             ShooterConstants.SHOOTER_MOTOR.MOTOR_2_ID);
-        shooterMotor2.setMotorAsFollower(shooterMotor1, ShooterConstants.SHOOTER_MOTOR.MOTOR_2_IS_INVERTED);
+        shooterMotor2.setMotorAsFollower(shooterMotor1, 
+            ShooterConstants.SHOOTER_MOTOR.MOTOR_1_IS_INVERTED != ShooterConstants.SHOOTER_MOTOR.MOTOR_2_IS_INVERTED);
     }
 
     public void configureKickerMotors(){
-        kickerMotor1 = new MarinersTalonFX(
+        kickerMotor1 = new MarinersSparkBase(
             "Kicker Motor 1", ShooterConstants.KICKER_MOTOR.CONTROLLER_LOCATION,
-            ShooterConstants.KICKER_MOTOR.MOTOR_1_ID, ShooterConstants.KICKER_MOTOR.PID,
-            ShooterConstants.KICKER_MOTOR.GEAR_RATIO
-            );
+            ShooterConstants.KICKER_MOTOR.MOTOR_1_ID, true, MotorType.SPARK_FLEX);
         kickerMotor1.setMotorInverted(ShooterConstants.KICKER_MOTOR.MOTOR_1_IS_INVERTED);
 
-        kickerMotor2 = new MarinersTalonFX(
+        kickerMotor2 = new MarinersSparkBase(
             "Kicker Motor 2", ShooterConstants.KICKER_MOTOR.CONTROLLER_LOCATION,
-            ShooterConstants.KICKER_MOTOR.MOTOR_2_ID);
-        kickerMotor2.setMotorAsFollower(kickerMotor1, ShooterConstants.KICKER_MOTOR.MOTOR_2_IS_INVERTED);
+            ShooterConstants.KICKER_MOTOR.MOTOR_2_ID, true, MotorType.SPARK_FLEX);
+        kickerMotor2.setMotorAsFollower(kickerMotor1, 
+            ShooterConstants.KICKER_MOTOR.MOTOR_1_IS_INVERTED != ShooterConstants.KICKER_MOTOR.MOTOR_2_IS_INVERTED);
     }
     //#endregion
 
@@ -97,13 +99,13 @@ public class ShooterIOReal implements ShooterIO {
         inputs.shooterLinearVelocity = shooterLinearVelocity;
 
         
-        // inputs.kickerVelocity = RPM.of(getKickerVelocity());
+        inputs.kickerVelocity = RPM.of(getKickerVelocity());
 
-        // LinearVelocity kickerLinearVelocity = Meter.per(Minute).of(
-        //     getKickerVelocity() * ShooterConstants.KICKER_WHEEL_CIRCUMFERENCE.in(Meter)
-        // );
-        // inputs.kickerLinearVelocity = kickerLinearVelocity;
+        LinearVelocity kickerLinearVelocity = Meter.per(Minute).of(
+            getKickerVelocity() * ShooterConstants.KICKER_WHEEL_CIRCUMFERENCE.in(Meter)
+        );
+        inputs.kickerLinearVelocity = kickerLinearVelocity;
 
-        // inputs.pose = ShooterConstants.POSITION;
+        inputs.pose = ShooterConstants.POSITION;
     }
 }
