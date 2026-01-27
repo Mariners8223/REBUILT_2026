@@ -3,6 +3,8 @@ package frc.robot.subsystems.Intake;
 import org.littletonrobotics.junction.AutoLog;
 
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
 
 public interface IntakeIO 
 {
@@ -10,17 +12,17 @@ public interface IntakeIO
     class IntakeInputs 
     {
         Pose3d pose;
-        double currentPosition;
-        double positionMotorSpeed;
-        double TopMotorSpeed;
-        double BottomMotorSpeed;
+        Angle currentPosition; 
+        AngularVelocity positionMotorSpeed;//RPM
+        AngularVelocity TopMotorSpeed;//RPM
+        AngularVelocity BottomMotorSpeed;//RPM
     }
 
-    void setPositionMotorVoltage (double v);
+    void setPositionMotorVoltage (double voltage);
 
-    void setTopMotorVoltage(double v);
+    void setTopMotorVoltage(double voltage);
 
-    void setBottomMotorVoltage(double v);
+    void setBottomMotorVoltage(double voltage);
 
     double getCurrentPosition();
 

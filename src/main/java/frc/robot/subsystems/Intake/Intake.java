@@ -3,8 +3,12 @@ package frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
+
+import static edu.wpi.first.units.Units.Volts;
+
 import org.littletonrobotics.junction.Logger;
 import frc.robot.subsystems.Intake.IntakeIO.IntakeInputs;
+import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.RobotBase;
 
 
@@ -21,19 +25,19 @@ public class Intake extends SubsystemBase{
         this.resetAllMotorsEncoder();
     }
 
-    public void setPositionMotorVoltage (double v)
+    public void setPositionMotorVoltage (Voltage voltage)
     {
-        io.setPositionMotorVoltage(v);
+        io.setPositionMotorVoltage(voltage.in(Volts));
     }
 
-    public void setTopMotorVoltage(double v)
+    public void setTopMotorVoltage(Voltage voltage)
     {
-        io.setTopMotorVoltage(v);
+        io.setTopMotorVoltage(voltage.in(Volts));
     }
 
-    public void setBottomMotorVoltage(double v)
+    public void setBottomMotorVoltage(Voltage voltage)
     {
-        io.setBottomMotorVoltage(v);
+        io.setBottomMotorVoltage(voltage.in(Volts));
     }
 
     public double getCurrentPosition()

@@ -1,5 +1,8 @@
 package frc.robot.subsystems.Intake;
 
+import static edu.wpi.first.units.Units.Meter;
+import static edu.wpi.first.units.Units.Rotations;
+
 import frc.util.MarinersController.MarinersSimMotor;
 
 public class IntakeIOSim implements IntakeIO 
@@ -11,16 +14,16 @@ public class IntakeIOSim implements IntakeIO
     public IntakeIOSim()
     {
         positionMotor = new MarinersSimMotor("Position motor", null,IntakeConstants.PositionMotor.GEAR_RATIO,
-        IntakeConstants.PositionMotor.ROTATIONS_TO_METERS, IntakeConstants.MOMENT_OF_INERTIA);
+        IntakeConstants.PositionMotor.ROTATIONS_PER_METERS.in(Rotations.per(Meter)), IntakeConstants.MOMENT_OF_INERTIA);
 
         positionMotor.enableSoftLimits(IntakeConstants.SOFT_MINIMUM, IntakeConstants.SOFT_MAXIMUM);
         positionMotor.setMotorInverted(IntakeConstants.PositionMotor.IS_INVERTED);
 
         topMotor = new MarinersSimMotor("Top motor", null, IntakeConstants.TopMotor.GEAR_RATIO,
-        IntakeConstants.TopMotor.ROTATIONS_TO_METERS,IntakeConstants.MOMENT_OF_INERTIA);
+        IntakeConstants.TopMotor.ROTATIONS_PER_METERS.in(Rotations.per(Meter)),IntakeConstants.MOMENT_OF_INERTIA);
 
         bottomMotor = new MarinersSimMotor("Bottom motor", null, IntakeConstants.BottomMotor.GEAR_RATIO,
-        IntakeConstants.BottomMotor.ROTATIONS_TO_METERS,IntakeConstants.MOMENT_OF_INERTIA);
+        IntakeConstants.BottomMotor.ROTATIONS_PER_METERS.in(Rotations.per(Meter)),IntakeConstants.MOMENT_OF_INERTIA);
     }
     public void setPositionMotorVoltage(double voltage)
     {

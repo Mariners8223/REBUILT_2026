@@ -1,5 +1,16 @@
 package frc.robot.subsystems.Intake;
 
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.Rotations;
+import static edu.wpi.first.units.Units.Volts;
+
+import edu.wpi.first.units.AngleUnit;
+import edu.wpi.first.units.DistanceUnit;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.PerUnit;
+import edu.wpi.first.units.VoltageUnit;
+import edu.wpi.first.units.measure.Per;
+import edu.wpi.first.units.measure.Voltage;
 import frc.util.MarinersController.MarinersController.ControllerLocation;
 import frc.util.MarinersController.MarinersSparkBase.MotorType;
 
@@ -15,10 +26,10 @@ public class IntakeConstants
         public static final boolean IS_BRUSHLESS = false;
         public static final MotorType MOTOR_TYPE = MotorType.SPARK_FLEX;
         public static final boolean IS_INVERTED = false;
-        public static final double VOLTAGE = 0;
+        public static final Measure<VoltageUnit> VOLTAGE = Volts.of(0);//TODO:fix
         public static final double POSITION_TOLERANCE = 0;
-        public static final double GEAR_RATIO = 0;
-        public static final double ROTATIONS_TO_METERS = 0;
+        public static final double GEAR_RATIO = 1;
+        public static final Measure<PerUnit<AngleUnit, DistanceUnit>> ROTATIONS_PER_METERS = Rotations.per(Meters).ofNative(0);//TODO:fix
     }
 
     public static class TopMotor
@@ -28,9 +39,9 @@ public class IntakeConstants
         public static final boolean IS_BRUSHLESS = false;
         public static final MotorType MOTOR_TYPE = MotorType.SPARK_FLEX;
         public static final boolean IS_INVERTED = false; 
-        public static final double VOLTAGE = 0;
-        public static final double GEAR_RATIO = 0;
-        public static final double ROTATIONS_TO_METERS = 0;
+        public static final Measure<VoltageUnit> VOLTAGE = Volts.of(0);//TODO: fix
+        public static final double GEAR_RATIO = 1;
+        public static final Measure<PerUnit<AngleUnit, DistanceUnit>> ROTATIONS_PER_METERS = Rotations.per(Meters).ofNative(0);//TODO:fix
     }
     
 
@@ -41,9 +52,9 @@ public class IntakeConstants
         public static final boolean IS_BRUSHLESS = false;
         public static final MotorType MOTOR_TYPE = MotorType.SPARK_FLEX;
         public static final boolean IS_INVERTED = false;   
-        public static final double VOLTAGE = 0;
-        public static final double GEAR_RATIO = 0;
-        public static final double ROTATIONS_TO_METERS = 0;
+        public static final Measure<VoltageUnit> VOLTAGE = Volts.of(0);//TODO: fix
+        public static final double GEAR_RATIO = 1;
+        public static final Measure<PerUnit<AngleUnit, DistanceUnit>> ROTATIONS_PER_METERS = Rotations.per(Meters).ofNative(0);//TODO:fix
     }
     public static final double MOMENT_OF_INERTIA = 0;
     public static final double SOFT_MINIMUM = 0;
