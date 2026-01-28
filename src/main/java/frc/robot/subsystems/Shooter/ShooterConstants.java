@@ -78,6 +78,9 @@ public class ShooterConstants {
         public static Distance HUB_CIRCUMSCRIBED_CIRCLE_DIAMETER = Inches.of(47);
     }
 
+    public static double LOW_PASS_FILTER_ALPHA = 0.3;
+    public static double FEED_FORWARD_SHOOTER_BOOST = 1;
+
     public static final Distance SHOOTER_HEIGHT = Centimeter.of(40);
     public static final Angle SHOOTER_ANGLE = Degree.of(75);
     public static final LinearAcceleration ACCELERATION_DUE_TO_GRAVITY = MetersPerSecondPerSecond.of(9.8);
