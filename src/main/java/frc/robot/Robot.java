@@ -16,6 +16,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.Shooter.IncreasingShootSpeed;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -51,6 +52,7 @@ public class Robot extends LoggedRobot {
     m_robotContainer = new RobotContainer();
 
     SmartDashboard.putNumber("Shooter Velocity", 0);
+    SmartDashboard.putNumber("Grow", 1);
 
   }
 
@@ -102,7 +104,12 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    RobotContainer.shooter.setShooterVelocity(RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0)));
+    // if (RobotContainer.shooter.getCurrentCommand() != RobotContainer.shooter.getDefaultCommand()){
+    //     int x = 0;
+    // }
+    // else{
+    //     RobotContainer.shooter.setShooterVelocity(RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0)));
+    // }
   }
 
   @Override
