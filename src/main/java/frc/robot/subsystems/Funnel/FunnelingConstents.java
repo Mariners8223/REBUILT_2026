@@ -2,7 +2,7 @@
 package frc.robot.subsystems.Funnel;
 
 import frc.util.MarinersController.MarinersSparkBase.MotorType;
-
+import frc.util.PIDFGains;
 import frc.util.MarinersController.MarinersController.ControllerLocation;
 
 
@@ -10,21 +10,22 @@ public class FunnelingConstents {
     public static ControllerLocation controllerLocation;
     public static MotorType motorType;
     public static class LeadingMotor{
-        public static final int Lead_ID = 42;
+        public static final int Lead_ID = 12;
         public static final ControllerLocation ControllerLocation = controllerLocation.MOTOR;
         public static final boolean Is_Brushless = true;
         public static final MotorType MOTOR_TYPE = MotorType.SPARK_FLEX;
-        public static final double GearRatio = 1;
+        public static final double GearRatio = 0.6;
         public static final double MOMENT_OF_INERTIA_SIM = 1;
 
-        public static final double LeadSpeed = 0.4;
+        public static final double LeadSpeed = 0.3;
     }
     public static class CenteringHIGHMotor{
         public static final int CenterHIGH_ID = 13;
         public static final ControllerLocation CONTROLLER_LOCATION = controllerLocation.MOTOR;
         public static final boolean Is_Brushless = true;
         public static final MotorType MOTOR_TYPE = MotorType.SPARK_MAX; // spark flex or spark max?
-                public static final double GearRatio = 1;
+        public static final PIDFGains GAINS = new PIDFGains(0, 0, 0);
+        public static final double GearRatio = 3;
         public static final double MOMENT_OF_INERTIA_SIM = 1;
 
 
@@ -39,6 +40,6 @@ public class FunnelingConstents {
         public static final double MOMENT_OF_INERTIA_SIM = 1;
 
 
-        public static final double CenteringLowSpeed = 0.2; 
+        public static final double CenteringLowSpeed = 0.3; 
     }
 }

@@ -10,7 +10,7 @@ public interface FunnelIO {
 
     void SetDutyCycleLead(double DutyCycleLead);
     void SetDutyCycleCenterHigh(double DutyCycleCenterHigh);
-    void setDutyCycleCenterLow(double DutyCycleCenterLow);
+    // void setDutyCycleCenterLow(double DutyCycleCenterLow);
     void update(FunnelIOInputs inputs);
     
 }

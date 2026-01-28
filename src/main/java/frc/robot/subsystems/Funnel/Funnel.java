@@ -20,11 +20,11 @@ public class Funnel extends SubsystemBase {
   }
   
   public void SpinCenterMotors(double CenterMotorSpeedLOW , double CenterMotorSpeedHIGH){
-    io.setDutyCycleCenterLow(CenterMotorSpeedLOW);
+    // io.setDutyCycleCenterLow(CenterMotorSpeedLOW);
     io.SetDutyCycleCenterHigh(CenterMotorSpeedHIGH);
   }
   public void StopCenterMotors(){
-    io.setDutyCycleCenterLow(0);
+    // io.setDutyCycleCenterLow(0);
     io.SetDutyCycleCenterHigh(0);
   }
 

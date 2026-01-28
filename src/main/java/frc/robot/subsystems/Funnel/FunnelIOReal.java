@@ -12,12 +12,12 @@ import frc.util.MarinersController.MarinersSparkBase;
 public class FunnelIOReal implements FunnelIO{
     private final MarinersSparkBase funnelMotor;
     private final MarinersSparkBase centerHighMotor;
-    private final MarinersController centerLowMotor;
+    // private final MarinersController centerLowMotor;
 
     public FunnelIOReal(){
         funnelMotor = configureFunnelMotor();
         centerHighMotor = configureCenterHighMotor();
-        centerLowMotor = configureCenterLowMotor();
+        // centerLowMotor = configureCenterLowMotor();
     }
 
     private MarinersSparkBase configureFunnelMotor(){
@@ -26,6 +26,7 @@ public class FunnelIOReal implements FunnelIO{
          FunnelingConstents.LeadingMotor.Lead_ID, FunnelingConstents.LeadingMotor.Is_Brushless,
          FunnelingConstents.LeadingMotor.MOTOR_TYPE);
 
+         Motor.setMotorInverted(true);
          return Motor;
     }
 
@@ -33,7 +34,8 @@ public class FunnelIOReal implements FunnelIO{
         MarinersSparkBase Motor;
         Motor = new MarinersSparkBase("CenteringHighMotor", FunnelingConstents.CenteringHIGHMotor.CONTROLLER_LOCATION,
          FunnelingConstents.CenteringHIGHMotor.CenterHIGH_ID,FunnelingConstents.CenteringHIGHMotor.Is_Brushless,
-          FunnelingConstents.CenteringHIGHMotor.MOTOR_TYPE);
+         FunnelingConstents.CenteringHIGHMotor.MOTOR_TYPE, FunnelingConstents.CenteringHIGHMotor.GAINS,
+         FunnelingConstents.CenteringHIGHMotor.GearRatio);
 
           return Motor;
     }
@@ -43,14 +45,15 @@ public class FunnelIOReal implements FunnelIO{
         Motor = new MarinersSparkBase("CenteringLowMotor", FunnelingConstents.CenteringLOWMotor.CONTROLLER_LOCATION,
          FunnelingConstents.CenteringLOWMotor.CenterLOW_ID,FunnelingConstents.CenteringLOWMotor.Is_Brushless,
           FunnelingConstents.CenteringLOWMotor.MOTOR_TYPE);
-
+        Motor.setMotorInverted(false);
+        
           return Motor;
     
     }
 
-    public void setDutyCycleCenterLow(double LowDutyCycle){
-        centerLowMotor.setDutyCycle(LowDutyCycle);
-    }
+    // public void setDutyCycleCenterLow(double LowDutyCycle){
+    //     centerLowMotor.setDutyCycle(LowDutyCycle);
+    // }
     public void SetDutyCycleCenterHigh(double HighDutyCycle){
         centerHighMotor.setDutyCycle(HighDutyCycle);
     }

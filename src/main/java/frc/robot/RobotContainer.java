@@ -61,10 +61,10 @@ public class RobotContainer {
 
 
     public void configureDriveBindings(){
-        new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(new StartEndCommand(() ->
-            driveBase.setDefaultCommand(new DriveCommand(driveBase, driveXboxController)),
-            driveBase::removeDefaultCommand).ignoringDisable(true));
-        driveXboxController.y().whileTrue(new Funnelling(funnel));
+      //   new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(new StartEndCommand(() ->
+      //       driveBase.setDefaultCommand(new DriveCommand(driveBase, driveXboxController)),
+      //       driveBase::removeDefaultCommand).ignoringDisable(true));
+         driveXboxController.y().whileTrue(new Funnelling(funnel));
         driveXboxController.a().whileTrue(new ToShooter(funnel));
         
    }
