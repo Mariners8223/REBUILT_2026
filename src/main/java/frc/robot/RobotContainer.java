@@ -3,8 +3,10 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.commands.Drive.DriveCommand;
+import frc.robot.commands.Shooter.IncreasingShootSpeed;
 
 import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Volt;
 
 import edu.wpi.first.units.measure.Distance;
@@ -43,13 +45,15 @@ public class RobotContainer {
         // configureDriveBindings();
         configureSysIDConfig();
         
-        driveController.cross().whileTrue(
-            new StartEndCommand(
-                () -> shooter.setKickerVoltage(Volt.of(3)),
-                () -> shooter.setKickerVoltage(Volt.of(0)),
-                shooter
-            )
-        );
+        // driveController.cross().whileTrue(
+        //     new StartEndCommand(
+        //         () -> shooter.setKickerVoltage(Volt.of(3)),
+        //         () -> shooter.setKickerVoltage(Volt.of(0)),
+        //         shooter
+        //     )
+        // );
+        driveController.cross().whileTrue(new IncreasingShootSpeed(shooter, RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))))
+        .whileFalse(new InstantCommand(() -> shooter.setShooterVelocity(RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0)))));
     }
 
     public Distance distanceFromHub(){
