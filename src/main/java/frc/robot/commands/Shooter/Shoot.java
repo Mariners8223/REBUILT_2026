@@ -4,10 +4,15 @@
 
 package frc.robot.commands.Shooter;
 
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+
 import java.util.function.Supplier;
+
+import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterConstants;
@@ -18,11 +23,15 @@ public class Shoot extends Command {
   Supplier<Distance> distanceSupplier;
 
   AngularVelocity filteredRPM;
+  AngularVelocity filteredRPMLast;
+
+  Timer boostTimer;
 
   /** Creates a new Shoot. */
   public Shoot(Shooter shooter, Supplier<Distance> distanceSupplier) {
     this.shooter = shooter;
     this.distanceSupplier = distanceSupplier;
+    boostTimer = new Timer();
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
@@ -31,14 +40,27 @@ public class Shoot extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    filteredRPM = ShooterConstants.Calculations.requiredAngularVelocity(distanceSupplier.get());
-    
+    AngularVelocity requiredSpeed = ShooterConstants.Calculations.requiredAngularVelocity(distanceSupplier.get());
+    filteredRPM = requiredSpeed.copy();
+    filteredRPMLast = filteredRPM;
+    Logger.recordOutput("Filtered RPM", filteredRPM);
 
+    shooter.setShooterVelocity(requiredSpeed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    filteredRPMLast = filteredRPM.copy();
+    AngularVelocity velocityDifference = shooter.getShooterVelocity().minus(filteredRPM);
+    filteredRPM = filteredRPM.plus(velocityDifference.times(ShooterConstants.LOW_PASS_FILTER_ALPHA));
+    Logger.recordOutput("Filtered RPM", filteredRPM);
+
+    AngularVelocity filteredVelocityDifference = filteredRPM.minus(filteredRPMLast);
+    if (filteredVelocityDifference.lte(ShooterConstants.SHOOTING_VELOCITY_FALL.unaryMinus())){
+      shooter.boostFeedForward(filteredVelocityDifference.in(RotationsPerSecond) * ShooterConstants.FEED_FORWARD_SHOOTER_BOOST);
+    }
+  }
 
   // Called once the command ends or is interrupted.
   @Override

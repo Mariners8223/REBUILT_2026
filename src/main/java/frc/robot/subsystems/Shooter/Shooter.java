@@ -48,6 +48,12 @@ public class Shooter extends SubsystemBase {
     public void setShooterVoltage(Voltage voltage){
         io.setShooterVoltage(voltage.in(Volts));
     }
+    public void boostFeedForward(double boost){
+        io.shooterFeedForwardBoost(boost);
+    }
+    public void resetFeedForward(){
+        io.resetShooterFeedForward();
+    }
 
     
     public AngularVelocity getKickerVelocity(){ 
