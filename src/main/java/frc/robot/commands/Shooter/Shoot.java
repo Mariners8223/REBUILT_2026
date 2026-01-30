@@ -10,6 +10,7 @@ import java.util.function.Supplier;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.Timer;
@@ -46,11 +47,14 @@ public class Shoot extends Command {
     Logger.recordOutput("Filtered RPM", filteredRPM);
 
     shooter.setShooterVelocity(requiredSpeed);
+    shooter.setKickerVoltage(ShooterConstants.KICKER_ACTIVE_VOLTAGE);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    shooter.setShooterVelocityByDistance(distanceSupplier.get());
+
     filteredRPMLast = filteredRPM.copy();
     AngularVelocity velocityDifference = shooter.getShooterVelocity().minus(filteredRPM);
     filteredRPM = filteredRPM.plus(velocityDifference.times(ShooterConstants.LOW_PASS_FILTER_ALPHA));
@@ -58,7 +62,17 @@ public class Shoot extends Command {
 
     AngularVelocity filteredVelocityDifference = filteredRPM.minus(filteredRPMLast);
     if (filteredVelocityDifference.lte(ShooterConstants.SHOOTING_VELOCITY_FALL.unaryMinus())){
-      shooter.boostFeedForward(filteredVelocityDifference.in(RotationsPerSecond) * ShooterConstants.FEED_FORWARD_SHOOTER_BOOST);
+      double boost = MathUtil.clamp(Math.abs(filteredVelocityDifference.in(RotationsPerSecond)) * ShooterConstants.FEED_FORWARD_SHOOTER_BOOST,
+                                0.0,
+                                ShooterConstants.MAX_FEED_FORWARD_BOOST);
+
+      shooter.boostFeedForward(boost);
+      boostTimer.restart();
+    }
+
+    if (boostTimer.hasElapsed(0.1)){
+      shooter.resetFeedForward();
+      boostTimer.stop();
     }
   }
 

@@ -54,6 +54,12 @@ public class ShooterIOSim implements ShooterIO{
     public void setShooterDutyCycle(double targetDutyCycle){
         flywheel.setInputVoltage(targetDutyCycle / flywheel.getGearbox().nominalVoltageVolts);
     }
+    public void shooterFeedForwardBoost(double boost){
+        return;
+    }
+    public void resetShooterFeedForward(){
+        return;
+    }
 
     public double getKickerVelocity(){
         return kickerMotors.getVelocity() / 60;

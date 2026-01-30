@@ -18,6 +18,7 @@ import edu.wpi.first.units.measure.LinearAcceleration;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.Mass;
 import edu.wpi.first.units.measure.MomentOfInertia;
+import edu.wpi.first.units.measure.Voltage;
 import frc.util.PIDFGains;
 import frc.util.MarinersController.MarinersController.ControllerLocation;
 
@@ -80,6 +81,7 @@ public class ShooterConstants {
 
     public static double LOW_PASS_FILTER_ALPHA = 0.3;
     public static double FEED_FORWARD_SHOOTER_BOOST = 1;
+    public static double MAX_FEED_FORWARD_BOOST = 0.5;
     public static AngularVelocity SHOOTING_VELOCITY_FALL = RotationsPerSecond.of(5);
 
     public static final Distance SHOOTER_HEIGHT = Centimeter.of(40);
@@ -99,6 +101,9 @@ public class ShooterConstants {
     public static final Distance KICKER_WHEEL_RADIUS = Centimeter.of(10);
     public static final Distance KICKER_WHEEL_CIRCUMFERENCE = KICKER_WHEEL_RADIUS.times(2 * Math.PI);
     public static final double KICKER_MOMENT_OF_INERTIA = 0;
+
+    public static final Voltage KICKER_ACTIVE_VOLTAGE = Volts.of(3);
+
 
     public static final Pose3d POSITION = new Pose3d(
         new Translation3d(0, 0, 0), new Rotation3d(0, 0, 0)
