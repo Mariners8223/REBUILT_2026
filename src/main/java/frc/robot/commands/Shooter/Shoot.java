@@ -4,6 +4,7 @@
 
 package frc.robot.commands.Shooter;
 
+import static edu.wpi.first.units.Units.Millisecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import java.util.function.Supplier;
@@ -70,7 +71,7 @@ public class Shoot extends Command {
       boostTimer.restart();
     }
 
-    if (boostTimer.hasElapsed(0.1)){
+    if (boostTimer.hasElapsed(ShooterConstants.FEED_FORWARD_BOOST_TIME)){
       shooter.resetFeedForward();
       boostTimer.stop();
     }

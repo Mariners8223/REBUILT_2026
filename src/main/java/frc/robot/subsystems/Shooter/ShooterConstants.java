@@ -18,6 +18,7 @@ import edu.wpi.first.units.measure.LinearAcceleration;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.Mass;
 import edu.wpi.first.units.measure.MomentOfInertia;
+import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.units.measure.Voltage;
 import frc.util.PIDFGains;
 import frc.util.MarinersController.MarinersController.ControllerLocation;
@@ -83,6 +84,7 @@ public class ShooterConstants {
     public static double FEED_FORWARD_SHOOTER_BOOST = 1;
     public static double MAX_FEED_FORWARD_BOOST = 0.5;
     public static AngularVelocity SHOOTING_VELOCITY_FALL = RotationsPerSecond.of(5);
+    public static Time FEED_FORWARD_BOOST_TIME = Millisecond.of(150);
 
     public static final Distance SHOOTER_HEIGHT = Centimeter.of(40);
     public static final Angle SHOOTER_ANGLE = Degree.of(75);
