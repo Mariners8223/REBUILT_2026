@@ -4,12 +4,16 @@ import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.commands.Drive.DriveCommand;
 import frc.robot.commands.Shooter.IncreasingShootSpeed;
+import frc.robot.commands.Shooter.Shoot;
+import frc.robot.commands.Shooter.ShootVelocity;
 
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Volt;
 
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.DriveTrain.DriveBase;
@@ -55,12 +59,17 @@ public class RobotContainer {
         // driveController.cross().whileTrue(new IncreasingShootSpeed(shooter, RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))))
         // .whileFalse(new InstantCommand(() -> shooter.setShooterVelocity(RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0)))));
 
-        driveXboxController.a().whileTrue(new Shoot(shooter, RobotContainer::lieForDistance));
+        driveXboxController.a().whileTrue(new ShootVelocity(shooter, RobotContainer::dashboardVelocity));
+        driveXboxController.b().whileTrue(new StartEndCommand(
+            () -> shooter.setShooterVelocity(RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))),
+            () -> shooter.setShooterVoltage(Volt.zero()), 
+            shooter)
+        );
         
     }
 
-    public Distance lieForDistance(){
-        return SmartDashboard.getNumber("Shooter Distance", 0);
+    public static AngularVelocity dashboardVelocity(){
+        return RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0));
     }
 
     public Distance distanceFromHub(){
