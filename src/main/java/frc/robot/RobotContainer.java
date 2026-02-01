@@ -61,7 +61,7 @@ public class RobotContainer {
     }
     if (pose.getX() <= 4.5){
         return driveBase.findPath(trenchLocations.downRightTrench, 2);
-    }
+    }+
     return driveBase.findPath(trenchLocations.downLeftTrench, 2);
    }
    
