@@ -9,7 +9,9 @@ import com.pathplanner.lib.util.FlippingUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.DriveTrain.DriveBase;
+import frc.util.HubTracker;
 
 
 /**
@@ -33,6 +35,7 @@ public class RobotContainer {
         driveBase = new DriveBase();
     
         configureDriveBindings();
+        
         
     }
 
@@ -61,7 +64,7 @@ public class RobotContainer {
     }
     if (pose.getX() <= 4.5){
         return driveBase.findPath(trenchLocations.downRightTrench, 2);
-    }+
+    }
     return driveBase.findPath(trenchLocations.downLeftTrench, 2);
    }
    
