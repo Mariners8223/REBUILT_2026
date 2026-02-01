@@ -52,8 +52,15 @@ public class RobotContainer {
         //         shooter
         //     )
         // );
-        driveController.cross().whileTrue(new IncreasingShootSpeed(shooter, RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))))
-        .whileFalse(new InstantCommand(() -> shooter.setShooterVelocity(RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0)))));
+        // driveController.cross().whileTrue(new IncreasingShootSpeed(shooter, RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))))
+        // .whileFalse(new InstantCommand(() -> shooter.setShooterVelocity(RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0)))));
+
+        driveXboxController.a().whileTrue(new Shoot(shooter, RobotContainer::lieForDistance));
+        
+    }
+
+    public Distance lieForDistance(){
+        return SmartDashboard.getNumber("Shooter Distance", 0);
     }
 
     public Distance distanceFromHub(){

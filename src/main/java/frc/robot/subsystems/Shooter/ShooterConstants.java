@@ -138,7 +138,8 @@ public class ShooterConstants {
         }
 
         public static AngularVelocity requiredAngularVelocity(LinearVelocity launchVelocity){
-            return RadiansPerSecond.zero(); // TODO: Find Function 
+            // return RadiansPerSecond.zero(); // TODO: Find Function
+            return RotationsPerSecond.of(launchVelocity.in(MetersPerSecond)); // TODO: FIX THIS. THIS CANNOT STAY FOR ANY LONG AMOUNT OF TIME
         }
 
         public static AngularVelocity requiredAngularVelocity(Distance distance){
