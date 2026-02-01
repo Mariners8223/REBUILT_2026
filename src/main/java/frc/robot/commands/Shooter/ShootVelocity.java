@@ -28,6 +28,8 @@ public class ShootVelocity extends Command {
   AngularVelocity filteredRPM;
   AngularVelocity filteredRPMLast;
 
+  AngularVelocity RPMLast;
+
   Timer boostTimer;
 
   /** Creates a new Shoot. */
@@ -46,6 +48,7 @@ public class ShootVelocity extends Command {
     AngularVelocity requiredSpeed = velocitySupplier.get();
     filteredRPM = requiredSpeed.copy();
     filteredRPMLast = filteredRPM;
+    RPMLast = shooter.getShooterVelocity();
     Logger.recordOutput("Filtered RPM", filteredRPM);
 
     shooter.setShooterVelocity(requiredSpeed);
@@ -63,8 +66,10 @@ public class ShootVelocity extends Command {
     Logger.recordOutput("Filtered RPM", filteredRPM);
 
     AngularVelocity filteredVelocityDifference = filteredRPM.minus(filteredRPMLast);
-    if (filteredVelocityDifference.lte(ShooterConstants.SHOOTING_VELOCITY_FALL.unaryMinus())){
-      double boost = MathUtil.clamp(Math.abs(filteredVelocityDifference.in(RotationsPerSecond)) * ShooterConstants.FEED_FORWARD_SHOOTER_BOOST,
+    AngularVelocity currentVelocityDifference = shooter.getShooterVelocity().minus(RPMLast);
+    // if (filteredVelocityDifference.lte(ShooterConstants.SHOOTING_VELOCITY_FALL.unaryMinus())){
+    if (currentVelocityDifference.lte(ShooterConstants.SHOOTING_VELOCITY_FALL.unaryMinus())){
+      double boost = MathUtil.clamp(Math.abs(currentVelocityDifference.in(RotationsPerSecond)) * ShooterConstants.FEED_FORWARD_SHOOTER_BOOST,
                                 0.0,
                                 ShooterConstants.MAX_FEED_FORWARD_BOOST);
 
@@ -72,16 +77,19 @@ public class ShootVelocity extends Command {
       boostTimer.restart();
     }
 
-    if (boostTimer.hasElapsed(ShooterConstants.FEED_FORWARD_BOOST_TIME)){
+    if (boostTimer.hasElapsed(ShooterConstants.FEED_FORWARD_BOOST_TIME) || ShooterConstants.Calculations.epsilonEquals(shooter.getShooterVelocity(), velocitySupplier.get(), RotationsPerSecond.of(1))){
       shooter.resetFeedForward();
       boostTimer.stop();
     }
+
+    RPMLast = shooter.getShooterVelocity().copy();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     shooter.setShooterVoltage(Volts.zero());
+    shooter.setKickerVoltage(Volts.zero());
   }
 
   // Returns true when the command should end.

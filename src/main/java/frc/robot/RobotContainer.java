@@ -59,12 +59,16 @@ public class RobotContainer {
         // driveController.cross().whileTrue(new IncreasingShootSpeed(shooter, RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))))
         // .whileFalse(new InstantCommand(() -> shooter.setShooterVelocity(RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0)))));
 
-        driveXboxController.a().whileTrue(new ShootVelocity(shooter, RobotContainer::dashboardVelocity));
-        driveXboxController.b().whileTrue(new StartEndCommand(
+        driveController.cross().whileTrue(new ShootVelocity(shooter, RobotContainer::dashboardVelocity));
+        driveController.circle().whileTrue(new StartEndCommand(
             () -> shooter.setShooterVelocity(RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))),
             () -> shooter.setShooterVoltage(Volt.zero()), 
             shooter)
         );
+        // driveController.triangle().whileTrue(new StartEndCommand(
+        //     () -> shooter.setKickerVoltage(Volt.of(SmartDashboard.getNumber("Kicker Voltage", 0))),
+        //     () -> shooter.setKickerVoltage(Volt.zero()), 
+        //     null));
         
     }
 

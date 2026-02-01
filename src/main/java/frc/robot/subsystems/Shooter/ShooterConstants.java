@@ -71,7 +71,7 @@ public class ShooterConstants {
         public static final int MOTOR_2_ID = 16;
 
         public static final boolean MOTOR_1_IS_INVERTED = true;
-        public static final boolean MOTOR_2_IS_INVERTED = false;
+        public static final boolean MOTOR_2_IS_INVERTED = true;
     }
 
     public static class HUB_CONSTANTS{
@@ -81,9 +81,9 @@ public class ShooterConstants {
     }
 
     public static double LOW_PASS_FILTER_ALPHA = 0.3;
-    public static double FEED_FORWARD_SHOOTER_BOOST = 1;
-    public static double MAX_FEED_FORWARD_BOOST = 0.5;
-    public static AngularVelocity SHOOTING_VELOCITY_FALL = RotationsPerSecond.of(5);
+    public static double FEED_FORWARD_SHOOTER_BOOST = 0.2;
+    public static double MAX_FEED_FORWARD_BOOST =  2;
+    public static AngularVelocity SHOOTING_VELOCITY_FALL = RotationsPerSecond.of(4);
     public static Time FEED_FORWARD_BOOST_TIME = Millisecond.of(150);
 
     public static final Distance SHOOTER_HEIGHT = Centimeter.of(40);
@@ -138,8 +138,7 @@ public class ShooterConstants {
         }
 
         public static AngularVelocity requiredAngularVelocity(LinearVelocity launchVelocity){
-            // return RadiansPerSecond.zero(); // TODO: Find Function
-            return RotationsPerSecond.of(launchVelocity.in(MetersPerSecond)); // TODO: FIX THIS. THIS CANNOT STAY FOR ANY LONG AMOUNT OF TIME
+            return RadiansPerSecond.zero(); // TODO: Find Function
         }
 
         public static AngularVelocity requiredAngularVelocity(Distance distance){

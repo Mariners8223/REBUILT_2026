@@ -52,6 +52,7 @@ public class Robot extends LoggedRobot {
     m_robotContainer = new RobotContainer();
 
     SmartDashboard.putNumber("Shooter Velocity", 0);
+    SmartDashboard.putNumber("Kicker Voltage", 0);
     SmartDashboard.putNumber("Shooter Distance", 0);
     SmartDashboard.putNumber("Grow", 1);
   }
