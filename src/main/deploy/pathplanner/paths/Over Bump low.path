@@ -4,28 +4,28 @@
     {
       "anchor": {
         "x": 3.5,
-        "y": 5.5
+        "y": 2.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.776650110375276,
-        "y": 5.404707505518763
+        "x": 4.5,
+        "y": 2.5
       },
       "isLocked": false,
-      "linkedName": "start bump high 4OC"
+      "linkedName": "start bump low 4OC"
     },
     {
       "anchor": {
-        "x": 1.668300220750552,
-        "y": 4.823912803532007
+        "x": 6.0,
+        "y": 2.5
       },
       "prevControl": {
-        "x": 1.9054580573951436,
-        "y": 5.022350993377484
+        "x": 5.0,
+        "y": 2.5
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "hub/tower high"
+      "linkedName": "bump low natural 4OC"
     }
   ],
   "rotationTargets": [],
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -13.924773220409417
+    "rotation": -51.02778261636085
   },
   "reversed": false,
   "folder": null,
