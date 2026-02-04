@@ -43,6 +43,7 @@ public class IntakeConstants
         public static final MotorType MOTOR_TYPE = MotorType.SPARK_FLEX;
         public static final boolean IS_INVERTED = false; 
         public static final Measure<VoltageUnit> VOLTAGE = Volts.of(0);//TODO: fix
+        public static final 
         public static final double GEAR_RATIO = 1;
         public static final Measure<PerUnit<AngleUnit, DistanceUnit>> ROTATIONS_PER_METERS = Rotations.per(Meters).ofNative(0);//TODO:fix
     }
