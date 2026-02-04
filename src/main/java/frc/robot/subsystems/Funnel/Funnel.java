@@ -19,7 +19,7 @@ public class Funnel extends SubsystemBase {
     io.SetDutyCycleLead(0);
   }
   
-  public void SpinCenterMotors(double CenterMotorSpeedLOW , double CenterMotorSpeedHIGH){
+  public void SpinCenterMotors(double CenterMotorSpeedHIGH){
     // io.setDutyCycleCenterLow(CenterMotorSpeedLOW);
     io.SetDutyCycleCenterHigh(CenterMotorSpeedHIGH);
   }

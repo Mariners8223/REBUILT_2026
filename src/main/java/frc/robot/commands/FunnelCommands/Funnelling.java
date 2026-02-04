@@ -8,6 +8,7 @@ public class Funnelling extends Command {
   public final Funnel funnel;
   public Funnelling(Funnel funnel) {
     this.funnel = funnel;
+    addRequirements(funnel);
   }
 
   @Override

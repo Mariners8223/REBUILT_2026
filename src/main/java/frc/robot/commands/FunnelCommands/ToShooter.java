@@ -10,12 +10,13 @@ public class ToShooter extends Command {
   public final Funnel funnel;
   public ToShooter(Funnel funnel) {
     this.funnel = funnel;
+    addRequirements(funnel);
   }
 
 
   @Override
   public void initialize() {
-    funnel.SpinCenterMotors(FunnelingConstents.CenteringLOWMotor.CenteringLowSpeed, FunnelingConstents.CenteringHIGHMotor.CenteringHighSpeed);
+    funnel.SpinCenterMotors(FunnelingConstents.CenteringHIGHMotor.CenteringHighSpeed);
     funnel.SpinLeadMotor(FunnelingConstents.LeadingMotor.LeadSpeed);
   }
 
