@@ -4,10 +4,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 
+import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.Volts;
 
 import org.littletonrobotics.junction.Logger;
 import frc.robot.subsystems.Intake.IntakeIO.IntakeInputs;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -40,9 +42,9 @@ public class Intake extends SubsystemBase{
         io.setBottomMotorDutyCycle(voltage.in(Volts));
     }
 
-    public double getCurrentPosition()
+    public Angle getCurrentPosition()
     {
-        return io.getCurrentPosition();
+        return Rotations.of(io.getCurrentPosition());
     }
 
     public void resetPositionMotorEncoder()

@@ -15,16 +15,16 @@ public class IntakeIOSim implements IntakeIO
     public IntakeIOSim()
     {
         positionMotor = new MarinersSimMotor("Position motor", null,IntakeConstants.PositionMotor.GEAR_RATIO,
-        IntakeConstants.PositionMotor.ROTATIONS_PER_METERS.in(Rotations.per(Meter)), IntakeConstants.MOMENT_OF_INERTIA);
+        1 , IntakeConstants.MOMENT_OF_INERTIA);
 
-        positionMotor.enableSoftLimits(IntakeConstants.SOFT_MINIMUM, IntakeConstants.SOFT_MAXIMUM);
+        positionMotor.enableSoftLimits(IntakeConstants.PositionMotor.SOFT_MINIMUM, IntakeConstants.PositionMotor.SOFT_MAXIMUM);
         positionMotor.setMotorInverted(IntakeConstants.PositionMotor.IS_INVERTED);
 
         topMotor = new MarinersSimMotor("Top motor", null, IntakeConstants.TopMotor.GEAR_RATIO,
-        IntakeConstants.TopMotor.ROTATIONS_PER_METERS.in(Rotations.per(Meter)),IntakeConstants.MOMENT_OF_INERTIA);
+        1 ,IntakeConstants.MOMENT_OF_INERTIA);
 
         bottomMotor = new MarinersSimMotor("Bottom motor", null, IntakeConstants.BottomMotor.GEAR_RATIO,
-        IntakeConstants.BottomMotor.ROTATIONS_PER_METERS.in(Rotations.per(Meter)),IntakeConstants.MOMENT_OF_INERTIA);
+        1 ,IntakeConstants.MOMENT_OF_INERTIA);
     }
     public void setPositionMotorRotation(double rotation)
     {

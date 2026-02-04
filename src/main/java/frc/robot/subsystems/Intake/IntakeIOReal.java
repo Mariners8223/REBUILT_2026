@@ -23,7 +23,9 @@ public class IntakeIOReal implements IntakeIO{
         IntakeConstants.PositionMotor.IS_BRUSHLESS, IntakeConstants.PositionMotor.MOTOR_TYPE);
         
         motor.setMotorInverted(IntakeConstants.PositionMotor.IS_INVERTED);
-        motor.enableSoftLimits(IntakeConstants.SOFT_MINIMUM, IntakeConstants.SOFT_MAXIMUM);
+        motor.enableSoftLimits(IntakeConstants.PositionMotor.SOFT_MINIMUM, IntakeConstants.PositionMotor.SOFT_MAXIMUM);
+
+        // PID and Profile
 
         return motor;
     }
@@ -45,12 +47,14 @@ public class IntakeIOReal implements IntakeIO{
 
         motor.setMotorInverted(IntakeConstants.TopMotor.IS_INVERTED);
 
+        motor.setMotorAsFollower(this.topMotor, IntakeConstants.BottomMotor.IS_INVERTED);
+
         return motor;
     }
 
     public void setPositionMotorRotation(double rotation)
     {
-        positionMotor.setReference(rotation, ControlMode.ProfiledPosition);
+        positionMotor.setReference(rotation, ControlMode.ProfiledVelocity);
     }
 
     public void setRollersDutyCycle(double dutyCycle)
