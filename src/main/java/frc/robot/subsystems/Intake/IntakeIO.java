@@ -18,15 +18,17 @@ public interface IntakeIO
         AngularVelocity BottomMotorSpeed;//RPM
     }
 
-    void setPositionMotorVoltage (double voltage);
+    void setPositionMotorRotation (double rotation);
 
-    void setTopMotorVoltage(double voltage);
+    void setTopMotorDutyCycle(double dutyCycle);
 
-    void setBottomMotorVoltage(double voltage);
+    void setBottomMotorDutyCycle(double dutyCycle);
+
+    void setRollersDutyCycle(double dutyCycle);
 
     double getCurrentPosition();
 
-    void resetAllMotorsEncoder();
+    void resetPositionMotorEncoder();
 
     void Update(IntakeInputs inputs);
 }

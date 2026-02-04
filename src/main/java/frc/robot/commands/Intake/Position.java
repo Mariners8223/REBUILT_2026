@@ -11,10 +11,12 @@ import frc.robot.subsystems.Intake.IntakeConstants;
 
 public class Position extends Command {
   private final Intake intake;
+  private final double position;
 
-  public Position(Intake intake) 
+  public Position(Intake intake, double position) 
   {
     this.intake = intake;
+    this.position = position;
 
     addRequirements(intake);
   }
@@ -23,13 +25,13 @@ public class Position extends Command {
   @Override
   public void initialize() 
   {
-    intake.setPositionMotorVoltage(IntakeConstants.PositionMotor.VOLTAGE);
+    intake.setPositionMotorRotation(IntakeConstants.PositionMotor.VOLTAGE);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() 
   {
-    return (Math.abs(intake.getCurrentPosition() - intake.getDesiredPosition()) <= IntakeConstants.PositionMotor.POSITION_TOLERANCE);
+    return (Math.abs(intake.getCurrentPosition() - position) <= IntakeConstants.PositionMotor.POSITION_TOLERANCE);
   }
 }

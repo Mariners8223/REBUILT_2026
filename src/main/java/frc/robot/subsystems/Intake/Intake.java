@@ -22,22 +22,22 @@ public class Intake extends SubsystemBase{
     public Intake()
     {
         io = new IntakeIOReal();
-        this.resetAllMotorsEncoder();
+        this.resetPositionMotorEncoder();
     }
 
-    public void setPositionMotorVoltage (Voltage voltage)
+    public void setPositionMotorRotation(Voltage voltage)
     {
-        io.setPositionMotorVoltage(voltage.in(Volts));
+        io.setPositionMotorRotation(voltage.in(Volts));
     }
 
-    public void setTopMotorVoltage(Voltage voltage)
+    public void setTopMotorDutyCycle(Voltage voltage)
     {
-        io.setTopMotorVoltage(voltage.in(Volts));
+        io.setTopMotorDutyCycle(voltage.in(Volts));
     }
 
-    public void setBottomMotorVoltage(Voltage voltage)
+    public void setBottomMotorDutyCycle(Voltage voltage)
     {
-        io.setBottomMotorVoltage(voltage.in(Volts));
+        io.setBottomMotorDutyCycle(voltage.in(Volts));
     }
 
     public double getCurrentPosition()
@@ -45,18 +45,14 @@ public class Intake extends SubsystemBase{
         return io.getCurrentPosition();
     }
 
-    public void resetAllMotorsEncoder()
+    public void resetPositionMotorEncoder()
     {
-        io.resetAllMotorsEncoder();
-    }
-
-    public double getDesiredPosition()
-    {
-        return this.desiredPosition;
+        io.resetPositionMotorEncoder();
     }
 
     @Override
-    public void periodic() {
+    public void periodic() 
+    {
         io.Update(inputs);
         Logger.processInputs(getName(), inputs);
     }

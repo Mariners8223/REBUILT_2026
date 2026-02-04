@@ -3,6 +3,7 @@ package frc.robot.subsystems.Intake;
 import frc.util.MarinersController.MarinersController;
 import frc.util.MarinersController.MarinersSparkBase;
 import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor;
+import frc.util.MarinersController.MarinersController.ControlMode;
 
 public class IntakeIOReal implements IntakeIO{
     private final MarinersSparkBase positionMotor;
@@ -22,6 +23,7 @@ public class IntakeIOReal implements IntakeIO{
         IntakeConstants.PositionMotor.IS_BRUSHLESS, IntakeConstants.PositionMotor.MOTOR_TYPE);
         
         motor.setMotorInverted(IntakeConstants.PositionMotor.IS_INVERTED);
+        motor.enableSoftLimits(IntakeConstants.SOFT_MINIMUM, IntakeConstants.SOFT_MAXIMUM);
 
         return motor;
     }
@@ -46,18 +48,39 @@ public class IntakeIOReal implements IntakeIO{
         return motor;
     }
 
-    public void setPositionMotorVoltage(double voltage)
+    public void setPositionMotorRotation(double rotation)
     {
-        positionMotor.setVoltage(voltage);
+        positionMotor.setReference(rotation, ControlMode.ProfiledPosition);
     }
 
-    public void setTopMotorVoltage(double voltage)
+    public void setRollersDutyCycle(double dutyCycle)
     {
-        topMotor.setVoltage(voltage);
+        topMotor.setDutyCycle(dutyCycle);
+        bottomMotor.setDutyCycle(dutyCycle);
     }
 
-    public void setBottomMotorVoltage(double voltage)
+    public double getCurrentPosition()
     {
-        bottomMotor.setVoltage(voltage);
+        return positionMotor.getPosition();
+    }
+
+    public void setTopMotorDutyCycle(double dutyCycle)
+    {
+        topMotor.setDutyCycle(dutyCycle);
+    }
+
+    public void setBottomMotorDutyCycle(double dutyCycle)
+    {
+        bottomMotor.setDutyCycle(dutyCycle);
+    }
+
+    public void resetPositionMotorEncoder()
+    {
+        positionMotor.setMotorEncoderPosition(IntakeConstants.PositionMotor.BOTTOM_POSITION);
+    }
+
+    public void Update(IntakeInputs inputs)
+    {
+        //inputs.currentPosition = getCurrentPosition();
     }
 }

@@ -3,6 +3,7 @@ package frc.robot.subsystems.Intake;
 import static edu.wpi.first.units.Units.Meter;
 import static edu.wpi.first.units.Units.Rotations;
 
+import frc.util.MarinersController.MarinersController.ControlMode;
 import frc.util.MarinersController.MarinersSimMotor;
 
 public class IntakeIOSim implements IntakeIO 
@@ -25,18 +26,39 @@ public class IntakeIOSim implements IntakeIO
         bottomMotor = new MarinersSimMotor("Bottom motor", null, IntakeConstants.BottomMotor.GEAR_RATIO,
         IntakeConstants.BottomMotor.ROTATIONS_PER_METERS.in(Rotations.per(Meter)),IntakeConstants.MOMENT_OF_INERTIA);
     }
-    public void setPositionMotorVoltage(double voltage)
+    public void setPositionMotorRotation(double rotation)
     {
-        positionMotor.setVoltage(voltage);
+        positionMotor.setReference(rotation, ControlMode.ProfiledPosition);
     }
 
-    public void setTopMotorVoltage(double voltage)
+    public void setRollersDutyCycle(double dutyCycle)
     {
-        topMotor.setVoltage(voltage);
+        topMotor.setDutyCycle(dutyCycle);
+        bottomMotor.setDutyCycle(dutyCycle);
     }
 
-    public void setBottomMotorVoltage(double voltage)
+    public double getCurrentPosition()
     {
-        bottomMotor.setVoltage(voltage);
+        return positionMotor.getPosition();
+    }
+
+    public void setTopMotorDutyCycle(double dutyCycle)
+    {
+        topMotor.setDutyCycle(dutyCycle);
+    }
+
+    public void setBottomMotorDutyCycle(double dutyCycle)
+    {
+        bottomMotor.setDutyCycle(dutyCycle);
+    }
+
+    public void resetPositionMotorEncoder()
+    {
+        positionMotor.setMotorEncoderPosition(IntakeConstants.PositionMotor.BOTTOM_POSITION);
+    }
+
+    public void Update(IntakeInputs inputs)
+    {
+        //inputs.currentPosition = getCurrentPosition();
     }
 }

@@ -30,6 +30,9 @@ public class IntakeConstants
         public static final double POSITION_TOLERANCE = 0;
         public static final double GEAR_RATIO = 1;
         public static final Measure<PerUnit<AngleUnit, DistanceUnit>> ROTATIONS_PER_METERS = Rotations.per(Meters).ofNative(0);//TODO:fix
+        public static final double TOP_POSITION = 0;
+        public static final double MIDDLE_POSITION = 0;
+        public static final double BOTTOM_POSITION = 0;
     }
 
     public static class TopMotor
