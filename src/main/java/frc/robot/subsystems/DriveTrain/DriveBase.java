@@ -153,7 +153,7 @@ public class DriveBase extends SubsystemBase {
                             DriverStation.getAlliance().get() == DriverStation.Alliance.Red,
                 this);
 
-                setModulesBrakeMode(true);
+        setModulesBrakeMode(true);
     }
 
 
@@ -197,7 +197,7 @@ public class DriveBase extends SubsystemBase {
         poseEstimator.resetPosition(newPose.getRotation(), positions, newPose);
 
         gyro.reset(newPose.getRotation());
-        currentPose = newPose;
+        currentPose = newPose;  
         Logger.processInputs(getName(), inputs);
     }
 
@@ -250,6 +250,7 @@ public class DriveBase extends SubsystemBase {
     /**
      * gets the current chassisSpeeds of the robot
      *
+     * 
      * @return the current chassis speeds
      */
     public ChassisSpeeds getChassisSpeeds() {
