@@ -72,7 +72,7 @@ public class RobotContainer {
    
    public static boolean inRange(){
     Pose2d pose = driveBase.getPose();
-    Pose2d hub = new Pose2d(4.611,4.046,new Rotation2d());
+    Pose2d hub = Constants.autoConstats.hub;
     if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
         pose = FlippingUtil.flipFieldPose(driveBase.getPose());
         hub = FlippingUtil.flipFieldPose(hub);
@@ -80,8 +80,18 @@ public class RobotContainer {
     double distanceFromHub = driveBase.getDistanceFromPoint2D(hub);
 
     if (pose.getX() > 4.5) return false;
-    if (distanceFromHub > Constants.autoConstats.maxRange) return false;
-    return true;
+    return distanceFromHub < Constants.autoConstats.maxRange;
+   }
+
+   public Command getInRange(){
+    Pose2d pose = driveBase.getPose();
+    if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
+        pose = FlippingUtil.flipFieldPose(driveBase.getPose());
+    }
+    if (pose.getY() >= 4.5){
+        return driveBase.findPath(Constants.autoConstats.topShoot).until(RobotContainer::inRange);
+    }
+    return driveBase.findPath(Constants.autoConstats.bottomShoot).until(RobotContainer::inRange);
    }
 
 
