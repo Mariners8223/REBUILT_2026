@@ -4,6 +4,8 @@ import frc.util.MarinersController.MarinersTalonFX;
 
 import static edu.wpi.first.units.Units.Rotation;
 
+import edu.wpi.first.math.geometry.Pose3d;
+
 import static edu.wpi.first.units.Units.RPM;
 
 import edu.wpi.first.units.measure.Angle;

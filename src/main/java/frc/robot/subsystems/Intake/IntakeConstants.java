@@ -64,6 +64,9 @@ public class IntakeConstants
         0,
         POSITION_TOLERANCE.in(Rotation),
         0);
+        public static final double X_ON_ROBOT = 0;
+        public static final double Y_ON_ROBOT = 0;
+        public static final double Z_OFFSET = 0;
     }
 
     public static class RollersMotor
@@ -79,8 +82,6 @@ public class IntakeConstants
     }
 
     public static final double MOMENT_OF_INERTIA = 0;
-    public static final double X_ON_ROBOT = 0;
-    public static final double Y_ON_ROBOT = 0;
-    public static final double Z_OFFSET = 0;
+    
     
 }
