@@ -63,6 +63,7 @@ Logger.start(); // Start logging! No more data receivers, replay sources, or met
     m_robotContainer = new RobotContainer();
     SmartDashboard.putBoolean("IsHubActive", HubTracker.isActive());
     SmartDashboard.putString("TimeLeftOnActivation", HubTracker.timeRemainingInCurrentShift().toString());
+    SmartDashboard.putBoolean("InRange", RobotContainer.inRange());
   }
 
   /**

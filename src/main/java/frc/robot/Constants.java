@@ -26,13 +26,17 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
+  public static final class autoConstats{
+
+    static double maxRange = 5; //TODO: find this
   //TODO: find an update all the locations!!!
-  public static final class TrenchLocations{
-    Pose2d upRightTrench = new Pose2d(0,0,new Rotation2d(0,0));
-    Pose2d upLeftTrench = new Pose2d(0,0,new Rotation2d(0,0));
-    Pose2d downRightTrench = new Pose2d(0,0,new Rotation2d(0,0));
-    Pose2d downLeftTrench = new Pose2d(0,0,new Rotation2d(0,0));
+    public static final class TrenchLocations{
+      Pose2d upRightTrench = new Pose2d(0,0,new Rotation2d(0,0));
+      Pose2d upLeftTrench = new Pose2d(0,0,new Rotation2d(0,0));
+      Pose2d downRightTrench = new Pose2d(0,0,new Rotation2d(0,0));
+      Pose2d downLeftTrench = new Pose2d(0,0,new Rotation2d(0,0));
+
+    }
 
   }
-
 }

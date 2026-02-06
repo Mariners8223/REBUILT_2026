@@ -2,11 +2,13 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
+import frc.robot.Constants.autoConstats;
 import frc.robot.commands.Drive.DriveCommand;
 
 import com.pathplanner.lib.util.FlippingUtil;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -21,7 +23,7 @@ import frc.util.HubTracker;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-    public static Constants.TrenchLocations trenchLocations = new Constants.TrenchLocations();
+    public static Constants.autoConstats.TrenchLocations trenchLocations = new Constants.autoConstats.TrenchLocations();
     public static DriveBase driveBase;
     public static Robot robot;
     public static CommandPS5Controller driveController;
@@ -68,6 +70,19 @@ public class RobotContainer {
     return driveBase.findPath(trenchLocations.downLeftTrench, 2);
    }
    
+   public static boolean inRange(){
+    Pose2d pose = driveBase.getPose();
+    Pose2d hub = new Pose2d(4.611,4.046,new Rotation2d());
+    if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
+        pose = FlippingUtil.flipFieldPose(driveBase.getPose());
+        hub = FlippingUtil.flipFieldPose(hub);
+    }
+    double distanceFromHub = driveBase.getDistanceFromPoint2D(hub);
+
+    if (pose.getX() > 4.5) return false;
+    if (distanceFromHub > Constants.autoConstats.maxRange) return false;
+    return true;
+   }
 
 
 }
