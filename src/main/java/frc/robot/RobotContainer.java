@@ -52,6 +52,7 @@ public class RobotContainer {
       
    }
 
+
    public Command passTrench(){
     Pose2d pose = driveBase.getPose();
 
@@ -70,6 +71,7 @@ public class RobotContainer {
     return driveBase.findPath(trenchLocations.downLeftTrench, 2);
    }
    
+
    public static boolean inRange(){
     Pose2d pose = driveBase.getPose();
     Pose2d hub = Constants.autoConstats.hub;
@@ -83,6 +85,7 @@ public class RobotContainer {
     return distanceFromHub < Constants.autoConstats.maxRange;
    }
 
+
    public Command getInRange(){
     Pose2d pose = driveBase.getPose();
     if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
@@ -95,4 +98,5 @@ public class RobotContainer {
    }
 
 
+   
 }

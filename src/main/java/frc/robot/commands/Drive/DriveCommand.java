@@ -11,7 +11,7 @@ import frc.robot.subsystems.DriveTrain.SwerveModules.DevBotConstants;
 
 import static frc.robot.subsystems.DriveTrain.DriveBaseConstants.DISTANCE_BETWEEN_WHEELS;
 
-public class DriveCommand extends Command {
+public class DriveCommand extends Command{
 
     private final DriveBase driveBase;
     private final CommandXboxController controller;
