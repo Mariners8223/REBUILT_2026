@@ -22,8 +22,8 @@ public class Rollers extends Command {
   @Override
   public void initialize() 
   {
-    intake.setTopMotorDutyCycle(IntakeConstants.TopMotor.VOLTAGE);
-    intake.setBottomMotorDutyCycle(IntakeConstants.BottomMotor.VOLTAGE);
+    intake.setTopMotorDutyCycle(IntakeConstants.TopMotor.DUTY_CYCLE);
+    intake.setBottomMotorDutyCycle(IntakeConstants.BottomMotor.DUTY_CYCLE);
   }
 
   // Called once the command ends or is interrupted.

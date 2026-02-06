@@ -29,7 +29,7 @@ public class IntakeConstants
         public static final MotorType MOTOR_TYPE = MotorType.SPARK_FLEX;
         public static final boolean IS_INVERTED = false;
         //public static final Measure<VoltageUnit> VOLTAGE = Volts.of(0);//TODO: do i need to delete that? if you dont want it just do it
-        public static final double POSITION_TOLERANCE = 0;
+        public static final Angle POSITION_TOLERANCE = Degrees.of(0);;
         public static final double GEAR_RATIO = 1;
         public static final Angle TOP_POSITION = Degrees.of(0);
         public static final Angle MIDDLE_POSITION = Degrees.of(0);

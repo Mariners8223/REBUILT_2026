@@ -45,7 +45,7 @@ public class Intake extends SubsystemBase{
 
     public Angle getCurrentPosition()
     {
-        return Rotations.of(io.getCurrentPosition());
+        return io.getCurrentPosition();
     }
 
     public void resetPositionMotorEncoder()

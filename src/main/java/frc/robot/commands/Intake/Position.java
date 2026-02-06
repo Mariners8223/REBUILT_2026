@@ -4,16 +4,18 @@
 
 package frc.robot.commands.Intake;
 
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeConstants;
 
 
 public class Position extends Command {
   private final Intake intake;
-  private final double position;
+  private final Angle position;
 
-  public Position(Intake intake, double position) 
+  public Position(Intake intake, Angle position) 
   {
     this.intake = intake;
     this.position = position;
@@ -25,13 +27,13 @@ public class Position extends Command {
   @Override
   public void initialize() 
   {
-    intake.setPositionMotorRotation(IntakeConstants.PositionMotor.VOLTAGE);
+    intake.setPositionMotorRotation(position);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() 
   {
-    return (Math.abs(intake.getCurrentPosition() - position) <= IntakeConstants.PositionMotor.POSITION_TOLERANCE);
+    return Constants.CALCULATIONS.epsilonEquals(intake.getCurrentPosition(), position, IntakeConstants.PositionMotor.POSITION_TOLERANCE);
   }
 }

@@ -2,6 +2,10 @@ package frc.robot.subsystems.Intake;
 
 import frc.util.MarinersController.MarinersController;
 import frc.util.MarinersController.MarinersSparkBase;
+
+import static edu.wpi.first.units.Units.Rotation;
+
+import edu.wpi.first.units.measure.Angle;
 import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor;
 import frc.util.MarinersController.MarinersController.ControlMode;
 
@@ -52,9 +56,9 @@ public class IntakeIOReal implements IntakeIO{
         return motor;
     }
 
-    public void setPositionMotorRotation(double rotation)
+    public void setPositionMotorRotation(Angle rotation)
     {
-        positionMotor.setReference(rotation, ControlMode.ProfiledVelocity);
+        positionMotor.setReference(rotation.in(Rotation), ControlMode.ProfiledVelocity);
     }
 
     public void setRollersDutyCycle(double dutyCycle)
@@ -63,9 +67,9 @@ public class IntakeIOReal implements IntakeIO{
         bottomMotor.setDutyCycle(dutyCycle);
     }
 
-    public double getCurrentPosition()
+    public Angle getCurrentPosition()
     {
-        return positionMotor.getPosition();
+        return positionMotor.getPosition().in(Angle);
     }
 
     public void setTopMotorDutyCycle(double dutyCycle)
@@ -80,11 +84,11 @@ public class IntakeIOReal implements IntakeIO{
 
     public void resetPositionMotorEncoder()
     {
-        positionMotor.setMotorEncoderPosition(IntakeConstants.PositionMotor.BOTTOM_POSITION);
+        positionMotor.setMotorEncoderPosition(IntakeConstants.PositionMotor.BOTTOM_POSITION.in(Rotation));
     }
 
     public void Update(IntakeInputs inputs)
     {
-        //inputs.currentPosition = getCurrentPosition();
+        inputs.currentPosition = getCurrentPosition();
     }
 }

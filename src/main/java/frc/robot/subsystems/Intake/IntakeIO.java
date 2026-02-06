@@ -26,7 +26,7 @@ public interface IntakeIO
 
     void setRollersDutyCycle(double dutyCycle);
 
-    double getCurrentPosition();
+    Angle getCurrentPosition();
 
     void resetPositionMotorEncoder();
 
