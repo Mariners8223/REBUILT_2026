@@ -33,16 +33,11 @@ public class Intake extends SubsystemBase{
         io.setPositionMotorRotation(rotations);
     }
 
-    public void setTopMotorDutyCycle(double dutyCycle)
+    public void setRollersMotorDutyCycle(double dutyCycle)
     {
-        io.setTopMotorDutyCycle(dutyCycle);
+        io.setRollersMotorDutyCycle(dutyCycle);
     }
-
-    public void setBottomMotorDutyCycle(double dutyCycle)
-    {
-        io.setBottomMotorDutyCycle(dutyCycle);
-    }
-
+    
     public Angle getCurrentPosition()
     {
         return io.getCurrentPosition();

@@ -14,17 +14,12 @@ public interface IntakeIO
         Pose3d pose;
         Angle currentPosition; 
         AngularVelocity positionMotorSpeed;//RPM
-        AngularVelocity TopMotorSpeed;//RPM
-        AngularVelocity BottomMotorSpeed;//RPM
+        AngularVelocity rollersMotorSpeed;//RPM
     }
 
     void setPositionMotorRotation (Angle rotation);
 
-    void setTopMotorDutyCycle(double dutyCycle);
-
-    void setBottomMotorDutyCycle(double dutyCycle);
-
-    void setRollersDutyCycle(double dutyCycle);
+    void setRollersMotorDutyCycle(double dutyCycle);
 
     Angle getCurrentPosition();
 
