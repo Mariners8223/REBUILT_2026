@@ -3,7 +3,9 @@ package frc.robot.subsystems.Intake;
 import frc.util.MarinersController.MarinersController;
 import frc.util.MarinersController.MarinersSparkBase;
 
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Rotation;
+import static edu.wpi.first.units.Units.Rotations;
 
 import edu.wpi.first.units.measure.Angle;
 import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor;
@@ -69,7 +71,7 @@ public class IntakeIOReal implements IntakeIO{
 
     public Angle getCurrentPosition()
     {
-        return positionMotor.getPosition().in(Angle);
+        return Rotations.of(positionMotor.getPosition()).in(Degrees);
     }
 
     public void setTopMotorDutyCycle(double dutyCycle)

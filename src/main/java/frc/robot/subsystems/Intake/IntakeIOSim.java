@@ -1,10 +1,13 @@
 package frc.robot.subsystems.Intake;
 
 import static edu.wpi.first.units.Units.Meter;
+import static edu.wpi.first.units.Units.Rotation;
 import static edu.wpi.first.units.Units.Rotations;
 
+import edu.wpi.first.units.measure.Angle;
 import frc.util.MarinersController.MarinersController.ControlMode;
 import frc.util.MarinersController.MarinersSimMotor;
+import frc.robot.subsystems.Intake.IntakeConstants;
 
 public class IntakeIOSim implements IntakeIO 
 {
@@ -26,9 +29,9 @@ public class IntakeIOSim implements IntakeIO
         bottomMotor = new MarinersSimMotor("Bottom motor", null, IntakeConstants.BottomMotor.GEAR_RATIO,
         1 ,IntakeConstants.MOMENT_OF_INERTIA);
     }
-    public void setPositionMotorRotation(double rotation)
+    public void setPositionMotorRotation(Angle rotation)
     {
-        positionMotor.setReference(rotation, ControlMode.ProfiledPosition);
+        positionMotor.setReference(rotation.in(Rotation), ControlMode.ProfiledPosition);
     }
 
     public void setRollersDutyCycle(double dutyCycle)
@@ -37,7 +40,7 @@ public class IntakeIOSim implements IntakeIO
         bottomMotor.setDutyCycle(dutyCycle);
     }
 
-    public double getCurrentPosition()
+    public Angle getCurrentPosition()
     {
         return positionMotor.getPosition();
     }
@@ -54,7 +57,7 @@ public class IntakeIOSim implements IntakeIO
 
     public void resetPositionMotorEncoder()
     {
-        positionMotor.setMotorEncoderPosition(IntakeConstants.PositionMotor.BOTTOM_POSITION);
+        positionMotor.setMotorEncoderPosition(IntakeConstants.PositionMotor.BOTTOM_POSITION.in(Rotation));
     }
 
     public void Update(IntakeInputs inputs)
