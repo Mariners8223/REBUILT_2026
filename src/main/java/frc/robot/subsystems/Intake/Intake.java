@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.Volts;
 
@@ -27,19 +28,19 @@ public class Intake extends SubsystemBase{
         this.resetPositionMotorEncoder();
     }
 
-    public void setPositionMotorRotation(Voltage voltage)
+    public void setPositionMotorRotation(Angle rotations)
     {
-        io.setPositionMotorRotation(voltage.in(Volts));
+        io.setPositionMotorRotation(rotations);
     }
 
-    public void setTopMotorDutyCycle(Voltage voltage)
+    public void setTopMotorDutyCycle(double dutyCycle)
     {
-        io.setTopMotorDutyCycle(voltage.in(Volts));
+        io.setTopMotorDutyCycle(dutyCycle);
     }
 
-    public void setBottomMotorDutyCycle(Voltage voltage)
+    public void setBottomMotorDutyCycle(double dutyCycle)
     {
-        io.setBottomMotorDutyCycle(voltage.in(Volts));
+        io.setBottomMotorDutyCycle(dutyCycle);
     }
 
     public Angle getCurrentPosition()

@@ -18,7 +18,7 @@ public interface IntakeIO
         AngularVelocity BottomMotorSpeed;//RPM
     }
 
-    void setPositionMotorRotation (double rotation);
+    void setPositionMotorRotation (Angle rotation);
 
     void setTopMotorDutyCycle(double dutyCycle);
 
