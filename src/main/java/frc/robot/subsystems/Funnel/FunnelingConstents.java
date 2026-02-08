@@ -19,11 +19,9 @@ public class FunnelingConstents {
 
         public static final double LeadSpeed = 0.3;
     }
-    public static class CenteringHIGHMotor{
+    public static class CenteringMotor{
         public static final int CenterHIGH_ID = 13;
         public static final ControllerLocation CONTROLLER_LOCATION = controllerLocation.MOTOR;
-        public static final boolean Is_Brushless = true;
-        public static final MotorType MOTOR_TYPE = MotorType.SPARK_MAX; // spark flex or spark max?
         public static final PIDFGains GAINS = new PIDFGains(0, 0, 0);
         public static final double GearRatio = 3;
         public static final double MOMENT_OF_INERTIA_SIM = 1;
@@ -31,7 +29,7 @@ public class FunnelingConstents {
 
         public static final double CenteringHighSpeed = 0.4;
     }
-    public static class CenteringLOWMotor{
+    /*public static class CenteringLOWMotor{
         public static final int CenterLOW_ID = 17;
         public static final ControllerLocation CONTROLLER_LOCATION = controllerLocation.MOTOR;
         public static final boolean Is_Brushless = true;
@@ -41,5 +39,5 @@ public class FunnelingConstents {
 
 
         public static final double CenteringLowSpeed = 0.3; 
-    }
+    }*/
 }

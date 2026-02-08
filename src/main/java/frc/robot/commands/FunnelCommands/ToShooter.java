@@ -16,7 +16,7 @@ public class ToShooter extends Command {
 
   @Override
   public void initialize() {
-    funnel.SpinCenterMotors(FunnelingConstents.CenteringHIGHMotor.CenteringHighSpeed);
+    funnel.SpinCenterMotors(FunnelingConstents.CenteringMotor.CenteringHighSpeed);
     funnel.SpinLeadMotor(FunnelingConstents.LeadingMotor.LeadSpeed);
   }
 

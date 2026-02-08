@@ -11,7 +11,7 @@ import frc.util.MarinersController.MarinersSimMotor;
 public class FunnelIOSim implements FunnelIO{
     MarinersSimMotor LeadMotor;
     MarinersSimMotor CenterHighMotor;
-    MarinersSimMotor CenterLowMotor;
+    //MarinersSimMotor CenterLowMotor;
 
     public FunnelIOSim(){
         LeadMotor= new MarinersSimMotor(
@@ -21,22 +21,24 @@ public class FunnelIOSim implements FunnelIO{
             FunnelingConstents.LeadingMotor.MOMENT_OF_INERTIA_SIM);
         
         CenterHighMotor= new MarinersSimMotor(
-            "Center High Motor",
-            DCMotor.getNeoVortex(1),
-            FunnelingConstents.CenteringHIGHMotor.GearRatio,
-            FunnelingConstents.CenteringHIGHMotor.MOMENT_OF_INERTIA_SIM);
-        CenterHighMotor= new MarinersSimMotor(
+            "Center Motor",
+            DCMotor.getKrakenX60(1),
+            FunnelingConstents.CenteringMotor.GearRatio,
+            FunnelingConstents.CenteringMotor.MOMENT_OF_INERTIA_SIM);
+        /*CenterHighMotor= new MarinersSimMotor(
             "Center Low Motor",
             DCMotor.getNeoVortex(1),
             FunnelingConstents.CenteringLOWMotor.GearRatio,
             FunnelingConstents.CenteringLOWMotor.MOMENT_OF_INERTIA_SIM);
+        */
     }
 
-    public void setDutyCycleCenterLow(double DutyCycleLOW){
+    /*public void setDutyCycleCenterLow(double DutyCycleLOW){
         CenterLowMotor.setDutyCycle(DutyCycleLOW);
-    }   
-    public void SetDutyCycleCenterHigh(double DutyCycleHIGH){
-        CenterHighMotor.setDutyCycle(DutyCycleHIGH);
+    } 
+    */  
+    public void SetDutyCycleCenter(double DutyCycleCenter){
+        CenterHighMotor.setDutyCycle(DutyCycleCenter);
     } 
     public void SetDutyCycleLead(double DutyCycleLead){
         LeadMotor.setDutyCycle(DutyCycleLead);

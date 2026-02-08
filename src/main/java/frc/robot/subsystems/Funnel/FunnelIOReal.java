@@ -7,16 +7,17 @@ package frc.robot.subsystems.Funnel;
 
 import frc.util.MarinersController.MarinersController;
 import frc.util.MarinersController.MarinersSparkBase;
+import frc.util.MarinersController.MarinersTalonFX;
 
 /** Add your docs here. */
 public class FunnelIOReal implements FunnelIO{
     private final MarinersSparkBase funnelMotor;
-    private final MarinersSparkBase centerHighMotor;
+    private final MarinersTalonFX centerMotor;
     // private final MarinersController centerLowMotor;
 
     public FunnelIOReal(){
         funnelMotor = configureFunnelMotor();
-        centerHighMotor = configureCenterHighMotor();
+        centerMotor = configureCenterMotor();
         // centerLowMotor = configureCenterLowMotor();
     }
 
@@ -30,17 +31,18 @@ public class FunnelIOReal implements FunnelIO{
          return Motor;
     }
 
-    private MarinersSparkBase configureCenterHighMotor(){
-        MarinersSparkBase Motor;
-        Motor = new MarinersSparkBase("CenteringHighMotor", FunnelingConstents.CenteringHIGHMotor.CONTROLLER_LOCATION,
-         FunnelingConstents.CenteringHIGHMotor.CenterHIGH_ID,FunnelingConstents.CenteringHIGHMotor.Is_Brushless,
-         FunnelingConstents.CenteringHIGHMotor.MOTOR_TYPE, FunnelingConstents.CenteringHIGHMotor.GAINS,
-         FunnelingConstents.CenteringHIGHMotor.GearRatio);
+    private MarinersTalonFX configureCenterMotor(){
+        MarinersTalonFX Motor;
+        Motor = new MarinersTalonFX("CenteringHighMotor", FunnelingConstents.CenteringMotor.CONTROLLER_LOCATION,
+         FunnelingConstents.CenteringMotor.CenterHIGH_ID, FunnelingConstents.CenteringMotor.GAINS,
+         FunnelingConstents.CenteringMotor.GearRatio);
+
+        
 
           return Motor;
     }
 
-    private MarinersSparkBase configureCenterLowMotor(){
+    /*private MarinersSparkBase configureCenterLowMotor(){
         MarinersSparkBase Motor;
         Motor = new MarinersSparkBase("CenteringLowMotor", FunnelingConstents.CenteringLOWMotor.CONTROLLER_LOCATION,
          FunnelingConstents.CenteringLOWMotor.CenterLOW_ID,FunnelingConstents.CenteringLOWMotor.Is_Brushless,
@@ -49,13 +51,13 @@ public class FunnelIOReal implements FunnelIO{
         
           return Motor;
     
-    }
+    }*/
 
     // public void setDutyCycleCenterLow(double LowDutyCycle){
     //     centerLowMotor.setDutyCycle(LowDutyCycle);
     // }
-    public void SetDutyCycleCenterHigh(double HighDutyCycle){
-        centerHighMotor.setDutyCycle(HighDutyCycle);
+    public void SetDutyCycleCenter(double HighDutyCycle){
+        centerMotor.setDutyCycle(HighDutyCycle);
     }
     public void SetDutyCycleLead(double LeadDutyCycle){
         funnelMotor.setDutyCycle(LeadDutyCycle);
