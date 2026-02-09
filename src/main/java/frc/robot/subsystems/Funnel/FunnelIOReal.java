@@ -5,6 +5,7 @@
 package frc.robot.subsystems.Funnel;
 
 
+import frc.util.PIDFGains;
 import frc.util.MarinersController.MarinersController;
 import frc.util.MarinersController.MarinersSparkBase;
 import frc.util.MarinersController.MarinersTalonFX;
@@ -23,21 +24,21 @@ public class FunnelIOReal implements FunnelIO{
 
     private MarinersSparkBase configureFunnelMotor(){
         MarinersSparkBase Motor;
-        Motor = new MarinersSparkBase("FunnelingMotor", FunnelingConstents.LeadingMotor.ControllerLocation,
+        Motor = new MarinersSparkBase("FunnelingMotor", FunnelingConstents.LeadingMotor.CONTROLLER_LOCATION,
          FunnelingConstents.LeadingMotor.Lead_ID, FunnelingConstents.LeadingMotor.Is_Brushless,
          FunnelingConstents.LeadingMotor.MOTOR_TYPE);
 
-         Motor.setMotorInverted(true);
+         Motor.setMotorInverted(FunnelingConstents.LeadingMotor.IS_INVERTED);
          return Motor;
     }
 
     private MarinersTalonFX configureCenterMotor(){
         MarinersTalonFX Motor;
         Motor = new MarinersTalonFX("CenteringHighMotor", FunnelingConstents.CenteringMotor.CONTROLLER_LOCATION,
-         FunnelingConstents.CenteringMotor.CenterHIGH_ID, FunnelingConstents.CenteringMotor.GAINS,
+         FunnelingConstents.CenteringMotor.CenterHIGH_ID, new PIDFGains(0,0,0),
          FunnelingConstents.CenteringMotor.GearRatio);
 
-        
+         Motor.setMotorInverted(FunnelingConstents.CenteringMotor.IS_INVERTED);
 
           return Motor;
     }
