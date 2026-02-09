@@ -10,63 +10,47 @@ import static edu.wpi.first.units.Units.RPM;
 
 import edu.wpi.first.units.measure.LinearVelocity;
 import frc.util.MarinersController.MarinersController;
-import frc.util.MarinersController.MarinersSparkBase;
 import frc.util.MarinersController.MarinersTalonFX;
 import frc.util.MarinersController.MarinersController.ControlMode;
-import frc.util.MarinersController.MarinersSparkBase.MotorType;
 
 /** Add your docs here. */
 public class ShooterIOReal implements ShooterIO {
     MarinersController leadMotor;
     MarinersController[] followMotors;
 
-    MarinersController kickerMotor1;
-    MarinersController kickerMotor2;
 
     public ShooterIOReal(){
         configureShooterMotors();
-        configureKickerMotors();
     }
 
     //#region Configuration
     public void configureShooterMotors(){
         leadMotor = new MarinersTalonFX(
-            "Shooter Motor 1", ShooterConstants.SHOOTER_MOTOR.CONTROLLER_LOCATION,
-            ShooterConstants.SHOOTER_MOTOR.LEAD_MOTOR_ID, ShooterConstants.SHOOTER_MOTOR.PID,
-            ShooterConstants.SHOOTER_MOTOR.GEAR_RATIO
+            "Shooter Motor 1", ShooterConstants.MOTOR_CONSTANTS.CONTROLLER_LOCATION,
+            ShooterConstants.MOTOR_CONSTANTS.LEAD_MOTOR_ID, ShooterConstants.MOTOR_CONSTANTS.PID,
+            ShooterConstants.MOTOR_CONSTANTS.GEAR_RATIO
             );
-        leadMotor.setMotorInverted(ShooterConstants.SHOOTER_MOTOR.LEAD_MOTOR_IS_INVERTED);
+        leadMotor.setMotorInverted(ShooterConstants.MOTOR_CONSTANTS.LEAD_MOTOR_IS_INVERTED);
         leadMotor.setMotorIdleMode(false);
 
-        leadMotor.setStaticFeedForward(ShooterConstants.SHOOTER_MOTOR.Ks);
-        leadMotor.setFeedForward(ShooterConstants.SHOOTER_MOTOR.Kv);
+        leadMotor.setStaticFeedForward(ShooterConstants.MOTOR_CONSTANTS.Ks);
+        leadMotor.setFeedForward(ShooterConstants.MOTOR_CONSTANTS.Kv);
 
         leadMotor.startPIDTuning();
 
         MarinersTalonFX[] followMotors = new MarinersTalonFX[3];
         for (int i = 0; i < followMotors.length; i++){
-            var follower = ShooterConstants.SHOOTER_MOTOR.FOLLOWERS[i];
+            var follower = ShooterConstants.MOTOR_CONSTANTS.FOLLOWERS[i];
 
             followMotors[i] = new MarinersTalonFX(
                 "Shooter Follower Motor " + Integer.toString(i + 1),
-                ShooterConstants.SHOOTER_MOTOR.CONTROLLER_LOCATION,
+                ShooterConstants.MOTOR_CONSTANTS.CONTROLLER_LOCATION,
                 follower.id()
             );
             followMotors[i].setMotorAsFollower(leadMotor, follower.inverted_from_leader());
         }
     }
 
-    public void configureKickerMotors(){
-        kickerMotor1 = new MarinersSparkBase(
-            "Kicker Motor 1", ShooterConstants.KICKER_MOTOR.CONTROLLER_LOCATION,
-            ShooterConstants.KICKER_MOTOR.MOTOR_1_ID, true, MotorType.SPARK_FLEX);
-        kickerMotor1.setMotorInverted(ShooterConstants.KICKER_MOTOR.MOTOR_1_IS_INVERTED);
-
-        kickerMotor2 = new MarinersSparkBase(
-            "Kicker Motor 2", ShooterConstants.KICKER_MOTOR.CONTROLLER_LOCATION,
-            ShooterConstants.KICKER_MOTOR.MOTOR_2_ID, true, MotorType.SPARK_FLEX);
-        kickerMotor2.setMotorAsFollower(kickerMotor1, ShooterConstants.KICKER_MOTOR.MOTOR_2_INVERTED_FROM_LEADER);
-    }
     //#endregion
 
     public double getShooterVelocity(){
@@ -85,21 +69,9 @@ public class ShooterIOReal implements ShooterIO {
         leadMotor.setStaticFeedForward(leadMotor.getPIDF().getF() + boost);
     }
     public void resetShooterFeedForward(){
-        leadMotor.setStaticFeedForward(ShooterConstants.SHOOTER_MOTOR.PID.getF());
+        leadMotor.setStaticFeedForward(ShooterConstants.MOTOR_CONSTANTS.PID.getF());
     }
 
-    public double getKickerVelocity(){
-        return kickerMotor1.getVelocity();
-    }
-    public void setKickerVelocity(double targetVelocity){
-        kickerMotor1.setReference(targetVelocity, ControlMode.Velocity);
-    }
-    public void setKickerDutyCycle(double targetDutyCycle){
-        kickerMotor1.setReference(targetDutyCycle, ControlMode.DutyCycle);
-    }
-    public void setKickerVoltage(double voltage){
-        kickerMotor1.setVoltage(voltage);
-    }
 
     public void update(ShooterInputs inputs){
         inputs.shooterVelocity = RPM.of(getShooterVelocity());
@@ -108,14 +80,6 @@ public class ShooterIOReal implements ShooterIO {
             getShooterVelocity() * ShooterConstants.SHOOTER_WHEEL_CIRCUMFERENCE.in(Meter)
         );
         inputs.shooterLinearVelocity = shooterLinearVelocity;
-
-        
-        inputs.kickerVelocity = RPM.of(getKickerVelocity());
-
-        LinearVelocity kickerLinearVelocity = Meter.per(Minute).of(
-            getKickerVelocity() * ShooterConstants.KICKER_WHEEL_CIRCUMFERENCE.in(Meter)
-        );
-        inputs.kickerLinearVelocity = kickerLinearVelocity;
 
         inputs.feedForward = leadMotor.getPIDF().getF();
 

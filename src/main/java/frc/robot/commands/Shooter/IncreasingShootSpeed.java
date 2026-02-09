@@ -34,7 +34,6 @@ public class IncreasingShootSpeed extends Command {
     public void initialize() {
         this.timer = 0;
         shooter.setShooterVelocity(startingSpeed);
-        shooter.setKickerVoltage(Volt.of(3));
         this.speed = RPM.of(SmartDashboard.getNumber("Shooter Velocity", 2500)).in(RotationsPerSecond);
     }
 
@@ -49,7 +48,6 @@ public class IncreasingShootSpeed extends Command {
     @Override
     public void end(boolean interrupted) {
         shooter.setShooterVelocity(startingSpeed);
-        shooter.setKickerVoltage(Volt.zero());
     }
 
     // Returns true when the command should end.

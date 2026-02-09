@@ -26,7 +26,7 @@ import frc.util.MarinersController.MarinersController.ControllerLocation;
 /** Add your docs here. */
 public class ShooterConstants {
 
-    public static class SHOOTER_MOTOR{
+    public static class MOTOR_CONSTANTS{
         public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
         public static final PIDFGains PID = new PIDFGains(
             0.25,
@@ -55,27 +55,6 @@ public class ShooterConstants {
         public static final FollowMotor FOLLOW_MOTOR_3 = new FollowMotor(0, false);
 
         public static final FollowMotor[] FOLLOWERS = {FOLLOW_MOTOR_1, FOLLOW_MOTOR_2, FOLLOW_MOTOR_3};
-    }
-
-    public static class KICKER_MOTOR{
-        public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
-        public static final PIDFGains PID = new PIDFGains(
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-        );
-        public static final double GEAR_RATIO = 1;
-
-        public static final int MOTOR_1_ID = 14;
-        public static final int MOTOR_2_ID = 16;
-
-        public static final boolean MOTOR_1_IS_INVERTED = true;
-        public static final boolean MOTOR_2_INVERTED_FROM_LEADER = false;
     }
 
     public static class HUB_CONSTANTS{

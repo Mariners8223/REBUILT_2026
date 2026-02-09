@@ -9,10 +9,13 @@ import static edu.wpi.first.units.Units.Minute;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 
@@ -52,25 +55,6 @@ public class Shooter extends SubsystemBase {
         io.resetShooterFeedForward();
     }
 
-    
-    public AngularVelocity getKickerVelocity(){ 
-        return inputs.kickerVelocity;
-    }
-    public LinearVelocity getKickerLinearVelocity(){
-        return inputs.kickerLinearVelocity;
-    }
-
-    public void setKickerVelocity(AngularVelocity targetVelocity){ 
-        io.setKickerVelocity(targetVelocity.in(RotationsPerSecond)); 
-    }
-    public void setKickerLinearVelocity(LinearVelocity targetVelocity){
-        double targetAngularVelocity = targetVelocity.in(Meters.per(Minute)) / ShooterConstants.KICKER_WHEEL_CIRCUMFERENCE.in(Meters);
-        io.setShooterVelocity(targetAngularVelocity);
-    }
-    public void setKickerVoltage(Voltage voltage){
-        io.setKickerVoltage(voltage.in(Volts));
-    }
-
 
     public void setShooterVelocityByDistance(Distance distance){
         setShooterVelocity(ShooterConstants.Calculations.requiredAngularVelocity(distance));
@@ -81,6 +65,12 @@ public class Shooter extends SubsystemBase {
             ShooterConstants.Calculations.requiredAngularVelocity(distance),
             ShooterConstants.SHOOTER_ANGULAR_VELOCITY_TOLERANCE
         );
+    }
+    public boolean isAtRequiredVelocity(AngularVelocity velocity){
+        return ShooterConstants.Calculations.epsilonEquals(
+            getShooterVelocity(), 
+            velocity,
+            ShooterConstants.SHOOTER_ANGULAR_VELOCITY_TOLERANCE);
     }
 
 

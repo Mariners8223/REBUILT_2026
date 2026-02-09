@@ -48,7 +48,6 @@ public class Shoot extends Command {
     Logger.recordOutput("Filtered RPM", filteredRPM);
 
     shooter.setShooterVelocity(requiredSpeed);
-    shooter.setKickerVoltage(ShooterConstants.KICKER_ACTIVE_VOLTAGE);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

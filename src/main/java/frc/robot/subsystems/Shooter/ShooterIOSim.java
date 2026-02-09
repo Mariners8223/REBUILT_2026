@@ -28,17 +28,10 @@ public class ShooterIOSim implements ShooterIO{
             LinearSystemId.createFlywheelSystem(
                 DCMotor.getKrakenX60(4), 
                 ShooterConstants.SHOOTER_MOMENT_OF_INERTIA.in(KilogramSquareMeters), 
-                ShooterConstants.SHOOTER_MOTOR.GEAR_REDUCTION
+                ShooterConstants.MOTOR_CONSTANTS.GEAR_REDUCTION
             ),
             DCMotor.getKrakenX60(2),
             0.0001, 0.0001
-        );
-
-        kickerMotors = new MarinersSimMotor(
-            "Kicker Motors", 
-            DCMotor.getFalcon500(2),
-            ShooterConstants.KICKER_MOTOR.GEAR_RATIO,
-            ShooterConstants.KICKER_MOMENT_OF_INERTIA
         );
     }
 
@@ -61,19 +54,6 @@ public class ShooterIOSim implements ShooterIO{
         return;
     }
 
-    public double getKickerVelocity(){
-        return kickerMotors.getVelocity() / 60;
-    }
-    public void setKickerVelocity(double targetVelocity){
-        kickerMotors.setReference(targetVelocity, ControlMode.Velocity);
-    }
-    public void setKickerDutyCycle(double targetDutyCycle){
-        kickerMotors.setDutyCycle(targetDutyCycle / flywheel.getGearbox().nominalVoltageVolts);
-    }
-    public void setKickerVoltage(double voltage){
-        kickerMotors.setVoltage(voltage);
-    }
-
     public void update(ShooterInputs inputs){
         inputs.shooterVelocity = RPM.of(getShooterVelocity());
 
@@ -81,14 +61,6 @@ public class ShooterIOSim implements ShooterIO{
             getShooterVelocity() * ShooterConstants.SHOOTER_WHEEL_CIRCUMFERENCE.in(Meter)
         );
         inputs.shooterLinearVelocity = shooterLinearVelocity;
-
-        
-        inputs.kickerVelocity = RPM.of(getKickerVelocity());
-
-        LinearVelocity kickerLinearVelocity = Meter.per(Minute).of(
-            getKickerVelocity() * ShooterConstants.KICKER_WHEEL_CIRCUMFERENCE.in(Meter)
-        );
-        inputs.kickerLinearVelocity = kickerLinearVelocity;
 
         inputs.pose = ShooterConstants.POSITION;
     }

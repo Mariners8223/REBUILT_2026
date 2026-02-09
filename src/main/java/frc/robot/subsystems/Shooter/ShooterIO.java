@@ -16,10 +16,6 @@ public interface ShooterIO {
     class ShooterInputs{
         AngularVelocity shooterVelocity; // RPM
         LinearVelocity shooterLinearVelocity; // m/s
-
-        AngularVelocity kickerVelocity; // RPM
-        LinearVelocity kickerLinearVelocity; // m/s
-
         double feedForward;
 
         Pose3d pose;
@@ -31,11 +27,6 @@ public interface ShooterIO {
     void setShooterDutyCycle(double targetDutyCycle);
     void shooterFeedForwardBoost(double feedForwardBoost);
     void resetShooterFeedForward();
-
-    double getKickerVelocity();
-    void setKickerVelocity(double targetVelocity);
-    void setKickerDutyCycle(double targetDutyCycle);
-    void setKickerVoltage(double voltage);
 
     void update(ShooterInputs inputs);
 }

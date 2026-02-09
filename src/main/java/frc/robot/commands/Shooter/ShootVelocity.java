@@ -24,10 +24,6 @@ import frc.robot.subsystems.Shooter.ShooterConstants;
 public class ShootVelocity extends Command {
   Shooter shooter;
   Supplier<AngularVelocity> velocitySupplier;
-
-  AngularVelocity filteredRPM;
-  AngularVelocity filteredRPMLast;
-
   AngularVelocity RPMLast;
 
   Timer boostTimer;
@@ -46,13 +42,9 @@ public class ShootVelocity extends Command {
   @Override
   public void initialize() {
     AngularVelocity requiredSpeed = velocitySupplier.get();
-    filteredRPM = requiredSpeed.copy();
-    filteredRPMLast = filteredRPM;
     RPMLast = shooter.getShooterVelocity();
-    Logger.recordOutput("Filtered RPM", filteredRPM);
 
     shooter.setShooterVelocity(requiredSpeed);
-    shooter.setKickerVoltage(ShooterConstants.KICKER_ACTIVE_VOLTAGE);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -60,16 +52,9 @@ public class ShootVelocity extends Command {
   public void execute() {
     shooter.setShooterVelocity(velocitySupplier.get());
 
-    filteredRPMLast = filteredRPM.copy();
-    AngularVelocity velocityDifference = shooter.getShooterVelocity().minus(filteredRPM);
-    filteredRPM = filteredRPM.plus(velocityDifference.times(ShooterConstants.LOW_PASS_FILTER_ALPHA));
-    Logger.recordOutput("Filtered RPM", filteredRPM);
-
-    AngularVelocity filteredVelocityDifference = filteredRPM.minus(filteredRPMLast);
-    AngularVelocity currentVelocityDifference = shooter.getShooterVelocity().minus(RPMLast);
-    // if (filteredVelocityDifference.lte(ShooterConstants.SHOOTING_VELOCITY_FALL.unaryMinus())){
-    if (currentVelocityDifference.lte(ShooterConstants.SHOOTING_VELOCITY_FALL.unaryMinus())){
-      double boost = MathUtil.clamp(Math.abs(currentVelocityDifference.in(RotationsPerSecond)) * ShooterConstants.FEED_FORWARD_SHOOTER_BOOST,
+    AngularVelocity velocityDifference = shooter.getShooterVelocity().minus(RPMLast);
+    if (velocityDifference.lte(ShooterConstants.SHOOTING_VELOCITY_FALL.unaryMinus())){
+      double boost = MathUtil.clamp(Math.abs(velocityDifference.in(RotationsPerSecond)) * ShooterConstants.FEED_FORWARD_SHOOTER_BOOST,
                                 0.0,
                                 ShooterConstants.MAX_FEED_FORWARD_BOOST);
 
@@ -90,7 +75,6 @@ public class ShootVelocity extends Command {
   @Override
   public void end(boolean interrupted) {
     shooter.setShooterVoltage(Volts.zero());
-    shooter.setKickerVoltage(Volts.zero());
   }
 
   // Returns true when the command should end.
