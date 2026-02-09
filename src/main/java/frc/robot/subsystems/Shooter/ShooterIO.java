@@ -20,6 +20,8 @@ public interface ShooterIO {
         AngularVelocity kickerVelocity; // RPM
         LinearVelocity kickerLinearVelocity; // m/s
 
+        double feedForward;
+
         Pose3d pose;
     }
 

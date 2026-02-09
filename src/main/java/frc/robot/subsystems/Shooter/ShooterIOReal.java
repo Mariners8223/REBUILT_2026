@@ -117,6 +117,8 @@ public class ShooterIOReal implements ShooterIO {
         );
         inputs.kickerLinearVelocity = kickerLinearVelocity;
 
+        inputs.feedForward = leadMotor.getPIDF().getF();
+
         inputs.pose = ShooterConstants.POSITION;
     }
 }
