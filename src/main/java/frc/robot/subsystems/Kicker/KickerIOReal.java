@@ -34,7 +34,7 @@ public class KickerIOReal implements KickerIO {
         followMotor.setMotorAsFollower(leadMotor, KickerConstants.MOTOR_CONSTANTS.FOLLOW_MOTOR_INVERTED_FROM_LEAD);
     }
 
-    public void setKickerDutyCycle(double targetDutyCycle){
+    public void setDutyCycle(double targetDutyCycle){
         leadMotor.setDutyCycle(targetDutyCycle);
     }
 

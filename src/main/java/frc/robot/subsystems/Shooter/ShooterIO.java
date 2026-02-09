@@ -21,12 +21,12 @@ public interface ShooterIO {
         Pose3d pose;
     }
 
-    double getShooterVelocity();
-    void setShooterVelocity(double targetVelocity);
-    void setShooterVoltage(double voltage);
-    void setShooterDutyCycle(double targetDutyCycle);
-    void shooterFeedForwardBoost(double feedForwardBoost);
-    void resetShooterFeedForward();
+    double getVelocity();
+    void setVelocity(double targetVelocity);
+    void setVoltage(double voltage);
+    void setDutyCycle(double targetDutyCycle);
+    void feedForwardBoost(double feedForwardBoost);
+    void resetFeedForward();
 
     void update(ShooterInputs inputs);
 }

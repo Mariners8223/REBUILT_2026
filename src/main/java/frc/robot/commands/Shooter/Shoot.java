@@ -47,13 +47,13 @@ public class Shoot extends Command {
     filteredRPMLast = filteredRPM;
     Logger.recordOutput("Filtered RPM", filteredRPM);
 
-    shooter.setShooterVelocity(requiredSpeed);
+    shooter.setVelocity(requiredSpeed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.setShooterVelocityByDistance(distanceSupplier.get());
+    shooter.setVelocityByDistance(distanceSupplier.get());
 
     filteredRPMLast = filteredRPM.copy();
     AngularVelocity velocityDifference = shooter.getShooterVelocity().minus(filteredRPM);

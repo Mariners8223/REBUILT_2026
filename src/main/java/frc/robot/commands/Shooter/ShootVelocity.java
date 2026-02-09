@@ -44,13 +44,13 @@ public class ShootVelocity extends Command {
     AngularVelocity requiredSpeed = velocitySupplier.get();
     RPMLast = shooter.getShooterVelocity();
 
-    shooter.setShooterVelocity(requiredSpeed);
+    shooter.setVelocity(requiredSpeed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.setShooterVelocity(velocitySupplier.get());
+    shooter.setVelocity(velocitySupplier.get());
 
     AngularVelocity velocityDifference = shooter.getShooterVelocity().minus(RPMLast);
     if (velocityDifference.lte(ShooterConstants.SHOOTING_VELOCITY_FALL.unaryMinus())){
@@ -74,7 +74,7 @@ public class ShootVelocity extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooter.setShooterVoltage(Volts.zero());
+    shooter.setVoltage(Volts.zero());
   }
 
   // Returns true when the command should end.

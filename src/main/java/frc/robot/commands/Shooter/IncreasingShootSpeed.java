@@ -33,7 +33,7 @@ public class IncreasingShootSpeed extends Command {
     @Override
     public void initialize() {
         this.timer = 0;
-        shooter.setShooterVelocity(startingSpeed);
+        shooter.setVelocity(startingSpeed);
         this.speed = RPM.of(SmartDashboard.getNumber("Shooter Velocity", 2500)).in(RotationsPerSecond);
     }
 
@@ -41,13 +41,13 @@ public class IncreasingShootSpeed extends Command {
     @Override
     public void execute() {
         this.speed += SmartDashboard.getNumber("Grow", 1);
-        shooter.setShooterVelocity(RotationsPerSecond.of(speed));
+        shooter.setVelocity(RotationsPerSecond.of(speed));
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        shooter.setShooterVelocity(startingSpeed);
+        shooter.setVelocity(startingSpeed);
     }
 
     // Returns true when the command should end.

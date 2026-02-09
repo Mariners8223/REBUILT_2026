@@ -6,6 +6,7 @@ package frc.robot.subsystems.Kicker;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 
 public class Kicker extends SubsystemBase {
   KickerIO io;
@@ -13,15 +14,15 @@ public class Kicker extends SubsystemBase {
 
   /** Creates a new Kicker. */
   public Kicker() {
-    io = new KickerIOReal();
+    io = Robot.isReal() ? new KickerIOReal() : new KickerIOSim();
   }
 
   public void setMotors(double dutyCycle){
-    io.setKickerDutyCycle(dutyCycle);
+    io.setDutyCycle(dutyCycle);
   }
 
   public void stopMotors(){
-    io.setKickerDutyCycle(0);
+    io.setDutyCycle(0);
   }
 
   public Command setKickerCommand(double dutyCycle){

@@ -16,7 +16,7 @@ public interface KickerIO {
         double dutyCycle;
     }
 
-    void setKickerDutyCycle(double targetDutyCycle);
+    void setDutyCycle(double targetDutyCycle);
 
     void update(KickerInputs inputs);
 }

@@ -53,31 +53,31 @@ public class ShooterIOReal implements ShooterIO {
 
     //#endregion
 
-    public double getShooterVelocity(){
+    public double getVelocity(){
         return leadMotor.getVelocity();
     }
-    public void setShooterVelocity(double targetVelocity){
+    public void setVelocity(double targetVelocity){
         leadMotor.setReference(targetVelocity, ControlMode.Velocity);
     }
-    public void setShooterVoltage(double voltage){
+    public void setVoltage(double voltage){
         leadMotor.setVoltage(voltage);
     }
-    public void setShooterDutyCycle(double targetDutyCycle){
+    public void setDutyCycle(double targetDutyCycle){
         leadMotor.setReference(targetDutyCycle, ControlMode.DutyCycle);
     }
-    public void shooterFeedForwardBoost(double boost){
+    public void feedForwardBoost(double boost){
         leadMotor.setStaticFeedForward(leadMotor.getPIDF().getF() + boost);
     }
-    public void resetShooterFeedForward(){
+    public void resetFeedForward(){
         leadMotor.setStaticFeedForward(ShooterConstants.MOTOR_CONSTANTS.PID.getF());
     }
 
 
     public void update(ShooterInputs inputs){
-        inputs.shooterVelocity = RPM.of(getShooterVelocity());
+        inputs.shooterVelocity = RPM.of(getVelocity());
 
         LinearVelocity shooterLinearVelocity = Meter.per(Minute).of(
-            getShooterVelocity() * ShooterConstants.SHOOTER_WHEEL_CIRCUMFERENCE.in(Meter)
+            getVelocity() * ShooterConstants.SHOOTER_WHEEL_CIRCUMFERENCE.in(Meter)
         );
         inputs.shooterLinearVelocity = shooterLinearVelocity;
 

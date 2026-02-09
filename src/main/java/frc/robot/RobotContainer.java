@@ -61,8 +61,8 @@ public class RobotContainer {
 
         driveController.cross().whileTrue(new ShootVelocity(shooter, RobotContainer::dashboardVelocity));
         driveController.circle().whileTrue(new StartEndCommand(
-            () -> shooter.setShooterVelocity(RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))),
-            () -> shooter.setShooterVoltage(Volt.zero()), 
+            () -> shooter.setVelocity(RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))),
+            () -> shooter.setVoltage(Volt.zero()), 
             shooter)
         );
         // driveController.triangle().whileTrue(new StartEndCommand(

@@ -36,28 +36,28 @@ public class Shooter extends SubsystemBase {
     }
 
     public void stopShooter(){
-        io.setShooterDutyCycle(0);
+        io.setDutyCycle(0);
     }
-    public void setShooterVelocity(AngularVelocity targetVelocity){ 
-        io.setShooterVelocity(targetVelocity.in(RotationsPerSecond)); 
+    public void setVelocity(AngularVelocity targetVelocity){ 
+        io.setVelocity(targetVelocity.in(RotationsPerSecond)); 
     }
-    public void setShooterLinearVelocity(LinearVelocity targetVelocity){
+    public void setLinearVelocity(LinearVelocity targetVelocity){
         double targetAngularVelocity = targetVelocity.in(Meters.per(Minute)) / ShooterConstants.SHOOTER_WHEEL_CIRCUMFERENCE.in(Meters);
-        io.setShooterVelocity(targetAngularVelocity);
+        io.setVelocity(targetAngularVelocity);
     }
-    public void setShooterVoltage(Voltage voltage){
-        io.setShooterVoltage(voltage.in(Volts));
+    public void setVoltage(Voltage voltage){
+        io.setVoltage(voltage.in(Volts));
     }
     public void boostFeedForward(double boost){
-        io.shooterFeedForwardBoost(boost);
+        io.feedForwardBoost(boost);
     }
     public void resetFeedForward(){
-        io.resetShooterFeedForward();
+        io.resetFeedForward();
     }
 
 
-    public void setShooterVelocityByDistance(Distance distance){
-        setShooterVelocity(ShooterConstants.Calculations.requiredAngularVelocity(distance));
+    public void setVelocityByDistance(Distance distance){
+        setVelocity(ShooterConstants.Calculations.requiredAngularVelocity(distance));
     }
     public boolean isAtRequiredVelocity(Distance distance){
         return ShooterConstants.Calculations.epsilonEquals(

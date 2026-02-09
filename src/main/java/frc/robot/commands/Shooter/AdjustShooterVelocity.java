@@ -30,7 +30,7 @@ public class AdjustShooterVelocity extends Command {
   @Override
   public void execute() {
     if (this.isShooting.getAsBoolean()){
-      shooter.setShooterVelocityByDistance(distanceSupplier.get());
+      shooter.setVelocityByDistance(distanceSupplier.get());
     }
     else{
       shooter.stopShooter();

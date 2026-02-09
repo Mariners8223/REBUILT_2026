@@ -31,7 +31,7 @@ public class ShooterSysID {
                 (state) -> Logger.recordOutput("Shooter/SYSID/State", state.toString())
             ),
             new Mechanism(
-                (voltage) -> shooter.setShooterVoltage(voltage),
+                (voltage) -> shooter.setVoltage(voltage),
                 null,
                 shooter)
             );

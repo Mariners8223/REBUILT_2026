@@ -35,30 +35,30 @@ public class ShooterIOSim implements ShooterIO{
         );
     }
 
-    public double getShooterVelocity(){
+    public double getVelocity(){
         return flywheel.getAngularVelocityRPM();
     }
-    public void setShooterVelocity(double targetVelocity){
+    public void setVelocity(double targetVelocity){
         flywheel.setInput(targetVelocity);
     }
-    public void setShooterVoltage(double voltage){
+    public void setVoltage(double voltage){
         flywheel.setInput(voltage);
     }
-    public void setShooterDutyCycle(double targetDutyCycle){
+    public void setDutyCycle(double targetDutyCycle){
         flywheel.setInputVoltage(targetDutyCycle / flywheel.getGearbox().nominalVoltageVolts);
     }
-    public void shooterFeedForwardBoost(double boost){
+    public void feedForwardBoost(double boost){
         return;
     }
-    public void resetShooterFeedForward(){
+    public void resetFeedForward(){
         return;
     }
 
     public void update(ShooterInputs inputs){
-        inputs.shooterVelocity = RPM.of(getShooterVelocity());
+        inputs.shooterVelocity = RPM.of(getVelocity());
 
         LinearVelocity shooterLinearVelocity = Meter.per(Minute).of(
-            getShooterVelocity() * ShooterConstants.SHOOTER_WHEEL_CIRCUMFERENCE.in(Meter)
+            getVelocity() * ShooterConstants.SHOOTER_WHEEL_CIRCUMFERENCE.in(Meter)
         );
         inputs.shooterLinearVelocity = shooterLinearVelocity;
 
