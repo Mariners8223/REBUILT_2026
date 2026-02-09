@@ -278,12 +278,14 @@ public class DriveBase extends SubsystemBase {
     }
 
     /*
-     * gets the length of a straight line from the current pose to the input pose in a flat world(double)
+     * gets the length of a straight line from the current pose to the input pose in a flat world (double)
+     * 
+     * @param the point from which to calculate the distance
      * 
      * @return the distance from input point and current pose
      */
     public double getDistanceFromPoint2D(Pose2d point) {
-        return currentPose.minus(point).getTranslation().getNorm();
+        return currentPose.getTranslation().getDistance(point.getTranslation());
     }
 
     /**
