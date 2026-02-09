@@ -77,7 +77,8 @@ public class ShootVelocity extends Command {
       boostTimer.restart();
     }
 
-    if (boostTimer.hasElapsed(ShooterConstants.FEED_FORWARD_BOOST_TIME) || ShooterConstants.Calculations.epsilonEquals(shooter.getShooterVelocity(), velocitySupplier.get(), RotationsPerSecond.of(1))){
+    if (boostTimer.hasElapsed(ShooterConstants.FEED_FORWARD_BOOST_TIME) 
+        || ShooterConstants.Calculations.epsilonEquals(shooter.getShooterVelocity(), velocitySupplier.get(), RotationsPerSecond.of(1))){
       shooter.resetFeedForward();
       boostTimer.stop();
     }

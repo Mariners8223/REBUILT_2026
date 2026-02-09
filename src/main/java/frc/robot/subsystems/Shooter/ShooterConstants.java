@@ -46,11 +46,15 @@ public class ShooterConstants {
         public static final double GEAR_RATIO = 1;
         public static final double GEAR_REDUCTION = 1 / GEAR_RATIO;
 
-        public static final int MOTOR_1_ID = 12;
-        public static final int MOTOR_2_ID = 23;
+        public static final int LEAD_MOTOR_ID = 12;
+        public static final boolean LEAD_MOTOR_IS_INVERTED = true;
 
-        public static final boolean MOTOR_1_IS_INVERTED = true;
-        public static final boolean MOTOR_2_IS_INVERTED = false;
+        public record FollowMotor(int id, boolean inverted_from_leader){}
+        public static final FollowMotor FOLLOW_MOTOR_1 = new FollowMotor(23, true);
+        public static final FollowMotor FOLLOW_MOTOR_2 = new FollowMotor(0, false);
+        public static final FollowMotor FOLLOW_MOTOR_3 = new FollowMotor(0, false);
+
+        public static final FollowMotor[] FOLLOWERS = {FOLLOW_MOTOR_1, FOLLOW_MOTOR_2, FOLLOW_MOTOR_3};
     }
 
     public static class KICKER_MOTOR{
@@ -71,7 +75,7 @@ public class ShooterConstants {
         public static final int MOTOR_2_ID = 16;
 
         public static final boolean MOTOR_1_IS_INVERTED = true;
-        public static final boolean MOTOR_2_IS_INVERTED = true;
+        public static final boolean MOTOR_2_INVERTED_FROM_LEADER = false;
     }
 
     public static class HUB_CONSTANTS{
@@ -138,7 +142,7 @@ public class ShooterConstants {
         }
 
         public static AngularVelocity requiredAngularVelocity(LinearVelocity launchVelocity){
-            return RadiansPerSecond.zero(); // TODO: Find Function
+            return RotationsPerSecond.of(launchVelocity.in(Meters.per(Minute)) / SHOOTER_WHEEL_RADIUS.in(Meter)); // TODO: MAKE MORE EXACT FUNCTION
         }
 
         public static AngularVelocity requiredAngularVelocity(Distance distance){
