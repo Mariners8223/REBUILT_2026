@@ -3,9 +3,12 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.commands.Drive.DriveCommand;
-
+import frc.robot.commands.Intake.Position;
+import frc.robot.commands.Intake.Rollers;
 import edu.wpi.first.wpilibj.RobotState;
 import frc.robot.subsystems.DriveTrain.DriveBase;
+import frc.robot.subsystems.Intake.Intake;
+import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakePosition;
 
 
 /**
@@ -25,17 +28,25 @@ public class RobotContainer {
         driveController = new CommandPS5Controller(1);
         driveXboxController = new CommandXboxController(0);
 
-        driveBase = new DriveBase();
+        // driveBase = new DriveBase();
 
-        configureDriveBindings();
+        // configureDriveBindings();
+        Intake intake = new Intake();
+
+        driveController.cross().onTrue(new Position(intake, IntakePosition.Open));
+        driveController.triangle().onTrue(new Position(intake, IntakePosition.Closed));
+
+        driveController.circle().whileTrue(new Rollers(intake));
+
+        driveController.options().onTrue(new InstantCommand(() -> intake.resetPositionMotorEncoder()));
         
     }
 
 
     public void configureDriveBindings(){
-        new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(new StartEndCommand(() ->
-            driveBase.setDefaultCommand(new DriveCommand(driveBase, driveXboxController)),
-            driveBase::removeDefaultCommand).ignoringDisable(true));
+//         new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(new StartEndCommand(() ->
+//             driveBase.setDefaultCommand(new DriveCommand(driveBase, driveXboxController)),
+//             driveBase::removeDefaultCommand).ignoringDisable(true));
    }
    
 

@@ -9,6 +9,8 @@ import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.Volts;
 
 import org.littletonrobotics.junction.Logger;
+
+import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakePosition;
 import frc.robot.subsystems.Intake.IntakeIO.IntakeInputs;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Voltage;
@@ -33,6 +35,10 @@ public class Intake extends SubsystemBase{
         io.setPositionMotorRotation(rotations);
     }
 
+    public void setPositionMotorState(IntakePosition position){
+        setPositionMotorRotation(position.getAngle());
+    }
+
     public void setRollersMotorDutyCycle(double dutyCycle)
     {
         io.setRollersMotorDutyCycle(dutyCycle);
@@ -53,5 +59,7 @@ public class Intake extends SubsystemBase{
     {
         io.Update(inputs);
         Logger.processInputs(getName(), inputs);
+
+        Logger.recordOutput("Intake/Command", (getCurrentCommand() != null ? getCurrentCommand().toString() : "None"));
     }
 }

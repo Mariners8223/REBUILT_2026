@@ -9,13 +9,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeConstants;
+import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakePosition;
 
 
 public class Position extends Command {
   private final Intake intake;
-  private final Angle position;
+  private final IntakePosition position;
 
-  public Position(Intake intake, Angle position) 
+  public Position(Intake intake, IntakePosition position) 
   {
     this.intake = intake;
     this.position = position;
@@ -27,13 +28,13 @@ public class Position extends Command {
   @Override
   public void initialize() 
   {
-    intake.setPositionMotorRotation(position);
+    intake.setPositionMotorState(position);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() 
   {
-    return Constants.CALCULATIONS.epsilonEquals(intake.getCurrentPosition(), position, IntakeConstants.PositionMotor.POSITION_TOLERANCE);
+    return Constants.CALCULATIONS.epsilonEquals(intake.getCurrentPosition(), position.getAngle(), IntakeConstants.PositionMotor.POSITION_TOLERANCE);
   }
 }
