@@ -1,3 +1,9 @@
+package frc.robot.subsystems.Climb;
+
+import org.littletonrobotics.junction.AutoLog;
+
+import edu.wpi.first.math.geometry.Pose3d;
+
 public interface ClimbIO {
   @AutoLog
     class ClimbInputs{
