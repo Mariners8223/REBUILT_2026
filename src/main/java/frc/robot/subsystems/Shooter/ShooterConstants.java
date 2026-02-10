@@ -46,11 +46,11 @@ public class ShooterConstants {
         public static final double GEAR_RATIO = 1;
         public static final double GEAR_REDUCTION = 1 / GEAR_RATIO;
 
-        public static final int LEAD_MOTOR_ID = 12;
+        public static final int LEAD_MOTOR_ID = 22;
         public static final boolean LEAD_MOTOR_IS_INVERTED = true;
 
         public record FollowMotor(int id, boolean inverted_from_leader){}
-        public static final FollowMotor FOLLOW_MOTOR_1 = new FollowMotor(23, true);
+        public static final FollowMotor FOLLOW_MOTOR_1 = new FollowMotor(21, true);
         public static final FollowMotor FOLLOW_MOTOR_2 = new FollowMotor(0, false);
         public static final FollowMotor FOLLOW_MOTOR_3 = new FollowMotor(0, false);
 
