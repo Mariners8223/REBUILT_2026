@@ -4,7 +4,7 @@ import frc.util.MarinersController.MarinersController.ControllerLocation;
 
 public class ClimbConstants 
 {
-    public static final int MOTOR_ID = 0;
+    public static final int MOTOR_ID = 25;
     public static final double GEAR_RATIO = 1;
     public static final double ROTATIONS_TO_METERS = 0;
     public static final double CLIMB_POWER = 0;
