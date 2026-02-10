@@ -21,7 +21,7 @@ public class FunnelingConstents {
         public static final boolean IS_INVERTED = true;
     }
     public static class CenteringMotor{
-        public static final int CenterHIGH_ID = 13;
+        public static final int CenterHIGH_ID = 33;
         public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
         public static final double GearRatio = 3;
         public static final double MOMENT_OF_INERTIA_SIM = 1;
