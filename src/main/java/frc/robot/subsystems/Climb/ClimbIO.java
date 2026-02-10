@@ -14,10 +14,12 @@ public interface ClimbIO {
     void setPower(double power);
 
     void resetPosition();
+
     double getPosition();
+
+    void stopClimbMotor();
 
     void setBrakeMode(boolean isBrake);
 
     void Update(ClimbInputs inputs);
-    void setServoAngle(double angle);
 }
