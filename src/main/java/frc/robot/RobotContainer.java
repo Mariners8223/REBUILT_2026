@@ -5,7 +5,6 @@
 package frc.robot;
 
 import static edu.wpi.first.units.Units.RPM;
-import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -75,7 +74,7 @@ public class RobotContainer {
                 .until(() -> Constants.CALCULATIONS.epsilonEquals(
                         shooter.getShooterVelocity(), 
                         RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0)),
-                        RotationsPerSecond.of(2))
+                        RPM.of(20))
                 ),
                 Commands.parallel(
                     kicker.setKickerCommand(0.4),
