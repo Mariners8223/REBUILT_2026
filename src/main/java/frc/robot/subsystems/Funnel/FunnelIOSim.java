@@ -18,7 +18,7 @@ public class FunnelIOSim implements FunnelIO{
             DCMotor.getNeoVortex(1),
             FunnelConstants.LeadingMotor.GearRatio,
             FunnelConstants.LeadingMotor.MOMENT_OF_INERTIA_SIM);
-        
+
         CenterHighMotor= new MarinersSimMotor(
             "Center Motor",
             DCMotor.getKrakenX60(1),
@@ -28,7 +28,7 @@ public class FunnelIOSim implements FunnelIO{
 
     public void SetDutyCycleCenter(double DutyCycleCenter){
         CenterHighMotor.setDutyCycle(DutyCycleCenter);
-    } 
+    }
     public void SetDutyCycleLead(double DutyCycleLead){
         LeadMotor.setDutyCycle(DutyCycleLead);
     }

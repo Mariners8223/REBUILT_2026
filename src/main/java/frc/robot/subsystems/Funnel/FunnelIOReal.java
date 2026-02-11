@@ -46,5 +46,3 @@ public class FunnelIOReal implements FunnelIO{
         funnelMotor.setDutyCycle(LeadDutyCycle);
     }
 }
-
-    

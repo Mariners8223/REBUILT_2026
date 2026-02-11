@@ -7,7 +7,7 @@ import frc.util.MarinersController.MarinersController.ControlMode;
 import frc.util.MarinersController.MarinersSimMotor;
 import static edu.wpi.first.units.Units.RPM;
 
-public class IntakeIOSim implements IntakeIO 
+public class IntakeIOSim implements IntakeIO
 {
     MarinersSimMotor positionMotor;
     MarinersSimMotor rollersMotor;

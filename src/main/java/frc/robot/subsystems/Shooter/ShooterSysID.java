@@ -16,7 +16,7 @@ import org.littletonrobotics.junction.Logger;
 public class ShooterSysID {
 
     private final SysIdRoutine routine;
-    
+
     public ShooterSysID(Shooter shooter){
         routine = new SysIdRoutine(
             new Config(

@@ -29,7 +29,7 @@ public final class Constants {
   }
 
   public static class FieldConstants{
-    public static final Translation2d HUB_POSITION = new Translation2d(); // TODO: FIX POSITION 
+    public static final Translation2d HUB_POSITION = new Translation2d(); // TODO: FIX POSITION
   }
 
   public static class CALCULATIONS{

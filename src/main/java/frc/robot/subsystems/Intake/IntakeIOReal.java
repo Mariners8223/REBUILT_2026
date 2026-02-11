@@ -20,7 +20,7 @@ public class IntakeIOReal implements IntakeIO{
     private MarinersTalonFX configurePositionMotor()
     {
         MarinersTalonFX motor;
-        motor = new MarinersTalonFX("position motor", IntakeConstants.PositionMotor.CONTROLLER_LOCATION, 
+        motor = new MarinersTalonFX("position motor", IntakeConstants.PositionMotor.CONTROLLER_LOCATION,
         IntakeConstants.PositionMotor.MOTOR_ID, IntakeConstants.PositionMotor.PID_GAINS, IntakeConstants.PositionMotor.GEAR_RATIO);
         motor.setMotorInverted(IntakeConstants.PositionMotor.IS_INVERTED);
         motor.enableSoftLimits(IntakeConstants.PositionMotor.SOFT_MINIMUM, IntakeConstants.PositionMotor.SOFT_MAXIMUM);
@@ -35,14 +35,14 @@ public class IntakeIOReal implements IntakeIO{
     private MarinersTalonFX configureRollersMotor()
     {
         MarinersTalonFX motor;
-        motor = new MarinersTalonFX("rollers motor", IntakeConstants.RollersMotor.CONTROLLER_LOCATION, 
+        motor = new MarinersTalonFX("rollers motor", IntakeConstants.RollersMotor.CONTROLLER_LOCATION,
         IntakeConstants.RollersMotor.MOTOR_ID);
 
         motor.setMotorInverted(IntakeConstants.RollersMotor.IS_INVERTED);
 
         return motor;
     }
-    
+
     public void setPositionMotorRotation(Angle rotation)
     {
         positionMotor.setReference(rotation.in(Rotation), ControlMode.ProfiledPosition);

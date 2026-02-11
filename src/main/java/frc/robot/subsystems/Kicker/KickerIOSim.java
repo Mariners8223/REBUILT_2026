@@ -15,7 +15,7 @@ public class KickerIOSim implements KickerIO {
 
     public KickerIOSim(){
         kickerMotors = new MarinersSimMotor(
-            "Kicker Motors", 
+            "Kicker Motors",
             DCMotor.getNeoVortex(2),
             KickerConstants.MOTOR_CONSTANTS.GEAR_RATIO,
             1

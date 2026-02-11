@@ -11,7 +11,7 @@ import frc.robot.subsystems.Intake.IntakeConstants;
 
 public class Rollers extends Command {
   private final Intake intake;
-  public Rollers(Intake intake) 
+  public Rollers(Intake intake)
   {
     this.intake = intake;
 
@@ -20,14 +20,14 @@ public class Rollers extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() 
+  public void initialize()
   {
     intake.setRollersMotorDutyCycle(IntakeConstants.RollersMotor.DUTY_CYCLE);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) 
+  public void end(boolean interrupted)
   {
     intake.setRollersMotorDutyCycle(0);
   }

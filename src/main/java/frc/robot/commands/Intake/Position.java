@@ -13,7 +13,7 @@ public class Position extends Command {
   private final Intake intake;
   private final IntakePosition position;
 
-  public Position(Intake intake, IntakePosition position) 
+  public Position(Intake intake, IntakePosition position)
   {
     this.intake = intake;
     this.position = position;
@@ -23,14 +23,14 @@ public class Position extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() 
+  public void initialize()
   {
     intake.setPositionMotorState(position);
   }
 
   // Returns true when the command should end.
   @Override
-  public boolean isFinished() 
+  public boolean isFinished()
   {
     return false;
     // return Constants.CALCULATIONS.epsilonEquals(intake.getCurrentPosition(), position.getAngle(), IntakeConstants.PositionMotor.POSITION_TOLERANCE);

@@ -25,8 +25,8 @@ public class ShooterIOSim implements ShooterIO{
     public ShooterIOSim(){
         flywheel = new FlywheelSim(
             LinearSystemId.createFlywheelSystem(
-                DCMotor.getKrakenX60(4), 
-                ShooterConstants.SHOOTER_MOMENT_OF_INERTIA.in(KilogramSquareMeters), 
+                DCMotor.getKrakenX60(4),
+                ShooterConstants.SHOOTER_MOMENT_OF_INERTIA.in(KilogramSquareMeters),
                 ShooterConstants.MOTOR_CONSTANTS.GEAR_REDUCTION
             ),
             DCMotor.getKrakenX60(2),

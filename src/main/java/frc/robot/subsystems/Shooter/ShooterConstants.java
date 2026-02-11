@@ -72,7 +72,7 @@ public class ShooterConstants {
     public static final Distance SHOOTER_HEIGHT = Centimeter.of(40);
     public static final Angle SHOOTER_ANGLE = Degree.of(75);
     public static final LinearAcceleration ACCELERATION_DUE_TO_GRAVITY = MetersPerSecondPerSecond.of(9.8);
-    
+
 
     public static final Distance SHOOTER_WHEEL_RADIUS = Centimeter.of(10);
     public static final Distance SHOOTER_WHEEL_CIRCUMFERENCE = SHOOTER_WHEEL_RADIUS.times(2 * Math.PI);
@@ -80,7 +80,7 @@ public class ShooterConstants {
     public static final MomentOfInertia SHOOTER_MOMENT_OF_INERTIA = KilogramSquareMeters.of(1);
 
     public static final AngularVelocity SHOOTER_ANGULAR_VELOCITY_TOLERANCE = RPM.of(100);
-    
+
 
 
     public static final Distance KICKER_WHEEL_RADIUS = Centimeter.of(10);

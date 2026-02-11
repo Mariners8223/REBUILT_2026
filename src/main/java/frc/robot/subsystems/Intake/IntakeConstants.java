@@ -13,7 +13,7 @@ import frc.util.MarinersController.MarinersController.ControllerLocation;
 import frc.util.MarinersController.MarinersSparkBase.MotorType;
 
 
-public class IntakeConstants 
+public class IntakeConstants
 {
 
     public static class PositionMotor
@@ -30,7 +30,7 @@ public class IntakeConstants
             {
                 this.angle = angle;
             }
- 
+
             public Angle getAngle()
             {
                 return this.angle;
@@ -79,14 +79,14 @@ public class IntakeConstants
         public static final MotorType MOTOR_TYPE = MotorType.SPARK_FLEX;
         public static final boolean IS_INVERTED = false;
         public static final double GEAR_RATIO = 1;
-        public static final double DUTY_CYCLE = 1; // i assume that you want a dutyCycle constat bc you have that in your io 
+        public static final double DUTY_CYCLE = 1; // i assume that you want a dutyCycle constat bc you have that in your io
     }
 
     public static final double MOMENT_OF_INERTIA = 0;
-    
+
 
     public static final double X_ON_ROBOT = 0;
     public static final double Y_ON_ROBOT = 0;
     public static final double Z_OFFSET = 0;
-    
+
 }

@@ -15,16 +15,16 @@ public class KickerIOReal implements KickerIO {
 
     public KickerIOReal(){
         leadMotor = new MarinersSparkBase(
-            "Kicker Lead Motor", 
-            KickerConstants.MOTOR_CONSTANTS.CONTROLLER_LOCATION, 
-            KickerConstants.MOTOR_CONSTANTS.LEAD_MOTOR_ID, 
+            "Kicker Lead Motor",
+            KickerConstants.MOTOR_CONSTANTS.CONTROLLER_LOCATION,
+            KickerConstants.MOTOR_CONSTANTS.LEAD_MOTOR_ID,
             true,
             KickerConstants.MOTOR_CONSTANTS.MOTOR_TYPE);
         leadMotor.setMotorInverted(KickerConstants.MOTOR_CONSTANTS.LEAD_MOTOR_IS_INVERTED);
         leadMotor.setMotorIdleMode(true);
-        
+
         followMotor = new MarinersSparkBase(
-            "Kicker Follow Motor", 
+            "Kicker Follow Motor",
             KickerConstants.MOTOR_CONSTANTS.CONTROLLER_LOCATION,
             KickerConstants.MOTOR_CONSTANTS.FOLLOW_MOTOR_ID,
             true,

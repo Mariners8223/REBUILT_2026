@@ -5,7 +5,6 @@
 package frc.robot;
 
 import static edu.wpi.first.units.Units.RPM;
-import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -39,7 +38,7 @@ public class RobotContainer {
         intake = new Intake();
         shooter = new Shooter();
         kicker = new Kicker();
-        
+
         // configureDriveBindings();
         configureTestingBindings();
     }
@@ -48,7 +47,7 @@ public class RobotContainer {
         new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(
             new StartEndCommand(() ->driveBase.setDefaultCommand(new DriveCommand(driveBase, driveController)),
             driveBase::removeDefaultCommand)
-            .ignoringDisable(true));        
+            .ignoringDisable(true));
     }
 
    public void configureTestingBindings(){
@@ -86,7 +85,7 @@ public class RobotContainer {
         driveController.L1().toggleOnTrue(
                 Commands.run(() -> shooter.setVelocity(RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))))
                 .until(() -> Constants.CALCULATIONS.epsilonEquals(
-                        shooter.getShooterVelocity(), 
+                        shooter.getShooterVelocity(),
                         RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0)),
                         RPM.of(60))
                 ).andThen(new PrintCommand("Finished Climb")).
@@ -99,7 +98,7 @@ public class RobotContainer {
             Commands.sequence(
                 Commands.run(() -> shooter.setVelocity(RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))))
                 .until(() -> Constants.CALCULATIONS.epsilonEquals(
-                        shooter.getShooterVelocity(), 
+                        shooter.getShooterVelocity(),
                         RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0)),
                         RPM.of(20))
                 ),

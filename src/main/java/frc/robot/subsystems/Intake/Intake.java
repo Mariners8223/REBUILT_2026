@@ -33,12 +33,12 @@ public class Intake extends SubsystemBase{
     {
         io.setRollersMotorDutyCycle(dutyCycle);
     }
-    
+
     public Angle getCurrentPosition()
     {
         return io.getCurrentPosition();
     }
-    
+
     public IntakePosition getCurrentState(){
         return IntakePosition.findNearestPosition(getCurrentPosition());
     }
@@ -64,7 +64,7 @@ public class Intake extends SubsystemBase{
     }
 
     @Override
-    public void periodic() 
+    public void periodic()
     {
         io.Update(inputs);
         Logger.processInputs(getName(), inputs);
