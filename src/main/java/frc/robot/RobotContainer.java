@@ -19,30 +19,17 @@ import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakePosition;
  */
 public class RobotContainer {
     public static DriveBase driveBase;
-    public static Robot robot;
     public static CommandPS5Controller driveController;
     public static CommandXboxController driveXboxController;
+    public static Intake intake;
 
 
     public RobotContainer() {
         driveController = new CommandPS5Controller(1);
         driveXboxController = new CommandXboxController(0);
 
-        // driveBase = new DriveBase();
-
-        // configureDriveBindings();
-        Intake intake = new Intake();
-
-        driveController.cross().onTrue(new Position(intake, IntakePosition.Open));
-        driveController.triangle().onTrue(new Position(intake, IntakePosition.Closed));
-
-        driveController.circle().whileTrue(new Rollers(intake));
-
-        driveController.options().onTrue(new InstantCommand(() -> intake.resetPositionMotorEncoder()));
-
-        intake.startPIDTuning();
-        
-        
+        driveBase = new DriveBase();
+        configureDriveBindings();        
     }
 
 
@@ -50,6 +37,5 @@ public class RobotContainer {
         new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(new StartEndCommand(() ->
             driveBase.setDefaultCommand(new DriveCommand(driveBase, driveXboxController)),
             driveBase::removeDefaultCommand).ignoringDisable(true));
-
    }
 }

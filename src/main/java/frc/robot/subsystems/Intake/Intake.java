@@ -20,13 +20,10 @@ import edu.wpi.first.wpilibj.RobotBase;
 public class Intake extends SubsystemBase{
     private final IntakeIO io;
     private final IntakeInputsAutoLogged inputs = new IntakeInputsAutoLogged();
-    private double currentPosition;
-    private double desiredPosition;
-
 
     public Intake()
     {
-        io = new IntakeIOReal();
+        io = Robot.isReal() ? new IntakeIOReal() : new IntakeIOSim();
         this.resetPositionMotorEncoder();
     }
 
