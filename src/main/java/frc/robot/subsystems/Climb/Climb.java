@@ -4,9 +4,6 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.Climb.ClimbIOReal;
-import frc.robot.subsystems.Climb.ClimbIO;
-
 
 public class Climb extends SubsystemBase {
     private final ClimbIO io;
@@ -14,13 +11,10 @@ public class Climb extends SubsystemBase {
 
     public Climb() 
     {
-        io = new ClimbIOReal();// : new ClimbIOSim();
+        io = new ClimbIOReal();
         io.resetPosition();
 
         io.setBrakeMode(false);
-    //     new Trigger(RobotState::isEnabled).whileTrue(new StartEndCommand(
-    //         () -> io.setBrakeMode(true),
-    //         () -> io.setBrakeMode(false)).ignoringDisable(true));
     }
 
     public void setMotorPower(double power) 

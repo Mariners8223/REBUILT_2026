@@ -19,7 +19,7 @@ public class ClimbIOReal implements ClimbIO
 
         motor.setMotorInverted(ClimbConstants.IS_INVERTED);
 
-        motor.enableSoftLimits(ClimbConstants.SOFT_MINIMUM, ClimbConstants.SOFT_MAXIMUM);
+        //motor.enableSoftLimits(ClimbConstants.SOFT_MINIMUM, ClimbConstants.SOFT_MAXIMUM);
 
         return motor;
     }

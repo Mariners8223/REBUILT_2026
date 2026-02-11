@@ -8,40 +8,32 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Climb.Climb;
 import frc.robot.subsystems.Climb.ClimbConstants;
 
-/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ClimbCommand extends Command {
     private final Climb climb;
-    private boolean Up;
-  /** Creates a new ClimbCommand. */
-  public ClimbCommand(Climb climb,boolean up) {
-    this.climb = climb;
-    Up = up;
-    
-    addRequirements(climb);
-    // Use addRequirements() here to declare subsystem dependencies.
-  }
+    private final ClimbConstants.HEIGHTS desired_height;
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-    if (Up){
-        climb.setMotorPower(ClimbConstants.CLIMB_POWER);
+    public ClimbCommand(Climb climb,ClimbConstants.HEIGHTS height) {
+        this.climb = climb;
+        this.desired_height = height;
+        
+        addRequirements(climb);
     }
-    else{
-        climb.setMotorPower(-ClimbConstants.CLIMB_POWER);
+
+    // Called when the command is initially scheduled.
+    @Override
+    public void initialize() {
+        climb.setMotorPower(Math.signum(desired_height.GetHeight() - climb.getPosition()) * ClimbConstants.CLIMB_POWER);
     }
-  }
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    climb.setMotorPower(0);
-    
-  }
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {
+        climb.setMotorPower(0);
+    }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return climb.getPosition() - ClimbConstants.CLIMB_TOLERANCE >= ClimbConstants.DESIRED_HIGHT;
-  }
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        return Math.abs(climb.getPosition() - desired_height.GetHeight()) <= ClimbConstants.CLIMB_TOLERANCE;
+    }
 }
