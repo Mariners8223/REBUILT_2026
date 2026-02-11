@@ -11,6 +11,7 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -21,6 +22,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
+  public static boolean isRedAlliance = false;
+
 
   private final RobotContainer m_robotContainer;
 
@@ -30,7 +33,7 @@ public class Robot extends LoggedRobot {
    */
   public Robot() {
     Logger.recordMetadata("ProjectName", "MyProject"); // Set a metadata value
-
+    
     if (isReal()) {
         Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
         Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
@@ -40,8 +43,11 @@ public class Robot extends LoggedRobot {
         Logger.setReplaySource(new WPILOGReader(logPath)); // Read replay log
         Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
 
+              isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
+
     new RobotContainer();
 }
+
 
 Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our

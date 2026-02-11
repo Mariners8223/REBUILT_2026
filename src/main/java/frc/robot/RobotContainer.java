@@ -19,7 +19,7 @@ import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakePosition;
  */
 public class RobotContainer {
     public static DriveBase driveBase;
-
+    public static Robot robot;
     public static CommandPS5Controller driveController;
     public static CommandXboxController driveXboxController;
 
@@ -47,11 +47,9 @@ public class RobotContainer {
 
 
     public void configureDriveBindings(){
-//         new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(new StartEndCommand(() ->
-//             driveBase.setDefaultCommand(new DriveCommand(driveBase, driveXboxController)),
-//             driveBase::removeDefaultCommand).ignoringDisable(true));
+        new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(new StartEndCommand(() ->
+            driveBase.setDefaultCommand(new DriveCommand(driveBase, driveXboxController)),
+            driveBase::removeDefaultCommand).ignoringDisable(true));
+
    }
-   
-
-
 }
