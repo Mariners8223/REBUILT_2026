@@ -26,9 +26,9 @@ public class ClimbIOReal implements ClimbIO
         return motor;
     }
 
-    public void setPower(double power) 
+    public void setPower(double power)
     {
-        motor.setDutyCycle(power); 
+        motor.setDutyCycle(power);
     }
 
     public void stopClimbMotor()
@@ -36,14 +36,14 @@ public class ClimbIOReal implements ClimbIO
         motor.stopMotor();
     }
 
-    public void resetPosition() 
+    public void resetPosition()
     {
-        motor.setMotorEncoderPosition(ClimbConstants.START_POSITION); 
+        motor.setMotorEncoderPosition(ClimbConstants.START_POSITION);
     }
 
-    public double getPosition() 
-    { 
-        return motor.getPosition(); 
+    public double getPosition()
+    {
+        return motor.getPosition();
     }
 
     public void setPosition(double refrence){
@@ -51,7 +51,7 @@ public class ClimbIOReal implements ClimbIO
     }
 
     @Override
-    public void setBrakeMode(boolean isBrake) 
+    public void setBrakeMode(boolean isBrake)
     {
         motor.setMotorIdleMode(isBrake);
     }

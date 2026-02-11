@@ -10,7 +10,7 @@ public class Climb extends SubsystemBase {
     private final ClimbIO io;
     private final ClimbInputsAutoLogged inputs = new ClimbInputsAutoLogged();
 
-    public Climb() 
+    public Climb()
     {
         io = new ClimbIOReal();
         io.resetPosition();
@@ -22,7 +22,7 @@ public class Climb extends SubsystemBase {
         io.resetPosition();
     }
 
-    public void setMotorPower(double power) 
+    public void setMotorPower(double power)
     {
         io.setPower(power);
     }
@@ -30,7 +30,7 @@ public class Climb extends SubsystemBase {
     public void setMotorPosition(Heights height){
         io.setPosition(height.getHeight());
     }
-    
+
     public double getPosition()
     {
         return io.getPosition();
@@ -40,13 +40,13 @@ public class Climb extends SubsystemBase {
     {
         io.stopClimbMotor();
     }
-    
+
     public boolean isAtPosition(double position){
         return Math.abs(getPosition() - position) < ClimbConstants.CLIMB_TOLERANCE;
     }
 
     @Override
-    public void periodic() 
+    public void periodic()
     {
         // This method will be called once per scheduler run
          io.Update(inputs);

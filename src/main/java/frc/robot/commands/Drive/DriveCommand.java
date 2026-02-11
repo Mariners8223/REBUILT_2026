@@ -4,7 +4,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Robot;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 
 import frc.robot.subsystems.DriveTrain.SwerveModules.DevBotConstants;
@@ -46,7 +45,7 @@ public class DriveCommand extends Command {
 
         double driveBaseRadius = Math.hypot(DISTANCE_BETWEEN_WHEELS / 2, DISTANCE_BETWEEN_WHEELS / 2);
 
-        MAX_OMEGA_RAD_PER_SEC = MAX_FREE_WHEEL_SPEED / driveBaseRadius;        
+        MAX_OMEGA_RAD_PER_SEC = MAX_FREE_WHEEL_SPEED / driveBaseRadius;
     }
 
     public static void normalSpeed(){
@@ -54,7 +53,7 @@ public class DriveCommand extends Command {
 
         double driveBaseRadius = Math.hypot(DISTANCE_BETWEEN_WHEELS / 2, DISTANCE_BETWEEN_WHEELS / 2);
 
-        MAX_OMEGA_RAD_PER_SEC = MAX_FREE_WHEEL_SPEED / driveBaseRadius;  
+        MAX_OMEGA_RAD_PER_SEC = MAX_FREE_WHEEL_SPEED / driveBaseRadius;
     }
 
 

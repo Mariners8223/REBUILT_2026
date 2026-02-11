@@ -3,7 +3,7 @@ package frc.robot.subsystems.Climb;
 import frc.util.MarinersController.MarinersController.ControllerLocation;
 import frc.util.PIDFGains;
 
-public class ClimbConstants 
+public class ClimbConstants
 {
     public enum Heights{
         RESET(0),
@@ -20,12 +20,12 @@ public class ClimbConstants
             return this.height;
         }
     }
-    
+
     public static final int MOTOR_ID = 25;
     public static final double GEAR_RATIO = 45;
     public static final double ROTATIONS_TO_METERS = 1/0.1324;
     public static final double CLIMB_POWER = 0.3;
-    public static final double SOFT_MINIMUM = 0; 
+    public static final double SOFT_MINIMUM = 0;
     public static final double SOFT_MAXIMUM = 0.8;
     public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
     public static final double CLIMB_TOLERANCE = 0.005;

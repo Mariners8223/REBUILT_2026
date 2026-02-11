@@ -219,7 +219,7 @@ public class MarinersSparkBase extends MarinersController {
      */
     public MarinersSparkBase(String name, ControllerLocation location, int id, boolean isBrushless, MotorType type, PIDFGains gains, double gearRatio, double firstDerivativeLimit, double secondDerivativeLimit) {
         this(name, location, id, isBrushless, type);
-        
+
         super.setProfile(firstDerivativeLimit, secondDerivativeLimit);
 
         super.setPIDF(gains);
@@ -269,7 +269,7 @@ public class MarinersSparkBase extends MarinersController {
         reportError("Error configuring motor with external encoder", error);
 
         encoder.setPosition(absoluteEncoder.getPosition());
-        
+
         super.setMeasurements(
                 new MarinersMeasurements(
                         encoder::getPosition,
@@ -305,7 +305,7 @@ public class MarinersSparkBase extends MarinersController {
 
         REVLibError error = motor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
 
-        reportError("Error configuring motor with absolute encoder", error);        
+        reportError("Error configuring motor with absolute encoder", error);
 
         super.setMeasurements(
                 new MarinersMeasurements(
@@ -363,9 +363,9 @@ public class MarinersSparkBase extends MarinersController {
         config.secondaryCurrentLimit(thresholdCurrentLimit);
 
         REVLibError error = motor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
-        
+
         reportError("Error configuring motor current limits", error);
-        
+
     }
 
     /**
@@ -381,9 +381,9 @@ public class MarinersSparkBase extends MarinersController {
         config.secondaryCurrentLimit(currentThreshold);
 
         REVLibError error = motor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
-        
+
         reportError("Error configuring motor current limits", error);
-        
+
     }
 
 
@@ -426,9 +426,9 @@ public class MarinersSparkBase extends MarinersController {
         config.follow(base.getMotor(), invert);
 
         REVLibError error = motor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
-        
+
         reportError("Error configuring motor follower", error);
-        
+
     }
 
 
@@ -439,9 +439,9 @@ public class MarinersSparkBase extends MarinersController {
         config.idleMode(mode);
 
         REVLibError error = motor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
-        
+
         reportError("Error configuring motor idle mode", error);
-        
+
     }
 
 
@@ -457,7 +457,7 @@ public class MarinersSparkBase extends MarinersController {
 
     @Override
     protected void setPIDFMotor(PIDFGains gains) {
-        
+
         ClosedLoopConfig controller = config.closedLoop;
 
 
@@ -465,11 +465,11 @@ public class MarinersSparkBase extends MarinersController {
         controller.i(gains.getI() / measurements.getGearRatio() / 12);
         controller.d(gains.getD() / measurements.getGearRatio() / 12);
         controller.iZone(gains.getIZone() / measurements.getGearRatio() / 12);
-        
+
         REVLibError error = motor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
-        
+
         reportError("Error configuring motor PID", error);
-        
+
     }
 
     @Override
@@ -480,9 +480,9 @@ public class MarinersSparkBase extends MarinersController {
         controller.outputRange(-Math.abs(min) / 12, max / 12);
 
         REVLibError error = motor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
-        
+
         reportError("Error configuring motor output range", error);
-        
+
     }
 
     @Override
@@ -515,7 +515,7 @@ public class MarinersSparkBase extends MarinersController {
 
         // REVLibError error = motor.getClosedLoopController().setReference(output, controlType, 0, feedForward);
         REVLibError error = motor.getClosedLoopController().setReference(output, controlType, ClosedLoopSlot.kSlot0, feedForward);
-        
+
         reportError("Error setting motor output", error);
     }
 }

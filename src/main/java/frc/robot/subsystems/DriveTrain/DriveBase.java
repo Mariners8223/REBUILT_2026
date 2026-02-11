@@ -15,14 +15,11 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.Robot;
-import frc.robot.commands.Drive.DriveCommand;
 import frc.robot.subsystems.DriveTrain.SwerveModules.DevBotConstants;
 import frc.robot.subsystems.DriveTrain.SwerveModules.SwerveModule;
 import frc.util.FastGyros.GyroIO;
 import frc.util.FastGyros.PigeonIO;
 import frc.util.FastGyros.SimGyroIO;
-import org.json.simple.parser.ParseException;
 import org.littletonrobotics.junction.AutoLog;
 import org.littletonrobotics.junction.Logger;
 
@@ -35,13 +32,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 
-import java.io.IOException;
 import java.util.function.DoubleSupplier;
 
 
@@ -82,7 +75,7 @@ public class DriveBase extends SubsystemBase {
     /**
      * the inputs of the drive base (all the motor voltages, angles, speeds, etc.) to be logged
      */
-    private final DriveBaseInputsAutoLogged inputs = new DriveBaseInputsAutoLogged();   
+    private final DriveBaseInputsAutoLogged inputs = new DriveBaseInputsAutoLogged();
 
     /**
      * the max speed the wheels can spin (drive motor at max speed)

@@ -6,17 +6,16 @@ package frc.robot.commands.Climb;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Climb.Climb;
-import frc.robot.subsystems.Climb.ClimbConstants;
 import frc.robot.subsystems.Climb.ClimbConstants.Heights;
 
 public class ClimbCommand extends Command {
     private final Climb climb;
-    private final ClimbConstants.Heights desiredHeight;
+    private final Heights desiredHeight;
 
-    public ClimbCommand(Climb climb, ClimbConstants.Heights height) {
+    public ClimbCommand(Climb climb, Heights height) {
         this.climb = climb;
         this.desiredHeight = height;
-        
+
         addRequirements(climb);
     }
 
@@ -24,7 +23,7 @@ public class ClimbCommand extends Command {
     @Override
     public void initialize() {
         // climb.setMotorPower(Math.signum(desiredHeight.getHeight() - climb.getPosition()) * ClimbConstants.CLIMB_POWER);
-        climb.setPosition(desiredHeight.getHeight());
+        climb.setMotorPosition(desiredHeight);
     }
 
     // Called once the command ends or is interrupted.
