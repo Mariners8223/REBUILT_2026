@@ -6,7 +6,6 @@ package frc.robot.subsystems.Funnel;
 
 
 import frc.util.PIDFGains;
-import frc.util.MarinersController.MarinersController;
 import frc.util.MarinersController.MarinersSparkBase;
 import frc.util.MarinersController.MarinersTalonFX;
 

@@ -4,40 +4,10 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.function.BooleanSupplier;
-
-import com.pathplanner.lib.events.EventTrigger;
-
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.*;
-import edu.wpi.first.wpilibj2.command.button.*;
-import frc.robot.Constants.RobotType;
-import frc.robot.commands.Drive.DriveCommand;
-import frc.robot.commands.FunnelCommands.Funnelling;
-import frc.robot.commands.FunnelCommands.ToShooter;
-
-import org.json.simple.parser.ParseException;
-import org.littletonrobotics.conduit.ConduitApi;
-import org.littletonrobotics.junction.Logger;
-import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
-
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import edu.wpi.first.wpilibj2.command.button.*;
+import frc.robot.commands.Drive.DriveCommand;
 
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.Funnel.Funnel;
@@ -52,21 +22,17 @@ public class RobotContainer {
     public RobotContainer() {
         driveController = new CommandPS5Controller(1);
         driveXboxController = new CommandXboxController(0);
+
+        driveBase = new DriveBase();
         funnel = new Funnel();
-        //driveBase = new DriveBase();
         
         configureDriveBindings();
-        
     }
 
 
     public void configureDriveBindings(){
-        //   new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(new StartEndCommand(() ->
-        //       driveBase.setDefaultCommand(new DriveCommand(driveBase, driveXboxController)),
-        //       driveBase::removeDefaultCommand).ignoringDisable(true));
-        driveXboxController.y().whileTrue(new Funnelling(funnel));
-        driveXboxController.a().whileTrue(new ToShooter(funnel));
-        
+          new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(new StartEndCommand(() ->
+              driveBase.setDefaultCommand(new DriveCommand(driveBase, driveXboxController)),
+              driveBase::removeDefaultCommand).ignoringDisable(true));        
    }
-
 }

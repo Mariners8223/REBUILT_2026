@@ -2,7 +2,6 @@
 package frc.robot.subsystems.Funnel;
 
 import frc.util.MarinersController.MarinersSparkBase.MotorType;
-import frc.util.PIDFGains;
 import static frc.util.MarinersController.MarinersController.ControllerLocation;
 
 
