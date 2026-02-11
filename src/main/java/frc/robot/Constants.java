@@ -35,6 +35,6 @@ public final class Constants {
   public static class CALCULATIONS{
     public static <U extends Unit> boolean epsilonEquals(Measure<U> unit1, Measure<U> unit2, Measure<U> tolerance){
       return Math.abs(unit1.baseUnitMagnitude() - unit2.baseUnitMagnitude()) <= tolerance.baseUnitMagnitude();
-    }
-  }
-}
+    }  
+  }  
+}  

@@ -88,7 +88,7 @@ public class RobotContainer {
                         shooter.getShooterVelocity(),
                         RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0)),
                         RPM.of(60))
-                ).andThen(new PrintCommand("Finished Climb")).
+                ).
                 andThen(
                     kicker.setKickerCommand(0.4)
                 )
