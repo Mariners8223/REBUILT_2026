@@ -37,6 +37,4 @@ public final class Constants {
       return Math.abs(unit1.baseUnitMagnitude() - unit2.baseUnitMagnitude()) <= tolerance.baseUnitMagnitude();
     }
   }
-
-
 }

@@ -8,18 +8,8 @@ import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.commands.Drive.DriveCommand;
-import frc.robot.commands.Shooter.ShootVelocity;
-
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.RPM;
-import static edu.wpi.first.units.Units.Volt;
-
-import edu.wpi.first.units.measure.AngularVelocity;
-import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.Shooter.Shooter;
-import frc.robot.subsystems.Shooter.ShooterSysID;
 import frc.robot.subsystems.Funnel.Funnel;
 import frc.robot.subsystems.Intake.Intake;
 
@@ -40,14 +30,15 @@ public class RobotContainer {
         driveBase = new DriveBase();
         funnel = new Funnel();
         intake = new Intake();
+        shooter = new Shooter();
         
         configureDriveBindings();
     }
 
 
     public void configureDriveBindings(){
-          new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(new StartEndCommand(() ->
-              driveBase.setDefaultCommand(new DriveCommand(driveBase, driveXboxController)),
-              driveBase::removeDefaultCommand).ignoringDisable(true));        
+        new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(new StartEndCommand(() ->
+            driveBase.setDefaultCommand(new DriveCommand(driveBase, driveXboxController)),
+            driveBase::removeDefaultCommand).ignoringDisable(true));        
    }
 }

@@ -2,16 +2,9 @@ package frc.robot.subsystems.Intake;
 
 import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakePosition;
 import frc.util.MarinersController.MarinersTalonFX;
-
 import static edu.wpi.first.units.Units.Rotation;
-
 import org.littletonrobotics.junction.Logger;
-
-import edu.wpi.first.math.geometry.Pose3d;
-
 import static edu.wpi.first.units.Units.RPM;
-import static edu.wpi.first.units.Units.Radian;
-
 import edu.wpi.first.units.measure.Angle;
 import frc.util.MarinersController.MarinersController.ControlMode;
 
@@ -52,9 +45,7 @@ public class IntakeIOReal implements IntakeIO{
     
     public void setPositionMotorRotation(Angle rotation)
     {
-        System.out.println("SetReference");
-        double ff = Math.sin(rotation.in(Radian)) * 0.2;
-        positionMotor.setReference(rotation.in(Rotation), ControlMode.ProfiledPosition, 0);
+        positionMotor.setReference(rotation.in(Rotation), ControlMode.ProfiledPosition);
     }
 
     public void setRollersMotorDutyCycle(double dutyCycle)
