@@ -4,7 +4,6 @@
 
 package frc.robot.commands.Shooter;
 
-import static edu.wpi.first.units.Units.Millisecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import java.util.function.Supplier;

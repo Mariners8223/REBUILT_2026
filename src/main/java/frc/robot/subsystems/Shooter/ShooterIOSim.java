@@ -14,7 +14,6 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import frc.util.MarinersController.MarinersSimMotor;
-import frc.util.MarinersController.MarinersController.ControlMode;
 
 /** Add your docs here. */
 public class ShooterIOSim implements ShooterIO{

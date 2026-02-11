@@ -7,8 +7,6 @@ package frc.robot.subsystems.Kicker;
 import static edu.wpi.first.units.Units.RPM;
 
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.wpilibj.simulation.DCMotorSim;
-import frc.robot.subsystems.Shooter.ShooterConstants;
 import frc.util.MarinersController.MarinersSimMotor;
 
 /** Add your docs here. */

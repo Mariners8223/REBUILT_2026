@@ -3,8 +3,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.commands.Drive.DriveCommand;
-import frc.robot.commands.Shooter.IncreasingShootSpeed;
-import frc.robot.commands.Shooter.Shoot;
 import frc.robot.commands.Shooter.ShootVelocity;
 
 import static edu.wpi.first.units.Units.Meters;
@@ -13,7 +11,6 @@ import static edu.wpi.first.units.Units.Volt;
 
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.DriveTrain.DriveBase;

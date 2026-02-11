@@ -4,10 +4,8 @@
 
 package frc.robot.subsystems.Kicker;
 
-import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
-import frc.robot.subsystems.Kicker.KickerConstants.MOTOR_CONSTANTS;
 import frc.util.MarinersController.MarinersSparkBase;
 
 /** Add your docs here. */
