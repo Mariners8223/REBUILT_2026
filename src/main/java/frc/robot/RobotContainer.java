@@ -11,12 +11,14 @@ import frc.robot.commands.Drive.DriveCommand;
 
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.Funnel.Funnel;
+import frc.robot.subsystems.Intake.Intake;
 
 public class RobotContainer {
-    public static DriveBase driveBase;
-    public static Funnel funnel;
     public static CommandPS5Controller driveController;
     public static CommandXboxController driveXboxController;
+
+    public static DriveBase driveBase;
+    public static Funnel funnel;
     public static Intake intake;
 
 
@@ -26,6 +28,7 @@ public class RobotContainer {
 
         driveBase = new DriveBase();
         funnel = new Funnel();
+        intake = new Intake();
         
         configureDriveBindings();
     }
