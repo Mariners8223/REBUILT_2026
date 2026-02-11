@@ -21,6 +21,7 @@ public class ClimbCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    if (climb.getPosition() < )
     climb.setMotorPower(ClimbConstants.CLIMB_POWER);
   }
 
@@ -28,7 +29,7 @@ public class ClimbCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     climb.setMotorPower(0);
-    climb.
+    
   }
 
   // Returns true when the command should end.

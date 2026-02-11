@@ -34,6 +34,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 
 import frc.robot.subsystems.DriveTrain.DriveBase;
+import frc.robot.commands.Climb.ClimbCommand;
+import frc.robot.subsystems.Climb.Climb;
 
 
 /**
@@ -47,6 +49,7 @@ public class RobotContainer {
 
     public static CommandPS5Controller driveController;
     public static CommandXboxController driveXboxController;
+    public static Climb climb;
 
 
     public RobotContainer() {
@@ -54,6 +57,7 @@ public class RobotContainer {
         driveXboxController = new CommandXboxController(0);
 
         driveBase = new DriveBase();
+        climb = new Climb();
 
         configureDriveBindings();
         
@@ -65,7 +69,7 @@ public class RobotContainer {
             driveBase.setDefaultCommand(new DriveCommand(driveBase, driveXboxController)),
             driveBase::removeDefaultCommand).ignoringDisable(true));
 
-            driveXboxController.b().whileTrue(null)
+            driveXboxController.b().whileTrue(new ClimbCommand(climb));
    }
    
 
