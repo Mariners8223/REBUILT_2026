@@ -17,6 +17,7 @@ public class RobotContainer {
     public static Funnel funnel;
     public static CommandPS5Controller driveController;
     public static CommandXboxController driveXboxController;
+    public static Intake intake;
 
 
     public RobotContainer() {
