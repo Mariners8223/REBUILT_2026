@@ -46,6 +46,9 @@ public class Shooter extends SubsystemBase {
     public void setVoltage(Voltage voltage){
         io.setVoltage(voltage.in(Volts));
     }
+    public void setDutyCycle(double dutyCycle){
+        io.setDutyCycle(dutyCycle);
+    }
     public void boostFeedForward(double boost){
         io.feedForwardBoost(boost);
     }

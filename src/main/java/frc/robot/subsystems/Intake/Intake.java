@@ -69,6 +69,7 @@ public class Intake extends SubsystemBase{
         io.Update(inputs);
         Logger.processInputs(getName(), inputs);
 
+        Logger.recordOutput("Intake/State", getCurrentState() == null ? "Unkown" : getCurrentState().toString());
         Logger.recordOutput("Intake/Command", (getCurrentCommand() != null ? getCurrentCommand().toString() : "None"));
     }
 }

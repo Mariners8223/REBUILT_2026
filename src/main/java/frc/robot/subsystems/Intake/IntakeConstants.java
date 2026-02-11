@@ -7,6 +7,7 @@ import static edu.wpi.first.units.Units.Rotations;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.units.measure.Angle;
+import frc.robot.Constants;
 import frc.util.PIDFGains;
 import frc.util.MarinersController.MarinersController.ControllerLocation;
 import frc.util.MarinersController.MarinersSparkBase.MotorType;
@@ -39,9 +40,11 @@ public class IntakeConstants
             {
                 for(IntakePosition position : IntakePosition.values())
                 {
-                    Angle distance = position.getAngle().minus(angle);
-                    if(distance.lt(IntakeConstants.PositionMotor.POSITION_TOLERANCE))
-                        return position;
+                    if (Constants.CALCULATIONS.epsilonEquals(
+                        angle,
+                        position.getAngle(),
+                        IntakeConstants.PositionMotor.POSITION_TOLERANCE)
+                    ) return position;
                 }
                 return null;
             }

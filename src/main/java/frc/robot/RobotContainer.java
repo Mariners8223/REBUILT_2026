@@ -5,10 +5,13 @@
 package frc.robot;
 
 import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.commands.Drive.DriveCommand;
@@ -37,7 +40,7 @@ public class RobotContainer {
         shooter = new Shooter();
         kicker = new Kicker();
         
-        configureDriveBindings();
+        // configureDriveBindings();
         configureTestingBindings();
     }
 
@@ -51,7 +54,7 @@ public class RobotContainer {
    public void configureTestingBindings(){
         SmartDashboard.putNumber("Shooter Velocity", 0);
 
-        driveController.cross().onTrue(
+        driveController.cross().toggleOnTrue(
             intake.moveToPositionCommand(
                 intake.getCurrentState() == IntakePosition.Closed ?
                 IntakePosition.Open : IntakePosition.Closed
@@ -60,6 +63,7 @@ public class RobotContainer {
         driveController.triangle().toggleOnTrue(
             intake.spinRollersCommand()
         );
+        driveController.options().onTrue(new InstantCommand(() -> intake.resetPositionMotorEncoder()));
 
         driveController.square().toggleOnTrue(
             funnel.funnelingCommand()
@@ -68,13 +72,25 @@ public class RobotContainer {
             funnel.toShooterCommand()
         );
 
+        driveController.povUp().toggleOnTrue(
+            intake.moveToPositionCommand(IntakePosition.Closed).andThen(
+            Commands.parallel(
+                // intake.spinRollersCommand(),
+                funnel.toShooterCommand(),
+                kicker.setKickerCommand(0.4)
+            ))
+        );
+
+        driveController.povDown().toggleOnTrue(Commands.run(() -> shooter.setDutyCycle(0.05)));
+
         driveController.L1().toggleOnTrue(
                 Commands.run(() -> shooter.setVelocity(RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))))
                 .until(() -> Constants.CALCULATIONS.epsilonEquals(
                         shooter.getShooterVelocity(), 
                         RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0)),
-                        RPM.of(20))
-                ).andThen(
+                        RPM.of(60))
+                ).andThen(new PrintCommand("Finished Climb")).
+                andThen(
                     kicker.setKickerCommand(0.4)
                 )
         );
