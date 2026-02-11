@@ -54,6 +54,10 @@ public class Intake extends SubsystemBase{
         io.resetPositionMotorEncoder();
     }
 
+    public void startPIDTuning(){
+        io.startPIDTuning();
+    }
+
     @Override
     public void periodic() 
     {

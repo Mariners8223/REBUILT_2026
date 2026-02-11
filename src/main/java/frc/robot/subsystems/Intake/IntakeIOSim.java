@@ -44,6 +44,10 @@ public class IntakeIOSim implements IntakeIO
         positionMotor.setMotorEncoderPosition(IntakeConstants.PositionMotor.IntakePosition.Closed.getAngle().in(Rotation));
     }
 
+    public void startPIDTuning(){
+        positionMotor.startPIDTuning();
+    }
+
     public void Update(IntakeInputs inputs)
     {
          inputs.currentPosition = getCurrentPosition();

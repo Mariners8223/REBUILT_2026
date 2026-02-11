@@ -35,6 +35,7 @@ public class Position extends Command {
   @Override
   public boolean isFinished() 
   {
-    return Constants.CALCULATIONS.epsilonEquals(intake.getCurrentPosition(), position.getAngle(), IntakeConstants.PositionMotor.POSITION_TOLERANCE);
+    return false;
+    // return Constants.CALCULATIONS.epsilonEquals(intake.getCurrentPosition(), position.getAngle(), IntakeConstants.PositionMotor.POSITION_TOLERANCE);
   }
 }

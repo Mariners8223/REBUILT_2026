@@ -28,5 +28,7 @@ public interface IntakeIO
 
     void resetPositionMotorEncoder();
 
+    void startPIDTuning();
+
     void Update(IntakeInputs inputs);
 }

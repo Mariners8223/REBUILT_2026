@@ -39,6 +39,9 @@ public class RobotContainer {
         driveController.circle().whileTrue(new Rollers(intake));
 
         driveController.options().onTrue(new InstantCommand(() -> intake.resetPositionMotorEncoder()));
+
+        intake.startPIDTuning();
+        
         
     }
 

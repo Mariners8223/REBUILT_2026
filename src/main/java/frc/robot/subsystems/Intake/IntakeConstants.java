@@ -4,6 +4,7 @@ import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Rotation;
 import static edu.wpi.first.units.Units.Rotations;
 
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.units.measure.Angle;
 import frc.util.PIDFGains;
@@ -20,7 +21,7 @@ public class IntakeConstants
         public enum IntakePosition
         {
             Closed(Degrees.of(0)),
-            Open(Degrees.of(90));
+            Open(Degrees.of(-90));
 
             private final Angle angle;
 
@@ -50,19 +51,22 @@ public class IntakeConstants
         public static final int MOTOR_ID = 12;
         public static final boolean IS_BRUSHLESS = true;
         public static final MotorType MOTOR_TYPE = MotorType.SPARK_FLEX;
-        public static final boolean IS_INVERTED = false;
+        public static final boolean IS_INVERTED = true;
         //public static final Measure<VoltageUnit> VOLTAGE = Volts.of(0);//TODO: do i need to delete that? if you dont want it just do it
-        public static final Angle POSITION_TOLERANCE = Degrees.of(0);;
+        public static final Angle POSITION_TOLERANCE = Degrees.of(2);
         public static final double GEAR_RATIO = 20;
-        public static final double SOFT_MINIMUM = IntakePosition.Closed.getAngle().in(Rotations);
-        public static final double SOFT_MAXIMUM = IntakePosition.Open.getAngle().in(Rotations);
+        public static final double SOFT_MINIMUM = IntakePosition.Open.getAngle().in(Rotations);
+        public static final double SOFT_MAXIMUM = IntakePosition.Closed.getAngle().in(Rotations);
         public static final PIDFGains PID_GAINS = new PIDFGains(
-        100,
-        10,
+        350,
+        50,
         0,
         0.1,
         POSITION_TOLERANCE.in(Rotation),
         0);
+        public static final TrapezoidProfile PROFILE = new TrapezoidProfile(
+            new Constraints(4, 0.8)
+        );
     }
 
     public static class RollersMotor
