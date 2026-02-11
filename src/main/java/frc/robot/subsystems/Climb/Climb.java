@@ -32,9 +32,8 @@ public class Climb extends SubsystemBase {
         io.stopClimbMotor();
     }
     
-    public boolean isAtLimit() 
-    {
-        return (io.getPosition() <= ClimbConstants.SOFT_MINIMUM);
+    public boolean isAtPosition(double position){
+        return Math.abs(getPosition() - position) < ClimbConstants.CLIMB_TOLERANCE;
     }
 
     @Override

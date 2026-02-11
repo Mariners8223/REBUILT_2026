@@ -3,7 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.commands.Climb.ClimbCommand;
 import frc.robot.subsystems.Climb.Climb;
-import frc.robot.subsystems.Climb.ClimbConstants.HEIGHTS;
+import frc.robot.subsystems.Climb.ClimbConstants.Heights;
 
 
 /**
@@ -25,8 +25,8 @@ public class RobotContainer {
     }
 
     public void configureDriveBindings(){
-        driveController.triangle().onTrue(new ClimbCommand(climb,HEIGHTS.extended));
-        driveController.cross().onTrue(new ClimbCommand(climb,HEIGHTS.in_air));
-        driveController.square().onTrue(new ClimbCommand(climb, HEIGHTS.reset));
+        driveController.triangle().onTrue(new ClimbCommand(climb,Heights.EXTENDED));
+        driveController.cross().onTrue(new ClimbCommand(climb,Heights.IN_AIR));
+        driveController.square().onTrue(new ClimbCommand(climb, Heights.RESET));
    }
 }

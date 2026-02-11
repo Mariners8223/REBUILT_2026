@@ -10,11 +10,11 @@ import frc.robot.subsystems.Climb.ClimbConstants;
 
 public class ClimbCommand extends Command {
     private final Climb climb;
-    private final ClimbConstants.HEIGHTS desired_height;
+    private final ClimbConstants.Heights desiredHeight;
 
-    public ClimbCommand(Climb climb,ClimbConstants.HEIGHTS height) {
+    public ClimbCommand(Climb climb, ClimbConstants.Heights height) {
         this.climb = climb;
-        this.desired_height = height;
+        this.desiredHeight = height;
         
         addRequirements(climb);
     }
@@ -22,7 +22,7 @@ public class ClimbCommand extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        climb.setMotorPower(Math.signum(desired_height.GetHeight() - climb.getPosition()) * ClimbConstants.CLIMB_POWER);
+        climb.setMotorPower(Math.signum(desiredHeight.getHeight() - climb.getPosition()) * ClimbConstants.CLIMB_POWER);
     }
 
     // Called once the command ends or is interrupted.
@@ -34,6 +34,6 @@ public class ClimbCommand extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return Math.abs(climb.getPosition() - desired_height.GetHeight()) <= ClimbConstants.CLIMB_TOLERANCE;
+        return climb.isAtPosition(desiredHeight.getHeight());
     }
 }

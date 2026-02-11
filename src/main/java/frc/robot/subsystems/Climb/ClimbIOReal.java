@@ -16,16 +16,15 @@ public class ClimbIOReal implements ClimbIO
     public MarinersTalonFX configureMotor()
     {
         MarinersTalonFX motor = new MarinersTalonFX("Climb motor", ClimbConstants.CONTROLLER_LOCATION, ClimbConstants.MOTOR_ID);
-
+        motor.getMeasurements().setGearRatio(ClimbConstants.ROTATIONS_TO_METERS / ClimbConstants.GEAR_RATIO);
         motor.setMotorInverted(ClimbConstants.IS_INVERTED);
 
-        //motor.enableSoftLimits(ClimbConstants.SOFT_MINIMUM, ClimbConstants.SOFT_MAXIMUM);
-
+        motor.enableSoftLimits(ClimbConstants.SOFT_MINIMUM, ClimbConstants.SOFT_MAXIMUM);
         return motor;
     }
 
     public void setPower(double power) 
-    { 
+    {
         motor.setDutyCycle(power); 
     }
 
