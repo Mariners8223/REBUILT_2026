@@ -7,6 +7,7 @@ package frc.robot.commands.Climb;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Climb.Climb;
 import frc.robot.subsystems.Climb.ClimbConstants;
+import frc.robot.subsystems.Climb.ClimbConstants.Heights;
 
 public class ClimbCommand extends Command {
     private final Climb climb;
@@ -22,7 +23,8 @@ public class ClimbCommand extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        climb.setMotorPower(Math.signum(desiredHeight.getHeight() - climb.getPosition()) * ClimbConstants.CLIMB_POWER);
+        // climb.setMotorPower(Math.signum(desiredHeight.getHeight() - climb.getPosition()) * ClimbConstants.CLIMB_POWER);
+        climb.setPosition(desiredHeight.getHeight());
     }
 
     // Called once the command ends or is interrupted.
@@ -34,6 +36,7 @@ public class ClimbCommand extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return climb.isAtPosition(desiredHeight.getHeight());
+        // return climb.isAtPosition(desiredHeight.getHeight());
+        return false;
     }
 }

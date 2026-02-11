@@ -17,6 +17,10 @@ public class Climb extends SubsystemBase {
         io.setBrakeMode(false);
     }
 
+    public void resetPosition(){
+        io.resetPosition();
+    }
+
     public void setMotorPower(double power) 
     {
         io.setPower(power);
@@ -34,6 +38,9 @@ public class Climb extends SubsystemBase {
     
     public boolean isAtPosition(double position){
         return Math.abs(getPosition() - position) < ClimbConstants.CLIMB_TOLERANCE;
+    }
+    public void setPosition(double position){
+        io.setPosition(position);
     }
 
     @Override

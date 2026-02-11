@@ -17,6 +17,8 @@ public interface ClimbIO {
 
     double getPosition();
 
+    void setPosition(double position);
+
     void stopClimbMotor();
 
     void setBrakeMode(boolean isBrake);

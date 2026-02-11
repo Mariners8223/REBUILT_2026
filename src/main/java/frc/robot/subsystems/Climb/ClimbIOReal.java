@@ -3,6 +3,7 @@ package frc.robot.subsystems.Climb;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import frc.util.MarinersController.MarinersTalonFX;
+import frc.util.MarinersController.MarinersController.ControlMode;
 
 public class ClimbIOReal implements ClimbIO
 {
@@ -15,11 +16,12 @@ public class ClimbIOReal implements ClimbIO
 
     public MarinersTalonFX configureMotor()
     {
-        MarinersTalonFX motor = new MarinersTalonFX("Climb motor", ClimbConstants.CONTROLLER_LOCATION, ClimbConstants.MOTOR_ID);
-        motor.getMeasurements().setGearRatio(ClimbConstants.ROTATIONS_TO_METERS / ClimbConstants.GEAR_RATIO);
+        MarinersTalonFX motor = new MarinersTalonFX("Climb motor", ClimbConstants.CONTROLLER_LOCATION, ClimbConstants.MOTOR_ID, ClimbConstants.PID);
+        motor.getMeasurements().setGearRatio(ClimbConstants.ROTATIONS_TO_METERS * ClimbConstants.GEAR_RATIO);
         motor.setMotorInverted(ClimbConstants.IS_INVERTED);
 
         motor.enableSoftLimits(ClimbConstants.SOFT_MINIMUM, ClimbConstants.SOFT_MAXIMUM);
+        motor.startPIDTuning();
         return motor;
     }
 
@@ -41,6 +43,10 @@ public class ClimbIOReal implements ClimbIO
     public double getPosition() 
     { 
         return motor.getPosition(); 
+    }
+
+    public void setPosition(double refrence){
+        motor.setReference(refrence, ControlMode.Position);
     }
 
     @Override
