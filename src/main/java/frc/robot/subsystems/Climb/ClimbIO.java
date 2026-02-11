@@ -1,26 +1,27 @@
 package frc.robot.subsystems.Climb;
 
-import edu.wpi.first.math.geometry.Pose3d;
 import org.littletonrobotics.junction.AutoLog;
+
+import edu.wpi.first.math.geometry.Pose3d;
 
 public interface ClimbIO {
   @AutoLog
-  class ClimbInputs {
-    double height;
-    Pose3d pose;
-  }
+    class ClimbInputs{
+        double height;
+        Pose3d pose;
+    }
 
-  void setPower(double power);
+    void setPower(double power);
 
-  void resetPosition();
+    void resetPosition();
 
-  double getPosition();
+    double getPosition();
 
-  void setPosition(double position);
+    void setPosition(double position);
 
-  void stopClimbMotor();
+    void stopClimbMotor();
 
-  void setBrakeMode(boolean isBrake);
+    void setBrakeMode(boolean isBrake);
 
-  void Update(ClimbInputs inputs);
+    void Update(ClimbInputs inputs);
 }

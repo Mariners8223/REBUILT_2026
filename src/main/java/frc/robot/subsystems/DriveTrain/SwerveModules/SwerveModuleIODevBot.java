@@ -2,134 +2,138 @@ package frc.robot.subsystems.DriveTrain.SwerveModules;
 
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.MagnetHealthValue;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.util.MarinersController.*;
 
 public class SwerveModuleIODevBot extends SwerveModuleIO {
-  private final MarinersController driveMotor;
-  private final MarinersController steerMotor;
-  private final CANcoder absEncoder;
+    private final MarinersController driveMotor;
+    private final MarinersController steerMotor;
+    private final CANcoder absEncoder;
 
-  private final double DRIVE_KA;
+    private final double DRIVE_KA;
 
-  public SwerveModuleIODevBot(SwerveModule.ModuleName name) {
 
-    DevBotConstants constants = DevBotConstants.values()[name.ordinal()];
+    public SwerveModuleIODevBot(SwerveModule.ModuleName name) {
 
-    this.DRIVE_KA = constants.DRIVE_KA;
+        DevBotConstants constants = DevBotConstants.values()[name.ordinal()];
 
-    driveMotor =
-        new MarinersTalonFX(
-            name.name() + " Drive Motor",
-            MarinersController.ControllerLocation.MOTOR,
-            constants.DRIVE_MOTOR_ID,
-            constants.DRIVE_MOTOR_PID,
-            DevBotConstants.DRIVE_GEAR_RATIO / DevBotConstants.WHEEL_CIRCUMFERENCE_METERS);
+        this.DRIVE_KA = constants.DRIVE_KA;
 
-    driveMotor.setFeedForward(constants.DRIVE_KV);
+        driveMotor = new MarinersTalonFX(
+                name.name() + " Drive Motor",
+                MarinersController.ControllerLocation.MOTOR,
+                constants.DRIVE_MOTOR_ID,
+                constants.DRIVE_MOTOR_PID,
+                DevBotConstants.DRIVE_GEAR_RATIO / DevBotConstants.WHEEL_CIRCUMFERENCE_METERS);
 
-    driveMotor.setMotorInverted(constants.DRIVE_INVERTED);
+        driveMotor.setFeedForward(constants.DRIVE_KV);
 
-    driveMotor.setCurrentLimits(
-        DevBotConstants.DRIVE_MOTOR_CURRENT_LIMIT, DevBotConstants.DRIVE_MOTOR_CURRENT_THRESHOLD);
+        driveMotor.setMotorInverted(constants.DRIVE_INVERTED);
 
-    driveMotor.setMotorDeadBandVoltage(constants.DRIVE_KS);
+        driveMotor.setCurrentLimits(DevBotConstants.DRIVE_MOTOR_CURRENT_LIMIT, DevBotConstants.DRIVE_MOTOR_CURRENT_THRESHOLD);
 
-    driveMotor.setProfile(DevBotConstants.DRIVE_CONSTRAINTS);
+        driveMotor.setMotorDeadBandVoltage(constants.DRIVE_KS);
 
-    steerMotor =
-        new MarinersSparkBase(
-            name.name() + " Steer Motor",
-            MarinersController.ControllerLocation.RIO,
-            constants.STEER_MOTOR_ID,
-            true,
-            MarinersSparkBase.MotorType.SPARK_MAX,
-            constants.STEER_MOTOR_PID);
+        driveMotor.setProfile(DevBotConstants.DRIVE_CONSTRAINTS);
 
-    steerMotor.setMotorInverted(constants.STEER_INVERTED);
+        steerMotor = new MarinersSparkBase(
+                name.name() + " Steer Motor",
+                MarinersController.ControllerLocation.RIO,
+                constants.STEER_MOTOR_ID,
+                true,
+                MarinersSparkBase.MotorType.SPARK_MAX,
+                constants.STEER_MOTOR_PID);
 
-    steerMotor.setMotorDeadBandVoltage(constants.STEER_KS);
+        steerMotor.setMotorInverted(constants.STEER_INVERTED);
 
-    steerMotor.enablePositionWrapping(-0.5, 0.5);
+        steerMotor.setMotorDeadBandVoltage(constants.STEER_KS);
 
-    steerMotor.setProfile(DevBotConstants.STEER_CONSTRAINTS);
+        steerMotor.enablePositionWrapping(-0.5, 0.5);
 
-    steerMotor.setCurrentLimits(30, 40);
+        steerMotor.setProfile(DevBotConstants.STEER_CONSTRAINTS);
 
-    absEncoder =
-        configCANCoder(
-            constants.ABSOLUTE_ENCODER_ID, constants.ABSOLUTE_ZERO_OFFSET, (int) steerMotor.RUN_HZ);
+        steerMotor.setCurrentLimits(30, 40);
 
-    steerMotor.setMeasurements(
-        new MarinersMeasurementsCTRE(absEncoder.getPosition(), absEncoder.getVelocity(), 1));
-  }
+        absEncoder = configCANCoder(constants.ABSOLUTE_ENCODER_ID, constants.ABSOLUTE_ZERO_OFFSET, (int) steerMotor.RUN_HZ);
 
-  @Override
-  public void updateInputs(SwerveModuleIOInputsAutoLogged inputs) {
-    inputs.currentState.angle = Rotation2d.fromRotations(steerMotor.getPosition());
-    inputs.currentState.speedMetersPerSecond = driveMotor.getVelocity();
+        steerMotor.setMeasurements(new MarinersMeasurementsCTRE(
+                absEncoder.getPosition(),
+                absEncoder.getVelocity(),
+                1
+        ));
 
-    inputs.drivePositionMeters = driveMotor.getPosition();
 
-    MagnetHealthValue value = absEncoder.getMagnetHealth().getValue();
+    }
 
-    inputs.magentHleath = value.name();
-  }
+    @Override
+    public void updateInputs(SwerveModuleIOInputsAutoLogged inputs) {
+        inputs.currentState.angle = Rotation2d.fromRotations(steerMotor.getPosition());
+        inputs.currentState.speedMetersPerSecond = driveMotor.getVelocity();
 
-  @Override
-  public void setDriveMotorReference(double reference) {
-    driveMotor.setReference(reference, MarinersController.ControlMode.Velocity);
-  }
+        inputs.drivePositionMeters = driveMotor.getPosition();
 
-  @Override
-  public void setDriveMotorReference(double reference, double acceleration) {
-    driveMotor.setReference(
-        reference, MarinersController.ControlMode.Velocity, acceleration * DRIVE_KA);
-  }
+        MagnetHealthValue value = absEncoder.getMagnetHealth().getValue();
 
-  @Override
-  public void setDriveMotorVoltage(double voltage) {
-    driveMotor.setVoltage(voltage);
-  }
+        inputs.magentHleath = value.name();
+    }
 
-  @Override
-  public void setSteerMotorReference(double reference) {
-    steerMotor.setReference(reference, MarinersController.ControlMode.Position);
-  }
+    @Override
+    public void setDriveMotorReference(double reference) {
+        driveMotor.setReference(reference, MarinersController.ControlMode.Velocity);
+    }
 
-  @Override
-  public void setSteerMotorVoltage(double voltage) {
-    steerMotor.setVoltage(voltage);
-  }
+    @Override
+    public void setDriveMotorReference(double reference, double acceleration) {
+        driveMotor.setReference(reference, MarinersController.ControlMode.Velocity,
+                acceleration * DRIVE_KA);
+    }
 
-  @Override
-  public void setIdleMode(boolean isBrakeMode) {
-    driveMotor.setMotorIdleMode(isBrakeMode);
-    steerMotor.setMotorIdleMode(isBrakeMode);
-  }
+    @Override
+    public void setDriveMotorVoltage(double voltage) {
+        driveMotor.setVoltage(voltage);
+    }
 
-  @Override
-  public void resetDriveEncoder() {
-    driveMotor.resetMotorEncoder();
-  }
+    @Override
+    public void setSteerMotorReference(double reference) {
+        steerMotor.setReference(reference, MarinersController.ControlMode.Position);
+    }
 
-  @Override
-  void startDriveCalibration() {
-    driveMotor.startPIDTuning();
-  }
+    @Override
+    public void setSteerMotorVoltage(double voltage) {
+        steerMotor.setVoltage(voltage);
+    }
 
-  @Override
-  void endDriveCalibration() {
-    driveMotor.startPIDTuning();
-  }
+    @Override
+    public void setIdleMode(boolean isBrakeMode) {
+        driveMotor.setMotorIdleMode(isBrakeMode);
+        steerMotor.setMotorIdleMode(isBrakeMode);
+    }
 
-  @Override
-  void startSteerCalibration() {
-    steerMotor.startPIDTuning();
-  }
+    @Override
+    public void resetDriveEncoder() {
+        driveMotor.resetMotorEncoder();
+    }
 
-  @Override
-  void endSteerCalibration() {
-    steerMotor.startPIDTuning();
-  }
+    @Override
+    void startDriveCalibration() {
+        driveMotor.startPIDTuning();
+    }
+
+    @Override
+    void endDriveCalibration() {
+        driveMotor.startPIDTuning();
+    }
+
+    @Override
+    void startSteerCalibration() {
+        steerMotor.startPIDTuning();
+    }
+
+    @Override
+    void endSteerCalibration() {
+        steerMotor.startPIDTuning();
+    }
+
+
 }

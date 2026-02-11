@@ -8,109 +8,111 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.LinearAcceleration;
 import edu.wpi.first.util.sendable.SendableBuilder;
+
 import java.util.LinkedList;
 
-public class PigeonIO extends GyroIO {
+public class PigeonIO extends GyroIO{
 
-  private final Pigeon2 pigeon;
+    private final Pigeon2 pigeon;
 
-  private final BaseStatusSignal[] signals;
+    private final BaseStatusSignal[] signals;
 
-  private final StatusSignal<Angle> yaw;
-  private final StatusSignal<Angle> pitch;
-  private final StatusSignal<Angle> roll;
-  private final StatusSignal<LinearAcceleration> accelerationX;
-  private final StatusSignal<LinearAcceleration> accelerationY;
-  private final StatusSignal<AngularVelocity> yawRate;
+    private final StatusSignal<Angle> yaw;
+    private final StatusSignal<Angle> pitch;
+    private final StatusSignal<Angle> roll;
+    private final StatusSignal<LinearAcceleration> accelerationX;
+    private final StatusSignal<LinearAcceleration> accelerationY;
+    private final StatusSignal<AngularVelocity> yawRate;
 
-  public PigeonIO(int canID) {
-    pigeon = new Pigeon2(canID);
 
-    LinkedList<BaseStatusSignal> signals = new LinkedList<>();
+    public PigeonIO(int canID) {
+        pigeon = new Pigeon2(canID);
 
-    yaw = pigeon.getYaw();
-    pitch = pigeon.getPitch();
-    roll = pigeon.getRoll();
-    accelerationX = pigeon.getAccelerationX();
-    accelerationY = pigeon.getAccelerationY();
-    yawRate = pigeon.getAngularVelocityZWorld();
+        LinkedList<BaseStatusSignal> signals = new LinkedList<>();
 
-    yaw.setUpdateFrequency(50);
-    pitch.setUpdateFrequency(50);
-    roll.setUpdateFrequency(50);
-    accelerationX.setUpdateFrequency(50);
-    accelerationY.setUpdateFrequency(50);
-    yawRate.setUpdateFrequency(50);
+        yaw = pigeon.getYaw();
+        pitch = pigeon.getPitch();
+        roll = pigeon.getRoll();
+        accelerationX = pigeon.getAccelerationX();
+        accelerationY = pigeon.getAccelerationY();
+        yawRate = pigeon.getAngularVelocityZWorld();
 
-    pigeon.optimizeBusUtilization();
+        yaw.setUpdateFrequency(50);
+        pitch.setUpdateFrequency(50);
+        roll.setUpdateFrequency(50);
+        accelerationX.setUpdateFrequency(50);
+        accelerationY.setUpdateFrequency(50);
+        yawRate.setUpdateFrequency(50);
 
-    signals.add(yaw);
-    signals.add(pitch);
-    signals.add(roll);
-    signals.add(accelerationX);
-    signals.add(accelerationY);
-    signals.add(yawRate);
+        pigeon.optimizeBusUtilization();
 
-    this.signals = new StatusSignal[signals.size()];
+        signals.add(yaw);
+        signals.add(pitch);
+        signals.add(roll);
+        signals.add(accelerationX);
+        signals.add(accelerationY);
+        signals.add(yawRate);
 
-    signals.toArray(this.signals);
-  }
+        this.signals = new StatusSignal[signals.size()];
 
-  @Override
-  public void updateInputs() {
-    BaseStatusSignal.refreshAll(signals);
+        signals.toArray(this.signals);
+    }
 
-    inputs.angle = Rotation2d.fromDegrees(this.yaw.getValueAsDouble());
-    inputs.yaw = -this.yaw.getValueAsDouble();
-    inputs.pitch = this.pitch.getValueAsDouble();
-    inputs.roll = this.roll.getValueAsDouble();
-    inputs.yawRate = -this.yawRate.getValueAsDouble();
-    inputs.accelerationX = this.accelerationX.getValueAsDouble();
-    inputs.accelerationY = this.accelerationY.getValueAsDouble();
-  }
+    @Override
+    public void updateInputs() {
+        BaseStatusSignal.refreshAll(signals);
 
-  @Override
-  public Rotation2d getRotation2d() {
-    return inputs.angle;
-  }
+        inputs.angle = Rotation2d.fromDegrees(this.yaw.getValueAsDouble());
+        inputs.yaw = -this.yaw.getValueAsDouble();
+        inputs.pitch = this.pitch.getValueAsDouble();
+        inputs.roll = this.roll.getValueAsDouble();
+        inputs.yawRate = -this.yawRate.getValueAsDouble();
+        inputs.accelerationX = this.accelerationX.getValueAsDouble();
+        inputs.accelerationY = this.accelerationY.getValueAsDouble();
+    }
 
-  @Override
-  public double getYaw() {
-    return inputs.yaw;
-  }
+    @Override
+    public Rotation2d getRotation2d() {
+        return inputs.angle;
+    }
 
-  @Override
-  public double getYawRate() {
-    return inputs.yawRate;
-  }
+    @Override
+    public double getYaw() {
+        return inputs.yaw;
+    }
 
-  @Override
-  public double getPitch() {
-    return inputs.pitch;
-  }
+    @Override
+    public double getYawRate() {
+        return inputs.yawRate;
+    }
 
-  @Override
-  public double getRoll() {
-    return inputs.roll;
-  }
+    @Override
+    public double getPitch() {
+        return inputs.pitch;
+    }
 
-  @Override
-  public double getAccelerationX() {
-    return inputs.accelerationX;
-  }
+    @Override
+    public double getRoll() {
+        return inputs.roll;
+    }
 
-  @Override
-  public double getAccelerationY() {
-    return inputs.accelerationY;
-  }
+    @Override
+    public double getAccelerationX() {
+        return inputs.accelerationX;
+    }
 
-  @Override
-  public void reset(Rotation2d newAngle) {
-    pigeon.setYaw(newAngle.getDegrees());
-  }
+    @Override
+    public double getAccelerationY() {
+        return inputs.accelerationY;
+    }
 
-  @Override
-  public void initSendable(SendableBuilder builder) {
-    pigeon.initSendable(builder);
-  }
+    @Override
+    public void reset(Rotation2d newAngle) {
+        pigeon.setYaw(newAngle.getDegrees());
+    }
+
+    @Override
+    public void initSendable(SendableBuilder builder) {
+        pigeon.initSendable(builder);
+    }
 }

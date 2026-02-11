@@ -7,115 +7,114 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import org.littletonrobotics.junction.AutoLog;
 
-public abstract class SwerveModuleIO {
-  @AutoLog
-  static class SwerveModuleIOInputs {
-    public SwerveModuleState currentState = new SwerveModuleState();
+public abstract class SwerveModuleIO{
+    @AutoLog
+    static class SwerveModuleIOInputs {
+        public SwerveModuleState currentState = new SwerveModuleState();
 
-    public double drivePositionMeters = 0.0;
+        public double drivePositionMeters = 0.0;
 
-    public String magentHleath;
-  }
+        public String magentHleath;
+    }
 
-  /** Updates the inputs of the module */
-  abstract void updateInputs(SwerveModuleIOInputsAutoLogged inputs);
+    /**
+     * Updates the inputs of the module
+     */
+    abstract void updateInputs(SwerveModuleIOInputsAutoLogged inputs);
 
-  /**
-   * sets the reference for the drive motor
-   *
-   * @param reference the target for the built-in PID controller
-   */
-  public abstract void setDriveMotorReference(double reference);
+    /**
+     * sets the reference for the drive motor
+     *
+     * @param reference the target for the built-in PID controller
+     */
+    public abstract void setDriveMotorReference(double reference);
 
-  /**
-   * sets the reference for the drive motor
-   *
-   * @param reference the target for the built-in PID controller
-   * @param accelerationFeedForward the acceleration feed forward in (volts) / (m/s^2)
-   */
-  public abstract void setDriveMotorReference(double reference, double accelerationFeedForward);
+    /**
+     * sets the reference for the drive motor
+     * @param reference the target for the built-in PID controller
+     * @param accelerationFeedForward the acceleration feed forward in (volts) / (m/s^2)
+     */
+    public abstract  void setDriveMotorReference(double reference, double accelerationFeedForward);
 
-  /**
-   * sets the voltage for the drive motor
-   *
-   * @param voltage the voltage to set the motor to
-   */
-  public abstract void setDriveMotorVoltage(double voltage);
+    /**
+     * sets the voltage for the drive motor
+     * @param voltage the voltage to set the motor to
+     */
+    public abstract void setDriveMotorVoltage(double voltage);
 
-  /**
-   * sets the reference for the steer motor
-   *
-   * @param reference the target for the built-in PID controller
-   */
-  public abstract void setSteerMotorReference(double reference);
+    /**
+     * sets the reference for the steer motor
+     *
+     * @param reference the target for the built-in PID controller
+     */
+    public abstract void setSteerMotorReference(double reference);
 
-  /**
-   * sets the voltage for the steer motor
-   *
-   * @param voltage the voltage to set the motor to
-   */
-  public abstract void setSteerMotorVoltage(double voltage);
+    /**
+     * sets the voltage for the steer motor
+     * @param voltage the voltage to set the motor to
+     */
+    public abstract void setSteerMotorVoltage(double voltage);
 
-  /**
-   * sets the idle mode of the module
-   *
-   * @param isBrakeMode true for brake mode, false for coast mode
-   */
-  abstract void setIdleMode(boolean isBrakeMode);
+    /**
+     * sets the idle mode of the module
+     *
+     * @param isBrakeMode true for brake mode, false for coast mode
+     */
+    abstract void setIdleMode(boolean isBrakeMode);
 
-  /** resets the drive encoder */
-  abstract void resetDriveEncoder();
+    /**
+     * resets the drive encoder
+     */
+    abstract void resetDriveEncoder();
 
-  abstract void startDriveCalibration();
+    abstract void startDriveCalibration();
+    abstract void endDriveCalibration();
 
-  abstract void endDriveCalibration();
+    abstract void startSteerCalibration();
+    abstract void endSteerCalibration();
 
-  abstract void startSteerCalibration();
+    /**
+     * configures the absolute encoder (duty cycle encoder)
+     *
+     * @param absEncoderID the port of the abs encoder on the rio
+     * @param zeroOffset   the zero offsets of the abs encoder
+     * @return the configured abs encoder
+     */
+    protected DutyCycleEncoder configDutyCycleEncoder(int absEncoderID, double zeroOffset) {
+        return new DutyCycleEncoder(absEncoderID, 1, zeroOffset);
+    }
 
-  abstract void endSteerCalibration();
+    /**
+     * configures the absolute encoder (CANCoder)
+     *
+     * @param absEncoderID              the port of the abs encoder on the CAN bus
+     * @param absoluteEncoderZeroOffset the zero offsets of the abs encoder
+     * @return the configured CANCoder
+     */
+    protected CANcoder configCANCoder(int absEncoderID, double absoluteEncoderZeroOffset, int updateRate) {
+        CANcoder canCoder = new CANcoder(absEncoderID);
 
-  /**
-   * configures the absolute encoder (duty cycle encoder)
-   *
-   * @param absEncoderID the port of the abs encoder on the rio
-   * @param zeroOffset the zero offsets of the abs encoder
-   * @return the configured abs encoder
-   */
-  protected DutyCycleEncoder configDutyCycleEncoder(int absEncoderID, double zeroOffset) {
-    return new DutyCycleEncoder(absEncoderID, 1, zeroOffset);
-  }
+        CANcoderConfiguration config = new CANcoderConfiguration();
+        canCoder.getConfigurator().apply(config);
 
-  /**
-   * configures the absolute encoder (CANCoder)
-   *
-   * @param absEncoderID the port of the abs encoder on the CAN bus
-   * @param absoluteEncoderZeroOffset the zero offsets of the abs encoder
-   * @return the configured CANCoder
-   */
-  protected CANcoder configCANCoder(
-      int absEncoderID, double absoluteEncoderZeroOffset, int updateRate) {
-    CANcoder canCoder = new CANcoder(absEncoderID);
+        config.FutureProofConfigs = true;
 
-    CANcoderConfiguration config = new CANcoderConfiguration();
-    canCoder.getConfigurator().apply(config);
+        config.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
 
-    config.FutureProofConfigs = true;
+        config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+        config.MagnetSensor.MagnetOffset = -absoluteEncoderZeroOffset;
 
-    config.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
+        canCoder.getConfigurator().apply(config);
 
-    config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-    config.MagnetSensor.MagnetOffset = -absoluteEncoderZeroOffset;
+        // canCoder.setPosition(canCoder.getAbsolutePosition().getValueAsDouble());
 
-    canCoder.getConfigurator().apply(config);
+        canCoder.getPosition().setUpdateFrequency(updateRate);
+        canCoder.getVelocity().setUpdateFrequency(updateRate);
+        canCoder.getMagnetHealth().setUpdateFrequency(updateRate);
 
-    // canCoder.setPosition(canCoder.getAbsolutePosition().getValueAsDouble());
 
-    canCoder.getPosition().setUpdateFrequency(updateRate);
-    canCoder.getVelocity().setUpdateFrequency(updateRate);
-    canCoder.getMagnetHealth().setUpdateFrequency(updateRate);
+        canCoder.optimizeBusUtilization();
 
-    canCoder.optimizeBusUtilization();
-
-    return canCoder;
-  }
+        return canCoder;
+    }
 }

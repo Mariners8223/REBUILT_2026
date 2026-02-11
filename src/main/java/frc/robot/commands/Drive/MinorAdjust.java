@@ -10,7 +10,7 @@ import frc.robot.subsystems.DriveTrain.DriveBase;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class MinorAdjust extends Command {
-  public static enum AdjustmentDirection {
+  public static enum AdjustmentDirection{
     LEFT(0, 0.3),
     RIGHT(0, -0.3),
     FORWARD(0.3, 0),
@@ -23,16 +23,16 @@ public class MinorAdjust extends Command {
     private final double vX;
     private final double vY;
 
-    AdjustmentDirection(double vX, double vY) {
+    AdjustmentDirection(double vX, double vY){
       this.vX = vX;
       this.vY = vY;
     }
 
-    public double getVX() {
+    public double getVX(){
       return vX;
     }
 
-    public double getVY() {
+    public double getVY(){
       return vY;
     }
   }
