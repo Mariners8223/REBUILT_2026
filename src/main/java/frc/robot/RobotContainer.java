@@ -4,7 +4,12 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot;
 
+import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+
 import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.commands.Drive.DriveCommand;
@@ -12,33 +17,71 @@ import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Funnel.Funnel;
 import frc.robot.subsystems.Intake.Intake;
+import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakePosition;
+import frc.robot.subsystems.Kicker.Kicker;
 
 public class RobotContainer {
     public static CommandPS5Controller driveController;
-    public static CommandXboxController driveXboxController;
 
     public static DriveBase driveBase;
     public static Funnel funnel;
     public static Intake intake;
     public static Shooter shooter;
-
+    public static Kicker kicker;
 
     public RobotContainer() {
-        driveController = new CommandPS5Controller(1);
-        driveXboxController = new CommandXboxController(0);
+        driveController = new CommandPS5Controller(0);
 
         driveBase = new DriveBase();
         funnel = new Funnel();
         intake = new Intake();
         shooter = new Shooter();
+        kicker = new Kicker();
         
         configureDriveBindings();
+        configureTestingBindings();
     }
 
-
     public void configureDriveBindings(){
-        new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(new StartEndCommand(() ->
-            driveBase.setDefaultCommand(new DriveCommand(driveBase, driveXboxController)),
-            driveBase::removeDefaultCommand).ignoringDisable(true));        
+        new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(
+            new StartEndCommand(() ->driveBase.setDefaultCommand(new DriveCommand(driveBase, driveController)),
+            driveBase::removeDefaultCommand)
+            .ignoringDisable(true));        
+    }
+
+   public void configureTestingBindings(){
+        SmartDashboard.putNumber("Shooter Velocity", 0);
+
+        driveController.cross().onTrue(
+            intake.moveToPositionCommand(
+                intake.getCurrentState() == IntakePosition.Closed ?
+                IntakePosition.Open : IntakePosition.Closed
+            )
+        );
+        driveController.triangle().toggleOnTrue(
+            intake.spinRollersCommand()
+        );
+
+        driveController.square().toggleOnTrue(
+            funnel.funnelingCommand()
+        );
+        driveController.circle().toggleOnTrue(
+            funnel.toShooterCommand()
+        );
+
+        driveController.R1().toggleOnTrue(
+            Commands.sequence(
+                Commands.run(() -> shooter.setVelocity(RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))))
+                .until(() -> Constants.CALCULATIONS.epsilonEquals(
+                        shooter.getShooterVelocity(), 
+                        RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0)),
+                        RotationsPerSecond.of(2))
+                ),
+                Commands.parallel(
+                    kicker.setKickerCommand(0.4),
+                    funnel.toShooterCommand()
+                )
+            )
+        );
    }
 }

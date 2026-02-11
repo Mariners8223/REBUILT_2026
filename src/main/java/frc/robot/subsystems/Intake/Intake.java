@@ -38,6 +38,10 @@ public class Intake extends SubsystemBase{
     {
         return io.getCurrentPosition();
     }
+    
+    public IntakePosition getCurrentState(){
+        return IntakePosition.findNearestPosition(getCurrentPosition());
+    }
 
     public void resetPositionMotorEncoder()
     {
