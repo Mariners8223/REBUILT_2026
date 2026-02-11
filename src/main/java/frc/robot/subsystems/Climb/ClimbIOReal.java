@@ -16,7 +16,8 @@ public class ClimbIOReal implements ClimbIO
 
     public MarinersTalonFX configureMotor()
     {
-        MarinersTalonFX motor = new MarinersTalonFX("Climb motor", ClimbConstants.CONTROLLER_LOCATION, ClimbConstants.MOTOR_ID, ClimbConstants.PID);
+        MarinersTalonFX motor = new MarinersTalonFX("Climb motor", ClimbConstants.CONTROLLER_LOCATION,
+                                                    ClimbConstants.MOTOR_ID, ClimbConstants.PID);
         motor.getMeasurements().setGearRatio(ClimbConstants.ROTATIONS_TO_METERS * ClimbConstants.GEAR_RATIO);
         motor.setMotorInverted(ClimbConstants.IS_INVERTED);
 

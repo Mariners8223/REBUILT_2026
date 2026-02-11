@@ -4,6 +4,7 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.Climb.ClimbConstants.Heights;
 
 public class Climb extends SubsystemBase {
     private final ClimbIO io;
@@ -25,6 +26,10 @@ public class Climb extends SubsystemBase {
     {
         io.setPower(power);
     }
+
+    public void setMotorPosition(Heights height){
+        io.setPosition(height.getHeight());
+    }
     
     public double getPosition()
     {
@@ -39,9 +44,6 @@ public class Climb extends SubsystemBase {
     public boolean isAtPosition(double position){
         return Math.abs(getPosition() - position) < ClimbConstants.CLIMB_TOLERANCE;
     }
-    public void setPosition(double position){
-        io.setPosition(position);
-    }
 
     @Override
     public void periodic() 
@@ -50,9 +52,9 @@ public class Climb extends SubsystemBase {
          io.Update(inputs);
          Logger.processInputs(getName(), inputs);
 
-         double climbPrecnet = (inputs.height / ClimbConstants.SOFT_MINIMUM) * 100;
+         double percent = (inputs.height / ClimbConstants.SOFT_MINIMUM) * 100;
 
-         SmartDashboard.putNumber("climb precent", climbPrecnet);
+         SmartDashboard.putNumber("Climb/Climb Percent", percent);
 
         String currentCommandName = getCurrentCommand() == null ? "Null" : getCurrentCommand().getName();
         Logger.recordOutput("Climb/Current Command", currentCommandName);
