@@ -12,6 +12,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -22,8 +23,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
-
-  private final RobotContainer m_robotContainer;
+  public static boolean isRedAlliance = false;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -31,11 +31,12 @@ public class Robot extends LoggedRobot {
    */
   public Robot() {
     Logger.recordMetadata("ProjectName", "MyProject"); // Set a metadata value
-
+    
     if (isReal()) {
         Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
         Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
-    } else {
+    } 
+    else {
         setUseTiming(false); // Run as fast as possible
         String logPath = LogFileUtil.findReplayLog(); // Pull the replay log from AdvantageScope (or prompt the user)
         Logger.setReplaySource(new WPILOGReader(logPath)); // Read replay log
@@ -43,15 +44,11 @@ public class Robot extends LoggedRobot {
     }
 
 
+    isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
     Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-    m_robotContainer = new RobotContainer();
-
-    SmartDashboard.putNumber("Shooter Velocity", 0);
-    SmartDashboard.putNumber("Kicker Voltage", 0);
-    SmartDashboard.putNumber("Shooter Distance", 0);
-    SmartDashboard.putNumber("Grow", 1);
+    new RobotContainer();
   }
 
   /**
@@ -80,7 +77,6 @@ public class Robot extends LoggedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    
     }
   
 
@@ -102,12 +98,6 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    // if (RobotContainer.shooter.getCurrentCommand() != RobotContainer.shooter.getDefaultCommand()){
-    //     int x = 0;
-    // }
-    // else{
-    //     RobotContainer.shooter.setShooterVelocity(RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0)));
-    // }
   }
 
   @Override

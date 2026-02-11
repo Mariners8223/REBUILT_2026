@@ -9,13 +9,15 @@ import frc.robot.subsystems.DriveTrain.SwerveModules.DevBotConstants;
 import frc.util.PIDFGains;
 
 public class DriveBaseConstants {
-    public static final double DISTANCE_BETWEEN_WHEELS_HORIZONTAL = 20; //the distance in the long axis
-    public static final double DISTANCE_BETWEEN_WHEELS_VERTICAL = 15; //the distance in the short axis
+
+    ///public static final double DISTANCE_BETWEEN_WHEELS = 0.58; // the distance between each wheel in meters
+    public static final double DISTANCE_BETWEEN_WHEELS_HORIZONTAL = 20; //the distance between each wheel in meters - long axis
+    public static final double DISTANCE_BETWEEN_WHEELS_VERTICAL = 15; //'''''' - short axis
     public static final Translation2d[] MODULE_TRANSLATIONS = new Translation2d[]{
-            new Translation2d( DISTANCE_BETWEEN_WHEELS_HORIZONTAL / 2, DISTANCE_BETWEEN_WHEELS_VERTICAL / 2),
-            new Translation2d(DISTANCE_BETWEEN_WHEELS_HORIZONTAL / 2, -DISTANCE_BETWEEN_WHEELS_VERTICAL / 2),
-            new Translation2d(-DISTANCE_BETWEEN_WHEELS_HORIZONTAL / 2, DISTANCE_BETWEEN_WHEELS_VERTICAL / 2),
-            new Translation2d(-DISTANCE_BETWEEN_WHEELS_HORIZONTAL / 2, -DISTANCE_BETWEEN_WHEELS_VERTICAL / 2)};
+            new Translation2d(DISTANCE_BETWEEN_WHEELS_HORIZONTAL / 2, DISTANCE_BETWEEN_WHEELS_HORIZONTAL / 2),
+            new Translation2d(DISTANCE_BETWEEN_WHEELS_HORIZONTAL / 2, -DISTANCE_BETWEEN_WHEELS_HORIZONTAL / 2),
+            new Translation2d(-DISTANCE_BETWEEN_WHEELS_HORIZONTAL / 2, DISTANCE_BETWEEN_WHEELS_HORIZONTAL / 2),
+            new Translation2d(-DISTANCE_BETWEEN_WHEELS_HORIZONTAL / 2, -DISTANCE_BETWEEN_WHEELS_HORIZONTAL / 2)};
 
     public static final double THETA_KS = 0.11014;
     public static final double THETA_KV = 1.0942;

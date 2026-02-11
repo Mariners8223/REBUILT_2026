@@ -6,6 +6,9 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
 
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Unit;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -29,5 +32,12 @@ public final class Constants {
   public static class FieldConstants{
     public static final Translation2d HUB_POSITION = new Translation2d(); // TODO: FIX POSITION 
   }
+
+  public static class CALCULATIONS{
+    public static <U extends Unit> boolean epsilonEquals(Measure<U> unit1, Measure<U> unit2, Measure<U> tolerance){
+      return Math.abs(unit1.baseUnitMagnitude() - unit2.baseUnitMagnitude()) <= tolerance.baseUnitMagnitude();
+    }
+  }
+
 
 }
