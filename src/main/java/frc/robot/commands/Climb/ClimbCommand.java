@@ -7,36 +7,36 @@ package frc.robot.commands.Climb;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Climb.Climb;
 import frc.robot.subsystems.Climb.ClimbConstants;
-import frc.robot.subsystems.Climb.ClimbConstants.Heights;
 
 public class ClimbCommand extends Command {
-    private final Climb climb;
-    private final ClimbConstants.Heights desiredHeight;
+  private final Climb climb;
+  private final ClimbConstants.Heights desiredHeight;
 
-    public ClimbCommand(Climb climb, ClimbConstants.Heights height) {
-        this.climb = climb;
-        this.desiredHeight = height;
-        
-        addRequirements(climb);
-    }
+  public ClimbCommand(Climb climb, ClimbConstants.Heights height) {
+    this.climb = climb;
+    this.desiredHeight = height;
 
-    // Called when the command is initially scheduled.
-    @Override
-    public void initialize() {
-        // climb.setMotorPower(Math.signum(desiredHeight.getHeight() - climb.getPosition()) * ClimbConstants.CLIMB_POWER);
-        climb.setPosition(desiredHeight.getHeight());
-    }
+    addRequirements(climb);
+  }
 
-    // Called once the command ends or is interrupted.
-    @Override
-    public void end(boolean interrupted) {
-        climb.setMotorPower(0);
-    }
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {
+    // climb.setMotorPower(Math.signum(desiredHeight.getHeight() - climb.getPosition()) *
+    // ClimbConstants.CLIMB_POWER);
+    climb.setMotorPosition(desiredHeight);
+  }
 
-    // Returns true when the command should end.
-    @Override
-    public boolean isFinished() {
-        // return climb.isAtPosition(desiredHeight.getHeight());
-        return false;
-    }
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
+    climb.setMotorPower(0);
+  }
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    // return climb.isAtPosition(desiredHeight.getHeight());
+    return false;
+  }
 }
