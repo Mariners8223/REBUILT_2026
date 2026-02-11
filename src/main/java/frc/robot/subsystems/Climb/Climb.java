@@ -4,6 +4,9 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.Climb.ClimbIOReal;
+import frc.robot.subsystems.Climb.ClimbIO;
+
 
 public class Climb extends SubsystemBase {
     private final ClimbIO io;
@@ -11,13 +14,13 @@ public class Climb extends SubsystemBase {
 
     public Climb() 
     {
-        io = Robot.isReal() ?  new ClimbIOSim();
+        io = new ClimbIOReal();// : new ClimbIOSim();
         io.resetPosition();
 
         io.setBrakeMode(false);
-        new Trigger(RobotState::isEnabled).whileTrue(new StartEndCommand(
-            () -> io.setBrakeMode(true),
-            () -> io.setBrakeMode(false)).ignoringDisable(true));
+    //     new Trigger(RobotState::isEnabled).whileTrue(new StartEndCommand(
+    //         () -> io.setBrakeMode(true),
+    //         () -> io.setBrakeMode(false)).ignoringDisable(true));
     }
 
     public void setMotorPower(double power) 
@@ -27,7 +30,7 @@ public class Climb extends SubsystemBase {
     
     public double getPosition()
     {
-        io.getPosition();
+        return io.getPosition();
     }
 
     public void stopClimbMotor()
@@ -44,12 +47,12 @@ public class Climb extends SubsystemBase {
     public void periodic() 
     {
         // This method will be called once per scheduler run
-        io.Update(inputs);
-        Logger.processInputs(getName(), inputs);
+         io.Update(inputs);
+         Logger.processInputs(getName(), inputs);
 
-        double climbPrecnet = (inputs.height / ClimbConstants.SOFT_MINIMUM) * 100;
+         double climbPrecnet = (inputs.height / ClimbConstants.SOFT_MINIMUM) * 100;
 
-        SmartDashboard.putNumber("climb precent", climbPrecnet);
+         SmartDashboard.putNumber("climb precent", climbPrecnet);
 
         String currentCommandName = getCurrentCommand() == null ? "Null" : getCurrentCommand().getName();
         Logger.recordOutput("Climb/Current Command", currentCommandName);

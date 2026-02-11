@@ -48,13 +48,13 @@ public class RobotContainer {
     public static DriveBase driveBase;
 
     public static CommandPS5Controller driveController;
-    public static CommandXboxController driveXboxController;
+    //public static CommandXboxController driveXboxController;
     public static Climb climb;
 
 
     public RobotContainer() {
-        driveController = new CommandPS5Controller(1);
-        driveXboxController = new CommandXboxController(0);
+        driveController = new CommandPS5Controller(0);
+        //driveXboxController = new CommandXboxController(0);
 
         driveBase = new DriveBase();
         climb = new Climb();
@@ -65,11 +65,12 @@ public class RobotContainer {
 
 
     public void configureDriveBindings(){
-        new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(new StartEndCommand(() ->
-            driveBase.setDefaultCommand(new DriveCommand(driveBase, driveXboxController)),
-            driveBase::removeDefaultCommand).ignoringDisable(true));
+        // new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(new StartEndCommand(() ->
+        //     driveBase.setDefaultCommand(new DriveCommand(driveBase, driveXboxController)),
+        //     driveBase::removeDefaultCommand).ignoringDisable(true));
 
-            driveXboxController.b().whileTrue(new ClimbCommand(climb));
+        driveController.cross().whileTrue(new ClimbCommand(climb,false));
+        driveController.triangle().whileTrue(new ClimbCommand(climb,true));
    }
    
 

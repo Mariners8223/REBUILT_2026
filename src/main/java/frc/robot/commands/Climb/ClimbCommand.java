@@ -11,9 +11,12 @@ import frc.robot.subsystems.Climb.ClimbConstants;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ClimbCommand extends Command {
     private final Climb climb;
+    private boolean Up;
   /** Creates a new ClimbCommand. */
-  public ClimbCommand(Climb climb) {
+  public ClimbCommand(Climb climb,boolean up) {
     this.climb = climb;
+    Up = up;
+    
     addRequirements(climb);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -21,8 +24,12 @@ public class ClimbCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (climb.getPosition() < )
-    climb.setMotorPower(ClimbConstants.CLIMB_POWER);
+    if (Up){
+        climb.setMotorPower(ClimbConstants.CLIMB_POWER);
+    }
+    else{
+        climb.setMotorPower(-ClimbConstants.CLIMB_POWER);
+    }
   }
 
   // Called once the command ends or is interrupted.
