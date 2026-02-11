@@ -76,11 +76,14 @@ public class RobotContainer {
             Commands.parallel(
                 // intake.spinRollersCommand(),
                 funnel.toShooterCommand(),
-                kicker.setKickerCommand(0.4)
+                kicker.setKickerCommand(0.6)
             ))
         );
 
-        driveController.povDown().toggleOnTrue(Commands.run(() -> shooter.setDutyCycle(0.05)));
+        driveController.povDown().toggleOnTrue(Commands.startEnd(
+            () -> shooter.setDutyCycle(0.1),
+            () -> shooter.setDutyCycle(0))
+        );
 
         driveController.L1().toggleOnTrue(
                 Commands.run(() -> shooter.setVelocity(RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))))
@@ -100,8 +103,8 @@ public class RobotContainer {
                 .until(() -> Constants.CALCULATIONS.epsilonEquals(
                         shooter.getShooterVelocity(),
                         RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0)),
-                        RPM.of(20))
-                ),
+                        RPM.of(60))
+                ).withTimeout(1),
                 Commands.parallel(
                     kicker.setKickerCommand(0.4),
                     funnel.toShooterCommand()
