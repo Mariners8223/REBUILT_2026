@@ -1,5 +1,6 @@
 package frc.robot.subsystems.Intake;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 
@@ -45,6 +46,17 @@ public class Intake extends SubsystemBase{
 
     public void startPIDTuning(){
         io.startPIDTuning();
+    }
+
+    public Command moveToPositionCommand(IntakePosition position){
+        return this.runOnce(() -> setPositionMotorState(position));
+    }
+
+    public Command spinRollersCommand(){
+        return this.startEnd(
+            () -> setRollersMotorDutyCycle(IntakeConstants.RollersMotor.DUTY_CYCLE),
+            () -> setRollersMotorDutyCycle(0)
+        );
     }
 
     @Override

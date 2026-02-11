@@ -52,7 +52,6 @@ public class IntakeConstants
         public static final boolean IS_BRUSHLESS = true;
         public static final MotorType MOTOR_TYPE = MotorType.SPARK_FLEX;
         public static final boolean IS_INVERTED = true;
-        //public static final Measure<VoltageUnit> VOLTAGE = Volts.of(0);//TODO: do i need to delete that? if you dont want it just do it
         public static final Angle POSITION_TOLERANCE = Degrees.of(2);
         public static final double GEAR_RATIO = 20;
         public static final double SOFT_MINIMUM = IntakePosition.Open.getAngle().in(Rotations);
