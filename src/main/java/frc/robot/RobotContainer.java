@@ -68,6 +68,17 @@ public class RobotContainer {
             funnel.toShooterCommand()
         );
 
+        driveController.L1().toggleOnTrue(
+                Commands.run(() -> shooter.setVelocity(RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))))
+                .until(() -> Constants.CALCULATIONS.epsilonEquals(
+                        shooter.getShooterVelocity(), 
+                        RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0)),
+                        RPM.of(20))
+                ).andThen(
+                    kicker.setKickerCommand(0.4)
+                )
+        );
+
         driveController.R1().toggleOnTrue(
             Commands.sequence(
                 Commands.run(() -> shooter.setVelocity(RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))))
