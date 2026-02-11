@@ -5,29 +5,35 @@
 package frc.robot.commands.Climb;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.Climb.Climb;
+import frc.robot.subsystems.Climb.ClimbConstants;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ClimbCommand extends Command {
+    private final Climb climb;
   /** Creates a new ClimbCommand. */
-  public ClimbCommand() {
+  public ClimbCommand(Climb climb) {
+    this.climb = climb;
+    addRequirements(climb);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {}
+  public void initialize() {
+    climb.setMotorPower(ClimbConstants.CLIMB_POWER);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    climb.setMotorPower(0);
+    climb.
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return climb.getPosition() - ClimbConstants.CLIMB_TOLERANCE >= ClimbConstants.DESIRED_HIGHT;
   }
 }

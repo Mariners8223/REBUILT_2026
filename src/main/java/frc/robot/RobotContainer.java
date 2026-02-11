@@ -64,6 +64,8 @@ public class RobotContainer {
         new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(new StartEndCommand(() ->
             driveBase.setDefaultCommand(new DriveCommand(driveBase, driveXboxController)),
             driveBase::removeDefaultCommand).ignoringDisable(true));
+
+            driveXboxController.b().whileTrue(null)
    }
    
 
