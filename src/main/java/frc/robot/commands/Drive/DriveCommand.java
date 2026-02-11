@@ -9,7 +9,8 @@ import frc.robot.subsystems.DriveTrain.DriveBase;
 
 import frc.robot.subsystems.DriveTrain.SwerveModules.DevBotConstants;
 
-import static frc.robot.subsystems.DriveTrain.DriveBaseConstants.DISTANCE_BETWEEN_WHEELS;
+import static frc.robot.subsystems.DriveTrain.DriveBaseConstants.DISTANCE_BETWEEN_WHEELS_HORIZONTAL;
+import static frc.robot.subsystems.DriveTrain.DriveBaseConstants.DISTANCE_BETWEEN_WHEELS_VERTICAL;
 
 public class DriveCommand extends Command {
 
@@ -27,7 +28,7 @@ public class DriveCommand extends Command {
 
         MAX_FREE_WHEEL_SPEED = DevBotConstants.MAX_WHEEL_LINEAR_VELOCITY;
 
-        double driveBaseRadius = Math.hypot(DISTANCE_BETWEEN_WHEELS / 2, DISTANCE_BETWEEN_WHEELS / 2);
+        double driveBaseRadius = Math.hypot(DISTANCE_BETWEEN_WHEELS_HORIZONTAL / 2, DISTANCE_BETWEEN_WHEELS_VERTICAL / 2);
 
         MAX_OMEGA_RAD_PER_SEC = MAX_FREE_WHEEL_SPEED / driveBaseRadius;
     }
@@ -44,7 +45,8 @@ public class DriveCommand extends Command {
     public static void halfSpeed(){
         MAX_FREE_WHEEL_SPEED = DevBotConstants.MAX_WHEEL_LINEAR_VELOCITY / 2;
 
-        double driveBaseRadius = Math.hypot(DISTANCE_BETWEEN_WHEELS / 2, DISTANCE_BETWEEN_WHEELS / 2);
+        double driveBaseRadius = Math.hypot(DISTANCE_BETWEEN_WHEELS_HORIZONTAL / 2, DISTANCE_BETWEEN_WHEELS_VERTICAL / 2);
+
 
         MAX_OMEGA_RAD_PER_SEC = MAX_FREE_WHEEL_SPEED / driveBaseRadius;        
     }
@@ -52,7 +54,7 @@ public class DriveCommand extends Command {
     public static void normalSpeed(){
         MAX_FREE_WHEEL_SPEED = DevBotConstants.MAX_WHEEL_LINEAR_VELOCITY;
 
-        double driveBaseRadius = Math.hypot(DISTANCE_BETWEEN_WHEELS / 2, DISTANCE_BETWEEN_WHEELS / 2);
+        double driveBaseRadius = Math.hypot(DISTANCE_BETWEEN_WHEELS_HORIZONTAL / 2, DISTANCE_BETWEEN_WHEELS_VERTICAL / 2);
 
         MAX_OMEGA_RAD_PER_SEC = MAX_FREE_WHEEL_SPEED / driveBaseRadius;  
     }
