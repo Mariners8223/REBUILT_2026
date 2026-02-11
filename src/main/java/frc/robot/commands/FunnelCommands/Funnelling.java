@@ -2,7 +2,7 @@ package frc.robot.commands.FunnelCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Funnel.Funnel;
-import frc.robot.subsystems.Funnel.FunnelingConstents;
+import frc.robot.subsystems.Funnel.FunnelConstants;
 
 public class Funnelling extends Command {
   public final Funnel funnel;
@@ -13,7 +13,7 @@ public class Funnelling extends Command {
 
   @Override
   public void initialize() {
-    funnel.SpinLeadMotor(FunnelingConstents.LeadingMotor.LeadSpeed);
+    funnel.SpinLeadMotor(FunnelConstants.LeadingMotor.LeadSpeed);
   }
 
   @Override

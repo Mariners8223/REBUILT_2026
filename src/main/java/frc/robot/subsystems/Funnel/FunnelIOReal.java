@@ -12,58 +12,39 @@ import frc.util.MarinersController.MarinersTalonFX;
 public class FunnelIOReal implements FunnelIO{
     private final MarinersSparkBase funnelMotor;
     private final MarinersTalonFX centerMotor;
-    // private final MarinersController centerLowMotor;
 
     public FunnelIOReal(){
         funnelMotor = configureFunnelMotor();
         centerMotor = configureCenterMotor();
-        // centerLowMotor = configureCenterLowMotor();
     }
 
     private MarinersSparkBase configureFunnelMotor(){
         MarinersSparkBase Motor;
-        Motor = new MarinersSparkBase("FunnelingMotor", FunnelingConstents.LeadingMotor.CONTROLLER_LOCATION,
-         FunnelingConstents.LeadingMotor.Lead_ID, FunnelingConstents.LeadingMotor.Is_Brushless,
-         FunnelingConstents.LeadingMotor.MOTOR_TYPE);
+        Motor = new MarinersSparkBase("FunnelingMotor", FunnelConstants.LeadingMotor.CONTROLLER_LOCATION,
+         FunnelConstants.LeadingMotor.Lead_ID, FunnelConstants.LeadingMotor.Is_Brushless,
+         FunnelConstants.LeadingMotor.MOTOR_TYPE);
 
-         Motor.setMotorInverted(FunnelingConstents.LeadingMotor.IS_INVERTED);
+         Motor.setMotorInverted(FunnelConstants.LeadingMotor.IS_INVERTED);
          return Motor;
     }
 
     private MarinersTalonFX configureCenterMotor(){
         MarinersTalonFX Motor;
-        Motor = new MarinersTalonFX("CenteringHighMotor", FunnelingConstents.CenteringMotor.CONTROLLER_LOCATION,
-         FunnelingConstents.CenteringMotor.CenterHIGH_ID, new PIDFGains(0,0,0),
-         FunnelingConstents.CenteringMotor.GearRatio);
+        Motor = new MarinersTalonFX("CenteringHighMotor", FunnelConstants.CenteringMotor.CONTROLLER_LOCATION,
+         FunnelConstants.CenteringMotor.CenterHIGH_ID, new PIDFGains(0,0,0),
+         FunnelConstants.CenteringMotor.GearRatio);
 
-         Motor.setMotorInverted(FunnelingConstents.CenteringMotor.IS_INVERTED);
+         Motor.setMotorInverted(FunnelConstants.CenteringMotor.IS_INVERTED);
 
           return Motor;
     }
 
-    /*private MarinersSparkBase configureCenterLowMotor(){
-        MarinersSparkBase Motor;
-        Motor = new MarinersSparkBase("CenteringLowMotor", FunnelingConstents.CenteringLOWMotor.CONTROLLER_LOCATION,
-         FunnelingConstents.CenteringLOWMotor.CenterLOW_ID,FunnelingConstents.CenteringLOWMotor.Is_Brushless,
-          FunnelingConstents.CenteringLOWMotor.MOTOR_TYPE);
-        Motor.setMotorInverted(false);
-        
-          return Motor;
-    
-    }*/
-
-    // public void setDutyCycleCenterLow(double LowDutyCycle){
-    //     centerLowMotor.setDutyCycle(LowDutyCycle);
-    // }
     public void SetDutyCycleCenter(double HighDutyCycle){
         centerMotor.setDutyCycle(HighDutyCycle);
     }
     public void SetDutyCycleLead(double LeadDutyCycle){
         funnelMotor.setDutyCycle(LeadDutyCycle);
     }
-    public void update(FunnelIOInputs inputs){
-
-        }
 }
 
     

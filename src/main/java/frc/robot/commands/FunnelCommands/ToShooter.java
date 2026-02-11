@@ -4,7 +4,7 @@ package frc.robot.commands.FunnelCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Funnel.Funnel;
-import frc.robot.subsystems.Funnel.FunnelingConstents;
+import frc.robot.subsystems.Funnel.FunnelConstants;
 
 public class ToShooter extends Command {
   public final Funnel funnel;
@@ -16,8 +16,8 @@ public class ToShooter extends Command {
 
   @Override
   public void initialize() {
-    funnel.SpinCenterMotors(FunnelingConstents.CenteringMotor.CenteringHighSpeed);
-    funnel.SpinLeadMotor(FunnelingConstents.LeadingMotor.LeadSpeed);
+    funnel.SpinCenterMotors(FunnelConstants.CenteringMotor.CenteringHighSpeed);
+    funnel.SpinLeadMotor(FunnelConstants.LeadingMotor.LeadSpeed);
   }
 
   @Override
