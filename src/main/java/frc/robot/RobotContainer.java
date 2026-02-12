@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.commands.Climb.ClimbCommand;
@@ -27,9 +28,22 @@ public class RobotContainer {
 
 
     public void configureDriveBindings(){
-        driveController.triangle().onTrue(new ClimbCommand(climb,Heights.EXTENDED));
-        driveController.cross().onTrue(new ClimbCommand(climb,Heights.IN_AIR));
-        driveController.square().onTrue(new ClimbCommand(climb, Heights.RESET));
+        driveController.cross().onTrue(new ClimbCommand(climb, Heights.RESET));
+        driveController.triangle().onTrue(new ClimbCommand(climb, Heights.EXTENDED));
+        driveController.square().onTrue(new ClimbCommand(climb, Heights.IN_AIR));
+
+        driveController.povUp().whileTrue(
+            Commands.startEnd(
+                () -> climb.setMotorPower(0.1),
+                () -> climb.setMotorPower(0),
+                climb)
+        );
+        driveController.povDown().whileTrue(
+            Commands.startEnd(
+                () -> climb.setMotorPower(-0.1),
+                () -> climb.setMotorPower(0),
+                climb)
+        );
 
         driveController.options().onTrue(new InstantCommand(() -> climb.resetPosition()));
    }

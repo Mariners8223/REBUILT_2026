@@ -6,9 +6,9 @@ import frc.util.PIDFGains;
 public class ClimbConstants
 {
     public enum Heights{
-        RESET(0),
-        EXTENDED(0.2),
-        IN_AIR(0.1);
+        RESET(CLIMB_STARTING_HEIGHT),
+        EXTENDED(0.66),
+        IN_AIR(0.50);
 
         private final double height;
 
@@ -29,6 +29,7 @@ public class ClimbConstants
     public static final double SOFT_MAXIMUM = 0.8;
     public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
     public static final double CLIMB_TOLERANCE = 0.005;
+    public static final double CLIMB_STARTING_HEIGHT = 0.44; // From bottom of hook to floor
 
     public static final boolean IS_INVERTED = true;
     public static final double MOMENT_OF_INERTIA = 1;

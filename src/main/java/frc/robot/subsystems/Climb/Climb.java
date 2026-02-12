@@ -15,7 +15,7 @@ public class Climb extends SubsystemBase {
         io = new ClimbIOReal();
         io.resetPosition();
 
-        io.setBrakeMode(false);
+        io.setBrakeMode(true);
     }
 
     public void resetPosition(){
@@ -27,7 +27,7 @@ public class Climb extends SubsystemBase {
         io.setPower(power);
     }
 
-    public void setMotorPosition(Heights height){
+    public void setMotorHeight(Heights height){
         io.setPosition(height.getHeight());
     }
 

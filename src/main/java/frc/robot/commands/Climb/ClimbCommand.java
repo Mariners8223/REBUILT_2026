@@ -23,7 +23,7 @@ public class ClimbCommand extends Command {
     @Override
     public void initialize() {
         // climb.setMotorPower(Math.signum(desiredHeight.getHeight() - climb.getPosition()) * ClimbConstants.CLIMB_POWER);
-        climb.setMotorPosition(desiredHeight);
+        climb.setMotorHeight(desiredHeight);
     }
 
     // Called once the command ends or is interrupted.
