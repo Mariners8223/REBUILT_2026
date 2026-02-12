@@ -8,7 +8,8 @@ public class ClimbConstants
     public enum Heights{
         RESET(CLIMB_STARTING_HEIGHT),
         EXTENDED(0.66),
-        IN_AIR(0.50);
+        IN_AIR_TELEOP(0.50),
+        IN_AIR_AUTO(0.50);
 
         private final double height;
 
@@ -25,10 +26,10 @@ public class ClimbConstants
     public static final double GEAR_RATIO = 45;
     public static final double ROTATIONS_TO_METERS = 1/0.1324;
     public static final double CLIMB_POWER = 0.3;
-    public static final double SOFT_MINIMUM = 0;
-    public static final double SOFT_MAXIMUM = 0.8;
+    public static final double SOFT_MINIMUM = Heights.RESET.getHeight();
+    public static final double SOFT_MAXIMUM = SOFT_MINIMUM + 0.27;
     public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
-    public static final double CLIMB_TOLERANCE = 0.005;
+    public static final double CLIMB_TOLERANCE = 0.01;
     public static final double CLIMB_STARTING_HEIGHT = 0.44; // From bottom of hook to floor
 
     public static final boolean IS_INVERTED = true;

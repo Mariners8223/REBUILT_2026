@@ -3,6 +3,7 @@ package frc.robot.subsystems.Climb;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Climb.ClimbConstants.Heights;
 
@@ -45,6 +46,12 @@ public class Climb extends SubsystemBase {
         return Math.abs(getPosition() - position) < ClimbConstants.CLIMB_TOLERANCE;
     }
 
+
+    public Command toPositionCommand(Heights desiredHeight){
+        return this.runOnce(
+            () -> setMotorHeight(desiredHeight)
+        );
+    }
     @Override
     public void periodic()
     {
