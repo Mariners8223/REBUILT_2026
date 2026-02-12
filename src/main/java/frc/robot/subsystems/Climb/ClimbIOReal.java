@@ -59,6 +59,6 @@ public class ClimbIOReal implements ClimbIO
     public void Update(ClimbInputs inputs)
     {
         inputs.height = getPosition();
-        inputs.pose = new Pose3d(ClimbConstants.X_ON_ROBOT, ClimbConstants.Y_ON_ROBOT, ClimbConstants.Z_OFFSET, new Rotation3d());
+        inputs.pose = new Pose3d(ClimbConstants.X_ON_ROBOT, ClimbConstants.Y_ON_ROBOT, getPosition(), new Rotation3d());
     }
 }

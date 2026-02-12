@@ -22,8 +22,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
 
-  private final RobotContainer m_robotContainer;
-
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -41,10 +39,10 @@ if (isReal()) {
     Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
 }
 
-Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
+    Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-    m_robotContainer = new RobotContainer();
+    new RobotContainer();
   }
 
   /**
