@@ -6,15 +6,24 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.RPM;
 
+import java.util.Map;
+import java.util.function.BiFunction;
+
 import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.ProxyCommand;
+import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.*;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.Drive.DriveCommand;
 import frc.robot.subsystems.DriveTrain.DriveBase;
+import frc.robot.subsystems.DriveTrain.DriveBaseSYSID;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Funnel.Funnel;
 import frc.robot.subsystems.Intake.Intake;
@@ -30,6 +39,8 @@ public class RobotContainer {
     public static Shooter shooter;
     public static Kicker kicker;
 
+    public static DriveBaseSYSID driveSysID;
+
     public RobotContainer() {
         driveController = new CommandPS5Controller(0);
 
@@ -38,6 +49,8 @@ public class RobotContainer {
         intake = new Intake();
         shooter = new Shooter();
         kicker = new Kicker();
+
+        driveSysID = new DriveBaseSYSID(driveBase, driveController);
 
         // configureDriveBindings();
         configureTestingBindings();
@@ -50,7 +63,51 @@ public class RobotContainer {
             .ignoringDisable(true));
     }
 
-   public void configureTestingBindings(){
+
+    public BiFunction<Boolean, Direction, Command> chooseCommand(String type){
+        switch (type) {
+            case "Drive":
+                return (isDynamic, direction) -> 
+                    isDynamic ? driveSysID.getDriveMotorsRoutineDynamic(direction) : driveSysID.getDriveMotorsRoutineQuasistatic(direction);
+            case "Steer":
+                return (isDynamic, direction) -> 
+                    isDynamic ? driveSysID.getSteerMotorsRoutineDynamic(direction) : driveSysID.getSteerMotorsRoutineQuasistatic(direction);
+            case "Theta":
+                return (isDynamic, direction) -> 
+                    isDynamic ? driveSysID.getThetaRoutineDynamic(direction) : driveSysID.getThetaRoutineQuasistatic(direction);
+            default:
+                return (isDynamic, direction) -> new InstantCommand();
+        }
+    }
+
+
+
+    public void configureDriveSysidBindings(){
+        SendableChooser<String> type = new SendableChooser<String>();
+        type.addOption("Drive", "Drive");
+        type.addOption("Steer", "Steer");
+        type.addOption("Theta", "Theta");
+        type.setDefaultOption("Drive", "Drive");
+
+        SmartDashboard.putData(type);
+
+        driveController.cross().whileTrue(
+            new ProxyCommand(chooseCommand(type.getSelected()).apply(true, Direction.kReverse))
+        );
+        driveController.triangle().whileTrue(
+            new ProxyCommand(chooseCommand(type.getSelected()).apply(true, Direction.kForward))
+        );
+        driveController.square().whileTrue(
+            new ProxyCommand(chooseCommand(type.getSelected()).apply(false, Direction.kReverse))
+        );
+        driveController.circle().whileTrue(
+            new ProxyCommand(chooseCommand(type.getSelected()).apply(false, Direction.kForward))
+        );
+    }
+
+
+
+    public void configureTestingBindings(){
         SmartDashboard.putNumber("Shooter Velocity", 0);
 
         driveController.cross().toggleOnTrue(
