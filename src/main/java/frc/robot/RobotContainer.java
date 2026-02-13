@@ -31,6 +31,10 @@ public class RobotContainer {
         driveController.triangle().onTrue(climb.toPositionCommand(Heights.EXTENDED));
         driveController.square().onTrue(climb.toPositionCommand(Heights.IN_AIR_TELEOP));
 
+        driveController.R1().whileTrue(
+            new RunHookToHeight(climb, Heights.IN_AIR_TELEOP, 1)
+        )
+
         driveController.povUp().whileTrue(
             Commands.startEnd(
                 () -> climb.setMotorPower(0.1),
