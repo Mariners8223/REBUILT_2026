@@ -6,7 +6,6 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.RPM;
 
-import java.util.Map;
 import java.util.function.BiFunction;
 
 import edu.wpi.first.wpilibj.RobotState;
@@ -15,9 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.ProxyCommand;
-import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.*;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -52,8 +49,9 @@ public class RobotContainer {
 
         driveSysID = new DriveBaseSYSID(driveBase, driveController);
 
-        // configureDriveBindings();
-        configureTestingBindings();
+        configureDriveBindings();
+        // configureTestingBindings();
+        configureDriveSysidBindings();
     }
 
     public void configureDriveBindings(){
@@ -67,13 +65,13 @@ public class RobotContainer {
     public BiFunction<Boolean, Direction, Command> chooseCommand(String type){
         switch (type) {
             case "Drive":
-                return (isDynamic, direction) -> 
+                return (isDynamic, direction) ->
                     isDynamic ? driveSysID.getDriveMotorsRoutineDynamic(direction) : driveSysID.getDriveMotorsRoutineQuasistatic(direction);
             case "Steer":
-                return (isDynamic, direction) -> 
+                return (isDynamic, direction) ->
                     isDynamic ? driveSysID.getSteerMotorsRoutineDynamic(direction) : driveSysID.getSteerMotorsRoutineQuasistatic(direction);
             case "Theta":
-                return (isDynamic, direction) -> 
+                return (isDynamic, direction) ->
                     isDynamic ? driveSysID.getThetaRoutineDynamic(direction) : driveSysID.getThetaRoutineQuasistatic(direction);
             default:
                 return (isDynamic, direction) -> new InstantCommand();
@@ -109,6 +107,7 @@ public class RobotContainer {
 
     public void configureTestingBindings(){
         SmartDashboard.putNumber("Shooter Velocity", 0);
+        SmartDashboard.putNumber("Shooter Duty Cycle", 0);
 
         driveController.cross().toggleOnTrue(
             intake.moveToPositionCommand(
@@ -129,12 +128,14 @@ public class RobotContainer {
         );
 
         driveController.povUp().toggleOnTrue(
-            intake.moveToPositionCommand(IntakePosition.Closed).andThen(
+            // intake.moveToPositionCommand(IntakePosition.Open).andThen(
             Commands.parallel(
                 // intake.spinRollersCommand(),
-                funnel.toShooterCommand(),
-                kicker.setKickerCommand(0.6)
-            ))
+                // shooter.setDutyCycleCommand(SmartDashboard.getNumber("Shooter Duty Cycle", 0.2)),
+                shooter.setDutyCycleCommand(0.8),
+                // funnel.toShooterCommand(),
+                kicker.setKickerCommand(0.5)
+            )
         );
 
         driveController.povDown().toggleOnTrue(Commands.startEnd(
