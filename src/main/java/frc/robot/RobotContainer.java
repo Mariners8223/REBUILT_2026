@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.*;
+import frc.robot.commands.Climb.RunHookToHeight;
 import frc.robot.subsystems.Climb.Climb;
 import frc.robot.subsystems.Climb.ClimbConstants.Heights;
 
@@ -33,7 +34,7 @@ public class RobotContainer {
 
         driveController.R1().whileTrue(
             new RunHookToHeight(climb, Heights.IN_AIR_TELEOP, 1)
-        )
+        );
 
         driveController.povUp().whileTrue(
             Commands.startEnd(
