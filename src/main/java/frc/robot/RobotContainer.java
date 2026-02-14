@@ -74,6 +74,8 @@ public class RobotContainer {
             new StartEndCommand(() ->driveBase.setDefaultCommand(new DriveCommand(driveBase, driveController)),
             driveBase::removeDefaultCommand)
             .ignoringDisable(true));
+
+        driveController.options().onTrue(driveBase.resetOnlyDirection());
     }
 
 
