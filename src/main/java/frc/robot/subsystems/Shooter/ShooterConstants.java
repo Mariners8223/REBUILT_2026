@@ -6,8 +6,10 @@ package frc.robot.subsystems.Shooter;
 
 import static edu.wpi.first.units.Units.*;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.units.Measure;
@@ -107,7 +109,15 @@ public class ShooterConstants {
     }
 
     public static class Calculations{
-        // public static Distance 
+        public static Distance practicalDistance(Distance distance, Pose2d robotPose, double velocityX, double velocityY){
+            Translation2d velocity = new Translation2d(velocityX, velocityY);
+            double flightTime = LookupTable.DISTANCE_TO_TIME_OF_FLIGHT.get(distance.in(Meter));
+            Translation2d displacementFromRobotVelocity = velocity.times(flightTime);
+
+            
+
+            return Meters.zero();
+        }
 
         public static LinearVelocity requiredLinearVelocity(Distance distance){
             /*  h = y0 + tan(alpha) * d - (g / (2 * (v * cos(alpha))^2)) * d^2
