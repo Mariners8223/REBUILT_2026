@@ -46,6 +46,10 @@ public class ClimbIOReal implements ClimbIO
         return motor.getPosition();
     }
 
+    public double getCurrent(){
+        return motor.getMotor().getTorqueCurrent().getValueAsDouble();
+    }
+
     public void setPosition(double refrence){
         motor.setReference(refrence, ControlMode.Position);
     }

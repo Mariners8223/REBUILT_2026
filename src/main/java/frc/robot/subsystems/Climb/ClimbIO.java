@@ -23,5 +23,7 @@ public interface ClimbIO {
 
     void setBrakeMode(boolean isBrake);
 
+    double getCurrent();
+
     void Update(ClimbInputs inputs);
 }

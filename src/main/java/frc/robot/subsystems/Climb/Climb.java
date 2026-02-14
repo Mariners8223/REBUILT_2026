@@ -42,10 +42,13 @@ public class Climb extends SubsystemBase {
         io.stopClimbMotor();
     }
 
+    public double getCurrent(){
+        return io.getCurrent();
+    }
+
     public boolean isAtPosition(double position){
         return Math.abs(getPosition() - position) < ClimbConstants.CLIMB_TOLERANCE;
     }
-
 
     public Command toPositionCommand(Heights desiredHeight){
         return this.runOnce(
@@ -56,12 +59,12 @@ public class Climb extends SubsystemBase {
     public void periodic()
     {
         // This method will be called once per scheduler run
-         io.Update(inputs);
-         Logger.processInputs(getName(), inputs);
+        io.Update(inputs);
+        Logger.processInputs(getName(), inputs);
 
-         double percent = (inputs.height / ClimbConstants.SOFT_MINIMUM) * 100;
+        double percent = (inputs.height / ClimbConstants.SOFT_MINIMUM) * 100;
 
-         SmartDashboard.putNumber("Climb/Climb Percent", percent);
+        SmartDashboard.putNumber("Climb/Climb Percent", percent);
 
         String currentCommandName = getCurrentCommand() == null ? "Null" : getCurrentCommand().getName();
         Logger.recordOutput("Climb/Current Command", currentCommandName);

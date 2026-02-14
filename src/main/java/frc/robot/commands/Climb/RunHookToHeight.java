@@ -18,6 +18,7 @@ public class RunHookToHeight extends Command {
   public RunHookToHeight(Climb climb, Heights desiredHeight, double dutyCycle) {
     this.climb = climb;
     this.desiredHeight = desiredHeight;
+    this.dutyCycle = dutyCycle;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(climb);
