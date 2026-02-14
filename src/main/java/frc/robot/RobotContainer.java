@@ -51,9 +51,9 @@ public class RobotContainer {
 
         driveSysID = new DriveBaseSYSID(driveBase, driveController);
 
-        configureDriveBindings();
-        // configureTestingBindings();
-        configureDriveSysidBindings();
+        // configureDriveBindings();
+        configureTestingBindings();
+        // configureDriveSysidBindings();
     }
 
     public Distance distanceFromHub(){
@@ -122,8 +122,8 @@ public class RobotContainer {
 
 
     public void configureTestingBindings(){
-        SmartDashboard.putNumber("Shooter Velocity", 0);
         SmartDashboard.putNumber("Shooter Duty Cycle", 0);
+        SmartDashboard.putNumber("Kicker Duty Cycle", 0);
 
         driveController.cross().toggleOnTrue(
             intake.moveToPositionCommand(
@@ -147,12 +147,9 @@ public class RobotContainer {
             // intake.moveToPositionCommand(IntakePosition.Open).andThen(
             Commands.parallel(
                 // intake.spinRollersCommand(),
-                // shooter.setDutyCycleCommand(SmartDashboard.getNumber("Shooter Duty Cycle", 0.2)),
-                shooter.setDutyCycleCommand(0.75),
-                // funnel.toShooterCommand(),a[\]
-
-
-                kicker.setKickerCommand(0.2)
+                // funnel.toShooterCommand(),
+                shooter.setDutyCycleCommand(0.9),
+                kicker.setKickerCommand(0.8)
             )
         );
 
