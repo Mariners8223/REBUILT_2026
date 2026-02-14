@@ -3,6 +3,7 @@ package frc.robot.commands.Drive;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import frc.robot.Robot;
 import frc.robot.subsystems.DriveTrain.DriveBase;
@@ -18,6 +19,7 @@ public class DriveCommand extends Command {
     private final CommandPS5Controller controller;
     private static double MAX_FREE_WHEEL_SPEED;
     private static double MAX_OMEGA_RAD_PER_SEC;
+    private boolean lockOn;
 
     public DriveCommand(DriveBase driveBase, CommandPS5Controller controller) {
         this.driveBase = driveBase;
@@ -25,6 +27,11 @@ public class DriveCommand extends Command {
         addRequirements(this.driveBase);
         setName("DriveCommand");
 
+        controller.circle().onTrue(
+            new InstantCommand(() -> {
+                lockOn = !lockOn;
+            })
+        );
 
         MAX_FREE_WHEEL_SPEED = DevBotConstants.MAX_WHEEL_LINEAR_VELOCITY;
 
@@ -59,12 +66,18 @@ public class DriveCommand extends Command {
         MAX_OMEGA_RAD_PER_SEC = MAX_FREE_WHEEL_SPEED / driveBaseRadius;
     }
 
+    public static double lockOn(boolean isLockedOn, double rightX){
+        return isLockedOn ? 0 : rightX;
+    }
+
 
     @Override
     public void execute() {
         //calculates a value from 1 to the max wheel speed based on the R2 axis
         // double R2Axis = (1 - (0.5 + controller.getR2Axis() / 2)) * (driveBase.MAX_FREE_WHEEL_SPEED - 1) + 1;
         // double R2Axis  = 1 - (0.5 + controller.getRightTriggerAxis() / 2);
+
+
         double R2Axis  = 1 - controller.getR2Axis();
 
         if(R2Axis <= 0.1) {
@@ -80,7 +93,7 @@ public class DriveCommand extends Command {
         leftY *= R2Axis * MAX_FREE_WHEEL_SPEED;
         rightX *= R2Axis * MAX_OMEGA_RAD_PER_SEC;
 
-        ChassisSpeeds fieldRelativeSpeeds = new ChassisSpeeds(leftX, leftY, rightX);
+        ChassisSpeeds fieldRelativeSpeeds = new ChassisSpeeds(leftX, leftY, driveBase.lockOn(lockOn, rightX));
 
         Rotation2d gyroAngle = driveBase.getRotation2d();
 

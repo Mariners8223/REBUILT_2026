@@ -22,7 +22,10 @@ import frc.util.FastGyros.PigeonIO;
 import frc.util.FastGyros.SimGyroIO;
 import org.littletonrobotics.junction.AutoLog;
 import org.littletonrobotics.junction.Logger;
+import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
+import com.ctre.phoenix6.swerve.utility.PhoenixPIDController;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
 
@@ -33,6 +36,8 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import frc.robot.subsystems.Vision.Vision;
 import frc.robot.Constants;
 
 import java.util.function.DoubleSupplier;
@@ -44,6 +49,13 @@ import java.util.function.DoubleSupplier;
  */
 @SuppressWarnings("unused")
 public class DriveBase extends SubsystemBase {
+
+
+    PhotonCamera camera = new PhotonCamera("frontCamera");
+    private PhotonTrackedTarget target;
+
+    private double absoluteHeading;
+
     /**
      * the array of the modules themselves
      */
@@ -116,6 +128,7 @@ public class DriveBase extends SubsystemBase {
         modules[2] = new SwerveModule(SwerveModule.ModuleName.Back_Left);
         modules[3] = new SwerveModule(SwerveModule.ModuleName.Back_Right);
 
+        
         if (RobotBase.isReal()) {
             gyro = switch (Constants.ROBOT_TYPE) {
                 case DEVELOPMENT, COMPETITION -> new PigeonIO(DriveBaseConstants.PIGEON_ID);
@@ -288,6 +301,21 @@ public class DriveBase extends SubsystemBase {
      */
     public void addVisionMeasurement(Pose2d visionPose, double timeStamp, Matrix<N3, N1> stdDevs) {
         poseEstimator.addVisionMeasurement(visionPose, timeStamp, stdDevs);
+    }
+
+    public double lockOn(boolean lockOn, double leftX){
+        if (!lockOn) return leftX;
+        
+        return target.getYaw();
+
+        // double distanceX = getPose().getX() - 0;
+        // double distanceY = getPose().getY() - 0;
+        // double relativeHeading = Math.toDegrees(Math.atan2(distanceY, distanceX)); 
+
+        // absoluteHeading = Math.toRadians(-relativeHeading+270); //the magic sauce
+        // return Math.cos(absoluteHeading);
+        // return Math.sin(absoluteHeading);
+
     }
 
     /**
@@ -503,6 +531,13 @@ public class DriveBase extends SubsystemBase {
 
     @Override
     public void periodic() {
+        var frame = camera.getLatestResult();
+        
+        if (frame.hasTargets()){
+            target = frame.getBestTarget();
+        }
+        
+        
         for (int i = 0; i < 4; i++) {
             inputs.currentStates[i] = modules[i].getCurrentState();
             positions[i] = modules[i].modulePeriodic();
