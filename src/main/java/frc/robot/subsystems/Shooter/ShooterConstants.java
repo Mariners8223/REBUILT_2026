@@ -9,6 +9,7 @@ import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Unit;
 import edu.wpi.first.units.measure.Angle;
@@ -94,7 +95,20 @@ public class ShooterConstants {
         new Translation3d(0, 0, 0), new Rotation3d(0, 0, 0)
     );
 
+    public static class LookupTable{
+        public static final InterpolatingDoubleTreeMap DISTANCE_TO_SHOOT_SPEED = new InterpolatingDoubleTreeMap();
+        public static final InterpolatingDoubleTreeMap DISTANCE_TO_TIME_OF_FLIGHT = new InterpolatingDoubleTreeMap();
+
+        static{
+            DISTANCE_TO_SHOOT_SPEED.put(0.0,0.0);
+
+            DISTANCE_TO_TIME_OF_FLIGHT.put(0.0,0.0);
+        }
+    }
+
     public static class Calculations{
+        // public static Distance 
+
         public static LinearVelocity requiredLinearVelocity(Distance distance){
             /*  h = y0 + tan(alpha) * d - (g / (2 * (v * cos(alpha))^2)) * d^2
                 h - Hub Height

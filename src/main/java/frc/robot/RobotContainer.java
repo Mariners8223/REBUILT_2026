@@ -4,10 +4,12 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.RPM;
 
 import java.util.function.BiFunction;
 
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -53,6 +55,11 @@ public class RobotContainer {
         // configureTestingBindings();
         configureDriveSysidBindings();
     }
+
+    public Distance distanceFromHub(){
+        return Meters.of(driveBase.getPose().getTranslation().getDistance(Constants.FieldConstants.HUB_POSITION));
+    }
+
 
     public void configureDriveBindings(){
         new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(
