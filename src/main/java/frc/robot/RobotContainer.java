@@ -51,9 +51,9 @@ public class RobotContainer {
 
         driveSysID = new DriveBaseSYSID(driveBase, driveController);
 
-        // configureDriveBindings();
-        configureTestingBindings();
-        // configureDriveSysidBindings();
+        configureDriveBindings();
+        // configureTestingBindings();
+        configureDriveSysidBindings();
     }
 
     public Distance distanceFromHub(){
