@@ -1,51 +1,102 @@
-// Copyright (c) FIRST and other WPILib contributors.
-
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
 package frc.robot;
 
-import static edu.wpi.first.units.Units.RPM;
+import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj2.command.button.*;
+import frc.robot.Constants.autoConstats;
+import frc.robot.commands.Drive.DriveCommand;
 
+import com.pathplanner.lib.util.FlippingUtil;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
-import edu.wpi.first.wpilibj2.command.button.*;
-import frc.robot.commands.Drive.DriveCommand;
 import frc.robot.subsystems.DriveTrain.DriveBase;
-import frc.robot.subsystems.Shooter.Shooter;
-import frc.robot.subsystems.Funnel.Funnel;
-import frc.robot.subsystems.Intake.Intake;
-import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakePosition;
-import frc.robot.subsystems.Kicker.Kicker;
+import frc.util.HubTracker;
 
+
+/**
+ * This class is where the bulk of the robot should be declared. Since Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * subsystems, commands, and trigger mappings) should be declared here.
+ */
 public class RobotContainer {
-    public static CommandPS5Controller driveController;
-
+    public static Constants.autoConstats.TrenchLocations trenchLocations = new Constants.autoConstats.TrenchLocations();
     public static DriveBase driveBase;
-    public static Funnel funnel;
-    public static Intake intake;
-    public static Shooter shooter;
-    public static Kicker kicker;
+    public static Robot robot;
+    public static CommandPS5Controller driveController;
+    public static CommandXboxController driveXboxController;
+
 
     public RobotContainer() {
-        driveController = new CommandPS5Controller(0);
+        driveController = new CommandPS5Controller(1);
+        driveXboxController = new CommandXboxController(0);
 
         driveBase = new DriveBase();
-        funnel = new Funnel();
-        intake = new Intake();
-        shooter = new Shooter();
-        kicker = new Kicker();
-
-        // configureDriveBindings();
+    
+        configureDriveBindings();
+        
+        
     }
 
-    public void configureDriveBindings(){
-        // new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(new StartEndCommand(() ->
-        //     driveBase.setDefaultCommand(new DriveCommand(driveBase, driveXboxController)),
-        //     driveBase::removeDefaultCommand).ignoringDisable(true));
 
+    public void configureDriveBindings(){
+       new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(new StartEndCommand(() ->
+       driveBase.setDefaultCommand(new DriveCommand(driveBase, driveController)),
+       driveBase::removeDefaultCommand).ignoringDisable(true));
+       driveXboxController.b().onTrue(driveBase.resetOnlyDirection());//TODO: find the options button
+       driveXboxController.a().whileTrue(passTrench());
+       
+      
    }
+
+
+   public Command passTrench(){
+    Pose2d pose = driveBase.getPose();
+
+    if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
+        pose = FlippingUtil.flipFieldPose(driveBase.getPose());
+    }
+    if (pose.getY() >= 4){
+        if (pose.getX() <= 4.5){
+            return driveBase.findPath(trenchLocations.upRightTrench,2);
+        }
+        return driveBase.findPath(trenchLocations.upLeftTrench, 2);
+    }
+    if (pose.getX() <= 4.5){
+        return driveBase.findPath(trenchLocations.downRightTrench, 2);
+    }
+    return driveBase.findPath(trenchLocations.downLeftTrench, 2);
+   }
+   
+
+   public static boolean inRange(){
+    Pose2d pose = driveBase.getPose();
+    Pose2d hub = Constants.autoConstats.hub;
+    if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
+        pose = FlippingUtil.flipFieldPose(driveBase.getPose());
+        hub = FlippingUtil.flipFieldPose(hub);
+    }
+    double distanceFromHub = driveBase.getDistanceFromPoint2D(hub);
+
+    if (pose.getX() > 4.5) return false;
+    return distanceFromHub < Constants.autoConstats.maxRange;
+   }
+
+
+   public Command getInRange(){
+    Pose2d pose = driveBase.getPose();
+    if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
+        pose = FlippingUtil.flipFieldPose(driveBase.getPose());
+    }
+    if (pose.getY() >= 4.5){
+        return driveBase.findPath(Constants.autoConstats.topShoot).until(RobotContainer::inRange);
+    }
+    return driveBase.findPath(Constants.autoConstats.bottomShoot).until(RobotContainer::inRange);
+   }
+
+
+   
 }

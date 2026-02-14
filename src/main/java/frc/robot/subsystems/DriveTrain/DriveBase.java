@@ -318,6 +318,18 @@ public class DriveBase extends SubsystemBase {
 
     }
 
+    /*
+     * gets the length of a straight line from the current pose to the input pose in a flat world (double)
+     * 
+     * @param the point from which to calculate the distance
+     * 
+     * @return the distance from input point and current pose
+     */
+    public double getDistanceFromPoint2D(Pose2d point) {
+        return currentPose.getTranslation().getDistance(point.getTranslation());
+    } 
+
+
     /**
      * drives the robot relative to itself
      * @param chassisSpeeds the target chassis speeds of the robot

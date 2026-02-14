@@ -4,9 +4,8 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Unit;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -27,14 +26,21 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
+  public static final class autoConstats{
 
-  public static class FieldConstants{
-    public static final Translation2d HUB_POSITION = new Translation2d(); // TODO: FIX POSITION
-  }
+    static double maxRange = 5; //TODO: find this
+    static Pose2d hub = new Pose2d(4.611,4.046,new Rotation2d());
+    static Pose2d topShoot = new Pose2d(3.045,4.496,new Rotation2d());
+    static Pose2d bottomShoot = new Pose2d(3.045,3.495,new Rotation2d());
 
-  public static class CALCULATIONS{
-    public static <U extends Unit> boolean epsilonEquals(Measure<U> unit1, Measure<U> unit2, Measure<U> tolerance){
-      return Math.abs(unit1.baseUnitMagnitude() - unit2.baseUnitMagnitude()) <= tolerance.baseUnitMagnitude();
+  //TODO: find an update all the locations!!!
+    public static final class TrenchLocations{
+      Pose2d upRightTrench = new Pose2d(0,0,new Rotation2d(0,0));
+      Pose2d upLeftTrench = new Pose2d(0,0,new Rotation2d(0,0));
+      Pose2d downRightTrench = new Pose2d(0,0,new Rotation2d(0,0));
+      Pose2d downLeftTrench = new Pose2d(0,0,new Rotation2d(0,0));
+
     }
+
   }
 }
