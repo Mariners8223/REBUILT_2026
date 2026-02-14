@@ -18,6 +18,7 @@ public class DriveCommand extends Command {
     private final CommandPS5Controller controller;
     private static double MAX_FREE_WHEEL_SPEED;
     private static double MAX_OMEGA_RAD_PER_SEC;
+    private static boolean lockOn = false;
 
     public DriveCommand(DriveBase driveBase, CommandPS5Controller controller) {
         this.driveBase = driveBase;
@@ -59,6 +60,10 @@ public class DriveCommand extends Command {
         MAX_OMEGA_RAD_PER_SEC = MAX_FREE_WHEEL_SPEED / driveBaseRadius;
     }
 
+    public static double lockOn(boolean isLockedOn, double rightX){
+        return isLockedOn ? 0 : rightX;
+    }
+
 
     @Override
     public void execute() {
@@ -66,6 +71,10 @@ public class DriveCommand extends Command {
         // double R2Axis = (1 - (0.5 + controller.getR2Axis() / 2)) * (driveBase.MAX_FREE_WHEEL_SPEED - 1) + 1;
         // double R2Axis  = 1 - (0.5 + controller.getRightTriggerAxis() / 2);
         double R2Axis  = 1 - controller.getR2Axis();
+
+        if (controller.a().onTrue(null).getAsBoolean()){
+            lockOn = true;
+        }
 
         if(R2Axis <= 0.1) {
             R2Axis = 0.1;
@@ -80,7 +89,7 @@ public class DriveCommand extends Command {
         leftY *= R2Axis * MAX_FREE_WHEEL_SPEED;
         rightX *= R2Axis * MAX_OMEGA_RAD_PER_SEC;
 
-        ChassisSpeeds fieldRelativeSpeeds = new ChassisSpeeds(leftX, leftY, rightX);
+        ChassisSpeeds fieldRelativeSpeeds = new ChassisSpeeds(leftX, leftY, lockOn(lockOn, rightX));
 
         Rotation2d gyroAngle = driveBase.getRotation2d();
 

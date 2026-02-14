@@ -40,76 +40,12 @@ public class RobotContainer {
         kicker = new Kicker();
 
         // configureDriveBindings();
-        configureTestingBindings();
     }
 
     public void configureDriveBindings(){
-        new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(
-            new StartEndCommand(() ->driveBase.setDefaultCommand(new DriveCommand(driveBase, driveController)),
-            driveBase::removeDefaultCommand)
-            .ignoringDisable(true));
-    }
+        // new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(new StartEndCommand(() ->
+        //     driveBase.setDefaultCommand(new DriveCommand(driveBase, driveXboxController)),
+        //     driveBase::removeDefaultCommand).ignoringDisable(true));
 
-   public void configureTestingBindings(){
-        SmartDashboard.putNumber("Shooter Velocity", 0);
-
-        driveController.cross().toggleOnTrue(
-            intake.moveToPositionCommand(
-                intake.getCurrentState() == IntakePosition.Closed ?
-                IntakePosition.Open : IntakePosition.Closed
-            )
-        );
-        driveController.triangle().toggleOnTrue(
-            intake.spinRollersCommand()
-        );
-        driveController.options().onTrue(new InstantCommand(() -> intake.resetPositionMotorEncoder()));
-
-        driveController.square().toggleOnTrue(
-            funnel.funnelingCommand()
-        );
-        driveController.circle().toggleOnTrue(
-            funnel.toShooterCommand()
-        );
-
-        driveController.povUp().toggleOnTrue(
-            intake.moveToPositionCommand(IntakePosition.Closed).andThen(
-            Commands.parallel(
-                // intake.spinRollersCommand(),
-                funnel.toShooterCommand(),
-                kicker.setKickerCommand(0.6)
-            ))
-        );
-
-        driveController.povDown().toggleOnTrue(Commands.startEnd(
-            () -> shooter.setDutyCycle(0.1),
-            () -> shooter.setDutyCycle(0))
-        );
-
-        driveController.L1().toggleOnTrue(
-                Commands.run(() -> shooter.setVelocity(RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))))
-                .until(() -> Constants.CALCULATIONS.epsilonEquals(
-                        shooter.getShooterVelocity(),
-                        RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0)),
-                        RPM.of(60))
-                ).
-                andThen(
-                    kicker.setKickerCommand(0.4)
-                )
-        );
-
-        driveController.R1().toggleOnTrue(
-            Commands.sequence(
-                Commands.run(() -> shooter.setVelocity(RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))))
-                .until(() -> Constants.CALCULATIONS.epsilonEquals(
-                        shooter.getShooterVelocity(),
-                        RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0)),
-                        RPM.of(60))
-                ).withTimeout(1),
-                Commands.parallel(
-                    kicker.setKickerCommand(0.4),
-                    funnel.toShooterCommand()
-                )
-            )
-        );
    }
 }
