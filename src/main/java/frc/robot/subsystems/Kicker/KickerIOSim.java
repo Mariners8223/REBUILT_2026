@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems.Kicker;
 
-import static edu.wpi.first.units.Units.RPM;
-
 import edu.wpi.first.math.system.plant.DCMotor;
 import frc.util.MarinersController.MarinersSimMotor;
 
@@ -28,6 +26,6 @@ public class KickerIOSim implements KickerIO {
 
     public void update(KickerInputs inputs){
         inputs.dutyCycle = 0;
-        inputs.velocity = RPM.zero();
+        inputs.velocity = 0;
     }
 }

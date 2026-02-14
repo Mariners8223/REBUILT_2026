@@ -1,6 +1,7 @@
 package frc.robot.subsystems.Intake;
 
 import static edu.wpi.first.units.Units.Rotation;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import edu.wpi.first.units.measure.Angle;
 import frc.util.MarinersController.MarinersController.ControlMode;
@@ -50,8 +51,8 @@ public class IntakeIOSim implements IntakeIO
 
     public void Update(IntakeInputs inputs)
     {
-         inputs.currentPosition = getCurrentPosition();
-        inputs.positionMotorSpeed = RPM.of(positionMotor.getVelocity());
-        inputs.rollersMotorSpeed = RPM.of(rollersMotor.getVelocity());
+        inputs.currentPosition = getCurrentPosition();
+        inputs.positionMotorSpeed = RotationsPerSecond.of(positionMotor.getVelocity()).in(RPM);
+        inputs.rollersMotorSpeed = RotationsPerSecond.of(rollersMotor.getVelocity()).in(RPM);
     }
 }

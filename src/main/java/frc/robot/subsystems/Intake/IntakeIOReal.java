@@ -3,6 +3,8 @@ package frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakePosition;
 import frc.util.MarinersController.MarinersTalonFX;
 import static edu.wpi.first.units.Units.Rotation;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+
 import org.littletonrobotics.junction.Logger;
 import static edu.wpi.first.units.Units.RPM;
 import edu.wpi.first.units.measure.Angle;
@@ -70,8 +72,8 @@ public class IntakeIOReal implements IntakeIO{
     public void Update(IntakeInputs inputs)
     {
         inputs.currentPosition = getCurrentPosition();
-        inputs.positionMotorSpeed = RPM.of(positionMotor.getVelocity());
-        inputs.rollersMotorSpeed = RPM.of(rollersMotor.getVelocity());
+        inputs.positionMotorSpeed = RotationsPerSecond.of(positionMotor.getVelocity()).in(RPM);
+        inputs.rollersMotorSpeed = RotationsPerSecond.of(rollersMotor.getVelocity()).in(RPM);
         inputs.intakeState = IntakePosition.findNearestPosition(inputs.currentPosition);
 
         Logger.recordOutput("Setpoint", positionMotor.getSetpoint());

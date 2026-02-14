@@ -7,15 +7,13 @@ package frc.robot.subsystems.Shooter;
 import org.littletonrobotics.junction.AutoLog;
 
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.units.measure.AngularVelocity;
-import edu.wpi.first.units.measure.LinearVelocity;
 
 /** Add your docs here. */
 public interface ShooterIO {
     @AutoLog
     class ShooterInputs{
-        AngularVelocity shooterVelocity; // RPM
-        LinearVelocity shooterLinearVelocity; // m/s
+        double shooterVelocity; // RPM
+        double shooterLinearVelocity; // m/s
         double feedForward;
 
         Pose3d pose;

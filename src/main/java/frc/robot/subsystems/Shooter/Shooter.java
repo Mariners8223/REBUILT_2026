@@ -5,6 +5,7 @@
 package frc.robot.subsystems.Shooter;
 
 import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Minute;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Volts;
@@ -28,10 +29,10 @@ public class Shooter extends SubsystemBase {
     }
 
     public AngularVelocity getShooterVelocity(){
-        return inputs.shooterVelocity;
+        return RotationsPerSecond.of(io.getVelocity());
     }
     public LinearVelocity getShooterLinearVelocity(){
-        return inputs.shooterLinearVelocity;
+        return MetersPerSecond.of(inputs.shooterLinearVelocity);
     }
 
     public void stopShooter(){

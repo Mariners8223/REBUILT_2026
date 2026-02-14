@@ -4,7 +4,6 @@ import org.littletonrobotics.junction.AutoLog;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.units.measure.AngularVelocity;
 import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakePosition;
 
 public interface IntakeIO
@@ -14,8 +13,8 @@ public interface IntakeIO
     {
         Pose3d pose;
         Angle currentPosition;
-        AngularVelocity positionMotorSpeed;//RPM
-        AngularVelocity rollersMotorSpeed;//RPM
+        double positionMotorSpeed;//RPM
+        double rollersMotorSpeed;//RPM
 
         IntakePosition intakeState;
     }

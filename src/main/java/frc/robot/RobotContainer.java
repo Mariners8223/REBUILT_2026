@@ -4,10 +4,12 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.RPM;
 
 import java.util.function.BiFunction;
 
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -54,6 +56,19 @@ public class RobotContainer {
         configureDriveSysidBindings();
     }
 
+    public Distance distanceFromHub(){
+        return Meters.of(
+            driveBase.getPose().getTranslation().getDistance(Constants.FieldConstants.HUB_POSITION)
+        );
+    }
+    public Distance distanceFromHubWithVelocity(){
+        Distance distance = distanceFromHub();
+        double chassisVelocityX = driveBase.getAbsoluteChassisSpeeds().vxMetersPerSecond;
+        double chassisVelocityY = driveBase.getAbsoluteChassisSpeeds().vyMetersPerSecond;
+
+        return Meters.zero();
+    }
+
     public void configureDriveBindings(){
         new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(
             new StartEndCommand(() ->driveBase.setDefaultCommand(new DriveCommand(driveBase, driveController)),
@@ -77,7 +92,6 @@ public class RobotContainer {
                 return (isDynamic, direction) -> new InstantCommand();
         }
     }
-
 
 
     public void configureDriveSysidBindings(){
@@ -132,9 +146,11 @@ public class RobotContainer {
             Commands.parallel(
                 // intake.spinRollersCommand(),
                 // shooter.setDutyCycleCommand(SmartDashboard.getNumber("Shooter Duty Cycle", 0.2)),
-                shooter.setDutyCycleCommand(0.8),
-                // funnel.toShooterCommand(),
-                kicker.setKickerCommand(0.5)
+                shooter.setDutyCycleCommand(0.75),
+                // funnel.toShooterCommand(),a[\]
+
+
+                kicker.setKickerCommand(0.2)
             )
         );
 

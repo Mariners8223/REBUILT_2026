@@ -6,13 +6,11 @@ package frc.robot.subsystems.Kicker;
 
 import org.littletonrobotics.junction.AutoLog;
 
-import edu.wpi.first.units.measure.AngularVelocity;
-
 /** Add your docs here. */
 public interface KickerIO {
     @AutoLog
     public class KickerInputs{
-        AngularVelocity velocity; // RPM
+        double velocity; // RPM
         double dutyCycle;
     }
 
