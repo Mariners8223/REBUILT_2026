@@ -8,8 +8,7 @@ public class ClimbConstants
     public enum Heights{
         RESET(START_POSITION),
         EXTENDED(0.63),
-        IN_AIR_TELEOP(0.50),
-        IN_AIR_AUTO(0.50);
+        IN_AIR_AUTO(0.30);
 
         private final double height;
 
