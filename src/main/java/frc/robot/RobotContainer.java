@@ -44,8 +44,10 @@ public class RobotContainer {
 
         driveController.cross().onTrue(climb.toPositionCommand(Heights.RESET));
         driveController.triangle().onTrue(climb.toPositionCommand(Heights.EXTENDED));
+        driveController.circle().whileTrue(new RunHookToHeight(climb, Heights.EXTENDED, 0.1));
 
         driveController.R2().whileTrue(new RunHookToHeight(climb, Heights.RESET, 1));
+        driveController.L2().whileTrue(new RunHookToHeight(climb, Heights.IN_AIR_AUTO, 1));
 
         driveController.R2().whileTrue(
             new RunHookToHeight(climb, Heights.RESET, 1)
