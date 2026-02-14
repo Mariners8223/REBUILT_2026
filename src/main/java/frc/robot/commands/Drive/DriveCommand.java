@@ -19,7 +19,7 @@ public class DriveCommand extends Command {
     private final CommandPS5Controller controller;
     private static double MAX_FREE_WHEEL_SPEED;
     private static double MAX_OMEGA_RAD_PER_SEC;
-    private static boolean lockOn = false;
+    private boolean lockOn;
 
     public DriveCommand(DriveBase driveBase, CommandPS5Controller controller) {
         this.driveBase = driveBase;
@@ -66,6 +66,9 @@ public class DriveCommand extends Command {
         MAX_OMEGA_RAD_PER_SEC = MAX_FREE_WHEEL_SPEED / driveBaseRadius;
     }
 
+    public static double lockOn(boolean isLockedOn, double rightX){
+        return isLockedOn ? 0 : rightX;
+    }
 
 
     @Override
