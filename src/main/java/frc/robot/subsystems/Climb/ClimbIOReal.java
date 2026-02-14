@@ -21,7 +21,7 @@ public class ClimbIOReal implements ClimbIO
         motor.getMeasurements().setGearRatio(ClimbConstants.ROTATIONS_TO_METERS * ClimbConstants.GEAR_RATIO);
         motor.setMotorInverted(ClimbConstants.IS_INVERTED);
 
-        motor.enableSoftLimits(ClimbConstants.SOFT_MINIMUM, ClimbConstants.SOFT_MAXIMUM);
+        // motor.enableSoftLimits(ClimbConstants.SOFT_MINIMUM, ClimbConstants.SOFT_MAXIMUM);
         motor.startPIDTuning();
         return motor;
     }
