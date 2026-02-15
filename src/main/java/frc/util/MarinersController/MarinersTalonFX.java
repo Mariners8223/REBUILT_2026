@@ -228,7 +228,7 @@ public class MarinersTalonFX extends MarinersController {
         motorOutputConfig.PeakReverseDutyCycle = -Math.abs(min / 12);
 
         config.Voltage.PeakForwardVoltage = max;
-        config.Voltage.PeakReverseVoltage = -Math.abs(min);
+        config.Voltage.PeakReverseVoltage = Math.abs(min);
 
         StatusCode error = motor.getConfigurator().apply(config);
         reportError("Error setting max and min output", error);

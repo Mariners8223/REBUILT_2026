@@ -28,7 +28,7 @@ public class ShooterIOReal implements ShooterIO {
     //#region Configuration
     public void configureShooterMotors(){
         leadMotor = new MarinersTalonFX(
-            "Shooter Motor 1", ShooterConstants.MOTOR_CONSTANTS.CONTROLLER_LOCATION,
+            "Shooter Motor", ShooterConstants.MOTOR_CONSTANTS.CONTROLLER_LOCATION,
             ShooterConstants.MOTOR_CONSTANTS.LEAD_MOTOR_ID, ShooterConstants.MOTOR_CONSTANTS.PID,
             ShooterConstants.MOTOR_CONSTANTS.GEAR_RATIO
             );
@@ -38,7 +38,9 @@ public class ShooterIOReal implements ShooterIO {
         leadMotor.setStaticFeedForward(ShooterConstants.MOTOR_CONSTANTS.Ks);
         leadMotor.setFeedForward(ShooterConstants.MOTOR_CONSTANTS.Kv);
 
-        leadMotor.startPIDTuning();
+        // leadMotor.setMaxMinOutput(12, 0);
+
+        // leadMotor.startPIDTuning();
 
         MarinersTalonFX[] followMotors = new MarinersTalonFX[3];
         for (int i = 0; i < followMotors.length; i++){

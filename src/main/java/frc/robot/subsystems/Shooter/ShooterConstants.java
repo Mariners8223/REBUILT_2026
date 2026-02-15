@@ -32,16 +32,12 @@ public class ShooterConstants {
             0.25,
             0.7,
             0.1,
-            0,
-            0,
-            0,
-            0,
             0
         );
 
-        public static final double Ks = 0.10794;
-        public static final double Kv = 0.11656;
-        public static final double Ka = 0.01793;
+        public static final double Ks = 0.21571;
+        public static final double Kv = 0.11496;
+        public static final double Ka = 0.042404;
 
         public static final double GEAR_RATIO = 1;
         public static final double GEAR_REDUCTION = 1 / GEAR_RATIO;

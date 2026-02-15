@@ -7,7 +7,10 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import org.littletonrobotics.junction.Logger;
 import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.Radian;
+
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.util.MarinersController.MarinersController.ControlMode;
 
 public class IntakeIOReal implements IntakeIO{
@@ -25,13 +28,14 @@ public class IntakeIOReal implements IntakeIO{
         motor = new MarinersTalonFX("position motor", IntakeConstants.PositionMotor.CONTROLLER_LOCATION,
         IntakeConstants.PositionMotor.MOTOR_ID, IntakeConstants.PositionMotor.PID_GAINS, IntakeConstants.PositionMotor.GEAR_RATIO);
         motor.setMotorInverted(IntakeConstants.PositionMotor.IS_INVERTED);
-        motor.enableSoftLimits(IntakeConstants.PositionMotor.SOFT_MINIMUM, IntakeConstants.PositionMotor.SOFT_MAXIMUM);
+        // motor.enableSoftLimits(IntakeConstants.PositionMotor.SOFT_MINIMUM, IntakeConstants.PositionMotor.SOFT_MAXIMUM);
         motor.setMotorIdleMode(true);
         // PID and Profile
-        motor.setMaxMinOutput(4, -2);
+        // motor.setMaxMinOutput(4, -2);
         motor.setProfile(IntakeConstants.PositionMotor.PROFILE);
-        motor.startPIDTuning();
+        // motor.startPIDTuning();
 
+        SmartDashboard.putString("Intake PID", motor.getPIDF().toString());
         return motor;
     }
     private MarinersTalonFX configureRollersMotor()
@@ -62,7 +66,7 @@ public class IntakeIOReal implements IntakeIO{
 
     public void resetPositionMotorEncoder()
     {
-        positionMotor.setMotorEncoderPosition(IntakeConstants.PositionMotor.IntakePosition.Closed.getAngle().in(Rotation));
+        positionMotor.setMotorEncoderPosition(IntakeConstants.PositionMotor.IntakePosition.Open.getAngle().in(Rotation));
     }
 
     public void startPIDTuning(){

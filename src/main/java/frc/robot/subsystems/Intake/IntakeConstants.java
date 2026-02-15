@@ -63,11 +63,9 @@ public class IntakeConstants
         350,
         50,
         0,
-        0.1,
-        POSITION_TOLERANCE.in(Rotation),
-        0);
+        0.1);
         public static final TrapezoidProfile PROFILE = new TrapezoidProfile(
-            new Constraints(4, 0.8)
+            new Constraints(2, 0.8)
         );
     }
 
