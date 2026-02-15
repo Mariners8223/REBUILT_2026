@@ -7,7 +7,6 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import org.littletonrobotics.junction.Logger;
 import static edu.wpi.first.units.Units.RPM;
-import static edu.wpi.first.units.Units.Radian;
 
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;

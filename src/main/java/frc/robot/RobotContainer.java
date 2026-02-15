@@ -16,11 +16,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.*;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.Drive.DriveCommand;
+import frc.robot.commands.FunnelCommands.Funnelling;
+import frc.robot.commands.FunnelCommands.ToShooter;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.DriveTrain.DriveBaseSYSID;
 import frc.robot.subsystems.Shooter.Shooter;
@@ -161,12 +164,13 @@ public class RobotContainer {
         driveController.cross().onTrue(intake.moveToPositionCommand(IntakePosition.Closed));
         driveController.circle().onTrue(intake.moveToPositionCommand(IntakePosition.Open));
 
-
         driveController.triangle().toggleOnTrue(
             intake.spinRollersCommand()
         );
         driveController.options().onTrue(new InstantCommand(() -> intake.resetPositionMotorEncoder()));
 
+        driveController.L2().whileTrue(new ParallelCommandGroup(intake.spinRollersCommand(), 
+            new Funnelling(funnel)));
         // driveController.square().toggleOnTrue(
         //     funnel.funnelingCommand()
         // );
