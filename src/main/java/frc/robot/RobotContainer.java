@@ -9,7 +9,7 @@ import frc.robot.commands.Drive.MinorAdjust.AdjustmentDirection;
 import frc.robot.subsystems.Climb.Climb;
 import frc.robot.subsystems.Climb.ClimbConstants.Heights;
 import frc.robot.subsystems.DriveTrain.DriveBase;
-
+import frc.robot.subsystems.Climb.ClimbConstants;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -42,29 +42,13 @@ public class RobotContainer {
         driveController.povDownLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_LEFT));
         driveController.povDownRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_RIGHT));
 
-        driveController.cross().onTrue(climb.toPositionCommand(Heights.RESET));
+        
         driveController.triangle().onTrue(climb.toPositionCommand(Heights.EXTENDED));
-        driveController.circle().whileTrue(new RunHookToHeight(climb, Heights.EXTENDED, 0.1));
 
         driveController.R2().whileTrue(new RunHookToHeight(climb, Heights.RESET, 1));
         driveController.L2().whileTrue(new RunHookToHeight(climb, Heights.IN_AIR_AUTO, 1));
-
-        driveController.R2().whileTrue(
-            new RunHookToHeight(climb, Heights.RESET, 1)
-        );
-
-        driveController.R1().whileTrue(
-            Commands.startEnd(
-                () -> climb.setMotorPower(0.1),
-                () -> climb.setMotorPower(0),
-                climb)
-        );
-        driveController.L1().whileTrue(
-            Commands.startEnd(
-                () -> climb.setMotorPower(-0.1),
-                () -> climb.setMotorPower(0),
-                climb)
-        );
+        
+        driveController.square().whileTrue(new RunHookToHeight(climb, Heights.EXTENDED, ClimbConstants.GETTING_DOWN_DUTY_CYCLE));
 
         driveController.options().onTrue(new InstantCommand(() -> climb.resetPosition()));
    }
