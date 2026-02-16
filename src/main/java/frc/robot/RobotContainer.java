@@ -21,11 +21,16 @@ import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.*;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.commands.Climb.RunHookToHeight;
 import frc.robot.commands.Drive.DriveCommand;
+import frc.robot.commands.Drive.MinorAdjust;
+import frc.robot.commands.Drive.MinorAdjust.AdjustmentDirection;
 import frc.robot.commands.FunnelCommands.Funnelling;
-import frc.robot.commands.FunnelCommands.ToShooter;
 import frc.robot.subsystems.DriveTrain.DriveBase;
-import frc.robot.subsystems.Climb.ClimbConstants;import frc.robot.subsystems.DriveTrain.DriveBaseSYSID;
+import frc.robot.subsystems.Climb.Climb;
+import frc.robot.subsystems.Climb.ClimbConstants;
+import frc.robot.subsystems.Climb.ClimbConstants.Heights;
+import frc.robot.subsystems.DriveTrain.DriveBaseSYSID;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterSysID;
 import frc.robot.subsystems.Funnel.Funnel;
@@ -41,6 +46,7 @@ public class RobotContainer {
     public static Intake intake;
     public static Shooter shooter;
     public static Kicker kicker;
+    public static Climb climb;
 
     public static DriveBaseSYSID driveSysID;
     public static ShooterSysID shooterSysID;
@@ -77,9 +83,6 @@ public class RobotContainer {
 
         return Meters.zero();
     }
-        configureClimbTestBindings();
-    }
-
 
     public void configureDriveBindings(){
         new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(
@@ -173,7 +176,7 @@ public class RobotContainer {
         );
         driveController.options().onTrue(new InstantCommand(() -> intake.resetPositionMotorEncoder()));
 
-        driveController.L2().whileTrue(new ParallelCommandGroup(intake.spinRollersCommand(), 
+        driveController.L2().whileTrue(new ParallelCommandGroup(intake.spinRollersCommand(),
             new Funnelling(funnel)));
         // driveController.square().toggleOnTrue(
         //     funnel.funnelingCommand()
@@ -234,12 +237,12 @@ public class RobotContainer {
         driveController.povDownLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_LEFT));
         driveController.povDownRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_RIGHT));
 
-        
+
         driveController.triangle().onTrue(climb.toPositionCommand(Heights.EXTENDED));
 
         driveController.R2().whileTrue(new RunHookToHeight(climb, Heights.RESET, 1));
         driveController.L2().whileTrue(new RunHookToHeight(climb, Heights.IN_AIR_AUTO, 1));
-        
+
         driveController.square().whileTrue(new RunHookToHeight(climb, Heights.EXTENDED, ClimbConstants.GETTING_DOWN_DUTY_CYCLE));
 
         driveController.options().onTrue(new InstantCommand(() -> climb.resetPosition()));

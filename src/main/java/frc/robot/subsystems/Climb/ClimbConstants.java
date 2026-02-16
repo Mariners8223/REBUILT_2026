@@ -27,7 +27,7 @@ public class ClimbConstants
     public static final double GEAR_RATIO = 45;
     public static final double ROTATIONS_TO_METERS = 1/0.1324;
     public static final PIDFGains PID = new PIDFGains(1000, 40, 0, 0);
-    
+
     public static final double CLIMB_TOLERANCE = 0.01;
     public static final double START_POSITION = 0.44; // From bottom of hook to floor
     public static final double STALL_CURRENT = 3;
@@ -35,7 +35,7 @@ public class ClimbConstants
 
     public static final double SOFT_MINIMUM = START_POSITION - 0.1;
     public static final double SOFT_MAXIMUM = SOFT_MINIMUM + 0.27;
-    
+
     public static final double MOMENT_OF_INERTIA = 1;
     public static final double X_ON_ROBOT = 0;
     public static final double Y_ON_ROBOT = 0;

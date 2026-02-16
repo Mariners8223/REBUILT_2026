@@ -49,7 +49,6 @@ public class DriveCommand extends Command {
 
 
         MAX_OMEGA_RAD_PER_SEC = MAX_FREE_WHEEL_SPEED / driveBaseRadius;
-        MAX_OMEGA_RAD_PER_SEC = MAX_FREE_WHEEL_SPEED / driveBaseRadius;
     }
 
     public static void normalSpeed(){
@@ -57,7 +56,6 @@ public class DriveCommand extends Command {
 
         double driveBaseRadius = Math.hypot(DISTANCE_BETWEEN_WHEELS_HORIZONTAL / 2, DISTANCE_BETWEEN_WHEELS_VERTICAL / 2);
 
-        MAX_OMEGA_RAD_PER_SEC = MAX_FREE_WHEEL_SPEED / driveBaseRadius;
         MAX_OMEGA_RAD_PER_SEC = MAX_FREE_WHEEL_SPEED / driveBaseRadius;
     }
 

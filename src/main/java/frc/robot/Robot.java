@@ -78,8 +78,6 @@ public class Robot extends LoggedRobot {
   public void autonomousInit() {
     }
 
-
-
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {}
