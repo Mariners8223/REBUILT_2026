@@ -28,11 +28,11 @@ public class RobotContainer {
         driveBase = new DriveBase();
         climb = new Climb();
 
-        configureDriveBindings();
+        configureClimbTestBindings();
     }
 
 
-    public void configureDriveBindings(){
+    public void configureClimbTestBindings(){
         driveController.povRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.RIGHT));
         driveController.povLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.LEFT));
         driveController.povUp().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.FORWARD));
