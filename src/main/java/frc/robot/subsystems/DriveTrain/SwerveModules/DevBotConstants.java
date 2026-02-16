@@ -49,8 +49,7 @@ public enum DevBotConstants {
         WHEEL_RADIUS_METERS,
         MAX_WHEEL_LINEAR_VELOCITY,
         0.9,
-        DCMotor.getFalcon500(1),
-        DCMotor.getFalcon500(1),
+        DCMotor.getFalcon500(2),
         DRIVE_GEAR_RATIO,
         DRIVE_MOTOR_CURRENT_LIMIT,
         1);
