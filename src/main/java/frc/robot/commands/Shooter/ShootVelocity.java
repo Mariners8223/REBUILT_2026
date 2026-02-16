@@ -5,11 +5,15 @@
 package frc.robot.commands.Shooter;
 
 import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
 import java.util.function.Supplier;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -40,6 +44,8 @@ public class ShootVelocity extends Command {
     AngularVelocity requiredSpeed = velocitySupplier.get();
     RPMLast = shooter.getShooterVelocity();
 
+    System.out.println("Fall");
+    Logger.recordOutput("Shooter/Fall", (shooter.getShooterAcceleration().unaryMinus().gte(ShooterConstants.FALL_ACCELERATION)));
     shooter.setVelocity(requiredSpeed);
   }
 
@@ -47,10 +53,12 @@ public class ShootVelocity extends Command {
   @Override
   public void execute() {
     shooter.setVelocity(velocitySupplier.get());
+    Logger.recordOutput("Shooter/Fall", (shooter.getShooterAcceleration().unaryMinus().gte(ShooterConstants.FALL_ACCELERATION)));
 
-    AngularVelocity velocityDifference = shooter.getShooterVelocity().minus(RPMLast);
-    if (velocityDifference.lte(ShooterConstants.SHOOTING_VELOCITY_FALL.unaryMinus())){
-      double boost = MathUtil.clamp(Math.abs(velocityDifference.in(RotationsPerSecond)) * ShooterConstants.FEED_FORWARD_SHOOTER_BOOST,
+    // AngularVelocity velocityDifference = shooter.getShooterVelocity().minus(RPMLast);
+    // if (velocityDifference.lte(ShooterConstants.SHOOTING_VELOCITY_FALL.unaryMinus())){
+    if (shooter.getShooterAcceleration().unaryMinus().gte(ShooterConstants.FALL_ACCELERATION)){
+      double boost = MathUtil.clamp(shooter.getShooterAcceleration().unaryMinus().in(RotationsPerSecondPerSecond) * ShooterConstants.FEED_FORWARD_SHOOTER_BOOST,
                                 0.0,
                                 ShooterConstants.MAX_FEED_FORWARD_BOOST);
 

@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Unit;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularAcceleration;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearAcceleration;
@@ -29,7 +30,7 @@ public class ShooterConstants {
     public static class MOTOR_CONSTANTS{
         public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
         public static final PIDFGains PID = new PIDFGains(
-            0.25,
+            0.5,
             0.7,
             0.1,
             0
@@ -60,10 +61,11 @@ public class ShooterConstants {
     }
 
     public static double LOW_PASS_FILTER_ALPHA = 0.3;
-    public static double FEED_FORWARD_SHOOTER_BOOST = 0.2;
-    public static double MAX_FEED_FORWARD_BOOST =  2;
-    public static AngularVelocity SHOOTING_VELOCITY_FALL = RotationsPerSecond.of(4);
-    public static Time FEED_FORWARD_BOOST_TIME = Millisecond.of(150);
+    public static double FEED_FORWARD_SHOOTER_BOOST = 0.01;
+    public static double MAX_FEED_FORWARD_BOOST = 0.8;
+    public static AngularVelocity SHOOTING_VELOCITY_FALL = RotationsPerSecond.of(2);
+    public static final AngularAcceleration FALL_ACCELERATION = RotationsPerSecondPerSecond.of(20);
+    public static Time FEED_FORWARD_BOOST_TIME = Millisecond.of(30);
 
     public static final Distance SHOOTER_HEIGHT = Centimeter.of(40);
     public static final Angle SHOOTER_ANGLE = Degree.of(75);

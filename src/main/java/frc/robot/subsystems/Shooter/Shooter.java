@@ -8,9 +8,12 @@ import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Minute;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
 import org.littletonrobotics.junction.Logger;
+
+import edu.wpi.first.units.measure.AngularAcceleration;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearVelocity;
@@ -33,6 +36,9 @@ public class Shooter extends SubsystemBase {
     }
     public LinearVelocity getShooterLinearVelocity(){
         return MetersPerSecond.of(inputs.shooterLinearVelocity);
+    }
+    public AngularAcceleration getShooterAcceleration(){
+        return RotationsPerSecondPerSecond.of(io.getAcceleration());
     }
 
     public void stopShooter(){

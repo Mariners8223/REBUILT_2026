@@ -39,6 +39,9 @@ public class ShooterIOSim implements ShooterIO{
     public double getVelocity(){
         return flywheel.getAngularVelocityRPM();
     }
+    public double getAcceleration(){
+        return flywheel.getAngularAccelerationRadPerSecSq();
+    }
     public void setVelocity(double targetVelocity){
         flywheel.setInput(targetVelocity);
     }

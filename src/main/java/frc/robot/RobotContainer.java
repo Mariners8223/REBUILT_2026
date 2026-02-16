@@ -18,8 +18,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.*;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.Climb.RunHookToHeight;
@@ -27,6 +29,7 @@ import frc.robot.commands.Drive.DriveCommand;
 import frc.robot.commands.Drive.MinorAdjust;
 import frc.robot.commands.Drive.MinorAdjust.AdjustmentDirection;
 import frc.robot.commands.FunnelCommands.Funnelling;
+import frc.robot.commands.Shooter.ShootVelocity;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.Climb.Climb;
 import frc.robot.subsystems.Climb.ClimbConstants;
@@ -171,19 +174,48 @@ public class RobotContainer {
 
 
     public void configureTestingBindings(){
-        driveController.R1().onTrue(intake.moveToPositionCommand(IntakePosition.Closed)); 
-        driveController.L1().onTrue(intake.moveToPositionCommand(IntakePosition.Open)); 
+        SmartDashboard.putNumber("Shooter Velocity", 0);
 
-        driveController.triangle().toggleOnTrue(
-            Commands.parallel(funnel.funnelingCommand(), intake.spinRollersCommand())
-        );
+        // driveController.R1().onTrue(intake.moveToPositionCommand(IntakePosition.Closed)); 
+        // driveController.L1().onTrue(intake.moveToPositionCommand(IntakePosition.Open)); 
+
+        // driveController.triangle().toggleOnTrue(
+        //     Commands.parallel(funnel.funnelingCommand(), intake.spinRollersCommand())
+        // );
+
+        
 
         driveController.cross().toggleOnTrue(
             Commands.parallel(
-                funnel.toShooterCommand(),
-                kicker.setKickerCommand(0.3),
-                shooter.setDutyCycleCommand(0.3)
+                Commands.run(() -> shooter.setVelocity(RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))), shooter),
+                Commands.sequence(
+                    new WaitCommand(3),
+                    Commands.parallel(
+                        funnel.toShooterCommand(),
+                        kicker.setKickerCommand(0.3)
+                    )
+                )
             )
+        );
+
+        driveController.povDown().onTrue(new ShootVelocity(shooter, () -> RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))));
+
+        driveController.square().toggleOnTrue(
+            Commands.parallel(
+                new ShootVelocity(shooter, () -> RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))),
+                Commands.sequence(
+                    new WaitCommand(3),
+                    Commands.parallel(
+                        funnel.toShooterCommand(),
+                        kicker.setKickerCommand(0.3)
+                    )
+                )
+            )
+        );
+
+        driveController.povUp().onTrue(Commands.parallel(
+            new InstantCommand(() -> shooter.boostFeedForward(1)),
+            new PrintCommand("Boost"))
         );
         // driveController.cross().toggleOnTrue();
    }

@@ -11,6 +11,7 @@ import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import edu.wpi.first.units.measure.LinearVelocity;
+import frc.util.PIDFGains;
 import frc.util.MarinersController.MarinersController;
 import frc.util.MarinersController.MarinersTalonFX;
 import frc.util.MarinersController.MarinersController.ControlMode;
@@ -38,9 +39,11 @@ public class ShooterIOReal implements ShooterIO {
         leadMotor.setStaticFeedForward(ShooterConstants.MOTOR_CONSTANTS.Ks);
         leadMotor.setFeedForward(ShooterConstants.MOTOR_CONSTANTS.Kv);
 
+        leadMotor.setCurrentLimits(80, 110);
+
         // leadMotor.setMaxMinOutput(12, 0);
 
-        // leadMotor.startPIDTuning();
+        leadMotor.startPIDTuning();
 
         MarinersTalonFX[] followMotors = new MarinersTalonFX[3];
         for (int i = 0; i < followMotors.length; i++){
@@ -60,6 +63,9 @@ public class ShooterIOReal implements ShooterIO {
     public double getVelocity(){
         return leadMotor.getVelocity();
     }
+    public double getAcceleration(){
+        return leadMotor.getAcceleration();
+    }
     public void setVelocity(double targetVelocity){
         leadMotor.setReference(targetVelocity, ControlMode.Velocity);
     }
@@ -70,10 +76,13 @@ public class ShooterIOReal implements ShooterIO {
         leadMotor.setReference(targetDutyCycle, ControlMode.DutyCycle);
     }
     public void feedForwardBoost(double boost){
-        leadMotor.setStaticFeedForward(leadMotor.getPIDF().getF() + boost);
+        PIDFGains newGains = new PIDFGains(leadMotor.getPIDF().getP(), leadMotor.getPIDF().getI(), leadMotor.getPIDF().getD(),
+        leadMotor.getPIDF().getF() + boost);
+        leadMotor.setPIDF(newGains);
+        // leadMotor.setFeedForward(leadMotor.getPIDF().getF() + boost);
     }
     public void resetFeedForward(){
-        leadMotor.setStaticFeedForward(ShooterConstants.MOTOR_CONSTANTS.PID.getF());
+        leadMotor.setPIDF(ShooterConstants.MOTOR_CONSTANTS.PID);
     }
 
 
