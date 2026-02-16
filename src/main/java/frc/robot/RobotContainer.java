@@ -4,6 +4,7 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.RPM;
 
@@ -170,67 +171,21 @@ public class RobotContainer {
 
 
     public void configureTestingBindings(){
-        SmartDashboard.putNumber("Shooter Duty Cycle", 0);
-        SmartDashboard.putNumber("Kicker Duty Cycle", 0);
-
-        driveController.cross().onTrue(intake.moveToPositionCommand(IntakePosition.Closed));
-        driveController.circle().onTrue(intake.moveToPositionCommand(IntakePosition.Open));
+        driveController.R1().onTrue(intake.moveToPositionCommand(IntakePosition.Closed)); 
+        driveController.L1().onTrue(intake.moveToPositionCommand(IntakePosition.Open)); 
 
         driveController.triangle().toggleOnTrue(
-            intake.spinRollersCommand()
+            Commands.parallel(funnel.funnelingCommand(), intake.spinRollersCommand())
         );
-        driveController.options().onTrue(new InstantCommand(() -> intake.resetPositionMotorEncoder()));
 
-        driveController.L2().whileTrue(new ParallelCommandGroup(intake.spinRollersCommand(),
-            new Funnelling(funnel)));
-        // driveController.square().toggleOnTrue(
-        //     funnel.funnelingCommand()
-        // );
-        // driveController.circle().toggleOnTrue(
-        //     funnel.toShooterCommand()
-        // );
-
-        driveController.povUp().toggleOnTrue(
-            // intake.moveToPositionCommand(IntakePosition.Open).andThen(
+        driveController.cross().toggleOnTrue(
             Commands.parallel(
-                // intake.spinRollersCommand(),
-                // funnel.toShooterCommand(),
-                shooter.setDutyCycleCommand(0.9),
-                kicker.setKickerCommand(0.8)
+                funnel.toShooterCommand(),
+                kicker.setKickerCommand(0.3),
+                shooter.setDutyCycleCommand(0.3)
             )
         );
-
-        driveController.povDown().toggleOnTrue(Commands.startEnd(
-            () -> shooter.setDutyCycle(0.1),
-            () -> shooter.setDutyCycle(0))
-        );
-
-        driveController.L1().toggleOnTrue(
-                Commands.run(() -> shooter.setVelocity(RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))))
-                .until(() -> Constants.CALCULATIONS.epsilonEquals(
-                        shooter.getShooterVelocity(),
-                        RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0)),
-                        RPM.of(60))
-                ).
-                andThen(
-                    kicker.setKickerCommand(0.4)
-                )
-        );
-
-        driveController.R1().toggleOnTrue(
-            Commands.sequence(
-                Commands.run(() -> shooter.setVelocity(RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))))
-                .until(() -> Constants.CALCULATIONS.epsilonEquals(
-                        shooter.getShooterVelocity(),
-                        RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0)),
-                        RPM.of(60))
-                ).withTimeout(1),
-                Commands.parallel(
-                    kicker.setKickerCommand(0.4),
-                    funnel.toShooterCommand()
-                )
-            )
-        );
+        // driveController.cross().toggleOnTrue();
    }
     public void configureClimbTestBindings(){
         driveController.povRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.RIGHT));
