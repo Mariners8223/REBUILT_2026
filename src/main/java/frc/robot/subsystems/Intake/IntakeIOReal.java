@@ -65,7 +65,7 @@ public class IntakeIOReal implements IntakeIO{
 
     public void resetPositionMotorEncoder()
     {
-        positionMotor.setMotorEncoderPosition(IntakeConstants.PositionMotor.IntakePosition.Open.getAngle().in(Rotation));
+        positionMotor.setMotorEncoderPosition(IntakeConstants.PositionMotor.IntakePosition.Reset.getAngle().in(Rotation));
     }
 
     public void startPIDTuning(){

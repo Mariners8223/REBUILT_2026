@@ -84,6 +84,8 @@ public class RobotContainer {
         return Meters.zero();
     }
 
+
+    //#region Drive
     public void configureDriveBindings(){
         new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(
             new StartEndCommand(() ->driveBase.setDefaultCommand(new DriveCommand(driveBase, driveController)),
@@ -91,47 +93,6 @@ public class RobotContainer {
             .ignoringDisable(true));
 
         driveController.options().onTrue(driveBase.resetOnlyDirection());
-    }
-
-
-    public BiFunction<Boolean, Direction, Command> chooseCommand(String type){
-        switch (type) {
-            case "Drive":
-                return (isDynamic, direction) ->
-                    isDynamic ? driveSysID.getDriveMotorsRoutineDynamic(direction) : driveSysID.getDriveMotorsRoutineQuasistatic(direction);
-            case "Steer":
-                return (isDynamic, direction) ->
-                    isDynamic ? driveSysID.getSteerMotorsRoutineDynamic(direction) : driveSysID.getSteerMotorsRoutineQuasistatic(direction);
-            case "Theta":
-                return (isDynamic, direction) ->
-                    isDynamic ? driveSysID.getThetaRoutineDynamic(direction) : driveSysID.getThetaRoutineQuasistatic(direction);
-            default:
-                return (isDynamic, direction) -> new InstantCommand();
-        }
-    }
-
-    public void configureShooterSysIDBindings(){
-        driveController.cross().whileTrue(shooterSysID.getShooterDynamic(Direction.kReverse));
-        driveController.triangle().whileTrue(shooterSysID.getShooterDynamic(Direction.kForward));
-
-        driveController.circle().whileTrue(shooterSysID.getShooterQuasistatic(Direction.kForward));
-        driveController.square().whileTrue(shooterSysID.getShooterQuasistatic(Direction.kReverse));
-    }
-
-    public void configureShooterTestBindings(){
-        SmartDashboard.putNumber("Shooter RPM", 0);
-        SmartDashboard.putNumber("Kicker Duty Cycle", 0);
-
-        driveController.cross().toggleOnTrue(
-            Commands.startEnd(
-                () -> shooter.setVelocity(RPM.of(SmartDashboard.getNumber("Shooter RPM", 0))),
-                () -> shooter.stopShooter(),
-                shooter
-            )
-        );
-        driveController.triangle().toggleOnTrue(
-            kicker.setKickerCommand(0.5)
-        );
     }
 
     public void configureDriveSysidBindings(){
@@ -162,6 +123,50 @@ public class RobotContainer {
             new ProxyCommand(chooseCommand(chosen).apply(false, Direction.kForward))
         );
     }
+
+
+    public BiFunction<Boolean, Direction, Command> chooseCommand(String type){
+        switch (type) {
+            case "Drive":
+                return (isDynamic, direction) ->
+                    isDynamic ? driveSysID.getDriveMotorsRoutineDynamic(direction) : driveSysID.getDriveMotorsRoutineQuasistatic(direction);
+            case "Steer":
+                return (isDynamic, direction) ->
+                    isDynamic ? driveSysID.getSteerMotorsRoutineDynamic(direction) : driveSysID.getSteerMotorsRoutineQuasistatic(direction);
+            case "Theta":
+                return (isDynamic, direction) ->
+                    isDynamic ? driveSysID.getThetaRoutineDynamic(direction) : driveSysID.getThetaRoutineQuasistatic(direction);
+            default:
+                return (isDynamic, direction) -> new InstantCommand();
+        }
+    }
+    //#endregion
+
+    //#region Shooter
+    public void configureShooterSysIDBindings(){
+        driveController.cross().whileTrue(shooterSysID.getShooterDynamic(Direction.kReverse));
+        driveController.triangle().whileTrue(shooterSysID.getShooterDynamic(Direction.kForward));
+
+        driveController.circle().whileTrue(shooterSysID.getShooterQuasistatic(Direction.kForward));
+        driveController.square().whileTrue(shooterSysID.getShooterQuasistatic(Direction.kReverse));
+    }
+
+    public void configureShooterTestBindings(){
+        SmartDashboard.putNumber("Shooter RPM", 0);
+        SmartDashboard.putNumber("Kicker Duty Cycle", 0);
+
+        driveController.cross().toggleOnTrue(
+            Commands.startEnd(
+                () -> shooter.setVelocity(RPM.of(SmartDashboard.getNumber("Shooter RPM", 0))),
+                () -> shooter.stopShooter(),
+                shooter
+            )
+        );
+        driveController.triangle().toggleOnTrue(
+            kicker.setKickerCommand(0.5)
+        );
+    }
+    //#endregion
 
 
     public void configureTestingBindings(){
