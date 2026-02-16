@@ -50,6 +50,7 @@ public enum DevBotConstants {
         MAX_WHEEL_LINEAR_VELOCITY,
         0.9,
         DCMotor.getFalcon500(1),
+        DCMotor.getFalcon500(1),
         DRIVE_GEAR_RATIO,
         DRIVE_MOTOR_CURRENT_LIMIT,
         1);
@@ -154,3 +155,4 @@ public enum DevBotConstants {
         this.STEER_KA = STEER_KA;
     }
 }
+

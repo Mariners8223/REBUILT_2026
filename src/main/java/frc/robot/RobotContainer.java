@@ -25,7 +25,7 @@ import frc.robot.commands.Drive.DriveCommand;
 import frc.robot.commands.FunnelCommands.Funnelling;
 import frc.robot.commands.FunnelCommands.ToShooter;
 import frc.robot.subsystems.DriveTrain.DriveBase;
-import frc.robot.subsystems.DriveTrain.DriveBaseSYSID;
+import frc.robot.subsystems.Climb.ClimbConstants;import frc.robot.subsystems.DriveTrain.DriveBaseSYSID;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterSysID;
 import frc.robot.subsystems.Funnel.Funnel;
@@ -49,6 +49,7 @@ public class RobotContainer {
         driveController = new CommandPS5Controller(0);
 
         driveBase = new DriveBase();
+        climb = new Climb();
         funnel = new Funnel();
         intake = new Intake();
         shooter = new Shooter();
@@ -76,6 +77,9 @@ public class RobotContainer {
 
         return Meters.zero();
     }
+        configureClimbTestBindings();
+    }
+
 
     public void configureDriveBindings(){
         new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(
@@ -219,5 +223,25 @@ public class RobotContainer {
                 )
             )
         );
+   }
+    public void configureClimbTestBindings(){
+        driveController.povRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.RIGHT));
+        driveController.povLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.LEFT));
+        driveController.povUp().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.FORWARD));
+        driveController.povDown().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACKWARDS));
+        driveController.povUpLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.FRONT_LEFT));
+        driveController.povUpRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.FRONT_RIGHT));
+        driveController.povDownLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_LEFT));
+        driveController.povDownRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_RIGHT));
+
+        
+        driveController.triangle().onTrue(climb.toPositionCommand(Heights.EXTENDED));
+
+        driveController.R2().whileTrue(new RunHookToHeight(climb, Heights.RESET, 1));
+        driveController.L2().whileTrue(new RunHookToHeight(climb, Heights.IN_AIR_AUTO, 1));
+        
+        driveController.square().whileTrue(new RunHookToHeight(climb, Heights.EXTENDED, ClimbConstants.GETTING_DOWN_DUTY_CYCLE));
+
+        driveController.options().onTrue(new InstantCommand(() -> climb.resetPosition()));
    }
 }
