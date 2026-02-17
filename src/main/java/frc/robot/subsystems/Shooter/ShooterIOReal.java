@@ -69,6 +69,9 @@ public class ShooterIOReal implements ShooterIO {
     public void setVelocity(double targetVelocity){
         leadMotor.setReference(targetVelocity, ControlMode.Velocity);
     }
+    public void setVelocityWithFeedforward(double targetVelocity, double ff){
+        leadMotor.setReference(targetVelocity, ControlMode.Velocity, ff);
+    }
     public void setVoltage(double voltage){
         leadMotor.setVoltage(voltage);
     }

@@ -29,6 +29,7 @@ import frc.robot.commands.Drive.DriveCommand;
 import frc.robot.commands.Drive.MinorAdjust;
 import frc.robot.commands.Drive.MinorAdjust.AdjustmentDirection;
 import frc.robot.commands.FunnelCommands.Funnelling;
+import frc.robot.commands.Kicker.BlinkingKicker;
 import frc.robot.commands.Shooter.ShootVelocity;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.Climb.Climb;
@@ -175,6 +176,7 @@ public class RobotContainer {
 
     public void configureTestingBindings(){
         SmartDashboard.putNumber("Shooter Velocity", 0);
+        SmartDashboard.putNumber("Kicker RPM", 0.6);
 
         // driveController.R1().onTrue(intake.moveToPositionCommand(IntakePosition.Closed)); 
         // driveController.L1().onTrue(intake.moveToPositionCommand(IntakePosition.Open)); 
@@ -183,33 +185,39 @@ public class RobotContainer {
         //     Commands.parallel(funnel.funnelingCommand(), intake.spinRollersCommand())
         // );
 
-        
 
-        driveController.cross().toggleOnTrue(
-            Commands.parallel(
-                Commands.run(() -> shooter.setVelocity(RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))), shooter),
-                Commands.sequence(
-                    new WaitCommand(3),
-                    Commands.parallel(
-                        funnel.toShooterCommand(),
-                        kicker.setKickerCommand(0.3)
-                    )
-                )
-            )
-        );
+        driveController.L1().onTrue(intake.moveToPositionCommand(IntakePosition.Closed));
+        driveController.R1().onTrue(intake.moveToPositionCommand(IntakePosition.Middle));
 
         driveController.povDown().onTrue(new ShootVelocity(shooter, () -> RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))));
+
+        Command kickerCommand = kicker.setKickerCommand(SmartDashboard.getNumber("Kicker RPM", 0.6));
+        driveController.PS().whileTrue(new InstantCommand(() -> kicker.setMotors(SmartDashboard.getNumber("Kicker RPM", 0.6))));
+
+        Command everythingIntoShooter = Commands.sequence(
+                // intake.moveToPositionCommand(IntakePosition.Middle),
+                new WaitCommand(3),
+                Commands.parallel(
+                    funnel.toShooterCommand(),
+                    new BlinkingKicker(kicker, 1, 0.15, 0.15),
+                    intake.spinRollersCommand()
+                ));
+            // ).finallyDo(() -> intake.setPositionMotorState(IntakePosition.Open));
 
         driveController.square().toggleOnTrue(
             Commands.parallel(
                 new ShootVelocity(shooter, () -> RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))),
-                Commands.sequence(
-                    new WaitCommand(3),
-                    Commands.parallel(
-                        funnel.toShooterCommand(),
-                        kicker.setKickerCommand(0.3)
-                    )
-                )
+                new ProxyCommand(everythingIntoShooter)
+            )
+        );
+
+
+        driveController.povRight().whileTrue(Commands.run(() -> shooter.setVelocityWithFeedforward(RPM.of(1000), 4)));
+
+        driveController.cross().toggleOnTrue(
+            Commands.parallel(
+                Commands.run(() -> shooter.setVelocity(RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))), shooter),
+                new ProxyCommand(everythingIntoShooter)
             )
         );
 

@@ -45,6 +45,7 @@ public class ShooterIOSim implements ShooterIO{
     public void setVelocity(double targetVelocity){
         flywheel.setInput(targetVelocity);
     }
+    public void setVelocityWithFeedforward(double targetVelocity, double ff){}
     public void setVoltage(double voltage){
         flywheel.setInput(voltage);
     }

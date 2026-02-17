@@ -28,4 +28,5 @@ public interface ShooterIO {
     void resetFeedForward();
 
     void update(ShooterInputs inputs);
+    void setVelocityWithFeedforward(double in, double ff);
 }

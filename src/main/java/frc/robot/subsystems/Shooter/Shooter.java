@@ -47,6 +47,9 @@ public class Shooter extends SubsystemBase {
     public void setVelocity(AngularVelocity targetVelocity){
         io.setVelocity(targetVelocity.in(RotationsPerSecond));
     }
+    public void setVelocityWithFeedforward(AngularVelocity targetVelocity, double ff){
+        io.setVelocityWithFeedforward(targetVelocity.in(RotationsPerSecond), ff);
+    }
     public void setLinearVelocity(LinearVelocity targetVelocity){
         double targetAngularVelocity = targetVelocity.in(Meters.per(Minute)) / ShooterConstants.SHOOTER_WHEEL_CIRCUMFERENCE.in(Meters);
         io.setVelocity(targetAngularVelocity);

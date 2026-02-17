@@ -21,6 +21,7 @@ public class IntakeConstants
         public enum IntakePosition
         {
             Closed(Degrees.of(0)),
+            Middle(Degrees.of(-55)),
             Open(Rotations.of(-0.25)),
             Reset(Degrees.of(-90));
 

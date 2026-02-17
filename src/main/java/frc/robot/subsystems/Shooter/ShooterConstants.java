@@ -28,17 +28,17 @@ import frc.util.MarinersController.MarinersController.ControllerLocation;
 public class ShooterConstants {
 
     public static class MOTOR_CONSTANTS{
+        public static final double Ks = 0.21571;
+        public static final double Kv = 0.11496;
+        public static final double Ka = 0.042404;
+
         public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
         public static final PIDFGains PID = new PIDFGains(
             0.5,
             0.7,
             0.1,
-            0
+            Kv
         );
-
-        public static final double Ks = 0.21571;
-        public static final double Kv = 0.11496;
-        public static final double Ka = 0.042404;
 
         public static final double GEAR_RATIO = 1;
         public static final double GEAR_REDUCTION = 1 / GEAR_RATIO;
@@ -61,11 +61,11 @@ public class ShooterConstants {
     }
 
     public static double LOW_PASS_FILTER_ALPHA = 0.3;
-    public static double FEED_FORWARD_SHOOTER_BOOST = 0.01;
-    public static double MAX_FEED_FORWARD_BOOST = 0.8;
+    public static double FEED_FORWARD_SHOOTER_BOOST = 0.06;
+    public static double MAX_FEED_FORWARD_BOOST = 5;
     public static AngularVelocity SHOOTING_VELOCITY_FALL = RotationsPerSecond.of(2);
-    public static final AngularAcceleration FALL_ACCELERATION = RotationsPerSecondPerSecond.of(20);
-    public static Time FEED_FORWARD_BOOST_TIME = Millisecond.of(30);
+    public static final AngularAcceleration FALL_ACCELERATION = RotationsPerSecondPerSecond.of(30);
+    public static Time FEED_FORWARD_BOOST_TIME = Millisecond.of(80);
 
     public static final Distance SHOOTER_HEIGHT = Centimeter.of(40);
     public static final Angle SHOOTER_ANGLE = Degree.of(75);
@@ -93,6 +93,19 @@ public class ShooterConstants {
     );
 
     public static class Calculations{
+        // public static Distance practicalDistance(Translation2d hubPose, Pose2d robotPose, double velocityX, double velocityY){
+        //     Translation2d hubToRobot = hubPose.minus(robotPose.getTranslation());
+        //     double distance = hubToRobot.getNorm();
+
+        //     Translation2d velocity = new Translation2d(velocityX, velocityY);
+        //     double flightTime = LookupTable.DISTANCE_TO_TIME_OF_FLIGHT.get(distance);
+        //     Translation2d displacementFromRobotVelocity = velocity.times(flightTime);
+
+        //     hubToRobot.minus(displacementFromRobotVelocity);
+
+        //     return Meters.zero();
+        // }
+
         public static LinearVelocity requiredLinearVelocity(Distance distance){
             /*  h = y0 + tan(alpha) * d - (g / (2 * (v * cos(alpha))^2)) * d^2
                 h - Hub Height
