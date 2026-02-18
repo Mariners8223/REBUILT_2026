@@ -90,7 +90,7 @@ public class Vision extends SubsystemBase {
                     continue;
                 }
 
-                if(ignoreFunnel.get() && camera.constants == CameraConstants.FUNNEL_CAMERA){
+                if(ignoreFunnel.get() && camera.constants == CameraConstants.POINTING_OUT_CAMERA){
                     rejectedPoses.add(frame.robotPose());
                     continue;
                 }
@@ -195,7 +195,7 @@ public class Vision extends SubsystemBase {
             };
 
             this.cameraName = cameraName;
-            this.constants = CameraConstants.END_EFFECTOR_CAMERA;
+            this.constants = CameraConstants.POINTING_IN_CAMERA;
             inputs = new VisionInputsAutoLogged();
 
         }

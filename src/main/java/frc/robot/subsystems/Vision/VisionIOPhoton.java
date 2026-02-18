@@ -20,7 +20,7 @@ public class VisionIOPhoton implements VisionIO {
     private final PhotonCamera camera;
     private final PhotonPoseEstimator poseEstimator;
 
-    private final Supplier<Pose2d> referncePoseSupplier;
+    private final Supplier<Pose2d> referencePoseSupplier;
 
 
     public VisionIOPhoton(CameraConstants cameraConstants, AprilTagFieldLayout fieldLayout, Supplier<Pose2d> referencePoseSupplier) {
@@ -30,7 +30,7 @@ public class VisionIOPhoton implements VisionIO {
 
         poseEstimator.setMultiTagFallbackStrategy(VisionConstants.FALLBACK_STRATEGY);
 
-        this.referncePoseSupplier = referencePoseSupplier;
+        this.referencePoseSupplier = referencePoseSupplier;
     }
 
 
@@ -63,14 +63,14 @@ public class VisionIOPhoton implements VisionIO {
     /**
      * generates a VisionFrame from a PhotonPipelineResult
      * @param result the result to generate the frame from
-     * @return the generated frame
+     * @return a VisionFrame instance based on the result 
      */
     private VisionFrame generateFrame(PhotonPipelineResult result){
         if(!result.hasTargets()){
             return emptyFrame[0];
         }
 
-        poseEstimator.setReferencePose(referncePoseSupplier.get());
+        poseEstimator.setReferencePose(referencePoseSupplier.get());
 
         Optional<EstimatedRobotPose> poseEstimatorResult = poseEstimator.update(result);
 
