@@ -335,9 +335,6 @@ public class DriveBase extends SubsystemBase {
      * 
      * @return the distance from input point and current pose
      */
-    public double getDistanceFromPoint2D(Pose2d point) {
-        return currentPose.getTranslation().getDistance(point.getTranslation());
-    } 
 
 
     /**

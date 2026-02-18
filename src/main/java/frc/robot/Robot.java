@@ -31,6 +31,7 @@ import frc.util.HubTracker;
 public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
   public static boolean isRedAlliance = false;
+  private RobotContainer RobotContainer;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -55,11 +56,11 @@ public class Robot extends LoggedRobot {
     Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-    m_robotContainer = new RobotContainer();
+    RobotContainer = new RobotContainer();
     SmartDashboard.putBoolean("IsHubActive", HubTracker.isActive());
     SmartDashboard.putString("TimeLeftOnActivation", HubTracker.timeRemainingInCurrentShift().toString());
     SmartDashboard.putBoolean("InRange", RobotContainer.inRange());
-
+  }
 
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
