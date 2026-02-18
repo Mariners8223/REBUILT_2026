@@ -15,17 +15,17 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.Robot;
-import frc.robot.commands.Drive.DriveCommand;
 import frc.robot.subsystems.DriveTrain.SwerveModules.DevBotConstants;
 import frc.robot.subsystems.DriveTrain.SwerveModules.SwerveModule;
 import frc.util.FastGyros.GyroIO;
 import frc.util.FastGyros.PigeonIO;
 import frc.util.FastGyros.SimGyroIO;
-import org.json.simple.parser.ParseException;
 import org.littletonrobotics.junction.AutoLog;
 import org.littletonrobotics.junction.Logger;
+import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
+import com.ctre.phoenix6.swerve.utility.PhoenixPIDController;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
 
@@ -35,13 +35,11 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants;
-import frc.robot.RobotContainer;
 
-import java.io.IOException;
+import frc.robot.subsystems.Vision.Vision;
+import frc.robot.Constants;
+
 import java.util.function.DoubleSupplier;
 
 
@@ -51,6 +49,13 @@ import java.util.function.DoubleSupplier;
  */
 @SuppressWarnings("unused")
 public class DriveBase extends SubsystemBase {
+
+
+    PhotonCamera camera = new PhotonCamera("frontCamera");
+    private PhotonTrackedTarget target;
+
+    private double absoluteHeading;
+
     /**
      * the array of the modules themselves
      */
@@ -82,7 +87,7 @@ public class DriveBase extends SubsystemBase {
     /**
      * the inputs of the drive base (all the motor voltages, angles, speeds, etc.) to be logged
      */
-    private final DriveBaseInputsAutoLogged inputs = new DriveBaseInputsAutoLogged();   
+    private final DriveBaseInputsAutoLogged inputs = new DriveBaseInputsAutoLogged();
 
     /**
      * the max speed the wheels can spin (drive motor at max speed)
@@ -123,6 +128,7 @@ public class DriveBase extends SubsystemBase {
         modules[2] = new SwerveModule(SwerveModule.ModuleName.Back_Left);
         modules[3] = new SwerveModule(SwerveModule.ModuleName.Back_Right);
 
+        
         if (RobotBase.isReal()) {
             gyro = switch (Constants.ROBOT_TYPE) {
                 case DEVELOPMENT, COMPETITION -> new PigeonIO(DriveBaseConstants.PIGEON_ID);
@@ -308,6 +314,30 @@ public class DriveBase extends SubsystemBase {
     public void addVisionMeasurement(Pose2d visionPose, double timeStamp, Matrix<N3, N1> stdDevs) {
         poseEstimator.addVisionMeasurement(visionPose, timeStamp, stdDevs);
     }
+
+    public double lockOn(boolean lockOn, double leftX){
+        if (!lockOn) return leftX;
+        
+        return target.getYaw();
+
+        // double distanceX = getPose().getX() - 0;
+        // double distanceY = getPose().getY() - 0;
+        // double relativeHeading = Math.toDegrees(Math.atan2(distanceY, distanceX)); 
+
+        // absoluteHeading = Math.toRadians(-relativeHeading+270); //the magic sauce
+        // return Math.cos(absoluteHeading);
+        // return Math.sin(absoluteHeading);
+
+    }
+
+    /*
+     * gets the length of a straight line from the current pose to the input pose in a flat world (double)
+     * 
+     * @param the point from which to calculate the distance
+     * 
+     * @return the distance from input point and current pose
+     */
+
 
     /**
      * drives the robot relative to itself
@@ -522,6 +552,13 @@ public class DriveBase extends SubsystemBase {
 
     @Override
     public void periodic() {
+        var frame = camera.getLatestResult();
+        
+        if (frame.hasTargets()){
+            target = frame.getBestTarget();
+        }
+        
+        
         for (int i = 0; i < 4; i++) {
             inputs.currentStates[i] = modules[i].getCurrentState();
             positions[i] = modules[i].modulePeriodic();
