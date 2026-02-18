@@ -25,15 +25,9 @@ public class VisionConstants {
     public enum CameraConstants{
         POINTING_IN_CAMERA("pointing_in_camera",//this camera will be on a churo of the shooter
             new Transform3d(
-<<<<<<< Updated upstream
-                0.205, 0.081, 0.32,
-                new Rotation3d(0, Units.degreesToRadians(-1), Units.degreesToRadians(-13))),
-                0.2, 0.16), 
-=======
                 0, 0, 0,
                 new Rotation3d(0, Units.degreesToRadians(0), Units.degreesToRadians(0))),
                 0, 0),
->>>>>>> Stashed changes
 
        POINTING_OUT_CAMERA("pointing_out_camera", //this camera will be placed on the side of the shooter, pointing backwards
            new Transform3d(
