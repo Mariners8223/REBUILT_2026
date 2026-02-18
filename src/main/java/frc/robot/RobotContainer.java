@@ -44,7 +44,7 @@ public class RobotContainer {
 
     public void configureDriveBindings(){
        new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(new StartEndCommand(() ->
-       driveBase.setDefaultCommand(new DriveCommand(driveBase, driveXboxController)),
+       driveBase.setDefaultCommand(new DriveCommand(driveBase, driveController)),
        driveBase::removeDefaultCommand).ignoringDisable(true));
        driveXboxController.b().onTrue(driveBase.resetOnlyDirection());//TODO: find the options button
        driveXboxController.a().whileTrue(passTrench());
