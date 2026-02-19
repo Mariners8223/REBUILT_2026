@@ -79,21 +79,17 @@ public class Vision extends SubsystemBase {
                 if (!frame.hasTarget()) continue;
 
 
+                //TODO:Add this back
+                // if (!checkPoseLocation(frame.robotPose())) {
+                //     rejectedPoses.add(frame.robotPose());
+                //     continue;
+                // }
 
-                if (!checkPoseLocation(frame.robotPose())) {
-                    rejectedPoses.add(frame.robotPose());
-                    continue;
-                }
+                // if (!checkPoseAmbiguity(frame.poseAmbiguity(), frame.estimationType())) {
+                //     rejectedPoses.add(frame.robotPose());
+                //     continue;
+                // }
 
-                if (!checkPoseAmbiguity(frame.poseAmbiguity(), frame.estimationType())) {
-                    rejectedPoses.add(frame.robotPose());
-                    continue;
-                }
-
-                if(ignoreFunnel.get() && camera.constants == CameraConstants.POINTING_OUT_CAMERA){
-                    rejectedPoses.add(frame.robotPose());
-                    continue;
-                }
 
                 var stdDevs = getStdDevs(frame.averageTargetDistance(), frame.tagCount(), frame.estimationType(), camera);
 
@@ -124,6 +120,7 @@ public class Vision extends SubsystemBase {
         if (poseX >= VisionConstants.FIELD_LAYOUT.getFieldLength() || poseX < 0) return false;
         if (poseY >= VisionConstants.FIELD_LAYOUT.getFieldWidth() || poseY < 0) return false;
         return !(Math.abs(poseZ) > VisionConstants.maxHeightDeviation);
+        
     }
 
     /**
@@ -138,6 +135,7 @@ public class Vision extends SubsystemBase {
             return false;
         }
         return poseAmbiguity <= estimationType.getMaxAmbiguity();
+        
     }
 
         /**
