@@ -9,7 +9,7 @@ import frc.robot.subsystems.DriveTrain.SwerveModules.DevBotConstants;
 import frc.util.PIDFGains;
 
 public class DriveBaseConstants {
-        
+
     ///public static final double DISTANCE_BETWEEN_WHEELS = 0.58; // the distance between each wheel in meters
     public static final double DISTANCE_BETWEEN_WHEELS_HORIZONTAL = 0.5044; //the distance between each wheel in meters - long axis
     public static final double DISTANCE_BETWEEN_WHEELS_VERTICAL = 0.54222; //'''''' - short axis

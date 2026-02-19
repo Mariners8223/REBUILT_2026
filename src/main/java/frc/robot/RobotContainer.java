@@ -4,7 +4,6 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot;
 
-import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.RPM;
 
@@ -17,7 +16,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
@@ -28,7 +26,6 @@ import frc.robot.commands.Climb.RunHookToHeight;
 import frc.robot.commands.Drive.DriveCommand;
 import frc.robot.commands.Drive.MinorAdjust;
 import frc.robot.commands.Drive.MinorAdjust.AdjustmentDirection;
-import frc.robot.commands.FunnelCommands.Funnelling;
 import frc.robot.commands.Kicker.BlinkingKicker;
 import frc.robot.commands.Shooter.ShootVelocity;
 import frc.robot.subsystems.DriveTrain.DriveBase;
@@ -74,7 +71,7 @@ public class RobotContainer {
         shooterSysID = new ShooterSysID(shooter);
         vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
 
-        configureDriveBindings();
+        //configureDriveBindings();
         // configureShooterSysIDBindings();
         // configureShooterTestBindings();
         configureTestingBindings();
@@ -103,6 +100,8 @@ public class RobotContainer {
             .ignoringDisable(true));
 
         driveController.options().onTrue(driveBase.resetOnlyDirection());
+
+        // driveController.PS().onTrue(Commands.run(() -> driveBase.Rota))
     }
 
     public void configureDriveSysidBindings(){
@@ -181,55 +180,63 @@ public class RobotContainer {
 
     public void configureTestingBindings(){
         SmartDashboard.putNumber("Shooter Velocity", 0);
-        SmartDashboard.putNumber("Kicker RPM", 0.6);
+        SmartDashboard.putNumber("Kicker Duty Cycle", 0.6);
 
-        // driveController.R1().onTrue(intake.moveToPositionCommand(IntakePosition.Closed)); 
-        // driveController.L1().onTrue(intake.moveToPositionCommand(IntakePosition.Open)); 
+        driveController.square().onTrue(Commands.parallel(
+            funnel.onlyCenterCommand(),
+            kicker.setKickerCommand(SmartDashboard.getNumber("Kicker Duty Cycle", 0.6)),
+            new ShootVelocity(shooter, () -> RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0)))
+            ));
+
+        driveController.L1().onTrue(intake.moveToPositionCommand(IntakePosition.Closed));
+        driveController.R1().onTrue(intake.moveToPositionCommand(IntakePosition.Middle));
+        driveController.L2().onTrue(intake.moveToPositionCommand(IntakePosition.Open));
+
+        // driveController.R1().onTrue(intake.moveToPositionCommand(IntakePosition.Closed));
+        // driveController.L1().onTrue(intake.moveToPositionCommand(IntakePosition.Open));
 
         // driveController.triangle().toggleOnTrue(
         //     Commands.parallel(funnel.funnelingCommand(), intake.spinRollersCommand())
         // );
 
 
-        driveController.L1().onTrue(intake.moveToPositionCommand(IntakePosition.Closed));
-        driveController.R1().onTrue(intake.moveToPositionCommand(IntakePosition.Middle));
+        // driveController.square().whileTrue(new ShootVelocity(shooter, () -> RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))));
 
-        driveController.povDown().onTrue(new ShootVelocity(shooter, () -> RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))));
+        //Command kickerCommand = kicker.setKickerCommand(SmartDashboard.getNumber("Kicker Duty Cycle", 0.6));
+        
+        // driveController.PS().whileTrue(new InstantCommand(() -> kicker.setMotors(SmartDashboard.getNumber("Kicker RPM", 0.6))));
 
-        Command kickerCommand = kicker.setKickerCommand(SmartDashboard.getNumber("Kicker RPM", 0.6));
-        driveController.PS().whileTrue(new InstantCommand(() -> kicker.setMotors(SmartDashboard.getNumber("Kicker RPM", 0.6))));
-
-        Command everythingIntoShooter = Commands.sequence(
+        // Command everythingIntoShooter = Commands.sequence(
                 // intake.moveToPositionCommand(IntakePosition.Middle),
-                new WaitCommand(3),
-                Commands.parallel(
-                    funnel.toShooterCommand(),
-                    new BlinkingKicker(kicker, 1, 0.15, 0.15),
-                    intake.spinRollersCommand()
-                ));
+                // new WaitCommand(3),
+                // Commands.parallel(
+                //     funnel.toShooterCommand(),
+                //     kicker.setKickerCommand(0.8),
+                //     intake.spinRollersCommand()
+                // ));
             // ).finallyDo(() -> intake.setPositionMotorState(IntakePosition.Open));
 
-        driveController.square().toggleOnTrue(
-            Commands.parallel(
-                new ShootVelocity(shooter, () -> RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))),
-                new ProxyCommand(everythingIntoShooter)
-            )
-        );
+        // driveController.square().toggleOnTrue(
+        //     Commands.parallel(
+        //         new ShootVelocity(shooter, () -> RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))),
+        //         new ProxyCommand(everythingIntoShooter)
+        //     )
+        // );
 
 
-        driveController.povRight().whileTrue(Commands.run(() -> shooter.setVelocityWithFeedforward(RPM.of(1000), 4)));
+        // driveController.povRight().whileTrue(Commands.run(() -> shooter.setVelocityWithFeedforward(RPM.of(1000), 4)));
 
-        driveController.cross().toggleOnTrue(
-            Commands.parallel(
-                Commands.run(() -> shooter.setVelocity(RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))), shooter),
-                new ProxyCommand(everythingIntoShooter)
-            )
-        );
+        // driveController.cross().toggleOnTrue(
+        //     Commands.parallel(
+        //         Commands.run(() -> shooter.setVelocity(RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))), shooter),
+        //         new ProxyCommand(everythingIntoShooter)
+        //     )
+        // );
 
-        driveController.povUp().onTrue(Commands.parallel(
-            new InstantCommand(() -> shooter.boostFeedForward(1)),
-            new PrintCommand("Boost"))
-        );
+        // driveController.povUp().onTrue(Commands.parallel(
+        //     new InstantCommand(() -> shooter.boostFeedForward(1)),
+        //     new PrintCommand("Boost"))
+        // );
         // driveController.cross().toggleOnTrue();
    }
     public void configureClimbTestBindings(){

@@ -40,6 +40,13 @@ public class Funnel extends SubsystemBase {
     );
   }
 
+  public Command onlyCenterCommand(){
+    return this.startEnd(
+      () -> SpinCenterMotors(FunnelConstants.CenteringMotor.CenteringHighSpeed),
+      () -> StopCenterMotors()
+      );
+  }
+
   public Command toShooterCommand(){
     return this.startEnd(
       () -> {

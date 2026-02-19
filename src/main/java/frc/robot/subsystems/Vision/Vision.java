@@ -118,7 +118,7 @@ public class Vision extends SubsystemBase {
         if (poseX >= VisionConstants.FIELD_LAYOUT.getFieldLength() || poseX < 0) return false;
         if (poseY >= VisionConstants.FIELD_LAYOUT.getFieldWidth() || poseY < 0) return false;
         return !(Math.abs(poseZ) > VisionConstants.maxHeightDeviation);
-        
+
     }
 
     /**
@@ -133,7 +133,7 @@ public class Vision extends SubsystemBase {
             return false;
         }
         return poseAmbiguity <= estimationType.getMaxAmbiguity();
-        
+
     }
 
         /**
