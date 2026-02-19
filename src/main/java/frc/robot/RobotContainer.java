@@ -182,12 +182,19 @@ public class RobotContainer {
         SmartDashboard.putNumber("Shooter Velocity", 0);
         SmartDashboard.putNumber("Kicker Duty Cycle", 0.6);
 
-        driveController.square().onTrue(Commands.parallel(
+        driveController.square().toggleOnTrue(Commands.parallel(
             funnel.onlyCenterCommand(),
             kicker.setKickerCommand(SmartDashboard.getNumber("Kicker Duty Cycle", 0.6)),
             new ShootVelocity(shooter, () -> RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0)))
             ));
-
+        
+        driveController.circle().toggleOnTrue(Commands.parallel(
+            funnel.toShooterCommand(),
+            kicker.setKickerCommand(SmartDashboard.getNumber("Kicker Duty Cycle", 0.6)),
+            new ShootVelocity(shooter, () -> RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0)))
+        ));
+        driveController.triangle().whileTrue(new ShootVelocity(shooter, () -> RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))));
+            
         driveController.L1().onTrue(intake.moveToPositionCommand(IntakePosition.Closed));
         driveController.R1().onTrue(intake.moveToPositionCommand(IntakePosition.Middle));
         driveController.L2().onTrue(intake.moveToPositionCommand(IntakePosition.Open));
@@ -200,7 +207,6 @@ public class RobotContainer {
         // );
 
 
-        // driveController.square().whileTrue(new ShootVelocity(shooter, () -> RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))));
 
         //Command kickerCommand = kicker.setKickerCommand(SmartDashboard.getNumber("Kicker Duty Cycle", 0.6));
         
