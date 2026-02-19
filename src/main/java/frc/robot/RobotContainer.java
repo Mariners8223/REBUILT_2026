@@ -6,6 +6,7 @@ import frc.robot.commands.Drive.DriveCommand;
 
 import edu.wpi.first.wpilibj.RobotState;
 import frc.robot.subsystems.DriveTrain.DriveBase;
+import frc.robot.subsystems.Vision.Vision;
 
 
 /**
@@ -19,6 +20,7 @@ public class RobotContainer {
     public static Robot robot;
     public static CommandPS5Controller driveController;
     public static CommandXboxController driveXboxController;
+    public static Vision vision;
 
 
     public RobotContainer() {
@@ -26,6 +28,7 @@ public class RobotContainer {
         driveXboxController = new CommandXboxController(0);
 
         driveBase = new DriveBase();
+        vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
 
         configureDriveBindings();
         
