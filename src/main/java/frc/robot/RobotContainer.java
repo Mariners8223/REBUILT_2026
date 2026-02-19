@@ -32,6 +32,7 @@ import frc.robot.commands.FunnelCommands.Funnelling;
 import frc.robot.commands.Kicker.BlinkingKicker;
 import frc.robot.commands.Shooter.ShootVelocity;
 import frc.robot.subsystems.DriveTrain.DriveBase;
+import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Climb.Climb;
 import frc.robot.subsystems.Climb.ClimbConstants;
 import frc.robot.subsystems.Climb.ClimbConstants.Heights;
@@ -55,6 +56,9 @@ public class RobotContainer {
 
     public static DriveBaseSYSID driveSysID;
     public static ShooterSysID shooterSysID;
+    public static CommandXboxController driveXboxController;
+    public static Vision vision;
+
 
     public RobotContainer() {
         driveController = new CommandPS5Controller(0);
@@ -68,6 +72,7 @@ public class RobotContainer {
 
         driveSysID = new DriveBaseSYSID(driveBase, driveController);
         shooterSysID = new ShooterSysID(shooter);
+        vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
 
         configureDriveBindings();
         // configureShooterSysIDBindings();
