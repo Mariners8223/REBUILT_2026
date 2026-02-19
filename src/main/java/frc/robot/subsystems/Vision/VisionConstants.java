@@ -31,8 +31,8 @@ public class VisionConstants {
 
        POINTING_OUT_CAMERA("pointing_out_camera", //this camera will be placed on the side of the shooter, pointing backwards
            new Transform3d(
-               0, 0, 0,
-               new Rotation3d(0, Units.degreesToRadians(0), Units.degreesToRadians(0))),
+               0.23554, -0.26835, 0.47246,
+               new Rotation3d(Units.degreesToRadians(-75), Units.degreesToRadians(0), Units.degreesToRadians(0))),
                0, 0);
 
         public final String cameraName;
