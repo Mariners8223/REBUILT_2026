@@ -32,12 +32,11 @@ public class Vision extends SubsystemBase {
 
     private final VisionConsumer poseConsumer;
 
-    private final Supplier<Boolean> ignoreFunnel;
 
     /**
      * Creates a new Vision.
      */
-    public Vision(VisionConsumer poseConsumer, Supplier<Pose2d> referncePoseSupplier, Supplier<Boolean> ignoreFunnel) {
+    public Vision(VisionConsumer poseConsumer, Supplier<Pose2d> referncePoseSupplier) {
 
         int numOfCameras = CameraConstants.values().length;
 
@@ -51,7 +50,6 @@ public class Vision extends SubsystemBase {
         }
 
         this.poseConsumer = poseConsumer;
-        this.ignoreFunnel = ignoreFunnel;
     }
 
     @Override
