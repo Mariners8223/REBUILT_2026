@@ -77,16 +77,15 @@ public class Vision extends SubsystemBase {
                 if (!frame.hasTarget()) continue;
 
 
-                //TODO:Add this back
-                // if (!checkPoseLocation(frame.robotPose())) {
-                //     rejectedPoses.add(frame.robotPose());
-                //     continue;
-                // }
+                 if (!checkPoseLocation(frame.robotPose())) {
+                    rejectedPoses.add(frame.robotPose());
+                     continue;
+                 }
 
-                // if (!checkPoseAmbiguity(frame.poseAmbiguity(), frame.estimationType())) {
-                //     rejectedPoses.add(frame.robotPose());
-                //     continue;
-                // }
+                 if (!checkPoseAmbiguity(frame.poseAmbiguity(), frame.estimationType())) {
+                     rejectedPoses.add(frame.robotPose());
+                     continue;
+                 }
 
 
                 var stdDevs = getStdDevs(frame.averageTargetDistance(), frame.tagCount(), frame.estimationType(), camera);
