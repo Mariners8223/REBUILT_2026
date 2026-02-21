@@ -58,7 +58,7 @@ public class RobotContainer {
     }
 
     public Distance distanceFromHub(){
-        return Meters.of(driveBase.getPose().getTranslation().getDistance(Constants.FieldConstants.HUB_POSITION.getTranslation()));
+        return Meters.of(driveBase.getPose().getTranslation().getDistance(Constants.FieldConstants.HUB_POSITION.getTranslation().toTranslation2d()));
     }
 
     public void configureDriveBindings(){
@@ -66,7 +66,7 @@ public class RobotContainer {
             new StartEndCommand(() -> driveBase.setDefaultCommand(new DriveCommand(driveBase, driveController)),
             driveBase::removeDefaultCommand)
             .ignoringDisable(true));
-        driveController.R1().toggleOnTrue(new AimDriving(driveBase, driveController, () -> {return Constants.FieldConstants.HUB_POSITION;} ));
+        driveController.R1().toggleOnTrue(new AimDriving(driveBase, driveController, () -> {return Constants.FieldConstants.HUB_POSITION.toPose2d();} ));
     }
 
 

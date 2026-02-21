@@ -4,10 +4,20 @@
 
 package frc.robot;
 
+import java.util.List;
+
+import edu.wpi.first.apriltag.AprilTag;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Unit;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotState;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -30,7 +40,7 @@ public final class Constants {
   }
 
   public static class FieldConstants{
-    public static final Pose2d HUB_POSITION = new Pose2d(); // TODO: FIX POSITION
+    public static final Pose3d HUB_POSITION = new Pose3d(Units.inchesToMeters(158.6 + 47 / 2.0), 8.07 / 2, Units.inchesToMeters(72), new Rotation3d());; // TODO: FIX POSITION
   }
 
   public static class CALCULATIONS{
