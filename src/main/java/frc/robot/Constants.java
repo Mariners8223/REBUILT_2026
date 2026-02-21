@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Unit;
@@ -29,7 +30,7 @@ public final class Constants {
   }
 
   public static class FieldConstants{
-    public static final Translation2d HUB_POSITION = new Translation2d(); // TODO: FIX POSITION
+    public static final Pose2d HUB_POSITION = new Pose2d(); // TODO: FIX POSITION
   }
 
   public static class CALCULATIONS{

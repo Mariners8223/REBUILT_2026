@@ -1,0 +1,107 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
+package frc.robot.commands.Drive;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
+import frc.robot.Robot;
+import frc.robot.subsystems.DriveTrain.DriveBase;
+import frc.robot.subsystems.DriveTrain.DriveBaseConstants;
+import frc.robot.subsystems.DriveTrain.SwerveModules.DevBotConstants;
+
+import static frc.robot.subsystems.DriveTrain.DriveBaseConstants.DISTANCE_BETWEEN_WHEELS_HORIZONTAL;
+import static frc.robot.subsystems.DriveTrain.DriveBaseConstants.DISTANCE_BETWEEN_WHEELS_VERTICAL;
+
+import java.util.function.Supplier;
+
+/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
+public class AimDriving extends Command {
+    private final DriveBase driveBase;
+    private final CommandPS5Controller controller;
+    private static double MAX_FREE_WHEEL_SPEED;
+    private static double MAX_OMEGA_RAD_PER_SEC;
+    Supplier<Pose2d> poseSupplier;
+
+    PIDController thetaController = DriveBaseConstants.PathPlanner.THETA_PID.createPIDController();
+
+    public AimDriving(DriveBase driveBase, CommandPS5Controller controller, Supplier<Pose2d> poseSupplier) {
+        this.driveBase = driveBase;
+        this.controller = controller;
+        this.poseSupplier = poseSupplier;
+        addRequirements(this.driveBase);
+        setName("AimDriving");
+
+        MAX_FREE_WHEEL_SPEED = DevBotConstants.MAX_WHEEL_LINEAR_VELOCITY;
+
+        double driveBaseRadius = Math.hypot(DISTANCE_BETWEEN_WHEELS_HORIZONTAL / 2, DISTANCE_BETWEEN_WHEELS_VERTICAL / 2);
+
+        MAX_OMEGA_RAD_PER_SEC = MAX_FREE_WHEEL_SPEED / driveBaseRadius;
+    }
+
+    @Override
+    public void initialize() {
+        driveBase.drive(new ChassisSpeeds());
+        thetaController.reset();
+    }
+
+    public static double deadBand(double value) {
+        return Math.abs(value) > 0.1 ? value : 0;
+    }
+
+    public static void halfSpeed(){
+        MAX_FREE_WHEEL_SPEED = DevBotConstants.MAX_WHEEL_LINEAR_VELOCITY / 2;
+
+        double driveBaseRadius = Math.hypot(DISTANCE_BETWEEN_WHEELS_HORIZONTAL / 2, DISTANCE_BETWEEN_WHEELS_VERTICAL / 2);
+
+
+        MAX_OMEGA_RAD_PER_SEC = MAX_FREE_WHEEL_SPEED / driveBaseRadius;
+    }
+
+    public static void normalSpeed(){
+        MAX_FREE_WHEEL_SPEED = DevBotConstants.MAX_WHEEL_LINEAR_VELOCITY;
+
+        double driveBaseRadius = Math.hypot(DISTANCE_BETWEEN_WHEELS_HORIZONTAL / 2, DISTANCE_BETWEEN_WHEELS_VERTICAL / 2);
+
+        MAX_OMEGA_RAD_PER_SEC = MAX_FREE_WHEEL_SPEED / driveBaseRadius;
+    }
+
+
+    @Override
+    public void execute() {
+        //calculates a value from 1 to the max wheel speed based on the R2 axis
+        // double R2Axis = (1 - (0.5 + controller.getR2Axis() / 2)) * (driveBase.MAX_FREE_WHEEL_SPEED - 1) + 1;
+        // double R2Axis  = 1 - (0.5 + controller.getRightTriggerAxis() / 2);
+        double angleTarget = poseSupplier.get().minus(driveBase.getPose()).getRotation().getRadians();
+        thetaController.setSetpoint(angleTarget);
+
+        double R2Axis  = 1 - controller.getR2Axis();
+
+        if(R2Axis <= 0.1) {
+            R2Axis = 0.1;
+        }
+
+        //sets the value of the 3 vectors we need (accounting for drift)
+        double leftX = -deadBand(controller.getLeftY());
+        double leftY = -deadBand(controller.getLeftX());
+
+        leftX *= R2Axis * MAX_FREE_WHEEL_SPEED;
+        leftY *= R2Axis * MAX_FREE_WHEEL_SPEED;
+
+        ChassisSpeeds fieldRelativeSpeeds = new ChassisSpeeds(leftX, leftY, thetaController.calculate(driveBase.getRotation2d().getRadians()));
+
+        Rotation2d gyroAngle = driveBase.getRotation2d();
+
+        if(Robot.isRedAlliance) gyroAngle = gyroAngle.plus(Rotation2d.fromDegrees(180));
+
+        ChassisSpeeds robotRelativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, gyroAngle);
+
+        //drives the robot with the values
+        driveBase.drive(robotRelativeSpeeds);
+    }
+}

@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.*;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.commands.Drive.AimDriving;
 import frc.robot.commands.Drive.DriveCommand;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.DriveTrain.DriveBaseSYSID;
@@ -57,14 +58,15 @@ public class RobotContainer {
     }
 
     public Distance distanceFromHub(){
-        return Meters.of(driveBase.getPose().getTranslation().getDistance(Constants.FieldConstants.HUB_POSITION));
+        return Meters.of(driveBase.getPose().getTranslation().getDistance(Constants.FieldConstants.HUB_POSITION.getTranslation()));
     }
 
     public void configureDriveBindings(){
         new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(
-            new StartEndCommand(() ->driveBase.setDefaultCommand(new DriveCommand(driveBase, driveController)),
+            new StartEndCommand(() -> driveBase.setDefaultCommand(new DriveCommand(driveBase, driveController)),
             driveBase::removeDefaultCommand)
             .ignoringDisable(true));
+        driveController.R1().toggleOnTrue(new AimDriving(driveBase, driveController, () -> {return Constants.FieldConstants.HUB_POSITION;} ));
     }
 
 
