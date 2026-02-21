@@ -39,13 +39,13 @@ public class ShooterIOReal implements ShooterIO {
         leadMotor.setStaticFeedForward(ShooterConstants.MOTOR_CONSTANTS.Ks);
         leadMotor.setFeedForward(ShooterConstants.MOTOR_CONSTANTS.Kv);
 
-        leadMotor.setCurrentLimits(80, 110);
+        leadMotor.setCurrentLimits(60, 90);
 
         // leadMotor.setMaxMinOutput(12, 0);
 
         leadMotor.startPIDTuning();
 
-        MarinersTalonFX[] followMotors = new MarinersTalonFX[3];
+        MarinersTalonFX[] followMotors = new MarinersTalonFX[1];
         for (int i = 0; i < followMotors.length; i++){
             var follower = ShooterConstants.MOTOR_CONSTANTS.FOLLOWERS[i];
 

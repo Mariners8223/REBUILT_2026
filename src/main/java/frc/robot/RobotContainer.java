@@ -193,8 +193,10 @@ public class RobotContainer {
             kicker.setKickerCommand(SmartDashboard.getNumber("Kicker Duty Cycle", 0.6)),
             new ShootVelocity(shooter, () -> RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0)))
         ));
-        driveController.triangle().whileTrue(new ShootVelocity(shooter, () -> RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))));
+        driveController.triangle().whileTrue(funnel.funnelingCommand());
             
+        driveController.cross().whileTrue(funnel.funnelingCommand());
+       
         driveController.L1().onTrue(intake.moveToPositionCommand(IntakePosition.Closed));
         driveController.R1().onTrue(intake.moveToPositionCommand(IntakePosition.Middle));
         driveController.L2().onTrue(intake.moveToPositionCommand(IntakePosition.Open));
