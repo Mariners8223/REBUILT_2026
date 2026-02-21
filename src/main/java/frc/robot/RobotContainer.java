@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.Drive.AimDriving;
 import frc.robot.commands.Drive.DriveCommand;
 import frc.robot.subsystems.DriveTrain.DriveBase;
+import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.DriveTrain.DriveBaseSYSID;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Funnel.Funnel;
@@ -40,6 +41,9 @@ public class RobotContainer {
     public static Kicker kicker;
 
     public static DriveBaseSYSID driveSysID;
+    public static CommandXboxController driveXboxController;
+    public static Vision vision;
+
 
     public RobotContainer() {
         driveController = new CommandPS5Controller(0);
@@ -51,6 +55,7 @@ public class RobotContainer {
         kicker = new Kicker();
 
         driveSysID = new DriveBaseSYSID(driveBase, driveController);
+        vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
 
         configureDriveBindings();
         // configureTestingBindings();

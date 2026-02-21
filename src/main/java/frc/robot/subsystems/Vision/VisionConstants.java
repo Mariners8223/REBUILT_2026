@@ -16,24 +16,24 @@ public class VisionConstants {
     public static final PhotonPoseEstimator.PoseStrategy FALLBACK_STRATEGY =
             PhotonPoseEstimator.PoseStrategy.LOWEST_AMBIGUITY;
 
-    public static final AprilTagFieldLayout FIELD_LAYOUT = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
+    public static final AprilTagFieldLayout FIELD_LAYOUT = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
 
     public static final double maxHeightDeviation = 0.1;
     public static final double maxMultiAmbiguity = 0.3;
     public static final double maxSingleAmbiguity = 0.1;
 
     public enum CameraConstants{
-        END_EFFECTOR_CAMERA("EndEffectorCamera",
+        POINTING_IN_CAMERA("pointing_in_camera",//this camera will be on a churo of the shooter
             new Transform3d(
-                0.205, 0.081, 0.32,
-                new Rotation3d(0, Units.degreesToRadians(-1), Units.degreesToRadians(-13))),
-                0.2, 0.16),
+                0, 0, 0,
+                new Rotation3d(0, Units.degreesToRadians(0), Units.degreesToRadians(0))),
+                0, 0),
 
-       FUNNEL_CAMERA("FunnelCamera",
+       POINTING_OUT_CAMERA("pointing_out_camera", //this camera will be placed on the side of the shooter, pointing backwards
            new Transform3d(
-               -0.34, 0.178, 0.557,
-               new Rotation3d(0, Units.degreesToRadians(-15), Units.degreesToRadians(177))),
-               0.25, 0.16);
+               0.23554, -0.26835, 0.47246,
+               new Rotation3d(Units.degreesToRadians(-15), Units.degreesToRadians(0), Units.degreesToRadians(0))),
+               0, 0);
 
         public final String cameraName;
         public final double XYstdFactor;

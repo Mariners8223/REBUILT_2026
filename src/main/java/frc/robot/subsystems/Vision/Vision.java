@@ -32,12 +32,11 @@ public class Vision extends SubsystemBase {
 
     private final VisionConsumer poseConsumer;
 
-    private final Supplier<Boolean> ignoreFunnel;
 
     /**
      * Creates a new Vision.
      */
-    public Vision(VisionConsumer poseConsumer, Supplier<Pose2d> referncePoseSupplier, Supplier<Boolean> ignoreFunnel) {
+    public Vision(VisionConsumer poseConsumer, Supplier<Pose2d> referncePoseSupplier) {
 
         int numOfCameras = CameraConstants.values().length;
 
@@ -51,7 +50,6 @@ public class Vision extends SubsystemBase {
         }
 
         this.poseConsumer = poseConsumer;
-        this.ignoreFunnel = ignoreFunnel;
     }
 
     @Override
@@ -79,21 +77,16 @@ public class Vision extends SubsystemBase {
                 if (!frame.hasTarget()) continue;
 
 
-
-                if (!checkPoseLocation(frame.robotPose())) {
+                 if (!checkPoseLocation(frame.robotPose())) {
                     rejectedPoses.add(frame.robotPose());
-                    continue;
-                }
+                     continue;
+                 }
 
-                if (!checkPoseAmbiguity(frame.poseAmbiguity(), frame.estimationType())) {
-                    rejectedPoses.add(frame.robotPose());
-                    continue;
-                }
+                 if (!checkPoseAmbiguity(frame.poseAmbiguity(), frame.estimationType())) {
+                     rejectedPoses.add(frame.robotPose());
+                     continue;
+                 }
 
-                if(ignoreFunnel.get() && camera.constants == CameraConstants.FUNNEL_CAMERA){
-                    rejectedPoses.add(frame.robotPose());
-                    continue;
-                }
 
                 var stdDevs = getStdDevs(frame.averageTargetDistance(), frame.tagCount(), frame.estimationType(), camera);
 
@@ -124,6 +117,7 @@ public class Vision extends SubsystemBase {
         if (poseX >= VisionConstants.FIELD_LAYOUT.getFieldLength() || poseX < 0) return false;
         if (poseY >= VisionConstants.FIELD_LAYOUT.getFieldWidth() || poseY < 0) return false;
         return !(Math.abs(poseZ) > VisionConstants.maxHeightDeviation);
+        
     }
 
     /**
@@ -138,6 +132,7 @@ public class Vision extends SubsystemBase {
             return false;
         }
         return poseAmbiguity <= estimationType.getMaxAmbiguity();
+        
     }
 
         /**
@@ -195,7 +190,7 @@ public class Vision extends SubsystemBase {
             };
 
             this.cameraName = cameraName;
-            this.constants = CameraConstants.END_EFFECTOR_CAMERA;
+            this.constants = CameraConstants.POINTING_IN_CAMERA;
             inputs = new VisionInputsAutoLogged();
 
         }
