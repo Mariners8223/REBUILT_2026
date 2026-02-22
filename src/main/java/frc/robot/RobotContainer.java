@@ -71,7 +71,7 @@ public class RobotContainer {
         shooterSysID = new ShooterSysID(shooter);
         vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
 
-        //configureDriveBindings();
+        configureDriveBindings();
         // configureShooterSysIDBindings();
         // configureShooterTestBindings();
         configureTestingBindings();
@@ -99,7 +99,7 @@ public class RobotContainer {
             driveBase::removeDefaultCommand)
             .ignoringDisable(true));
 
-        driveController.options().onTrue(driveBase.resetOnlyDirection());
+        driveController.povUp().onTrue(driveBase.resetOnlyDirection());
 
         // driveController.PS().onTrue(Commands.run(() -> driveBase.Rota))
     }

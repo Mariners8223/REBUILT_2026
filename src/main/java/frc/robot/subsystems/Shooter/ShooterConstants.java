@@ -43,6 +43,9 @@ public class ShooterConstants {
         public static final double GEAR_RATIO = 1;
         public static final double GEAR_REDUCTION = 1 / GEAR_RATIO;
 
+        public static final int SHOOTER_MOTOR_CURRENT_LIMIT = 30;
+        public static final int SHOOTER_MOTOR_CURRENT_THRESHOLD = 60;
+
         public static final int LEAD_MOTOR_ID = 5;
         public static final boolean LEAD_MOTOR_IS_INVERTED = false;
 

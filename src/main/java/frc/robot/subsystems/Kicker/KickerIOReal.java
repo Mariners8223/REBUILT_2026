@@ -23,7 +23,8 @@ public class KickerIOReal implements KickerIO {
             KickerConstants.MOTOR_CONSTANTS.MOTOR_TYPE);
         leadMotor.setMotorInverted(KickerConstants.MOTOR_CONSTANTS.LEAD_MOTOR_IS_INVERTED);
         leadMotor.setMotorIdleMode(true);
-        leadMotor.setCurrentLimits(60, 90);
+        leadMotor.setCurrentLimits(KickerConstants.MOTOR_CONSTANTS.LEAD_MOTOR_CURRENT_LIMIT,
+           KickerConstants.MOTOR_CONSTANTS.LEAD_MOTOR_CURRENT_THRESHOLD);
 
         followMotor = new MarinersSparkBase(
             "Kicker Follow Motor",

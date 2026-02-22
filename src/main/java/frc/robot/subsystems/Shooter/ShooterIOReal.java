@@ -15,6 +15,8 @@ import frc.util.PIDFGains;
 import frc.util.MarinersController.MarinersController;
 import frc.util.MarinersController.MarinersTalonFX;
 import frc.util.MarinersController.MarinersController.ControlMode;
+import frc.robot.subsystems.Shooter.ShooterConstants;
+import frc.robot.subsystems.Shooter.ShooterConstants.MOTOR_CONSTANTS;
 
 /** Add your docs here. */
 public class ShooterIOReal implements ShooterIO {
@@ -39,7 +41,7 @@ public class ShooterIOReal implements ShooterIO {
         leadMotor.setStaticFeedForward(ShooterConstants.MOTOR_CONSTANTS.Ks);
         leadMotor.setFeedForward(ShooterConstants.MOTOR_CONSTANTS.Kv);
 
-        leadMotor.setCurrentLimits(60, 90);
+        leadMotor.setCurrentLimits(MOTOR_CONSTANTS.SHOOTER_MOTOR_CURRENT_LIMIT, MOTOR_CONSTANTS.SHOOTER_MOTOR_CURRENT_THRESHOLD);
 
         // leadMotor.setMaxMinOutput(12, 0);
 

@@ -14,6 +14,9 @@ public class KickerConstants {
         public static final MotorType MOTOR_TYPE = MotorType.SPARK_FLEX;
         public static final double GEAR_RATIO = 1;
 
+        public static final int LEAD_MOTOR_CURRENT_LIMIT = 30;
+        public static final int LEAD_MOTOR_CURRENT_THRESHOLD = 60;
+
         public static final int LEAD_MOTOR_ID = 14;
         public static final int FOLLOW_MOTOR_ID = 16;
 
