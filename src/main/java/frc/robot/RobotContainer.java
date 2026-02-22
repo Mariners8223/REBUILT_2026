@@ -58,8 +58,8 @@ public class RobotContainer {
         vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
 
         configureDriveBindings();
-        // configureTestingBindings();
-        configureDriveSysidBindings();
+        configureTestingBindings();
+        //configureDriveSysidBindings();
     }
 
     public Distance distanceFromHub(){
@@ -71,6 +71,7 @@ public class RobotContainer {
             new StartEndCommand(() -> driveBase.setDefaultCommand(new DriveCommand(driveBase, driveController)),
             driveBase::removeDefaultCommand)
             .ignoringDisable(true));
+        driveController.povUp().onTrue(driveBase.resetOnlyDirection());
         driveController.R1().toggleOnTrue(new AimDriving(driveBase, driveController, () -> {return Constants.FieldConstants.HUB_POSITION.toPose2d();} ));
     }
 
@@ -121,13 +122,15 @@ public class RobotContainer {
     public void configureTestingBindings(){
         SmartDashboard.putNumber("Shooter Velocity", 0);
         SmartDashboard.putNumber("Shooter Duty Cycle", 0);
-
-        driveController.cross().toggleOnTrue(
-            intake.moveToPositionCommand(
-                intake.getCurrentState() == IntakePosition.Closed ?
-                IntakePosition.Open : IntakePosition.Closed
-            )
-        );
+        
+        driveController.cross().whileTrue(new StartEndCommand(() -> shooter.setDutyCycle(0.2), 
+            () -> shooter.setDutyCycle(0)));
+        // driveController.cross().toggleOnTrue(
+        //     intake.moveToPositionCommand(
+        //         intake.getCurrentState() == IntakePosition.Closed ?
+        //         IntakePosition.Open : IntakePosition.Closed
+        //     )
+        // );
         driveController.triangle().toggleOnTrue(
             intake.spinRollersCommand()
         );
