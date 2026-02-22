@@ -26,7 +26,7 @@ public class VisionConstants {
         POINTING_IN_CAMERA("pointing_in_camera",//this camera will be on a churo of the shooter
             new Transform3d(
                 0.11143, 0.221, 0.574,
-                new Rotation3d(0, Units.degreesToRadians(26), Units.degreesToRadians(0))),
+                new Rotation3d(0, Units.degreesToRadians(-26), Units.degreesToRadians(0))),
                 0, 0),
 
        POINTING_OUT_CAMERA("pointing_out_camera", //this camera will be placed on the side of the shooter, pointing backwards

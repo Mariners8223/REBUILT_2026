@@ -7,8 +7,14 @@ package frc.robot;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.RPM;
 
+import java.io.IOException;
+import java.util.Optional;
 import java.util.function.BiFunction;
 
+import org.json.simple.parser.ParseException;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -25,11 +31,15 @@ import frc.robot.commands.Drive.DriveCommand;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.DriveTrain.DriveBaseSYSID;
+import frc.robot.subsystems.DriveTrain.DriveBaseConstants.PathPlanner;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Funnel.Funnel;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakePosition;
 import frc.robot.subsystems.Kicker.Kicker;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.FileVersionException;
 
 public class RobotContainer {
     public static CommandPS5Controller driveController;
@@ -58,7 +68,7 @@ public class RobotContainer {
         vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
 
         configureDriveBindings();
-        configureTestingBindings();
+        //configureTestingBindings();
         //configureDriveSysidBindings();
     }
 
@@ -73,6 +83,16 @@ public class RobotContainer {
             .ignoringDisable(true));
         driveController.povUp().onTrue(driveBase.resetOnlyDirection());
         driveController.R1().toggleOnTrue(new AimDriving(driveBase, driveController, () -> {return Constants.FieldConstants.HUB_POSITION.toPose2d();} ));
+        // Optional<PathPlannerPath> path = Optional.empty();
+        // try {
+        //     path = Optional.of(PathPlannerPath.fromPathFile("pointhub"));
+        // } catch (FileVersionException | IOException | ParseException e) {
+        //     System.err.println("Failed to load path: " + e.getMessage());
+        // }
+
+        // if (path.isPresent()) {
+        //     driveController.square().onTrue(driveBase.pathFindToPathAndFollow(path.get()));
+        // }
     }
 
 
