@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import frc.robot.Robot;
@@ -19,6 +20,8 @@ import static frc.robot.subsystems.DriveTrain.DriveBaseConstants.DISTANCE_BETWEE
 import static frc.robot.subsystems.DriveTrain.DriveBaseConstants.DISTANCE_BETWEEN_WHEELS_VERTICAL;
 
 import java.util.function.Supplier;
+
+import org.littletonrobotics.junction.Logger;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AimDriving extends Command {
@@ -36,6 +39,8 @@ public class AimDriving extends Command {
         this.poseSupplier = poseSupplier;
         addRequirements(this.driveBase);
         setName("AimDriving");
+
+        thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
         MAX_FREE_WHEEL_SPEED = DevBotConstants.MAX_WHEEL_LINEAR_VELOCITY;
 
@@ -79,6 +84,8 @@ public class AimDriving extends Command {
         // double R2Axis  = 1 - (0.5 + controller.getRightTriggerAxis() / 2);
         double angleTarget = poseSupplier.get().minus(driveBase.getPose()).getRotation().getRadians();
         thetaController.setSetpoint(angleTarget);
+
+        Logger.recordOutput("Angle to Hub", angleTarget);
 
         double R2Axis  = 1 - controller.getR2Axis();
 

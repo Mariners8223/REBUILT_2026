@@ -9,6 +9,8 @@ import static edu.wpi.first.units.Units.RPM;
 
 import java.util.function.BiFunction;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -60,6 +62,8 @@ public class RobotContainer {
         configureDriveBindings();
         // configureTestingBindings();
         configureDriveSysidBindings();
+
+        Logger.recordOutput("Hub Pose", Constants.FieldConstants.HUB_POSITION);
     }
 
     public Distance distanceFromHub(){
