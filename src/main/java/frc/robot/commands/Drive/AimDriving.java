@@ -100,7 +100,7 @@ public class AimDriving extends Command {
         leftX *= R2Axis * MAX_FREE_WHEEL_SPEED;
         leftY *= R2Axis * MAX_FREE_WHEEL_SPEED;
 
-        ChassisSpeeds fieldRelativeSpeeds = new ChassisSpeeds(leftX, leftY, thetaController.calculate(driveBase.getRotation2d().getRadians()));
+        ChassisSpeeds fieldRelativeSpeeds = new ChassisSpeeds(leftX, leftY, thetaController.calculate(angleTarget));
 
         Rotation2d gyroAngle = driveBase.getRotation2d();
 

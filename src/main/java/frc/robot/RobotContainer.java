@@ -7,6 +7,8 @@ package frc.robot;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.RPM;
 
+import java.io.IOException;
+import java.util.Optional;
 import java.util.function.BiFunction;
 
 import org.littletonrobotics.junction.Logger;
@@ -27,11 +29,15 @@ import frc.robot.commands.Drive.DriveCommand;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.DriveTrain.DriveBaseSYSID;
+import frc.robot.subsystems.DriveTrain.DriveBaseConstants.PathPlanner;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Funnel.Funnel;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakePosition;
 import frc.robot.subsystems.Kicker.Kicker;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.FileVersionException;
 
 public class RobotContainer {
     public static CommandPS5Controller driveController;
@@ -60,7 +66,7 @@ public class RobotContainer {
         vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
 
         configureDriveBindings();
-        // configureTestingBindings();
+        //configureTestingBindings();
         configureDriveSysidBindings();
 
         Logger.recordOutput("Hub Pose", Constants.FieldConstants.HUB_POSITION);
@@ -75,7 +81,18 @@ public class RobotContainer {
             new StartEndCommand(() -> driveBase.setDefaultCommand(new DriveCommand(driveBase, driveController)),
             driveBase::removeDefaultCommand)
             .ignoringDisable(true));
+        driveController.povUp().onTrue(driveBase.resetOnlyDirection());
         driveController.R1().toggleOnTrue(new AimDriving(driveBase, driveController, () -> {return Constants.FieldConstants.HUB_POSITION.toPose2d();} ));
+        // Optional<PathPlannerPath> path = Optional.empty();
+        // try {
+        //     path = Optional.of(PathPlannerPath.fromPathFile("pointhub"));
+        // } catch (FileVersionException | IOException | ParseException e) {
+        //     System.err.println("Failed to load path: " + e.getMessage());
+        // }
+
+        // if (path.isPresent()) {
+        //     driveController.square().onTrue(driveBase.pathFindToPathAndFollow(path.get()));
+        // }
     }
 
 
@@ -125,13 +142,15 @@ public class RobotContainer {
     public void configureTestingBindings(){
         SmartDashboard.putNumber("Shooter Velocity", 0);
         SmartDashboard.putNumber("Shooter Duty Cycle", 0);
-
-        driveController.cross().toggleOnTrue(
-            intake.moveToPositionCommand(
-                intake.getCurrentState() == IntakePosition.Closed ?
-                IntakePosition.Open : IntakePosition.Closed
-            )
-        );
+        
+        driveController.cross().whileTrue(new StartEndCommand(() -> shooter.setDutyCycle(0.2), 
+            () -> shooter.setDutyCycle(0)));
+        // driveController.cross().toggleOnTrue(
+        //     intake.moveToPositionCommand(
+        //         intake.getCurrentState() == IntakePosition.Closed ?
+        //         IntakePosition.Open : IntakePosition.Closed
+        //     )
+        // );
         driveController.triangle().toggleOnTrue(
             intake.spinRollersCommand()
         );

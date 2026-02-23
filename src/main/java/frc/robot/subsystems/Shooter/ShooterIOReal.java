@@ -38,7 +38,7 @@ public class ShooterIOReal implements ShooterIO {
 
         leadMotor.startPIDTuning();
 
-        MarinersTalonFX[] followMotors = new MarinersTalonFX[3];
+        MarinersTalonFX[] followMotors = new MarinersTalonFX[1];
         for (int i = 0; i < followMotors.length; i++){
             var follower = ShooterConstants.MOTOR_CONSTANTS.FOLLOWERS[i];
 
