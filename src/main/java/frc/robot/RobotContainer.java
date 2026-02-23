@@ -67,10 +67,6 @@ public class RobotContainer {
     public static CommandXboxController driveXboxController;
     public static Vision vision;
 
-    public static ShooterSysID shooterSysID;
-    public static CommandXboxController driveXboxController;
-    public static Vision vision;
-
 
     public RobotContainer() {
         driveController = new CommandPS5Controller(0);
@@ -83,7 +79,6 @@ public class RobotContainer {
         kicker = new Kicker();
 
         driveSysID = new DriveBaseSYSID(driveBase, driveController);
-        shooterSysID = new ShooterSysID(shooter);
         vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
 
         configureDriveBindings();
@@ -97,11 +92,6 @@ public class RobotContainer {
         return Meters.of(driveBase.getPose().getTranslation().getDistance(Constants.FieldConstants.HUB_POSITION.getTranslation().toTranslation2d()));
     }
 
-    public Distance distanceFromHub(){
-        return Meters.of(
-            driveBase.getPose().getTranslation().getDistance(Constants.FieldConstants.HUB_POSITION)
-        );
-    }
     public Distance distanceFromHubWithVelocity(){
         Distance distance = distanceFromHub();
         double chassisVelocityX = driveBase.getAbsoluteChassisSpeeds().vxMetersPerSecond;
@@ -183,13 +173,13 @@ public class RobotContainer {
     //#endregion
 
     //#region Shooter
-    public void configureShooterSysIDBindings(){
-        driveController.cross().whileTrue(shooterSysID.getShooterDynamic(Direction.kReverse));
-        driveController.triangle().whileTrue(shooterSysID.getShooterDynamic(Direction.kForward));
+    // public void configureShooterSysIDBindings(){
+    //     driveController.cross().whileTrue(shooterSysID.getShooterDynamic(Direction.kReverse));
+    //     driveController.triangle().whileTrue(shooterSysID.getShooterDynamic(Direction.kForward));
 
-        driveController.circle().whileTrue(shooterSysID.getShooterQuasistatic(Direction.kForward));
-        driveController.square().whileTrue(shooterSysID.getShooterQuasistatic(Direction.kReverse));
-    }
+    //     driveController.circle().whileTrue(shooterSysID.getShooterQuasistatic(Direction.kForward));
+    //     driveController.square().whileTrue(shooterSysID.getShooterQuasistatic(Direction.kReverse));
+    // }
 
     public void configureShooterTestBindings(){
         SmartDashboard.putNumber("Shooter RPM", 0);
