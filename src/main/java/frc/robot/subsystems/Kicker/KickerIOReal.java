@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems.Kicker;
 
+import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import frc.util.MarinersController.MarinersSparkBase;
@@ -38,7 +39,7 @@ public class KickerIOReal implements KickerIO {
 
     public void update(KickerInputs inputs){
         inputs.dutyCycle = leadMotor.getMotor().get();
-        inputs.velocity = RotationsPerSecond.of(leadMotor.getVelocity());
+        inputs.velocity = RotationsPerSecond.of(leadMotor.getVelocity()).in(RPM);
     }
 
 }

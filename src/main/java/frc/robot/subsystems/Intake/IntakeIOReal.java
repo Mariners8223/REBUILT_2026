@@ -3,9 +3,13 @@ package frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakePosition;
 import frc.util.MarinersController.MarinersTalonFX;
 import static edu.wpi.first.units.Units.Rotation;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+
 import org.littletonrobotics.junction.Logger;
 import static edu.wpi.first.units.Units.RPM;
+
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.util.MarinersController.MarinersController.ControlMode;
 
 public class IntakeIOReal implements IntakeIO{
@@ -23,13 +27,14 @@ public class IntakeIOReal implements IntakeIO{
         motor = new MarinersTalonFX("position motor", IntakeConstants.PositionMotor.CONTROLLER_LOCATION,
         IntakeConstants.PositionMotor.MOTOR_ID, IntakeConstants.PositionMotor.PID_GAINS, IntakeConstants.PositionMotor.GEAR_RATIO);
         motor.setMotorInverted(IntakeConstants.PositionMotor.IS_INVERTED);
-        motor.enableSoftLimits(IntakeConstants.PositionMotor.SOFT_MINIMUM, IntakeConstants.PositionMotor.SOFT_MAXIMUM);
+        // motor.enableSoftLimits(IntakeConstants.PositionMotor.SOFT_MINIMUM, IntakeConstants.PositionMotor.SOFT_MAXIMUM);
         motor.setMotorIdleMode(true);
         // PID and Profile
-        motor.setMaxMinOutput(4, -2);
+        // motor.setMaxMinOutput(4, -2);
         motor.setProfile(IntakeConstants.PositionMotor.PROFILE);
-        motor.startPIDTuning();
+        // motor.startPIDTuning();
 
+        SmartDashboard.putString("Intake PID", motor.getPIDF().toString());
         return motor;
     }
     private MarinersTalonFX configureRollersMotor()
@@ -60,7 +65,7 @@ public class IntakeIOReal implements IntakeIO{
 
     public void resetPositionMotorEncoder()
     {
-        positionMotor.setMotorEncoderPosition(IntakeConstants.PositionMotor.IntakePosition.Closed.getAngle().in(Rotation));
+        positionMotor.setMotorEncoderPosition(IntakeConstants.PositionMotor.IntakePosition.Reset.getAngle().in(Rotation));
     }
 
     public void startPIDTuning(){
@@ -70,8 +75,8 @@ public class IntakeIOReal implements IntakeIO{
     public void Update(IntakeInputs inputs)
     {
         inputs.currentPosition = getCurrentPosition();
-        inputs.positionMotorSpeed = RPM.of(positionMotor.getVelocity());
-        inputs.rollersMotorSpeed = RPM.of(rollersMotor.getVelocity());
+        inputs.positionMotorSpeed = RotationsPerSecond.of(positionMotor.getVelocity()).in(RPM);
+        inputs.rollersMotorSpeed = RotationsPerSecond.of(rollersMotor.getVelocity()).in(RPM);
         inputs.intakeState = IntakePosition.findNearestPosition(inputs.currentPosition);
 
         Logger.recordOutput("Setpoint", positionMotor.getSetpoint());

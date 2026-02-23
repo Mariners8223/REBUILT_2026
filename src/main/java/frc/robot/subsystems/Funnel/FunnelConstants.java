@@ -16,7 +16,7 @@ public class FunnelConstants {
         public static final double GearRatio = 0.6;
         public static final double MOMENT_OF_INERTIA_SIM = 1;
 
-        public static final double LeadSpeed = 0.3;
+        public static final double LeadSpeed = 0.6;
         public static final boolean IS_INVERTED = false;
     }
 
@@ -26,7 +26,7 @@ public class FunnelConstants {
         public static final double GearRatio = 3;
         public static final double MOMENT_OF_INERTIA_SIM = 1;
 
-        public static final double CenteringHighSpeed = 0.4;
+        public static final double CenteringHighSpeed = 0.5;
         public static final boolean IS_INVERTED = true;
     }
 }

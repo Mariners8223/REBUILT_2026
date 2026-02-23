@@ -1,7 +1,6 @@
 package frc.robot.subsystems.Intake;
 
 import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.Rotation;
 import static edu.wpi.first.units.Units.Rotations;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -22,7 +21,9 @@ public class IntakeConstants
         public enum IntakePosition
         {
             Closed(Degrees.of(0)),
-            Open(Degrees.of(-90));
+            Middle(Degrees.of(-55)),
+            Open(Rotations.of(-0.25)),
+            Reset(Degrees.of(-90));
 
             private final Angle angle;
 
@@ -63,11 +64,9 @@ public class IntakeConstants
         350,
         50,
         0,
-        0.1,
-        POSITION_TOLERANCE.in(Rotation),
-        0);
+        0.1);
         public static final TrapezoidProfile PROFILE = new TrapezoidProfile(
-            new Constraints(4, 0.8)
+            new Constraints(2, 0.8)
         );
     }
 

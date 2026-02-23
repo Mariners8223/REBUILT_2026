@@ -63,7 +63,7 @@ public class VisionIOPhoton implements VisionIO {
     /**
      * generates a VisionFrame from a PhotonPipelineResult
      * @param result the result to generate the frame from
-     * @return a VisionFrame instance based on the result 
+     * @return a VisionFrame instance based on the result
      */
     private VisionFrame generateFrame(PhotonPipelineResult result){
         if(!result.hasTargets()){

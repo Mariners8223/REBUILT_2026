@@ -5,11 +5,15 @@
 package frc.robot.subsystems.Shooter;
 
 import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Minute;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
 import org.littletonrobotics.junction.Logger;
+
+import edu.wpi.first.units.measure.AngularAcceleration;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearVelocity;
@@ -28,10 +32,13 @@ public class Shooter extends SubsystemBase {
     }
 
     public AngularVelocity getShooterVelocity(){
-        return inputs.shooterVelocity;
+        return RotationsPerSecond.of(io.getVelocity());
     }
     public LinearVelocity getShooterLinearVelocity(){
-        return inputs.shooterLinearVelocity;
+        return MetersPerSecond.of(inputs.shooterLinearVelocity);
+    }
+    public AngularAcceleration getShooterAcceleration(){
+        return RotationsPerSecondPerSecond.of(io.getAcceleration());
     }
 
     public void stopShooter(){
@@ -39,6 +46,9 @@ public class Shooter extends SubsystemBase {
     }
     public void setVelocity(AngularVelocity targetVelocity){
         io.setVelocity(targetVelocity.in(RotationsPerSecond));
+    }
+    public void setVelocityWithFeedforward(AngularVelocity targetVelocity, double ff){
+        io.setVelocityWithFeedforward(targetVelocity.in(RotationsPerSecond), ff);
     }
     public void setLinearVelocity(LinearVelocity targetVelocity){
         double targetAngularVelocity = targetVelocity.in(Meters.per(Minute)) / ShooterConstants.SHOOTER_WHEEL_CIRCUMFERENCE.in(Meters);

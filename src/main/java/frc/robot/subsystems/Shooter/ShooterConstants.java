@@ -15,6 +15,7 @@ import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Unit;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularAcceleration;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearAcceleration;
@@ -30,21 +31,17 @@ import frc.util.MarinersController.MarinersController.ControllerLocation;
 public class ShooterConstants {
 
     public static class MOTOR_CONSTANTS{
+        public static final double Ks = 0.21571;
+        public static final double Kv = 0.11496;
+        public static final double Ka = 0.042404;
+
         public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
         public static final PIDFGains PID = new PIDFGains(
-            0.25,
+            0.5,
             0.7,
             0.1,
-            0,
-            0,
-            0,
-            0,
-            0
+            Kv
         );
-
-        public static final double Ks = 0.10794;
-        public static final double Kv = 0.11656;
-        public static final double Ka = 0.01793;
 
         public static final double GEAR_RATIO = 1;
         public static final double GEAR_REDUCTION = 1 / GEAR_RATIO;
@@ -67,10 +64,11 @@ public class ShooterConstants {
     }
 
     public static double LOW_PASS_FILTER_ALPHA = 0.3;
-    public static double FEED_FORWARD_SHOOTER_BOOST = 0.2;
-    public static double MAX_FEED_FORWARD_BOOST =  2;
-    public static AngularVelocity SHOOTING_VELOCITY_FALL = RotationsPerSecond.of(4);
-    public static Time FEED_FORWARD_BOOST_TIME = Millisecond.of(150);
+    public static double FEED_FORWARD_SHOOTER_BOOST = 0.06;
+    public static double MAX_FEED_FORWARD_BOOST = 5;
+    public static AngularVelocity SHOOTING_VELOCITY_FALL = RotationsPerSecond.of(2);
+    public static final AngularAcceleration FALL_ACCELERATION = RotationsPerSecondPerSecond.of(30);
+    public static Time FEED_FORWARD_BOOST_TIME = Millisecond.of(80);
 
     public static final Distance SHOOTER_HEIGHT = Centimeter.of(40);
     public static final Angle SHOOTER_ANGLE = Degree.of(75);

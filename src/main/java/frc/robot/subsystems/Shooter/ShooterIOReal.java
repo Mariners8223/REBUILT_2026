@@ -5,10 +5,13 @@
 package frc.robot.subsystems.Shooter;
 
 import static edu.wpi.first.units.Units.Meter;
+import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Minute;
 import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import edu.wpi.first.units.measure.LinearVelocity;
+import frc.util.PIDFGains;
 import frc.util.MarinersController.MarinersController;
 import frc.util.MarinersController.MarinersTalonFX;
 import frc.util.MarinersController.MarinersController.ControlMode;
@@ -26,7 +29,7 @@ public class ShooterIOReal implements ShooterIO {
     //#region Configuration
     public void configureShooterMotors(){
         leadMotor = new MarinersTalonFX(
-            "Shooter Motor 1", ShooterConstants.MOTOR_CONSTANTS.CONTROLLER_LOCATION,
+            "Shooter Motor", ShooterConstants.MOTOR_CONSTANTS.CONTROLLER_LOCATION,
             ShooterConstants.MOTOR_CONSTANTS.LEAD_MOTOR_ID, ShooterConstants.MOTOR_CONSTANTS.PID,
             ShooterConstants.MOTOR_CONSTANTS.GEAR_RATIO
             );
@@ -35,6 +38,10 @@ public class ShooterIOReal implements ShooterIO {
 
         leadMotor.setStaticFeedForward(ShooterConstants.MOTOR_CONSTANTS.Ks);
         leadMotor.setFeedForward(ShooterConstants.MOTOR_CONSTANTS.Kv);
+
+        leadMotor.setCurrentLimits(80, 110);
+
+        // leadMotor.setMaxMinOutput(12, 0);
 
         leadMotor.startPIDTuning();
 
@@ -56,8 +63,14 @@ public class ShooterIOReal implements ShooterIO {
     public double getVelocity(){
         return leadMotor.getVelocity();
     }
+    public double getAcceleration(){
+        return leadMotor.getAcceleration();
+    }
     public void setVelocity(double targetVelocity){
         leadMotor.setReference(targetVelocity, ControlMode.Velocity);
+    }
+    public void setVelocityWithFeedforward(double targetVelocity, double ff){
+        leadMotor.setReference(targetVelocity, ControlMode.Velocity, ff);
     }
     public void setVoltage(double voltage){
         leadMotor.setVoltage(voltage);
@@ -66,20 +79,23 @@ public class ShooterIOReal implements ShooterIO {
         leadMotor.setReference(targetDutyCycle, ControlMode.DutyCycle);
     }
     public void feedForwardBoost(double boost){
-        leadMotor.setStaticFeedForward(leadMotor.getPIDF().getF() + boost);
+        PIDFGains newGains = new PIDFGains(leadMotor.getPIDF().getP(), leadMotor.getPIDF().getI(), leadMotor.getPIDF().getD(),
+        leadMotor.getPIDF().getF() + boost);
+        leadMotor.setPIDF(newGains);
+        // leadMotor.setFeedForward(leadMotor.getPIDF().getF() + boost);
     }
     public void resetFeedForward(){
-        leadMotor.setStaticFeedForward(ShooterConstants.MOTOR_CONSTANTS.PID.getF());
+        leadMotor.setPIDF(ShooterConstants.MOTOR_CONSTANTS.PID);
     }
 
 
     public void update(ShooterInputs inputs){
-        inputs.shooterVelocity = RPM.of(getVelocity());
+        inputs.shooterVelocity = (RotationsPerSecond.of(getVelocity())).in(RPM);
 
         LinearVelocity shooterLinearVelocity = Meter.per(Minute).of(
             getVelocity() * ShooterConstants.SHOOTER_WHEEL_CIRCUMFERENCE.in(Meter)
         );
-        inputs.shooterLinearVelocity = shooterLinearVelocity;
+        inputs.shooterLinearVelocity = shooterLinearVelocity.in(MetersPerSecond);
 
         inputs.feedForward = leadMotor.getPIDF().getF();
 

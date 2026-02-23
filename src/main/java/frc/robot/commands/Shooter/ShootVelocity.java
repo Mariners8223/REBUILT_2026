@@ -4,10 +4,12 @@
 
 package frc.robot.commands.Shooter;
 
-import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
 import java.util.function.Supplier;
+
+import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -22,6 +24,7 @@ public class ShootVelocity extends Command {
   Supplier<AngularVelocity> velocitySupplier;
   AngularVelocity RPMLast;
 
+  double boost;
   Timer boostTimer;
 
   /** Creates a new Shoot. */
@@ -40,31 +43,39 @@ public class ShootVelocity extends Command {
     AngularVelocity requiredSpeed = velocitySupplier.get();
     RPMLast = shooter.getShooterVelocity();
 
+    System.out.println("Fall");
+    Logger.recordOutput("Shooter/Fall", (shooter.getShooterAcceleration().unaryMinus().gte(ShooterConstants.FALL_ACCELERATION)));
+    Logger.recordOutput("Shooter/Boost", boost);
     shooter.setVelocity(requiredSpeed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.setVelocity(velocitySupplier.get());
+    Logger.recordOutput("Shooter/Fall", (shooter.getShooterAcceleration().unaryMinus().gte(ShooterConstants.FALL_ACCELERATION)));
 
-    AngularVelocity velocityDifference = shooter.getShooterVelocity().minus(RPMLast);
-    if (velocityDifference.lte(ShooterConstants.SHOOTING_VELOCITY_FALL.unaryMinus())){
-      double boost = MathUtil.clamp(Math.abs(velocityDifference.in(RotationsPerSecond)) * ShooterConstants.FEED_FORWARD_SHOOTER_BOOST,
-                                0.0,
-                                ShooterConstants.MAX_FEED_FORWARD_BOOST);
+    if (shooter.getShooterAcceleration().unaryMinus().gte(ShooterConstants.FALL_ACCELERATION)){
+      boost += MathUtil.clamp(shooter.getShooterAcceleration().unaryMinus().in(RotationsPerSecondPerSecond) * ShooterConstants.FEED_FORWARD_SHOOTER_BOOST,
+                              0.0,
+                              ShooterConstants.MAX_FEED_FORWARD_BOOST);
 
-      shooter.boostFeedForward(boost);
+      // shooter.boostFeedForward(boost);
       boostTimer.restart();
+      shooter.setDutyCycle(1);
     }
 
-    if (boostTimer.hasElapsed(ShooterConstants.FEED_FORWARD_BOOST_TIME)
-        || ShooterConstants.Calculations.epsilonEquals(shooter.getShooterVelocity(), velocitySupplier.get(), RotationsPerSecond.of(1))){
-      shooter.resetFeedForward();
+    // if (boostTimer.hasElapsed(ShooterConstants.FEED_FORWARD_BOOST_TIME)
+    //     || shooter.getShooterVelocity().gte(velocitySupplier.get())){
+    if (shooter.getShooterVelocity().gte(velocitySupplier.get())){
+      // shooter.resetFeedForward();
       boostTimer.stop();
+      boost = 0;
     }
 
+    if (!boostTimer.isRunning()) shooter.setVelocity(velocitySupplier.get());
     RPMLast = shooter.getShooterVelocity().copy();
+
+    Logger.recordOutput("Shooter/Boost", boost);
   }
 
   // Called once the command ends or is interrupted.
