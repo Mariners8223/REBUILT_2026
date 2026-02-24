@@ -8,7 +8,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public class PIDFGains {
     private final double _kP, _kI, _kD, _kF, _tolerance, _iZone, _Period, _maxVelocity, _maxAcceleration;
-  
+
     public PIDFGains(double kP, double kI, double kD, double kF, double tolerance, double iZone) {
       this._kP = kP;
       this._kI = kI;
@@ -32,7 +32,7 @@ public class PIDFGains {
       this._maxVelocity = 0;
       this._Period = period;
     }
-  
+
     public PIDFGains(double kP, double kI, double kD) {
       this._kP = kP;
       this._kI = kI;
@@ -108,19 +108,19 @@ public class PIDFGains {
     public double getP() {
       return this._kP;
     }
-  
+
     public double getI() {
       return this._kI;
     }
-  
+
     public double getD() {
       return this._kD;
     }
-  
+
     public double getF() {
       return this._kF;
     }
-  
+
     public double getTolerance() {
       return this._tolerance;
     }

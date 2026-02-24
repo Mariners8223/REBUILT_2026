@@ -33,7 +33,7 @@ public class Robot extends LoggedRobot {
    */
   public Robot() {
     Logger.recordMetadata("ProjectName", "MyProject"); // Set a metadata value
-    
+
     if (isReal()) {
         Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
         Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
@@ -81,9 +81,9 @@ Logger.start(); // Start logging! No more data receivers, replay sources, or met
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    
+
     }
-  
+
 
   /** This function is called periodically during autonomous. */
   @Override
