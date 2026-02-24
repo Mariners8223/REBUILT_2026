@@ -84,7 +84,7 @@ public class RobotContainer {
         // configureDriveSysidBindings();
     }
 
-    public Distance distanceFromHub(){
+    public static Distance distanceFromHub(){
         return Meters.of(
             driveBase.getPose().getTranslation().getDistance(Constants.FieldConstants.HUB_POSITION)
         );
@@ -186,19 +186,30 @@ public class RobotContainer {
 
     public void configureTestingBindings(){
         SmartDashboard.putNumber("Shooter Velocity", 0);
-        SmartDashboard.putNumber("Kicker Duty Cycle", 0.6);
+        SmartDashboard.putNumber("Kicker Duty Cycle", 0.8);
 
-        driveController.square().toggleOnTrue(Commands.parallel(
-            funnel.onlyCenterCommand(),
-            kicker.setKickerCommand(SmartDashboard.getNumber("Kicker Duty Cycle", 0.6)),
+        // driveController.square().toggleOnTrue(Commands.parallel(
+        //     funnel.onlyCenterCommand(),
+        //     kicker.setKickerCommand(SmartDashboard.getNumber("Kicker Duty Cycle", 0.6)),
+        //     new ShootVelocity(shooter, () -> RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0)))
+        //     ));
+
+        driveController.square().toggleOnTrue(
             new ShootVelocity(shooter, () -> RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0)))
-            ));
+        );
+        driveController.circle().toggleOnTrue(
+            Commands.parallel(
+                kicker.setKickerCommand(SmartDashboard.getNumber("Kicker Duty Cycle", 0)),
+                funnel.toShooterCommand(),
+                intake.spinRollersCommand()
+            )
+        );
         
-        driveController.circle().toggleOnTrue(Commands.parallel(
-            funnel.toShooterCommand(),
-            kicker.setKickerCommand(SmartDashboard.getNumber("Kicker Duty Cycle", 0.6)),
-            new ShootVelocity(shooter, () -> RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0)))
-        ));
+        // driveController.circle().toggleOnTrue(Commands.parallel(
+        //     funnel.toShooterCommand(),
+        //     kicker.setKickerCommand(SmartDashboard.getNumber("Kicker Duty Cycle", 0.6)),
+        //     new ShootVelocity(shooter, () -> RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0)))
+        // ));
         driveController.triangle().whileTrue(funnel.funnelingCommand());
             
         driveController.cross().whileTrue(funnel.funnelingCommand());

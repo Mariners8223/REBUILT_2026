@@ -9,6 +9,7 @@ import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Unit;
 import edu.wpi.first.units.measure.Angle;
@@ -94,6 +95,37 @@ public class ShooterConstants {
     public static final Pose3d POSITION = new Pose3d(
         new Translation3d(0, 0, 0), new Rotation3d(0, 0, 0)
     );
+
+    public static class Maps{
+        public static final InterpolatingDoubleTreeMap DistanceToRPM = new InterpolatingDoubleTreeMap();
+        public static final InterpolatingDoubleTreeMap DistanceToFlytime = new InterpolatingDoubleTreeMap();
+
+        public static final InterpolatingDoubleTreeMap RPMToKicker = new InterpolatingDoubleTreeMap();
+
+        static{
+            DistanceToRPM.put(3.3,3540.0);
+            DistanceToFlytime.put(3.3, 1.0);
+            RPMToKicker.put(3540.0, 0.8);
+
+
+            DistanceToRPM.put(2.65,3150d);
+            DistanceToFlytime.put(2.65, 1.22);
+            RPMToKicker.put(3150.0, 0.8);
+
+            DistanceToRPM.put(1.8, 2850d);
+            DistanceToFlytime.put(1.8, 0.9);
+            RPMToKicker.put(2850d, 1d);
+        
+            DistanceToRPM.put(2.1, 2900d);
+            DistanceToFlytime.put(2.1, 1d);
+            RPMToKicker.put(2900d, 1d);
+                    
+            DistanceToRPM.put(4.1, 2900d);
+            DistanceToFlytime.put(4.1, 1d);
+            RPMToKicker.put(2900d, 1d);
+        
+        }
+    }
 
     public static class Calculations{
         // public static Distance practicalDistance(Translation2d hubPose, Pose2d robotPose, double velocityX, double velocityY){
