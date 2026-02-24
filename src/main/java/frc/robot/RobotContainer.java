@@ -267,4 +267,47 @@ public class RobotContainer {
 
         driveController.options().onTrue(new InstantCommand(() -> climb.resetPosition()));
    }
+    public Command passTrench(){
+    Pose2d pose = driveBase.getPose();
+
+    if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
+        pose = FlippingUtil.flipFieldPose(driveBase.getPose());
+    }
+    if (pose.getY() >= 4){
+        if (pose.getX() <= 4.5){
+            return driveBase.findPath(trenchLocations.upRightTrench,2);
+        }
+        return driveBase.findPath(trenchLocations.upLeftTrench, 2);
+    }
+    if (pose.getX() <= 4.5){
+        return driveBase.findPath(trenchLocations.downRightTrench, 2);
+    }
+    return driveBase.findPath(trenchLocations.downLeftTrench, 2);
+   }
+   
+
+   public static boolean inRange(){
+    Pose2d pose = driveBase.getPose();
+    Pose2d hub = Constants.autoConstats.hub;
+    if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
+        pose = FlippingUtil.flipFieldPose(driveBase.getPose());
+        hub = FlippingUtil.flipFieldPose(hub);
+    }
+    double distanceFromHub = driveBase.getDistanceFromPoint2D(hub);
+
+    if (pose.getX() > 4.5) return false;
+    return distanceFromHub < Constants.autoConstats.maxRange;
+   }
+
+
+   public Command getInRange(){
+    Pose2d pose = driveBase.getPose();
+    if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
+        pose = FlippingUtil.flipFieldPose(driveBase.getPose());
+    }
+    if (pose.getY() >= 4.5){
+        return driveBase.findPath(Constants.autoConstats.topShoot).until(RobotContainer::inRange);
+    }
+    return driveBase.findPath(Constants.autoConstats.bottomShoot).until(RobotContainer::inRange);
+   }
 }
