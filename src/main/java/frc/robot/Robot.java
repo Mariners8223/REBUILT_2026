@@ -12,8 +12,11 @@ import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.util.HubTracker;
+
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -23,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
   public static boolean isRedAlliance = false;
+  HubTracker tracker = new HubTracker();
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -41,8 +45,8 @@ public class Robot extends LoggedRobot {
         Logger.setReplaySource(new WPILOGReader(logPath)); // Read replay log
         Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
     }
-
-
+    
+    
     isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
     Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
