@@ -273,6 +273,8 @@ public class RobotContainer {
 
         driveController.options().onTrue(new InstantCommand(() -> climb.resetPosition()));
    }
+
+   //#region auto
     public Command passTrench(){
     Pose2d pose = driveBase.getPose();
 
@@ -316,4 +318,5 @@ public class RobotContainer {
     }
     return driveBase.findPath(Constants.autoConstats.bottomShoot).until(RobotContainer::inRange);
    }
+   //#endregion
 }
