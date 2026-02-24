@@ -39,7 +39,8 @@ public final class Constants {
       return Math.abs(unit1.baseUnitMagnitude() - unit2.baseUnitMagnitude()) <= tolerance.baseUnitMagnitude();
     }
   }
-  
+    public static final class autoConstats{
+
     static double maxRange = 5; //TODO: find this
     static Pose2d hub = new Pose2d(4.611,4.046,new Rotation2d());
     static Pose2d topShoot = new Pose2d(3.045,4.496,new Rotation2d());
@@ -52,5 +53,5 @@ public final class Constants {
       Pose2d downRightTrench = new Pose2d(0,0,new Rotation2d(0,0));
       Pose2d downLeftTrench = new Pose2d(0,0,new Rotation2d(0,0));
 
-    }
+    }}
 }
