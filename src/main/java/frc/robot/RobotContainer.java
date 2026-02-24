@@ -43,6 +43,8 @@ import frc.robot.subsystems.Kicker.Kicker;
 
 public class RobotContainer {
     public static CommandPS5Controller driveController;
+    public static Constants.autoConstats.TrenchLocations trenchLocations = new Constants.autoConstats.TrenchLocations();
+
 
     public static DriveBase driveBase;
     public static Funnel funnel;
