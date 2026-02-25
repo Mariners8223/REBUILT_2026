@@ -11,8 +11,8 @@ import frc.util.PIDFGains;
 public class DriveBaseConstants {
 
     ///public static final double DISTANCE_BETWEEN_WHEELS = 0.58; // the distance between each wheel in meters
-    public static final double DISTANCE_BETWEEN_WHEELS_HORIZONTAL = 0.5044; //the distance between each wheel in meters - long axis
-    public static final double DISTANCE_BETWEEN_WHEELS_VERTICAL = 0.54222; //'''''' - short axis
+    public static final double DISTANCE_BETWEEN_WHEELS_HORIZONTAL = 0.54819; //the distance between each wheel in meters - long axis
+    public static final double DISTANCE_BETWEEN_WHEELS_VERTICAL = 0.5044; //'''''' - short axis
     public static final Translation2d[] MODULE_TRANSLATIONS = new Translation2d[]{
             new Translation2d(DISTANCE_BETWEEN_WHEELS_HORIZONTAL / 2, DISTANCE_BETWEEN_WHEELS_VERTICAL / 2),
             new Translation2d(DISTANCE_BETWEEN_WHEELS_HORIZONTAL / 2, -DISTANCE_BETWEEN_WHEELS_VERTICAL / 2),
