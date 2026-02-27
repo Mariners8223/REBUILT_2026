@@ -1,0 +1,90 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+<<<<<<< HEAD
+        "x": 7.340728476821193,
+        "y": 1.4649834437086087
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.367897350993377,
+        "y": 0.5066721854304636
+      },
+      "isLocked": false,
+      "linkedName": "neutral low trench"
+    },
+    {
+      "anchor": {
+        "x": 4.0,
+        "y": 0.6
+      },
+      "prevControl": {
+        "x": 4.756192052980132,
+        "y": 0.5211920529801319
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "start trench low 9OC"
+=======
+        "x": 7.679525386313465,
+        "y": 2.060298013245034
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.116219646799117,
+        "y": 0.5502317880794707
+      },
+      "isLocked": false,
+      "linkedName": "Neutral low"
+    },
+    {
+      "anchor": {
+        "x": 4.049558498896247,
+        "y": 0.48247240618101617
+      },
+      "prevControl": {
+        "x": 4.872350993377483,
+        "y": 0.6712306843267106
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Trench low point to Hub"
+>>>>>>> a59235cfc9d0f64af04deb9fa6184375421e1773
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+<<<<<<< HEAD
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": "Neutral",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -157.9101816527483
+=======
+    "rotation": 81.2654431210238
+  },
+  "reversed": false,
+  "folder": "Neutral low paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 49.65825410967568
+>>>>>>> a59235cfc9d0f64af04deb9fa6184375421e1773
+  },
+  "useDefaultConstraints": true
+}
