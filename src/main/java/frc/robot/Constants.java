@@ -39,19 +39,19 @@ public final class Constants {
       return Math.abs(unit1.baseUnitMagnitude() - unit2.baseUnitMagnitude()) <= tolerance.baseUnitMagnitude();
     }
   }
-    public static final class autoConstats{
-
+  public static final class autoConstats{
     static double maxRange = 5; //TODO: find this
+    static double VIRTUAL_HUB_TOLERANCE = 0.01;
     static Pose2d hub = new Pose2d(4.611,4.046,new Rotation2d());
     static Pose2d topShoot = new Pose2d(3.045,4.496,new Rotation2d());
     static Pose2d bottomShoot = new Pose2d(3.045,3.495,new Rotation2d());
 
-  //TODO: find an update all the locations!!!
+    //TODO: find an update all the locations!!!
     public static final class TrenchLocations{
       Pose2d upRightTrench = new Pose2d(0,0,new Rotation2d(0,0));
       Pose2d upLeftTrench = new Pose2d(0,0,new Rotation2d(0,0));
       Pose2d downRightTrench = new Pose2d(0,0,new Rotation2d(0,0));
       Pose2d downLeftTrench = new Pose2d(0,0,new Rotation2d(0,0));
-
-    }}
+    }
+  }
 }

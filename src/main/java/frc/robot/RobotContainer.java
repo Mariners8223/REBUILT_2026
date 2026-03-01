@@ -6,12 +6,21 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.Radian;
 
 import java.util.function.BiFunction;
+
+import org.ejml.equation.Sequence;
 
 import com.pathplanner.lib.util.FlippingUtil;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
@@ -20,8 +29,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.ProxyCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.*;
@@ -29,6 +40,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.Climb.RunHookToHeight;
 import frc.robot.commands.Drive.DriveCommand;
 import frc.robot.commands.Drive.MinorAdjust;
+import frc.robot.commands.Drive.TurnToSetAngle;
 import frc.robot.commands.Drive.MinorAdjust.AdjustmentDirection;
 import frc.robot.commands.Kicker.BlinkingKicker;
 import frc.robot.commands.Shooter.ShootVelocity;
@@ -44,6 +56,8 @@ import frc.robot.subsystems.Funnel.Funnel;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakePosition;
 import frc.robot.subsystems.Kicker.Kicker;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import java.util.function.Supplier;
 
 public class RobotContainer {
     public static CommandPS5Controller driveController;
@@ -78,27 +92,9 @@ public class RobotContainer {
         vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
 
         configureDriveBindings();
-        // configureShooterSysIDBindings();
-        // configureShooterTestBindings();
-        configureTestingBindings();
-        // configureDriveSysidBindings();
+        configureSuperShoot();
     }
 
-    public static Distance distanceFromHub(){
-        return Meters.of(
-            driveBase.getPose().getTranslation().getDistance(Constants.FieldConstants.HUB_POSITION)
-        );
-    }
-    public Distance distanceFromHubWithVelocity(){
-        Distance distance = distanceFromHub();
-        double chassisVelocityX = driveBase.getAbsoluteChassisSpeeds().vxMetersPerSecond;
-        double chassisVelocityY = driveBase.getAbsoluteChassisSpeeds().vyMetersPerSecond;
-
-        return Meters.zero();
-    }
-
-
-    //#region Drive
     public void configureDriveBindings(){
         new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(
             new StartEndCommand(() ->driveBase.setDefaultCommand(new DriveCommand(driveBase, driveController)),
@@ -106,228 +102,52 @@ public class RobotContainer {
             .ignoringDisable(true));
 
         driveController.povUp().onTrue(driveBase.resetOnlyDirection());
+    }
+    
 
-        // driveController.PS().onTrue(Commands.run(() -> driveBase.Rota))
+    public double getFlightTime(double distance) { return distance * 8223; } // dummy function
+
+    public Pose2d getVirtualTarget() {
+        return getVirtualTarget(Constants.autoConstats.hub, 0);
     }
 
-    public void configureDriveSysidBindings(){
-        SendableChooser<String> type = new SendableChooser<String>();
-        type.addOption("Drive", "Drive");
-        type.addOption("Steer", "Steer");
-        type.addOption("Theta", "Theta");
-        type.setDefaultOption("Drive", "Drive");
+    public Pose2d getVirtualTarget(Pose2d virtualTarget, int depth) {
+        if (depth >= 5) return virtualTarget;
 
-        SmartDashboard.putData(type);
+        ChassisSpeeds fieldRelative = ChassisSpeeds.fromRobotRelativeSpeeds(driveBase.getChassisSpeeds(), driveBase.getRotation2d());
 
-        String chosen = "Theta";
+        double distance = driveBase.getPose().getTranslation().getDistance(virtualTarget.getTranslation());
 
-        driveController.cross().whileTrue(
-            driveSysID.getThetaRoutineDynamic(Direction.kForward)
-        );
+        double flightTime = getFlightTime(distance); //will get the true flight time from the tree table בעזרת השם
 
-        driveController.cross().whileTrue(
-            new ProxyCommand(chooseCommand(chosen).apply(true, Direction.kReverse))
-        );
-        driveController.triangle().whileTrue(
-            new ProxyCommand(chooseCommand(chosen).apply(true, Direction.kForward))
-        );
-        driveController.square().whileTrue(
-            new ProxyCommand(chooseCommand(chosen).apply(false, Direction.kReverse))
-        );
-        driveController.circle().whileTrue(
-            new ProxyCommand(chooseCommand(chosen).apply(false, Direction.kForward))
-        );
-    }
+        Translation2d virtualOffset = new Translation2d(-fieldRelative.vxMetersPerSecond * flightTime,-fieldRelative.vyMetersPerSecond * flightTime);
 
+        Pose2d newVirtualTarget = new Pose2d(Constants.autoConstats.hub.getTranslation().plus(virtualOffset),Constants.autoConstats.hub.getRotation());
 
-    public BiFunction<Boolean, Direction, Command> chooseCommand(String type){
-        switch (type) {
-            case "Drive":
-                return (isDynamic, direction) ->
-                    isDynamic ? driveSysID.getDriveMotorsRoutineDynamic(direction) : driveSysID.getDriveMotorsRoutineQuasistatic(direction);
-            case "Steer":
-                return (isDynamic, direction) ->
-                    isDynamic ? driveSysID.getSteerMotorsRoutineDynamic(direction) : driveSysID.getSteerMotorsRoutineQuasistatic(direction);
-            case "Theta":
-                return (isDynamic, direction) ->
-                    isDynamic ? driveSysID.getThetaRoutineDynamic(direction) : driveSysID.getThetaRoutineQuasistatic(direction);
-            default:
-                return (isDynamic, direction) -> new InstantCommand();
+        if (newVirtualTarget.getTranslation().getDistance(virtualTarget.getTranslation()) < Constants.autoConstats.VIRTUAL_HUB_TOLERANCE) {
+            return newVirtualTarget;
         }
-    }
-    //#endregion
-
-    //#region Shooter
-    public void configureShooterSysIDBindings(){
-        driveController.cross().whileTrue(shooterSysID.getShooterDynamic(Direction.kReverse));
-        driveController.triangle().whileTrue(shooterSysID.getShooterDynamic(Direction.kForward));
-
-        driveController.circle().whileTrue(shooterSysID.getShooterQuasistatic(Direction.kForward));
-        driveController.square().whileTrue(shooterSysID.getShooterQuasistatic(Direction.kReverse));
+        return getVirtualTarget(newVirtualTarget, depth + 1);
     }
 
-    public void configureShooterTestBindings(){
-        SmartDashboard.putNumber("Shooter RPM", 0);
-        SmartDashboard.putNumber("Kicker Duty Cycle", 0);
+    public double getRPM(double distance) {return distance/8223;}
 
-        driveController.cross().toggleOnTrue(
-            Commands.startEnd(
-                () -> shooter.setVelocity(RPM.of(SmartDashboard.getNumber("Shooter RPM", 0))),
-                () -> shooter.stopShooter(),
-                shooter
-            )
-        );
-        driveController.triangle().toggleOnTrue(
-            kicker.setKickerCommand(0.5)
+    public Command SuperShoot() {
+        return new ParallelCommandGroup(
+            Commands.run(() -> {
+                Pose2d target = getVirtualTarget();
+                double distance = target.getTranslation().getDistance(driveBase.getPose().getTranslation());
+                Rotation2d rotation = target.getTranslation().minus(driveBase.getPose().getTranslation()).getAngle();
+
+                new ShootVelocity(shooter, () -> AngularVelocity.ofBaseUnits(getRPM(distance), RPM));
+                new TurnToSetAngle(driveBase, () -> Angle.ofBaseUnits(rotation.getRadians(), Radian));
+            }),
+            kicker.setKickerCommand(0.6),
+            funnel.toShooterCommand()
         );
     }
-    //#endregion
 
-
-    public void configureTestingBindings(){
-        SmartDashboard.putNumber("Shooter Velocity", 0);
-        SmartDashboard.putNumber("Kicker Duty Cycle", 0.8);
-
-        // driveController.square().toggleOnTrue(Commands.parallel(
-        //     funnel.onlyCenterCommand(),
-        //     kicker.setKickerCommand(SmartDashboard.getNumber("Kicker Duty Cycle", 0.6)),
-        //     new ShootVelocity(shooter, () -> RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0)))
-        //     ));
-
-        driveController.square().toggleOnTrue(
-            new ShootVelocity(shooter, () -> RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0)))
-        );
-        driveController.circle().toggleOnTrue(
-            Commands.parallel(
-                kicker.setKickerCommand(SmartDashboard.getNumber("Kicker Duty Cycle", 0)),
-                funnel.toShooterCommand(),
-                intake.spinRollersCommand()
-            )
-        );
-        
-        // driveController.circle().toggleOnTrue(Commands.parallel(
-        //     funnel.toShooterCommand(),
-        //     kicker.setKickerCommand(SmartDashboard.getNumber("Kicker Duty Cycle", 0.6)),
-        //     new ShootVelocity(shooter, () -> RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0)))
-        // ));
-        driveController.triangle().whileTrue(funnel.funnelingCommand());
-            
-        driveController.cross().whileTrue(funnel.funnelingCommand());
-       
-        driveController.L1().onTrue(intake.moveToPositionCommand(IntakePosition.Closed));
-        driveController.R1().onTrue(intake.moveToPositionCommand(IntakePosition.Middle));
-        driveController.L2().onTrue(intake.moveToPositionCommand(IntakePosition.Open));
-
-        // driveController.R1().onTrue(intake.moveToPositionCommand(IntakePosition.Closed));
-        // driveController.L1().onTrue(intake.moveToPositionCommand(IntakePosition.Open));
-
-        // driveController.triangle().toggleOnTrue(
-        //     Commands.parallel(funnel.funnelingCommand(), intake.spinRollersCommand())
-        // );
-
-
-
-        //Command kickerCommand = kicker.setKickerCommand(SmartDashboard.getNumber("Kicker Duty Cycle", 0.6));
-        
-        // driveController.PS().whileTrue(new InstantCommand(() -> kicker.setMotors(SmartDashboard.getNumber("Kicker RPM", 0.6))));
-
-        // Command everythingIntoShooter = Commands.sequence(
-                // intake.moveToPositionCommand(IntakePosition.Middle),
-                // new WaitCommand(3),
-                // Commands.parallel(
-                //     funnel.toShooterCommand(),
-                //     kicker.setKickerCommand(0.8),
-                //     intake.spinRollersCommand()
-                // ));
-            // ).finallyDo(() -> intake.setPositionMotorState(IntakePosition.Open));
-
-        // driveController.square().toggleOnTrue(
-        //     Commands.parallel(
-        //         new ShootVelocity(shooter, () -> RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))),
-        //         new ProxyCommand(everythingIntoShooter)
-        //     )
-        // );
-
-
-        // driveController.povRight().whileTrue(Commands.run(() -> shooter.setVelocityWithFeedforward(RPM.of(1000), 4)));
-
-        // driveController.cross().toggleOnTrue(
-        //     Commands.parallel(
-        //         Commands.run(() -> shooter.setVelocity(RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))), shooter),
-        //         new ProxyCommand(everythingIntoShooter)
-        //     )
-        // );
-
-        // driveController.povUp().onTrue(Commands.parallel(
-        //     new InstantCommand(() -> shooter.boostFeedForward(1)),
-        //     new PrintCommand("Boost"))
-        // );
-        // driveController.cross().toggleOnTrue();
-   }
-    public void configureClimbTestBindings(){
-        driveController.povRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.RIGHT));
-        driveController.povLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.LEFT));
-        driveController.povUp().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.FORWARD));
-        driveController.povDown().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACKWARDS));
-        driveController.povUpLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.FRONT_LEFT));
-        driveController.povUpRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.FRONT_RIGHT));
-        driveController.povDownLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_LEFT));
-        driveController.povDownRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_RIGHT));
-
-
-        driveController.triangle().onTrue(climb.toPositionCommand(Heights.EXTENDED));
-
-        driveController.R2().whileTrue(new RunHookToHeight(climb, Heights.RESET, 1));
-        driveController.L2().whileTrue(new RunHookToHeight(climb, Heights.IN_AIR_AUTO, 1));
-
-        driveController.square().whileTrue(new RunHookToHeight(climb, Heights.EXTENDED, ClimbConstants.GETTING_DOWN_DUTY_CYCLE));
-
-        driveController.options().onTrue(new InstantCommand(() -> climb.resetPosition()));
-   }
-
-   //#region auto
-    public Command passTrench(){
-    Pose2d pose = driveBase.getPose();
-
-    if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
-        pose = FlippingUtil.flipFieldPose(driveBase.getPose());
+    public void configureSuperShoot(){
+        driveController.square().toggleOnTrue(SuperShoot());
     }
-    if (pose.getY() >= 4){
-        if (pose.getX() <= 4.5){
-            return driveBase.findPath(trenchLocations.upRightTrench,2);
-        }
-        return driveBase.findPath(trenchLocations.upLeftTrench, 2);
-    }
-    if (pose.getX() <= 4.5){
-        return driveBase.findPath(trenchLocations.downRightTrench, 2);
-    }
-    return driveBase.findPath(trenchLocations.downLeftTrench, 2);
-   }
-   
-
-   public static boolean inRange(){
-    Pose2d pose = driveBase.getPose();
-    Pose2d hub = Constants.autoConstats.hub;
-    if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
-        pose = FlippingUtil.flipFieldPose(driveBase.getPose());
-        hub = FlippingUtil.flipFieldPose(hub);
-    }
-    double distanceFromHub = driveBase.getDistanceFromPoint2D(hub);
-
-    if (pose.getX() > 4.5) return false;
-    return distanceFromHub < Constants.autoConstats.maxRange;
-   }
-
-
-   public Command getInRange(){
-    Pose2d pose = driveBase.getPose();
-    if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
-        pose = FlippingUtil.flipFieldPose(driveBase.getPose());
-    }
-    if (pose.getY() >= 4.5){
-        return driveBase.findPath(Constants.autoConstats.topShoot).until(RobotContainer::inRange);
-    }
-    return driveBase.findPath(Constants.autoConstats.bottomShoot).until(RobotContainer::inRange);
-   }
-   //#endregion
 }
