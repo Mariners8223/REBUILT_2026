@@ -44,6 +44,7 @@ import frc.robot.commands.Drive.TurnToSetAngle;
 import frc.robot.commands.Drive.MinorAdjust.AdjustmentDirection;
 import frc.robot.commands.Kicker.BlinkingKicker;
 import frc.robot.commands.Shooter.ShootVelocity;
+import frc.robot.commands.SuperShoot.SuperShootCommand;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Climb.Climb;
@@ -54,10 +55,7 @@ import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterSysID;
 import frc.robot.subsystems.Funnel.Funnel;
 import frc.robot.subsystems.Intake.Intake;
-import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakePosition;
 import frc.robot.subsystems.Kicker.Kicker;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import java.util.function.Supplier;
 
 public class RobotContainer {
     public static CommandPS5Controller driveController;
@@ -92,7 +90,8 @@ public class RobotContainer {
         vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
 
         configureDriveBindings();
-        configureSuperShoot();
+
+        driveController.square().toggleOnTrue(new SuperShootCommand(driveBase, shooter, kicker, funnel, Constants.autoConstats.hub));
     }
 
     public void configureDriveBindings(){
@@ -102,52 +101,5 @@ public class RobotContainer {
             .ignoringDisable(true));
 
         driveController.povUp().onTrue(driveBase.resetOnlyDirection());
-    }
-    
-
-    public double getFlightTime(double distance) { return distance * 8223; } // dummy function
-
-    public Pose2d getVirtualTarget() {
-        return getVirtualTarget(Constants.autoConstats.hub, 0);
-    }
-
-    public Pose2d getVirtualTarget(Pose2d virtualTarget, int depth) {
-        if (depth >= 5) return virtualTarget;
-
-        ChassisSpeeds fieldRelative = ChassisSpeeds.fromRobotRelativeSpeeds(driveBase.getChassisSpeeds(), driveBase.getRotation2d());
-
-        double distance = driveBase.getPose().getTranslation().getDistance(virtualTarget.getTranslation());
-
-        double flightTime = getFlightTime(distance); //will get the true flight time from the tree table בעזרת השם
-
-        Translation2d virtualOffset = new Translation2d(-fieldRelative.vxMetersPerSecond * flightTime,-fieldRelative.vyMetersPerSecond * flightTime);
-
-        Pose2d newVirtualTarget = new Pose2d(Constants.autoConstats.hub.getTranslation().plus(virtualOffset),Constants.autoConstats.hub.getRotation());
-
-        if (newVirtualTarget.getTranslation().getDistance(virtualTarget.getTranslation()) < Constants.autoConstats.VIRTUAL_HUB_TOLERANCE) {
-            return newVirtualTarget;
-        }
-        return getVirtualTarget(newVirtualTarget, depth + 1);
-    }
-
-    public double getRPM(double distance) {return distance/8223;}
-
-    public Command SuperShoot() {
-        return new ParallelCommandGroup(
-            Commands.run(() -> {
-                Pose2d target = getVirtualTarget();
-                double distance = target.getTranslation().getDistance(driveBase.getPose().getTranslation());
-                Rotation2d rotation = target.getTranslation().minus(driveBase.getPose().getTranslation()).getAngle();
-
-                new ShootVelocity(shooter, () -> AngularVelocity.ofBaseUnits(getRPM(distance), RPM));
-                new TurnToSetAngle(driveBase, () -> Angle.ofBaseUnits(rotation.getRadians(), Radian));
-            }),
-            kicker.setKickerCommand(0.6),
-            funnel.toShooterCommand()
-        );
-    }
-
-    public void configureSuperShoot(){
-        driveController.square().toggleOnTrue(SuperShoot());
     }
 }
