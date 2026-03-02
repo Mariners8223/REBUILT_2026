@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.Climb.RunHookToHeight;
 import frc.robot.commands.Drive.DriveCommand;
 import frc.robot.commands.Drive.MinorAdjust;
+import frc.robot.commands.Drive.TurnToSetAngle;
 import frc.robot.commands.Drive.MinorAdjust.AdjustmentDirection;
 import frc.robot.commands.Kicker.BlinkingKicker;
 import frc.robot.commands.Shooter.ShootVelocity;
@@ -78,10 +79,6 @@ public class RobotContainer {
         vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
 
         configureDriveBindings();
-        // configureShooterSysIDBindings();
-        // configureShooterTestBindings();
-        configureTestingBindings();
-        // configureDriveSysidBindings();
     }
 
     public static Distance distanceFromHub(){
@@ -105,166 +102,11 @@ public class RobotContainer {
             driveBase::removeDefaultCommand)
             .ignoringDisable(true));
 
-        driveController.povUp().onTrue(driveBase.resetOnlyDirection());
+        driveController.PS().onTrue(driveBase.resetOnlyDirection());
 
-        // driveController.PS().onTrue(Commands.run(() -> driveBase.Rota))
-    }
+        driveController.options().whileTrue(climb.setDutyCycleCommand(0.1));
+        driveController.share().whileTrue(climb.setDutyCycleCommand(-0.1));
 
-    public void configureDriveSysidBindings(){
-        SendableChooser<String> type = new SendableChooser<String>();
-        type.addOption("Drive", "Drive");
-        type.addOption("Steer", "Steer");
-        type.addOption("Theta", "Theta");
-        type.setDefaultOption("Drive", "Drive");
-
-        SmartDashboard.putData(type);
-
-        String chosen = "Theta";
-
-        driveController.cross().whileTrue(
-            driveSysID.getThetaRoutineDynamic(Direction.kForward)
-        );
-
-        driveController.cross().whileTrue(
-            new ProxyCommand(chooseCommand(chosen).apply(true, Direction.kReverse))
-        );
-        driveController.triangle().whileTrue(
-            new ProxyCommand(chooseCommand(chosen).apply(true, Direction.kForward))
-        );
-        driveController.square().whileTrue(
-            new ProxyCommand(chooseCommand(chosen).apply(false, Direction.kReverse))
-        );
-        driveController.circle().whileTrue(
-            new ProxyCommand(chooseCommand(chosen).apply(false, Direction.kForward))
-        );
-    }
-
-
-    public BiFunction<Boolean, Direction, Command> chooseCommand(String type){
-        switch (type) {
-            case "Drive":
-                return (isDynamic, direction) ->
-                    isDynamic ? driveSysID.getDriveMotorsRoutineDynamic(direction) : driveSysID.getDriveMotorsRoutineQuasistatic(direction);
-            case "Steer":
-                return (isDynamic, direction) ->
-                    isDynamic ? driveSysID.getSteerMotorsRoutineDynamic(direction) : driveSysID.getSteerMotorsRoutineQuasistatic(direction);
-            case "Theta":
-                return (isDynamic, direction) ->
-                    isDynamic ? driveSysID.getThetaRoutineDynamic(direction) : driveSysID.getThetaRoutineQuasistatic(direction);
-            default:
-                return (isDynamic, direction) -> new InstantCommand();
-        }
-    }
-    //#endregion
-
-    //#region Shooter
-    public void configureShooterSysIDBindings(){
-        driveController.cross().whileTrue(shooterSysID.getShooterDynamic(Direction.kReverse));
-        driveController.triangle().whileTrue(shooterSysID.getShooterDynamic(Direction.kForward));
-
-        driveController.circle().whileTrue(shooterSysID.getShooterQuasistatic(Direction.kForward));
-        driveController.square().whileTrue(shooterSysID.getShooterQuasistatic(Direction.kReverse));
-    }
-
-    public void configureShooterTestBindings(){
-        SmartDashboard.putNumber("Shooter RPM", 0);
-        SmartDashboard.putNumber("Kicker Duty Cycle", 0);
-
-        driveController.cross().toggleOnTrue(
-            Commands.startEnd(
-                () -> shooter.setVelocity(RPM.of(SmartDashboard.getNumber("Shooter RPM", 0))),
-                () -> shooter.stopShooter(),
-                shooter
-            )
-        );
-        driveController.triangle().toggleOnTrue(
-            kicker.setKickerCommand(0.5)
-        );
-    }
-    //#endregion
-
-
-    public void configureTestingBindings(){
-        SmartDashboard.putNumber("Shooter Velocity", 0);
-        SmartDashboard.putNumber("Kicker Duty Cycle", 0.8);
-
-        // driveController.square().toggleOnTrue(Commands.parallel(
-        //     funnel.onlyCenterCommand(),
-        //     kicker.setKickerCommand(SmartDashboard.getNumber("Kicker Duty Cycle", 0.6)),
-        //     new ShootVelocity(shooter, () -> RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0)))
-        //     ));
-
-        driveController.square().toggleOnTrue(
-            new ShootVelocity(shooter, () -> RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0)))
-        );
-        driveController.circle().toggleOnTrue(
-            Commands.parallel(
-                kicker.setKickerCommand(SmartDashboard.getNumber("Kicker Duty Cycle", 0)),
-                funnel.toShooterCommand(),
-                intake.spinRollersCommand()
-            )
-        );
-        
-        // driveController.circle().toggleOnTrue(Commands.parallel(
-        //     funnel.toShooterCommand(),
-        //     kicker.setKickerCommand(SmartDashboard.getNumber("Kicker Duty Cycle", 0.6)),
-        //     new ShootVelocity(shooter, () -> RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0)))
-        // ));
-        driveController.triangle().whileTrue(funnel.funnelingCommand());
-            
-        driveController.cross().whileTrue(funnel.funnelingCommand());
-       
-        driveController.L1().onTrue(intake.moveToPositionCommand(IntakePosition.Closed));
-        driveController.R1().onTrue(intake.moveToPositionCommand(IntakePosition.Middle));
-        driveController.L2().onTrue(intake.moveToPositionCommand(IntakePosition.Open));
-
-        // driveController.R1().onTrue(intake.moveToPositionCommand(IntakePosition.Closed));
-        // driveController.L1().onTrue(intake.moveToPositionCommand(IntakePosition.Open));
-
-        // driveController.triangle().toggleOnTrue(
-        //     Commands.parallel(funnel.funnelingCommand(), intake.spinRollersCommand())
-        // );
-
-
-
-        //Command kickerCommand = kicker.setKickerCommand(SmartDashboard.getNumber("Kicker Duty Cycle", 0.6));
-        
-        // driveController.PS().whileTrue(new InstantCommand(() -> kicker.setMotors(SmartDashboard.getNumber("Kicker RPM", 0.6))));
-
-        // Command everythingIntoShooter = Commands.sequence(
-                // intake.moveToPositionCommand(IntakePosition.Middle),
-                // new WaitCommand(3),
-                // Commands.parallel(
-                //     funnel.toShooterCommand(),
-                //     kicker.setKickerCommand(0.8),
-                //     intake.spinRollersCommand()
-                // ));
-            // ).finallyDo(() -> intake.setPositionMotorState(IntakePosition.Open));
-
-        // driveController.square().toggleOnTrue(
-        //     Commands.parallel(
-        //         new ShootVelocity(shooter, () -> RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))),
-        //         new ProxyCommand(everythingIntoShooter)
-        //     )
-        // );
-
-
-        // driveController.povRight().whileTrue(Commands.run(() -> shooter.setVelocityWithFeedforward(RPM.of(1000), 4)));
-
-        // driveController.cross().toggleOnTrue(
-        //     Commands.parallel(
-        //         Commands.run(() -> shooter.setVelocity(RPM.of(SmartDashboard.getNumber("Shooter Velocity", 0))), shooter),
-        //         new ProxyCommand(everythingIntoShooter)
-        //     )
-        // );
-
-        // driveController.povUp().onTrue(Commands.parallel(
-        //     new InstantCommand(() -> shooter.boostFeedForward(1)),
-        //     new PrintCommand("Boost"))
-        // );
-        // driveController.cross().toggleOnTrue();
-   }
-    public void configureClimbTestBindings(){
         driveController.povRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.RIGHT));
         driveController.povLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.LEFT));
         driveController.povUp().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.FORWARD));
@@ -274,16 +116,22 @@ public class RobotContainer {
         driveController.povDownLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_LEFT));
         driveController.povDownRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_RIGHT));
 
+        driveController.R1().toggleOnTrue(
+            new AimDriving(driveBase, () -> return Constants.FieldConstants.HUB_POSITION),
+        ).onlyIf(RobotContainer::inAlliance);
+        driveController.L1().toggleOnTrue(
+            new ShootDistance(shooter, RobotContainer::distanceFromHub)
+        );
 
-        driveController.triangle().onTrue(climb.toPositionCommand(Heights.EXTENDED));
+        driveController.cross().onTrue(intake.switchPositionCommand());
+        driveController.circle().toggleOnTrue(intake.spinRollersCommand());
 
-        driveController.R2().whileTrue(new RunHookToHeight(climb, Heights.RESET, 1));
-        driveController.L2().whileTrue(new RunHookToHeight(climb, Heights.IN_AIR_AUTO, 1));
+        driveController.triangle().whileTrue(new FullClimb(driveBase, climb));
+        driveController.square().toggleOnTrue(funnel.funnelingCommand());
 
-        driveController.square().whileTrue(new RunHookToHeight(climb, Heights.EXTENDED, ClimbConstants.GETTING_DOWN_DUTY_CYCLE));
-
-        driveController.options().onTrue(new InstantCommand(() -> climb.resetPosition()));
-   }
+        driveController.R3().onTrue(intake.bumpFuelCommand());
+    }
+    //#endregion
 
    //#region auto
     public Command passTrench(){
