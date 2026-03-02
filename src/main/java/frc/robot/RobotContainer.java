@@ -73,8 +73,12 @@ public class RobotContainer {
     }
 
     public static Distance distanceFromHub(){
+        Pose2d hubLocation = Constants.FieldConstants.HUB_POSITION;
+        if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
+            hubLocation = FlippingUtil.flipFieldPose(hubLocation);
+        }
         return Meters.of(
-            driveBase.getPose().getTranslation().getDistance(Constants.FieldConstants.HUB_POSITION.getTranslation())
+            driveBase.getPose().getTranslation().getDistance(hubLocation.getTranslation())
         );
     }
 
