@@ -268,7 +268,7 @@ public class DriveBase extends SubsystemBase {
     public Pose2d getPose() {
         return currentPose;
     }
-    
+
         public double getDistanceFromPoint2D(Pose2d point) {
         return currentPose.getTranslation().getDistance(point.getTranslation());
     }

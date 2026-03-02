@@ -6,7 +6,6 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Unit;
 
@@ -33,7 +32,7 @@ public final class Constants {
   public static class FieldConstants{
     public static final Pose2d HUB_POSITION = new Pose2d(); // TODO: FIX POSITION
     public static final Pose2d TOWER_POSITION = new Pose2d();
-    
+
     public static final double RED_ALLIANCE_ZONE_X = 0;
     public static final double BLUE_ALLIANCE_ZONE_X = 0;
   }

@@ -70,7 +70,7 @@ public class Intake extends SubsystemBase{
     }
 
     public Command switchIntakePositionCommand(){
-        IntakePosition switchedPosition = 
+        IntakePosition switchedPosition =
             state == IntakePosition.Closed ? IntakePosition.Open : IntakePosition.Closed;
 
         return this.runOnce(

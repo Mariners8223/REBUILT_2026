@@ -15,7 +15,6 @@ import frc.util.PIDFGains;
 import frc.util.MarinersController.MarinersController;
 import frc.util.MarinersController.MarinersTalonFX;
 import frc.util.MarinersController.MarinersController.ControlMode;
-import frc.robot.subsystems.Shooter.ShooterConstants;
 import frc.robot.subsystems.Shooter.ShooterConstants.MOTOR_CONSTANTS;
 
 /** Add your docs here. */

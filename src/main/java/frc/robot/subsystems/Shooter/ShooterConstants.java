@@ -17,7 +17,6 @@ import edu.wpi.first.units.measure.AngularAcceleration;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearAcceleration;
-import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.Mass;
 import edu.wpi.first.units.measure.MomentOfInertia;
 import edu.wpi.first.units.measure.Time;
@@ -112,12 +111,12 @@ public class ShooterConstants {
 
             DistanceToRPM.put(1.8, 2850d);
             DistanceToFlytime.put(1.8, 0.9);
-        
+
             DistanceToRPM.put(2.1, 2900d);
             DistanceToFlytime.put(2.1, 1d);
-                    
+
             DistanceToRPM.put(4.1, 2900d);
-            DistanceToFlytime.put(4.1, 1d);        
+            DistanceToFlytime.put(4.1, 1d);
         }
     }
 
