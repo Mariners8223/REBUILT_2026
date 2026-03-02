@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.Climb.RunHookToHeight;
 import frc.robot.commands.Drive.AimDriving;
 import frc.robot.commands.Drive.DriveCommand;
+import frc.robot.commands.Drive.HookToTower;
 import frc.robot.commands.Drive.MinorAdjust;
 import frc.robot.commands.Drive.TurnToSetAngle;
 import frc.robot.commands.Drive.MinorAdjust.AdjustmentDirection;
@@ -119,7 +120,7 @@ public class RobotContainer {
         Command fullClimb =
             Commands.sequence(
                 climb.toPositionCommand(Heights.EXTENDED),
-                new DriveToPoint(Constants.FieldConstants.CLIMB_TOWER_POSITION),
+                new HookToTower(driveBase),
                 new RunHookToHeight(climb, Heights.RESET, 1)
             );
 
