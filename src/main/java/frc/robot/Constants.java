@@ -49,12 +49,12 @@ public final class Constants {
     static Pose2d topShoot = new Pose2d(3.045,4.496,new Rotation2d());
     static Pose2d bottomShoot = new Pose2d(3.045,3.495,new Rotation2d());
 
-  //TODO: find an update all the locations!!!
+
     public static final class TrenchLocations{
-      Pose2d upRightTrench = new Pose2d(0,0,new Rotation2d(0,0));
-      Pose2d upLeftTrench = new Pose2d(0,0,new Rotation2d(0,0));
-      Pose2d downRightTrench = new Pose2d(0,0,new Rotation2d(0,0));
-      Pose2d downLeftTrench = new Pose2d(0,0,new Rotation2d(0,0));
+      Pose2d upRightTrench = new Pose2d(5.825,7.341,new Rotation2d());
+      Pose2d upLeftTrench = new Pose2d(3.573,7.341,new Rotation2d());
+      Pose2d downRightTrench = new Pose2d(5.760,0.652,new Rotation2d());
+      Pose2d downLeftTrench = new Pose2d(3.560,0.652,new Rotation2d());
 
     }}
 }
