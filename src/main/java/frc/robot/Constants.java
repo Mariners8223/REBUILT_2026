@@ -31,7 +31,9 @@ public final class Constants {
   }
 
   public static class FieldConstants{
-    public static final Translation2d HUB_POSITION = new Translation2d(); // TODO: FIX POSITION
+    public static final Pose2d HUB_POSITION = new Pose2d(); // TODO: FIX POSITION
+    public static final double RED_ALLIANCE_ZONE_X = 0;
+    public static final double BLUE_ALLIANCE_ZONE_X = 0;
   }
 
   public static class CALCULATIONS{

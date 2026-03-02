@@ -22,15 +22,13 @@ import frc.robot.subsystems.Shooter.ShooterConstants;
 public class ShootVelocity extends Command {
   Shooter shooter;
   Supplier<AngularVelocity> velocitySupplier;
-  AngularVelocity RPMLast;
 
-  double boost;
   Timer boostTimer;
 
   /** Creates a new Shoot. */
-  public ShootVelocity(Shooter shooter, Supplier<AngularVelocity> distanceSupplier) {
+  public ShootVelocity(Shooter shooter, Supplier<AngularVelocity> velocitySupplier) {
     this.shooter = shooter;
-    this.velocitySupplier = distanceSupplier;
+    this.velocitySupplier = velocitySupplier;
     boostTimer = new Timer();
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -41,41 +39,22 @@ public class ShootVelocity extends Command {
   @Override
   public void initialize() {
     AngularVelocity requiredSpeed = velocitySupplier.get();
-    RPMLast = shooter.getShooterVelocity();
-
-    System.out.println("Fall");
-    Logger.recordOutput("Shooter/Fall", (shooter.getShooterAcceleration().unaryMinus().gte(ShooterConstants.FALL_ACCELERATION)));
-    Logger.recordOutput("Shooter/Boost", boost);
     shooter.setVelocity(requiredSpeed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Logger.recordOutput("Shooter/Fall", (shooter.getShooterAcceleration().unaryMinus().gte(ShooterConstants.FALL_ACCELERATION)));
-
     if (shooter.getShooterAcceleration().unaryMinus().gte(ShooterConstants.FALL_ACCELERATION)){
-      boost += MathUtil.clamp(shooter.getShooterAcceleration().unaryMinus().in(RotationsPerSecondPerSecond) * ShooterConstants.FEED_FORWARD_SHOOTER_BOOST,
-                              0.0,
-                              ShooterConstants.MAX_FEED_FORWARD_BOOST);
-
-      // shooter.boostFeedForward(boost);
       boostTimer.restart();
       shooter.setDutyCycle(1);
     }
 
-    // if (boostTimer.hasElapsed(ShooterConstants.FEED_FORWARD_BOOST_TIME)
-    //     || shooter.getShooterVelocity().gte(velocitySupplier.get())){
     if (shooter.getShooterVelocity().gte(velocitySupplier.get())){
-      // shooter.resetFeedForward();
       boostTimer.stop();
-      boost = 0;
     }
 
     if (!boostTimer.isRunning()) shooter.setVelocity(velocitySupplier.get());
-    RPMLast = shooter.getShooterVelocity().copy();
-
-    Logger.recordOutput("Shooter/Boost", boost);
   }
 
   // Called once the command ends or is interrupted.

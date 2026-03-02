@@ -2,10 +2,12 @@ package frc.robot.subsystems.Intake;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Rotations;
+import static edu.wpi.first.units.Units.Seconds;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Time;
 import frc.robot.Constants;
 import frc.util.PIDFGains;
 import frc.util.MarinersController.MarinersController.ControllerLocation;
@@ -87,5 +89,8 @@ public class IntakeConstants
     public static final double X_ON_ROBOT = 0;
     public static final double Y_ON_ROBOT = 0;
     public static final double Z_OFFSET = 0;
+
+
+    public static final Time BUMP_WAIT_TIME = Seconds.of(0.5);
 
 }

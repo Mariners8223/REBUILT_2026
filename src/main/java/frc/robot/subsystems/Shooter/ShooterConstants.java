@@ -95,35 +95,29 @@ public class ShooterConstants {
     public static final Pose3d POSITION = new Pose3d(
         new Translation3d(0, 0, 0), new Rotation3d(0, 0, 0)
     );
+    public static final double PASSING_VELOCITY = 0;
 
     public static class Maps{
         public static final InterpolatingDoubleTreeMap DistanceToRPM = new InterpolatingDoubleTreeMap();
         public static final InterpolatingDoubleTreeMap DistanceToFlytime = new InterpolatingDoubleTreeMap();
 
-        public static final InterpolatingDoubleTreeMap RPMToKicker = new InterpolatingDoubleTreeMap();
+        public static final InterpolatingDoubleTreeMap DistanceToKicker = new InterpolatingDoubleTreeMap();
 
         static{
             DistanceToRPM.put(3.3,3540.0);
             DistanceToFlytime.put(3.3, 1.0);
-            RPMToKicker.put(3540.0, 0.8);
-
 
             DistanceToRPM.put(2.65,3150d);
             DistanceToFlytime.put(2.65, 1.22);
-            RPMToKicker.put(3150.0, 0.8);
 
             DistanceToRPM.put(1.8, 2850d);
             DistanceToFlytime.put(1.8, 0.9);
-            RPMToKicker.put(2850d, 1d);
         
             DistanceToRPM.put(2.1, 2900d);
             DistanceToFlytime.put(2.1, 1d);
-            RPMToKicker.put(2900d, 1d);
                     
             DistanceToRPM.put(4.1, 2900d);
-            DistanceToFlytime.put(4.1, 1d);
-            RPMToKicker.put(2900d, 1d);
-        
+            DistanceToFlytime.put(4.1, 1d);        
         }
     }
 
@@ -141,39 +135,37 @@ public class ShooterConstants {
         //     return Meters.zero();
         // }
 
-        public static LinearVelocity requiredLinearVelocity(Distance distance){
-            /*  h = y0 + tan(alpha) * d - (g / (2 * (v * cos(alpha))^2)) * d^2
-                h - Hub Height
-                d - Distance from centre of Hub
-                y0 - Height of Shooter from ground
-                alpha - Launch Angle
-                g - Acceleration due to Gravity
+        // public static LinearVelocity requiredLinearVelocity(Distance distance){
+        //     /*  h = y0 + tan(alpha) * d - (g / (2 * (v * cos(alpha))^2)) * d^2
+        //         h - Hub Height
+        //         d - Distance from centre of Hub
+        //         y0 - Height of Shooter from ground
+        //         alpha - Launch Angle
+        //         g - Acceleration due to Gravity
 
-                v - Launch Velocity
+        //         v - Launch Velocity
 
-                Solve for v:
-                v^2 = g*d^2 / (2 * cos(alpha) * (x*sin(alpha) - (h-y0)*cos(alpha)))
-            */
+        //         Solve for v:
+        //         v^2 = g*d^2 / (2 * cos(alpha) * (x*sin(alpha) - (h-y0)*cos(alpha)))
+        //     */
 
-            double cos = Math.cos(SHOOTER_ANGLE.in(Radian));
-            double sin = Math.sin(SHOOTER_ANGLE.in(Radian));
-            double height_differential = (HUB_CONSTANTS.HUB_HEIGHT.minus(SHOOTER_HEIGHT)).in(Meter);
+        //     double cos = Math.cos(SHOOTER_ANGLE.in(Radian));
+        //     double sin = Math.sin(SHOOTER_ANGLE.in(Radian));
+        //     double height_differential = (HUB_CONSTANTS.HUB_HEIGHT.minus(SHOOTER_HEIGHT)).in(Meter);
 
-            double numerator = ACCELERATION_DUE_TO_GRAVITY.baseUnitMagnitude() * (distance.times(distance)).baseUnitMagnitude();
-            double denominator = 2 * cos * (distance.baseUnitMagnitude() * sin - height_differential * cos);
-            double final_solution = Math.sqrt(numerator / denominator);
+        //     double numerator = ACCELERATION_DUE_TO_GRAVITY.baseUnitMagnitude() * (distance.times(distance)).baseUnitMagnitude();
+        //     double denominator = 2 * cos * (distance.baseUnitMagnitude() * sin - height_differential * cos);
+        //     double final_solution = Math.sqrt(numerator / denominator);
 
-            return MetersPerSecond.of(final_solution);
-        }
+        //     return MetersPerSecond.of(final_solution);
+        // }
 
-        public static AngularVelocity requiredAngularVelocity(LinearVelocity launchVelocity){
-            return RotationsPerSecond.of(launchVelocity.in(Meters.per(Minute)) / SHOOTER_WHEEL_RADIUS.in(Meter)); // TODO: MAKE MORE EXACT FUNCTION
-        }
+        // public static AngularVelocity requiredAngularVelocity(LinearVelocity launchVelocity){
+        //     return RotationsPerSecond.of(launchVelocity.in(Meters.per(Minute)) / SHOOTER_WHEEL_RADIUS.in(Meter)); // TODO: MAKE MORE EXACT FUNCTION
+        // }
 
         public static AngularVelocity requiredAngularVelocity(Distance distance){
-            return requiredAngularVelocity(
-                requiredLinearVelocity(distance)
-            );
+            return RPM.of(Maps.DistanceToRPM.get(distance.in(Meters)));
         }
 
         public static <U extends Unit> boolean epsilonEquals(Measure<U> unit1, Measure<U> unit2, Measure<U> tolerance){

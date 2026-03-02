@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems.Kicker;
 
+import java.util.function.Supplier;
+
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
@@ -29,6 +32,13 @@ public class Kicker extends SubsystemBase {
     return this.startEnd(
       () -> setMotors(dutyCycle),
       () -> stopMotors());
+  }
+
+  public Command setKickerByDistance(Supplier<Distance> distanceSupplier){
+    return this.runEnd(
+      () -> this.setMotors(KickerConstants.getRPM(distanceSupplier.get())),
+      () -> this.stopMotors()
+    );
   }
 
   @Override
