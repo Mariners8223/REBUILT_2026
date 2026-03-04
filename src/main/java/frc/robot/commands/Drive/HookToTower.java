@@ -8,19 +8,25 @@ import java.util.List;
 
 import org.littletonrobotics.junction.Logger;
 
+import com.pathplanner.lib.util.FlippingUtil;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.DriveTrain.DriveBaseConstants;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class HookToTower extends Command {
     private final DriveBase driveBase;
-    private Pose2d targetPose = Constants.FieldConstants.TOWER_POSITION;
+    private Pose2d targetPose = 
+      Robot.isRedAlliance ? 
+      Constants.FieldConstants.TOWER_POSITION : 
+      FlippingUtil.flipFieldPose(Constants.FieldConstants.TOWER_POSITION);
 
     private final PIDController XController = DriveBaseConstants.DrivePID.X_PID;
     private final PIDController YController = DriveBaseConstants.DrivePID.Y_PID;
