@@ -51,10 +51,11 @@ public class ShooterConstants {
 
         public record FollowMotor(int id, boolean inverted_from_leader){}
         public static final FollowMotor FOLLOW_MOTOR_1 = new FollowMotor(21, true);
-        public static final FollowMotor FOLLOW_MOTOR_2 = new FollowMotor(22, true);
-        public static final FollowMotor FOLLOW_MOTOR_3 = new FollowMotor(8, false);
+        // public static final FollowMotor FOLLOW_MOTOR_2 = new FollowMotor(22, true);
+        // public static final FollowMotor FOLLOW_MOTOR_3 = new FollowMotor(8, false);
 
-        public static final FollowMotor[] FOLLOWERS = {FOLLOW_MOTOR_1, FOLLOW_MOTOR_2, FOLLOW_MOTOR_3};
+        // public static final FollowMotor[] FOLLOWERS = {FOLLOW_MOTOR_1, FOLLOW_MOTOR_2, FOLLOW_MOTOR_3};
+        public static final FollowMotor[] FOLLOWERS = {FOLLOW_MOTOR_1};
     }
 
     public static class HUB_CONSTANTS{

@@ -54,7 +54,7 @@ public class IntakeConstants
 
         }
         public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
-        public static final int MOTOR_ID = 12;
+        public static final int MOTOR_ID = 56;
         public static final boolean IS_BRUSHLESS = true;
         public static final MotorType MOTOR_TYPE = MotorType.SPARK_FLEX;
         public static final boolean IS_INVERTED = true;
