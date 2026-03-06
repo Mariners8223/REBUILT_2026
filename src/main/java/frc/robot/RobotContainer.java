@@ -82,8 +82,40 @@ public class RobotContainer {
         );
     }
 
+    // for tests!!
+    public void configureTestBindings(){
+
+        driveController.povRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.RIGHT));
+        driveController.povLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.LEFT));
+        driveController.povUp().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.FORWARD));
+        driveController.povDown().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACKWARDS));
+        driveController.povUpLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.FRONT_LEFT));
+        driveController.povUpRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.FRONT_RIGHT));
+        driveController.povDownLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_LEFT));
+        driveController.povDownRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_RIGHT));
+
+        Command fullShootCommand =
+            Commands.parallel(
+                new ShootDistance(shooter, RobotContainer::distanceFromHub),
+                Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
+                    .andThen(
+                        Commands.parallel(
+                            kicker.setKickerByDistance(RobotContainer::distanceFromHub),
+                            funnel.toShooterCommand()
+                        )
+                    )
+            );
+
+        
+
+    }
     //#region Drive
     public void configureDriveBindings(){
+        new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(
+            new StartEndCommand(() ->driveBase.setDefaultCommand(new DriveCommand(driveBase, driveController)),
+            driveBase::removeDefaultCommand)
+            .ignoringDisable(true));
+
         Command fullShootCommand =
             Commands.parallel(
                 new ShootDistance(shooter, RobotContainer::distanceFromHub),
@@ -114,12 +146,6 @@ public class RobotContainer {
                 new HookToTower(driveBase),
                 new RunHookToHeight(climb, Heights.RESET, 1)
             );
-
-
-        new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(
-            new StartEndCommand(() ->driveBase.setDefaultCommand(new DriveCommand(driveBase, driveController)),
-            driveBase::removeDefaultCommand)
-            .ignoringDisable(true));
 
         driveController.PS().onTrue(driveBase.resetOnlyDirection());
 
