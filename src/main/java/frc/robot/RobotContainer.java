@@ -7,6 +7,7 @@ package frc.robot;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.RPM;
 
+import java.util.function.BiFunction;
 
 import com.pathplanner.lib.util.FlippingUtil;
 
@@ -14,11 +15,16 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.*;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.Climb.RunHookToHeight;
 import frc.robot.commands.Drive.AimDriving;
 import frc.robot.commands.Drive.DriveCommand;
@@ -62,6 +68,7 @@ public class RobotContainer {
         driveController = new CommandPS5Controller(0);
 
         driveBase = new DriveBase();
+        driveSysID = new DriveBaseSYSID(driveBase, driveController);
         climb = new Climb();
         funnel = new Funnel();
         intake = new Intake();
@@ -71,7 +78,8 @@ public class RobotContainer {
         vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
 
         //configureDriveBindings();
-        configureTestBindings();
+        configureDriveBindings();
+        configureDriveSysidBindings();
     }
 
     public static Distance distanceFromHub(){
@@ -84,119 +92,58 @@ public class RobotContainer {
         );
     }
 
-    // for tests!!
-    public void configureTestBindings(){
-        new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(
-            new StartEndCommand(() ->driveBase.setDefaultCommand(new DriveCommand(driveBase, driveController)),
-            driveBase::removeDefaultCommand)
-            .ignoringDisable(true));
-        driveController.options().onTrue(driveBase.resetOnlyDirection());
-
-        driveController.povRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.RIGHT));
-        driveController.povLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.LEFT));
-        driveController.povUp().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.FORWARD));
-        driveController.povDown().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACKWARDS));
-        driveController.povUpLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.FRONT_LEFT));
-        driveController.povUpRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.FRONT_RIGHT));
-        driveController.povDownLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_LEFT));
-        driveController.povDownRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_RIGHT));
-
-        driveController.cross().toggleOnTrue(kicker.setKickerCommand(0.8));
-        driveController.square().toggleOnTrue(funnel.toShooterCommand());
-
-        // driveController.triangle().toggleOnTrue(shooter.setDutyCycleCommand(0.4));
-
-        driveController.circle().onTrue(
-            Commands.either(
-                intake.moveToPositionCommand(IntakePosition.Closed),
-                intake.moveToPositionCommand(IntakePosition.Open),
-                () -> intake.getCurrentState() == IntakePosition.Open
-            )
-        );
-
-        // driveController.R1().onTrue(intake.moveToPositionCommand(IntakePosition.Closed));
-        // driveController.L1().onTrue(intake.moveToPositionCommand(IntakePosition.Open));
-        driveController.triangle().toggleOnTrue(intake.spinRollersCommand());
-
-        driveController.R1().whileTrue(climb.dutyCycleCommand(0.3));
-        driveController.L1().whileTrue(climb.dutyCycleCommand(-0.3));
-
-    }
-
-    //#region Drive
-    public void configureDriveBindings(){
+     public void configureDriveBindings(){
         new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(
             new StartEndCommand(() ->driveBase.setDefaultCommand(new DriveCommand(driveBase, driveController)),
             driveBase::removeDefaultCommand)
             .ignoringDisable(true));
 
-        Command fullShootCommand =
-            Commands.parallel(
-                new ShootDistance(shooter, RobotContainer::distanceFromHub),
-                Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
-                    .andThen(
-                        Commands.parallel(
-                            kicker.setKickerByDistance(RobotContainer::distanceFromHub),
-                            funnel.toShooterCommand()
-                        )
-                    )
-            );
+        driveController.povUp().onTrue(driveBase.resetOnlyDirection());
 
-        Command passCommand =
-            Commands.parallel(
-              new ShootVelocity(shooter, () -> RPM.of(ShooterConstants.PASSING_VELOCITY)),
-                Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
-                    .andThen(
-                        Commands.parallel(
-                            kicker.setKickerCommand(1),
-                            funnel.toShooterCommand()
-                        )
-                    )
-            );
-
-        Command fullClimb =
-            Commands.sequence(
-                climb.toPositionCommand(Heights.EXTENDED),
-                new HookToTower(driveBase),
-                new RunHookToHeight(climb, Heights.RESET, 1)
-            );
-
-        driveController.PS().onTrue(driveBase.resetOnlyDirection());
-
-        driveController.options().whileTrue(climb.dutyCycleCommand(0.1));
-        driveController.create().whileTrue(climb.dutyCycleCommand(-0.1));
-
-        driveController.povRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.RIGHT));
-        driveController.povLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.LEFT));
-        driveController.povUp().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.FORWARD));
-        driveController.povDown().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACKWARDS));
-        driveController.povUpLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.FRONT_LEFT));
-        driveController.povUpRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.FRONT_RIGHT));
-        driveController.povDownLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_LEFT));
-        driveController.povDownRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_RIGHT));
-
-        driveController.R1().toggleOnTrue(
-            new AimDriving(driveBase, driveController, () -> Constants.FieldConstants.HUB_POSITION)
-            .onlyIf(RobotContainer::inAllianceZone)
-        );
-
-        driveController.L1().toggleOnTrue(
-            new ConditionalCommand(
-                fullShootCommand,
-                passCommand,
-                RobotContainer::inAllianceZone
-            )
-        );
-
-        driveController.cross().onTrue(intake.switchIntakePositionCommand());
-        driveController.circle().toggleOnTrue(intake.spinRollersCommand());
-
-        driveController.triangle().whileTrue(fullClimb);
-        driveController.square().toggleOnTrue(funnel.funnelingCommand());
-
-        driveController.R3().onTrue(intake.bumpFuelCommand());
+        // driveController.PS().onTrue(Commands.run(() -> driveBase.Rota))
     }
-    //#endregion
+
+    public void configureDriveSysidBindings(){
+        SendableChooser<String> type = new SendableChooser<String>();
+        type.addOption("Drive", "Drive");
+        type.addOption("Steer", "Steer");
+        type.addOption("Theta", "Theta");
+        type.setDefaultOption("Drive", "Drive");
+
+        SmartDashboard.putData(type);
+
+        String chosen = "Theta";
+
+        driveController.cross().whileTrue(
+            new ProxyCommand(chooseCommand(chosen).apply(true, Direction.kReverse))
+        );
+        driveController.triangle().whileTrue(
+            new ProxyCommand(chooseCommand(chosen).apply(true, Direction.kForward))
+        );
+        driveController.square().whileTrue(
+            new ProxyCommand(chooseCommand(chosen).apply(false, Direction.kReverse))
+        );
+        driveController.circle().whileTrue(
+            new ProxyCommand(chooseCommand(chosen).apply(false, Direction.kForward))
+        );
+    }
+
+
+    public BiFunction<Boolean, Direction, Command> chooseCommand(String type){
+        switch (type) {
+            case "Drive":
+                return (isDynamic, direction) ->
+                    isDynamic ? driveSysID.getDriveMotorsRoutineDynamic(direction) : driveSysID.getDriveMotorsRoutineQuasistatic(direction);
+            case "Steer":
+                return (isDynamic, direction) ->
+                    isDynamic ? driveSysID.getSteerMotorsRoutineDynamic(direction) : driveSysID.getSteerMotorsRoutineQuasistatic(direction);
+            case "Theta":
+                return (isDynamic, direction) ->
+                    isDynamic ? driveSysID.getThetaRoutineDynamic(direction) : driveSysID.getThetaRoutineQuasistatic(direction);
+            default:
+                return (isDynamic, direction) -> new InstantCommand();
+        }
+    }
 
    //#region auto
     public Command passTrench(){
