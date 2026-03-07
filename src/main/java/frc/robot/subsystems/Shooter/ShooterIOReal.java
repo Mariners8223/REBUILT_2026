@@ -20,7 +20,7 @@ import frc.robot.subsystems.Shooter.ShooterConstants.MOTOR_CONSTANTS;
 /** Add your docs here. */
 public class ShooterIOReal implements ShooterIO {
     MarinersController leadMotor;
-    MarinersController[] followMotors;
+    MarinersController followMotor;
 
 
     public ShooterIOReal(){
@@ -42,23 +42,11 @@ public class ShooterIOReal implements ShooterIO {
 
         leadMotor.setCurrentLimits(MOTOR_CONSTANTS.SHOOTER_MOTOR_CURRENT_LIMIT, MOTOR_CONSTANTS.SHOOTER_MOTOR_CURRENT_THRESHOLD);
 
-        // leadMotor.setMaxMinOutput(12, 0);
-
         leadMotor.startPIDTuning();
 
-        MarinersTalonFX[] followMotors = new MarinersTalonFX[1];
-        for (int i = 0; i < followMotors.length; i++){
-            var follower = ShooterConstants.MOTOR_CONSTANTS.FOLLOWERS[i];
-
-            followMotors[i] = new MarinersTalonFX(
-                "Shooter Follower Motor " + Integer.toString(i + 1),
-                ShooterConstants.MOTOR_CONSTANTS.CONTROLLER_LOCATION,
-                follower.id()
-            );
-            followMotors[i].setMotorAsFollower(leadMotor, follower.inverted_from_leader());
-        }
+        followMotor = new MarinersTalonFX("Shooter Follower Motor", MOTOR_CONSTANTS.CONTROLLER_LOCATION, MOTOR_CONSTANTS.FOLLOW_MOTOR_ID);
+        followMotor.setMotorAsFollower(leadMotor, MOTOR_CONSTANTS.IS_INVERTED_FROM_LEADER);
     }
-
     //#endregion
 
     public double getVelocity(){

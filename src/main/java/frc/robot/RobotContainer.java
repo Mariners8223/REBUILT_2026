@@ -105,10 +105,8 @@ public class RobotContainer {
                         )
                     )
             );
-
-        
-
     }
+
     //#region Drive
     public void configureDriveBindings(){
         new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(
@@ -218,20 +216,20 @@ public class RobotContainer {
    }
 
 
-   public Command getInRange(){
-    Pose2d pose = driveBase.getPose();
-    if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
-        pose = FlippingUtil.flipFieldPose(driveBase.getPose());
+    public Command getInRange(){
+        Pose2d pose = driveBase.getPose();
+        if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
+            pose = FlippingUtil.flipFieldPose(driveBase.getPose());
+        }
+        if (pose.getY() >= 4.5){
+            return driveBase.findPath(Constants.autoConstats.topShoot).until(RobotContainer::inRange);
+        }
+        return driveBase.findPath(Constants.autoConstats.bottomShoot).until(RobotContainer::inRange);
     }
-    if (pose.getY() >= 4.5){
-        return driveBase.findPath(Constants.autoConstats.topShoot).until(RobotContainer::inRange);
-    }
-    return driveBase.findPath(Constants.autoConstats.bottomShoot).until(RobotContainer::inRange);
-   }
 
    public static boolean inAllianceZone(){
         if (Robot.isRedAlliance) return driveBase.getPose().getX() > Constants.FieldConstants.RED_ALLIANCE_ZONE_X;
         else return driveBase.getPose().getX() < Constants.FieldConstants.BLUE_ALLIANCE_ZONE_X;
-   }
+    }
    //#endregion
 }
