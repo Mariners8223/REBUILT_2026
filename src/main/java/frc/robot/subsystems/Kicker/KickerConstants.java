@@ -21,8 +21,8 @@ public class KickerConstants {
         public static final int LEAD_MOTOR_CURRENT_LIMIT = 30;
         public static final int LEAD_MOTOR_CURRENT_THRESHOLD = 60;
 
-        public static final int LEAD_MOTOR_ID = 14;
-        public static final int FOLLOW_MOTOR_ID = 16;
+        public static final int LEAD_MOTOR_ID = 16;
+        public static final int FOLLOW_MOTOR_ID = 14;
 
         public static final boolean LEAD_MOTOR_IS_INVERTED = true;
         public static final boolean FOLLOW_MOTOR_INVERTED_FROM_LEAD = false;

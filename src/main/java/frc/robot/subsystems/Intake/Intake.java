@@ -2,6 +2,7 @@ package frc.robot.subsystems.Intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Robot;
@@ -22,7 +23,7 @@ public class Intake extends SubsystemBase{
     {
         io = Robot.isReal() ? new IntakeIOReal() : new IntakeIOSim();
         this.resetPositionMotorEncoder();
-        state = IntakePosition.Closed;
+        state = IntakePosition.Open;
     }
 
     public void setPositionMotorRotation(Angle rotations)
@@ -46,7 +47,7 @@ public class Intake extends SubsystemBase{
     }
 
     public IntakePosition getCurrentState(){
-        return IntakePosition.findNearestPosition(getCurrentPosition());
+        return this.state;
     }
 
     public void resetPositionMotorEncoder()
@@ -70,12 +71,11 @@ public class Intake extends SubsystemBase{
     }
 
     public Command switchIntakePositionCommand(){
-        IntakePosition switchedPosition =
-            state == IntakePosition.Closed ? IntakePosition.Open : IntakePosition.Closed;
-
-        return this.runOnce(
-            () -> setPositionMotorState(switchedPosition)
-        );
+        switch (this.state){
+            case Closed: { Logger.recordOutput("SwitchedPosition", IntakePosition.Open); return new InstantCommand(() -> setPositionMotorState(IntakePosition.Open));}
+            case Open: {Logger.recordOutput("SwitchedPosition", IntakePosition.Closed); return new InstantCommand(() -> setPositionMotorState(IntakePosition.Closed));}
+            default: {Logger.recordOutput("SwitchedPosition", IntakePosition.Open); return new InstantCommand(() -> setPositionMotorState(IntakePosition.Open));}
+        }
     }
 
     public Command bumpFuelCommand(){
@@ -92,7 +92,7 @@ public class Intake extends SubsystemBase{
         io.Update(inputs);
         Logger.processInputs(getName(), inputs);
 
-        Logger.recordOutput("Intake/State", getCurrentState() == null ? "Unkown" : getCurrentState().toString());
+        Logger.recordOutput("Intake/State", state);
         Logger.recordOutput("Intake/Command", (getCurrentCommand() != null ? getCurrentCommand().toString() : "None"));
     }
 }

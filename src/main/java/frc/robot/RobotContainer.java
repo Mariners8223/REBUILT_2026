@@ -37,6 +37,7 @@ import frc.robot.subsystems.Shooter.ShooterConstants;
 import frc.robot.subsystems.Shooter.ShooterSysID;
 import frc.robot.subsystems.Funnel.Funnel;
 import frc.robot.subsystems.Intake.Intake;
+import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakePosition;
 import frc.robot.subsystems.Kicker.Kicker;
 
 public class RobotContainer {
@@ -69,7 +70,8 @@ public class RobotContainer {
 
         vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
 
-        configureDriveBindings();
+        //configureDriveBindings();
+        configureTestBindings();
     }
 
     public static Distance distanceFromHub(){
@@ -84,6 +86,11 @@ public class RobotContainer {
 
     // for tests!!
     public void configureTestBindings(){
+        new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(
+            new StartEndCommand(() ->driveBase.setDefaultCommand(new DriveCommand(driveBase, driveController)),
+            driveBase::removeDefaultCommand)
+            .ignoringDisable(true));
+        driveController.options().onTrue(driveBase.resetOnlyDirection());
 
         driveController.povRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.RIGHT));
         driveController.povLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.LEFT));
@@ -94,17 +101,26 @@ public class RobotContainer {
         driveController.povDownLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_LEFT));
         driveController.povDownRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_RIGHT));
 
-        Command fullShootCommand =
-            Commands.parallel(
-                new ShootDistance(shooter, RobotContainer::distanceFromHub),
-                Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
-                    .andThen(
-                        Commands.parallel(
-                            kicker.setKickerByDistance(RobotContainer::distanceFromHub),
-                            funnel.toShooterCommand()
-                        )
-                    )
-            );
+        driveController.cross().toggleOnTrue(kicker.setKickerCommand(0.8));
+        driveController.square().toggleOnTrue(funnel.toShooterCommand());
+
+        // driveController.triangle().toggleOnTrue(shooter.setDutyCycleCommand(0.4));
+
+        driveController.circle().onTrue(
+            Commands.either(
+                intake.moveToPositionCommand(IntakePosition.Closed),
+                intake.moveToPositionCommand(IntakePosition.Open),
+                () -> intake.getCurrentState() == IntakePosition.Open
+            )
+        );
+
+        // driveController.R1().onTrue(intake.moveToPositionCommand(IntakePosition.Closed));
+        // driveController.L1().onTrue(intake.moveToPositionCommand(IntakePosition.Open));
+        driveController.triangle().toggleOnTrue(intake.spinRollersCommand());
+
+        driveController.R1().whileTrue(climb.dutyCycleCommand(0.3));
+        driveController.L1().whileTrue(climb.dutyCycleCommand(-0.3));
+
     }
 
     //#region Drive

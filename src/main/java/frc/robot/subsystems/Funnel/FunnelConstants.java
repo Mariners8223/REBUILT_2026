@@ -15,12 +15,12 @@ public class FunnelConstants {
         public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
         public static final boolean Is_Brushless = true;
         public static final MotorType MOTOR_TYPE = MotorType.SPARK_FLEX;
-        public static final double GearRatio = 0.6;
+        public static final double GearRatio = 1;
         public static final double MOMENT_OF_INERTIA_SIM = 1;
         public static final int LEAD_MOTOR_CURRENT_LIMIT = 30;
         public static final int LEAD_MOTOR_CURRENT_THRESHOLD = 60;
 
-        public static final double LeadSpeed = 0.6;
+        public static final double LeadSpeed = 0.5;
         public static final boolean IS_INVERTED = false;
     }
 
@@ -32,7 +32,7 @@ public class FunnelConstants {
         public static final int CENTER_MOTOR_CURRENT_LIMIT = 30;
         public static final int CENTER_MOTOR_CURRENT_THRESHOLD = 60;
 
-        public static final double CenteringHighSpeed = 0.5;
+        public static final double CenteringHighSpeed = 0.2;
         public static final boolean IS_INVERTED = true;
     }
 }
