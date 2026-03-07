@@ -2,8 +2,6 @@
 package frc.robot.subsystems.Funnel;
 
 import frc.util.MarinersController.MarinersSparkBase.MotorType;
-import static frc.util.MarinersController.MarinersController.ControllerLocation;
-
 import frc.util.MarinersController.MarinersController.ControllerLocation;
 
 
@@ -20,7 +18,7 @@ public class FunnelConstants {
         public static final int LEAD_MOTOR_CURRENT_LIMIT = 30;
         public static final int LEAD_MOTOR_CURRENT_THRESHOLD = 60;
 
-        public static final double LeadSpeed = 0.6;
+        public static final double LeadSpeed = 1;
         public static final boolean IS_INVERTED = false;
     }
 

@@ -69,7 +69,7 @@ public class RobotContainer {
 
         vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
 
-        configureDriveBindings();
+        configureTVBindings();
     }
 
     public static Distance distanceFromHub(){
@@ -82,8 +82,14 @@ public class RobotContainer {
         );
     }
 
-    // for tests!!
-    public void configureTestBindings(){
+    public void configureTVBindings(){
+        new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(
+            new StartEndCommand(
+                () -> driveBase.setDefaultCommand(
+                    new DriveCommand(driveBase, driveController)
+                ),
+                driveBase::removeDefaultCommand)
+            .ignoringDisable(true));
 
         driveController.povRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.RIGHT));
         driveController.povLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.LEFT));
@@ -94,21 +100,23 @@ public class RobotContainer {
         driveController.povDownLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_LEFT));
         driveController.povDownRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_RIGHT));
 
-        Command fullShootCommand =
+        driveController.cross().toggleOnTrue(
             Commands.parallel(
-                new ShootDistance(shooter, RobotContainer::distanceFromHub),
-                Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
-                    .andThen(
-                        Commands.parallel(
-                            kicker.setKickerByDistance(RobotContainer::distanceFromHub),
-                            funnel.toShooterCommand()
-                        )
-                    )
-            );
+                shooter.setDutyCycleCommand(0.4),
+                kicker.setKickerCommand(0.8),
+                funnel.toShooterCommand()
+            )
+        );
 
-        
+        driveController.circle().toggleOnTrue(funnel.funnelingCommand());
 
+        driveController.square().onTrue(intake.switchIntakePositionCommand());
+        driveController.triangle().toggleOnTrue(intake.spinRollersCommand());
+
+        driveController.R1().whileTrue(climb.dutyCycleCommand(0.3));
+        driveController.L1().whileTrue(climb.dutyCycleCommand(-0.3));
     }
+
     //#region Drive
     public void configureDriveBindings(){
         new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(

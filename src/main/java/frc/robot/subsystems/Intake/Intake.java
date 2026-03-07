@@ -22,7 +22,7 @@ public class Intake extends SubsystemBase{
     {
         io = Robot.isReal() ? new IntakeIOReal() : new IntakeIOSim();
         this.resetPositionMotorEncoder();
-        state = IntakePosition.Closed;
+        state = IntakePosition.Open;
     }
 
     public void setPositionMotorRotation(Angle rotations)

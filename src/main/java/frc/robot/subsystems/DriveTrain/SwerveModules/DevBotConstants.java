@@ -20,7 +20,7 @@ public enum DevBotConstants {
             0.15082, 2.2804, 0.35689, 0.24129, 1.7386, 0.23941),
 
     BACK_LEFT(12, 5, 50,
-    false, false, -0.010254,
+    false, false, 0,
             new PIDFGains(50, 0, 0), //Drive motor PID
             new PIDFGains(25, 20, 0, 0, 0.001, 0.05), //Steer motor PID
             0.16391, 2.3052, 0.28241, 0.32841, 1.6459, 0.11168),

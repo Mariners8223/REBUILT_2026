@@ -25,7 +25,7 @@ public class IntakeConstants
             Closed(Degrees.of(0)),
             Middle(Degrees.of(-55)),
             Open(Rotations.of(-0.25)),
-            Reset(Degrees.of(-90));
+            Reset(Degrees.of(0));
 
             private final Angle angle;
 

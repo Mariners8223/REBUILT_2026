@@ -39,14 +39,14 @@ public class MinorAdjust extends Command {
 
   private final DriveBase driveBase;
 
-  private final AdjustmentDirection direcation;
+  private final AdjustmentDirection direction;
 
   /** Creates a new MinorAdjust. */
   public MinorAdjust(DriveBase driveBase, AdjustmentDirection direcation) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.driveBase = driveBase;
 
-    this.direcation = direcation;
+    this.direction = direcation;
 
     addRequirements(driveBase);
   }
@@ -54,7 +54,7 @@ public class MinorAdjust extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    driveBase.drive(new ChassisSpeeds(direcation.getVX(), direcation.getVY(), 0));
+    driveBase.drive(new ChassisSpeeds(direction.getVX(), direction.getVY(), 0));
   }
 
   // Called once the command ends or is interrupted.
