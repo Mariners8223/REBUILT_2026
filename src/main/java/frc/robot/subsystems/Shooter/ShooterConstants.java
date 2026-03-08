@@ -34,9 +34,9 @@ public class ShooterConstants {
 
         public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
         public static final PIDFGains PID = new PIDFGains(
-            0.5,
-            0.7,
-            0.1,
+            0.4,
+            0,
+            0.07,
             Kv
         );
 
@@ -94,25 +94,24 @@ public class ShooterConstants {
 
     public static class Maps{
         public static final InterpolatingDoubleTreeMap DistanceToRPM = new InterpolatingDoubleTreeMap();
+        public static final InterpolatingDoubleTreeMap DistanceToRPMPassing = new InterpolatingDoubleTreeMap();
+
         public static final InterpolatingDoubleTreeMap DistanceToFlytime = new InterpolatingDoubleTreeMap();
 
-        public static final InterpolatingDoubleTreeMap DistanceToKicker = new InterpolatingDoubleTreeMap();
-
         static{
-            DistanceToRPM.put(3.3,3540.0);
-            DistanceToFlytime.put(3.3, 1.0);
+            DistanceToRPM.put(1.8, 2500.0);
+            DistanceToRPM.put(2.3, 2630.0);
+            DistanceToRPM.put(2.8, 2790.0);
+            DistanceToRPM.put(3.3, 2990.0);
+            DistanceToRPM.put(3.8, 3240.0);
+            DistanceToRPM.put(4.3, 3500.0);
+            DistanceToRPM.put(4.8, 3630.0);
+            DistanceToRPM.put(5.3, 3700.0);
+            DistanceToRPM.put(5.8, 3870.0);
 
-            DistanceToRPM.put(2.65,3150d);
-            DistanceToFlytime.put(2.65, 1.22);
-
-            DistanceToRPM.put(1.8, 2850d);
-            DistanceToFlytime.put(1.8, 0.9);
-
-            DistanceToRPM.put(2.1, 2900d);
-            DistanceToFlytime.put(2.1, 1d);
-
-            DistanceToRPM.put(4.1, 2900d);
-            DistanceToFlytime.put(4.1, 1d);
+            DistanceToRPMPassing.put(4.0, 3000.0);
+            DistanceToRPMPassing.put(6.2, 4000.0);
+            DistanceToRPMPassing.put(6.8, 5000.0);
         }
     }
 

@@ -28,16 +28,17 @@ public class KickerConstants {
         public static final boolean FOLLOW_MOTOR_INVERTED_FROM_LEAD = false;
     }
 
-    public static final InterpolatingDoubleTreeMap DistanceToRPM = new InterpolatingDoubleTreeMap();
+    public static final InterpolatingDoubleTreeMap DistantToDutyCycle = new InterpolatingDoubleTreeMap();
     static{
-        DistanceToRPM.put(3.3, 0.8);
-        DistanceToRPM.put(2.65, 0.8);
-        DistanceToRPM.put(1.8, 1d);
-        DistanceToRPM.put(2.1, 1d);
-        DistanceToRPM.put(4.1, 1d);
+        DistantToDutyCycle.put(1.8, 1d);
+        DistantToDutyCycle.put(3.3, 1d);
+        DistantToDutyCycle.put(3.8, 0.8);
+        DistantToDutyCycle.put(4.3, 0.8);
+        DistantToDutyCycle.put(4.8, 0.6);
+        DistantToDutyCycle.put(5.8, 0.6);
     }
 
     public static double getRPM(Distance distance){
-        return DistanceToRPM.get(distance.in(Meters));
+        return DistantToDutyCycle.get(distance.in(Meters));
     }
 }

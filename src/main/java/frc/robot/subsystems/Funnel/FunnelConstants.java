@@ -32,7 +32,7 @@ public class FunnelConstants {
         public static final int CENTER_MOTOR_CURRENT_LIMIT = 30;
         public static final int CENTER_MOTOR_CURRENT_THRESHOLD = 60;
 
-        public static final double CenteringHighSpeed = 0.2;
+        public static final double CenteringHighSpeed = 0.5;
         public static final boolean IS_INVERTED = true;
     }
 }

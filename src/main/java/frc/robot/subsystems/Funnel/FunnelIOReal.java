@@ -37,8 +37,8 @@ public class FunnelIOReal implements FunnelIO{
          FunnelConstants.CenteringMotor.GearRatio);
 
          Motor.setMotorInverted(FunnelConstants.CenteringMotor.IS_INVERTED);
-         Motor.setCurrentLimits(FunnelConstants.CenteringMotor.CENTER_MOTOR_CURRENT_LIMIT,
-             FunnelConstants.CenteringMotor.CENTER_MOTOR_CURRENT_THRESHOLD);
+        //  Motor.setCurrentLimits(FunnelConstants.CenteringMotor.CENTER_MOTOR_CURRENT_LIMIT,
+        //      FunnelConstants.CenteringMotor.CENTER_MOTOR_CURRENT_THRESHOLD);
 
           return Motor;
     }
