@@ -29,8 +29,8 @@ public class ShooterConstants {
 
     public static class MOTOR_CONSTANTS{
         public static final double Ks = 0.21571;
-        public static final double Kv = 0.11496;
-        public static final double Ka = 0.042404;
+        public static final double Kv = 0.1178;
+        public static final double Ka = 0.025268;
 
         public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
         public static final PIDFGains PID = new PIDFGains(

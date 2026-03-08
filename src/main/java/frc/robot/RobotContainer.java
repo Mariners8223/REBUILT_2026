@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.*;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.Climb.RunHookToHeight;
 import frc.robot.commands.Drive.AimDriving;
 import frc.robot.commands.Drive.DriveCommand;
@@ -66,12 +67,22 @@ public class RobotContainer {
         funnel = new Funnel();
         intake = new Intake();
         shooter = new Shooter();
+        shooterSysID = new ShooterSysID(shooter);
         kicker = new Kicker();
 
         vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
 
         //configureDriveBindings();
-        configureTestBindings();
+        // configureTestBindings();
+        configureShooterSysID();
+    }
+
+    public void configureShooterSysID(){
+        driveController.triangle().whileTrue(shooterSysID.getShooterDynamic(Direction.kForward));
+        driveController.cross().whileTrue(shooterSysID.getShooterDynamic(Direction.kReverse));
+
+        driveController.circle().whileTrue(shooterSysID.getShooterQuasistatic(Direction.kForward));
+        driveController.square().whileTrue(shooterSysID.getShooterQuasistatic(Direction.kReverse));
     }
 
     public static Distance distanceFromHub(){
