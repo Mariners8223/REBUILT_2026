@@ -23,9 +23,9 @@ import frc.robot.subsystems.DriveTrain.DriveBaseConstants;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class HookToTower extends Command {
     private final DriveBase driveBase;
-    private Pose2d targetPose = 
-      Robot.isRedAlliance ? 
-      Constants.FieldConstants.TOWER_POSITION : 
+    private Pose2d targetPose =
+      Robot.isRedAlliance ?
+      Constants.FieldConstants.TOWER_POSITION :
       FlippingUtil.flipFieldPose(Constants.FieldConstants.TOWER_POSITION);
 
     private final PIDController XController = DriveBaseConstants.DrivePID.X_PID;

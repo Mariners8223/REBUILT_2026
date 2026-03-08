@@ -21,7 +21,7 @@ public class DriveBaseSYSID {
     public DriveBaseSYSID(DriveBase driveBase, CommandGenericHID controller) {
 
 
-        Supplier<Rotation2d> 
+        Supplier<Rotation2d>
         controllerAngle = () -> {
             Rotation2d angle = new Rotation2d(-controller.getRawAxis(1), -controller.getRawAxis(0));
 

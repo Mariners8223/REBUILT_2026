@@ -23,8 +23,8 @@ public class IntakeConstants
         public enum IntakePosition
         {
             Closed(Degrees.of(0)),
-            Middle(Degrees.of(-55)),
-            Open(Rotations.of(-0.25)),
+            Middle(Degrees.of(-35)),
+            Open(Degrees.of(-90)),
             Reset(Degrees.of(-90));
 
             private final Angle angle;

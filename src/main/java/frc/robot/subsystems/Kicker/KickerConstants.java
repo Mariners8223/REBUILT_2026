@@ -18,7 +18,7 @@ public class KickerConstants {
         public static final MotorType MOTOR_TYPE = MotorType.SPARK_FLEX;
         public static final double GEAR_RATIO = 1;
 
-        public static final int LEAD_MOTOR_CURRENT_LIMIT = 30;
+        public static final int LEAD_MOTOR_CURRENT_LIMIT = 35;
         public static final int LEAD_MOTOR_CURRENT_THRESHOLD = 60;
 
         public static final int LEAD_MOTOR_ID = 16;
@@ -30,8 +30,8 @@ public class KickerConstants {
 
     public static final InterpolatingDoubleTreeMap DistantToDutyCycle = new InterpolatingDoubleTreeMap();
     static{
-        DistantToDutyCycle.put(1.8, 1d);
-        DistantToDutyCycle.put(3.3, 1d);
+        DistantToDutyCycle.put(1.8, 1.0);
+        DistantToDutyCycle.put(3.3, 1.0);
         DistantToDutyCycle.put(3.8, 0.8);
         DistantToDutyCycle.put(4.3, 0.8);
         DistantToDutyCycle.put(4.8, 0.6);

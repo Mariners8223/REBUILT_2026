@@ -30,9 +30,7 @@ public class IntakeIOReal implements IntakeIO{
         // motor.enableSoftLimits(IntakeConstants.PositionMotor.SOFT_MINIMUM, IntakeConstants.PositionMotor.SOFT_MAXIMUM);
         motor.setMotorIdleMode(true);
         // PID and Profile
-        // motor.setMaxMinOutput(4, -2);
         motor.setProfile(IntakeConstants.PositionMotor.PROFILE);
-        // motor.startPIDTuning();
 
         SmartDashboard.putString("Intake PID", motor.getPIDF().toString());
         return motor;
@@ -78,7 +76,6 @@ public class IntakeIOReal implements IntakeIO{
         inputs.positionMotorSpeed = RotationsPerSecond.of(positionMotor.getVelocity()).in(RPM);
         inputs.rollersMotorSpeed = RotationsPerSecond.of(rollersMotor.getVelocity()).in(RPM);
         inputs.intakeState = IntakePosition.findNearestPosition(inputs.currentPosition);
-
         Logger.recordOutput("Setpoint", positionMotor.getSetpoint());
     }
 }
