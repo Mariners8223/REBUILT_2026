@@ -32,10 +32,8 @@ import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Climb.Climb;
 import frc.robot.subsystems.Climb.ClimbConstants.Heights;
-import frc.robot.subsystems.DriveTrain.DriveBaseSYSID;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterConstants;
-import frc.robot.subsystems.Shooter.ShooterSysID;
 import frc.robot.subsystems.Funnel.Funnel;
 import frc.robot.subsystems.Funnel.FunnelConstants;
 import frc.robot.subsystems.Intake.Intake;
@@ -188,8 +186,7 @@ public class RobotContainer {
         driveController.povDownRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_RIGHT));
 
         driveController.R1().toggleOnTrue(
-            new AimDriving(driveBase, driveController, () -> Constants.FieldConstants.HUB_POSITION)
-            .onlyIf(RobotContainer::inAllianceZone)
+            new AimDriving(driveBase, driveController, RobotContainer::getShootingAngle)
         );
 
         driveController.L1().toggleOnTrue(
@@ -224,6 +221,20 @@ public class RobotContainer {
         return Meters.of(
             driveBase.getPose().getTranslation().getDistance(hubLocation.getTranslation())
         );
+    }
+
+    public static double angleToHub(){
+        Pose2d hubLocation = Constants.FieldConstants.HUB_POSITION;
+        if(Robot.isRedAlliance) hubLocation = FlippingUtil.flipFieldPose(hubLocation);
+        return driveBase.getAngleToPose(hubLocation);
+    }
+
+    public static double angleToAllianceZone(){
+        return Robot.isRedAlliance ? 0 : Math.PI / 2;
+    }
+
+    public static double getShootingAngle(){
+        return inAllianceZone() ? angleToHub() : angleToAllianceZone();
     }
 
    //#region auto
