@@ -37,9 +37,11 @@ import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterConstants;
 import frc.robot.subsystems.Shooter.ShooterSysID;
 import frc.robot.subsystems.Funnel.Funnel;
+import frc.robot.subsystems.Funnel.FunnelConstants;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakePosition;
 import frc.robot.subsystems.Kicker.Kicker;
+import frc.robot.subsystems.Kicker.KickerConstants;
 
 public class RobotContainer {
     public static CommandPS5Controller driveController;
@@ -89,6 +91,19 @@ public class RobotContainer {
         driveController.povDownLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_LEFT));
         driveController.povDownRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_RIGHT));
 
+        Command ejectCommand = Commands.parallel(
+            Commands.startEnd(
+                () -> kicker.setKickerCommand(KickerConstants.KICKER_EJECT_SPEED), 
+                () -> kicker.stopMotors(),
+                kicker
+            ),
+            Commands.startEnd(
+                () -> funnel.SpinCenterMotors(FunnelConstants.CenteringMotor.CENTERING_EJECT_SPEED),
+                () -> funnel.stopAllMotors(),
+                funnel
+            )
+        );
+
         driveController.cross().onTrue(
             Commands.either(
                 intake.moveToPositionCommand(IntakePosition.Closed),
@@ -102,12 +117,7 @@ public class RobotContainer {
                 funnel.funnelingCommand()
             )
         );
-        driveController.square().toggleOnTrue(
-            Commands.startEnd(
-                () -> funnel.SpinCenterMotors(-0.3),
-                () -> funnel.StopCenterMotors(),
-                funnel)
-        );
+        driveController.square().toggleOnTrue(ejectCommand);
 
         driveController.R3().onTrue(new ProxyCommand(intake.bumpFuelCommand()));
         driveController.triangle().toggleOnTrue(

@@ -90,7 +90,8 @@ public class ShooterConstants {
     public static final Pose3d POSITION = new Pose3d(
         new Translation3d(0, 0, 0), new Rotation3d(0, 0, 0)
     );
-    public static final double PASSING_VELOCITY = 0;
+    
+    public static final double PASSING_VELOCITY = 4000;
 
     public static class Maps{
         public static final InterpolatingDoubleTreeMap DistanceToRPM = new InterpolatingDoubleTreeMap();

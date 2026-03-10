@@ -41,4 +41,6 @@ public class KickerConstants {
     public static double getRPM(Distance distance){
         return DistantToDutyCycle.get(distance.in(Meters));
     }
+
+    public static final double KICKER_EJECT_SPEED = -0.3;
 }
