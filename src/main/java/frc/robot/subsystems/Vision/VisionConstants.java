@@ -20,7 +20,7 @@ public class VisionConstants {
 
     public static final double maxHeightDeviation = 0.1;
     public static final double maxMultiAmbiguity = 0.3;
-    public static final double maxSingleAmbiguity = 0.1;
+    public static final double maxSingleAmbiguity = 0.07;
 
     public enum CameraConstants{
         POINTING_IN_CAMERA("pointing_in_camera",//this camera will be on a churo of the shooter
@@ -30,7 +30,7 @@ public class VisionConstants {
                 0, 0),   
        POINTING_OUT_CAMERA("pointing_out_camera", //this camera will be placed on the side of the shooter, pointing backwards
            new Transform3d(
-               0.23554, -0.26835, 0.47246,
+               -0.23554, -0.26835, 0.51,
                new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(-14), Units.degreesToRadians(180))),
                0, 0);
         
