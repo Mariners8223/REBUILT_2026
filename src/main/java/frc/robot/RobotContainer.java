@@ -7,23 +7,32 @@ package frc.robot;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.RPM;
 
+import java.util.ArrayList;
+import java.util.List;
 
+import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.util.FlippingUtil;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.commands.Climb.RunHookToHeight;
 import frc.robot.commands.Drive.AimDriving;
 import frc.robot.commands.Drive.DriveCommand;
-import frc.robot.commands.Drive.HookToTower;
+import frc.robot.commands.Drive.DriveToPose;
 import frc.robot.commands.Drive.MinorAdjust;
 import frc.robot.commands.Drive.MinorAdjust.AdjustmentDirection;
 import frc.robot.commands.Shooter.ShootDistance;
@@ -41,6 +50,7 @@ import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakePosition;
 import frc.robot.subsystems.Kicker.Kicker;
 import frc.robot.subsystems.Kicker.KickerConstants;
 
+
 public class RobotContainer {
     public static CommandPS5Controller driveController;
     public static Constants.autoConstats.TrenchLocations trenchLocations = new Constants.autoConstats.TrenchLocations();
@@ -55,6 +65,8 @@ public class RobotContainer {
     public static CommandXboxController driveXboxController;
     public static Vision vision;
 
+    public static LoggedDashboardChooser<Command> autoChooser;
+
 
     public RobotContainer() {
         driveController = new CommandPS5Controller(0);
@@ -68,8 +80,9 @@ public class RobotContainer {
 
         vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
 
-        // configureDriveBindings();
-        configureTestBindings();
+        configureDriveBindings();
+        // configureTestBindings();
+        configureChooser();
     }
 
     // for tests!!
@@ -89,48 +102,13 @@ public class RobotContainer {
         driveController.povDownLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_LEFT));
         driveController.povDownRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_RIGHT));
 
-        Command ejectCommand = Commands.parallel(
-            Commands.startEnd(
-                () -> kicker.setKickerCommand(KickerConstants.KICKER_EJECT_SPEED), 
-                () -> kicker.stopMotors(),
-                kicker
-            ),
-            Commands.startEnd(
-                () -> funnel.SpinCenterMotors(FunnelConstants.CenteringMotor.CENTERING_EJECT_SPEED),
-                () -> funnel.stopAllMotors(),
-                funnel
-            )
-        );
+        driveController.triangle().onTrue(climb.toPositionCommand(Heights.EXTENDED));
+        driveController.cross().onTrue(new RunHookToHeight(climb, Heights.RESET, 0.7));
 
-        driveController.cross().onTrue(
-            Commands.either(
-                intake.moveToPositionCommand(IntakePosition.Closed),
-                intake.moveToPositionCommand(IntakePosition.Open),
-                () -> intake.getCurrentState() == IntakePosition.Open
-            )
-        );
-        driveController.circle().toggleOnTrue(
-            Commands.parallel(
-                intake.spinRollersCommand(),
-                funnel.funnelingCommand()
-            )
-        );
-        driveController.square().toggleOnTrue(ejectCommand);
+        driveController.options().whileTrue(climb.dutyCycleCommand(0.1));
+        driveController.create().whileTrue(climb.dutyCycleCommand(-0.1));
 
-        driveController.R3().onTrue(new ProxyCommand(intake.bumpFuelCommand()));
-        driveController.triangle().toggleOnTrue(
-            Commands.parallel(
-                new ShootVelocity(shooter, () -> RPM.of(1500)),
-                Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RPM.of(1500)))
-                    .andThen(
-                        Commands.parallel(
-                            kicker.setKickerByDistance(RobotContainer::distanceFromHub),
-                            funnel.toShooterCommand()
-                        )
-                )
-            )
-        );
-
+        driveController.R1().onTrue(new InstantCommand(() -> climb.resetPosition()));
     }
 
     //#region Drive
@@ -164,12 +142,31 @@ public class RobotContainer {
                     )
             );
 
+        Command hookToTower = 
+            Commands.sequence(
+                new DriveToPose(driveBase, Constants.FieldConstants.PRE_TOWER_POSITION).withTimeout(2),
+                new DriveToPose(driveBase, Constants.FieldConstants.TOWER_POSITION).withTimeout(2)
+            );
+
         Command fullClimb =
             Commands.sequence(
                 climb.toPositionCommand(Heights.EXTENDED),
-                new HookToTower(driveBase),
+                hookToTower,
                 new RunHookToHeight(climb, Heights.RESET, 1)
             );
+
+        Command ejectCommand = Commands.parallel(
+            Commands.startEnd(
+                () -> kicker.setKickerCommand(KickerConstants.KICKER_EJECT_SPEED), 
+                () -> kicker.stopMotors(),
+                kicker
+            ),
+            Commands.startEnd(
+                () -> funnel.SpinCenterMotors(FunnelConstants.CenteringMotor.CENTERING_EJECT_SPEED),
+                () -> funnel.stopAllMotors(),
+                funnel
+            )
+        );
 
         driveController.PS().onTrue(driveBase.resetOnlyDirection());
 
@@ -204,14 +201,37 @@ public class RobotContainer {
                 () -> intake.getCurrentState() == IntakePosition.Open
             )
         );
-        driveController.circle().toggleOnTrue(intake.spinRollersCommand());
+        
+        driveController.circle().toggleOnTrue(
+            Commands.parallel(
+                intake.spinRollersCommand(),
+                funnel.funnelingCommand()
+            )
+        );
 
         driveController.triangle().whileTrue(fullClimb);
-        driveController.square().toggleOnTrue(funnel.funnelingCommand());
+        
+        driveController.square().toggleOnTrue(ejectCommand);
 
         driveController.R3().onTrue(intake.bumpFuelCommand());
     }
     //#endregion
+
+    public static void configureChooser(){
+        List<String> namesOfAutos = AutoBuilder.getAllAutoNames();
+        List<PathPlannerAuto> autosOfAutos = new ArrayList<>();
+
+        autoChooser = new LoggedDashboardChooser<>("chooser");
+        for (String autoName : namesOfAutos) {
+            PathPlannerAuto auto = new PathPlannerAuto(autoName);
+            autosOfAutos.add(auto);
+        }
+
+        autosOfAutos.forEach(auto -> autoChooser.addOption(auto.getName(), auto));
+
+        autoChooser.addDefaultOption("Do Nothing", new InstantCommand());
+        SmartDashboard.putData("chooser", autoChooser.getSendableChooser());
+    }
 
     public static Distance distanceFromHub(){
         Pose2d hubLocation = Constants.FieldConstants.HUB_POSITION;

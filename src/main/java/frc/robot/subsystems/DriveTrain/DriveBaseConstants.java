@@ -52,7 +52,7 @@ public class DriveBaseConstants {
         public static final double UPPER_SPEED_LIMIT_THETA = 4 * 1.1;
 
         public static final double XY_DEADBAND = 0;
-        public static final double THETA_DEADBAND = 0.4;
+        public static final double THETA_DEADBAND = 0.2;
 
         public static final double XY_TOLERANCE = 0.015;
         public static final double THETA_TOLERANCE = Units.degreesToRadians(2);

@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakePosition;
 import frc.util.HubTracker;
 
 
@@ -84,6 +85,8 @@ public class Robot extends LoggedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    CommandScheduler.getInstance().schedule(RobotContainer.intake.moveToPositionCommand(IntakePosition.Reset));
+    CommandScheduler.getInstance().schedule(RobotContainer.autoChooser.get());
     }
 
   /** This function is called periodically during autonomous. */

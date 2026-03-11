@@ -13,6 +13,7 @@ public interface ShooterIO {
     @AutoLog
     class ShooterInputs{
         double shooterVelocity; // RPM
+        double shooterSetPoint; // RPM
         double shooterLinearVelocity; // m/s
         double feedForward;
 
