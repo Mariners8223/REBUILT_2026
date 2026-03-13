@@ -6,17 +6,14 @@ package frc.robot.commands.Intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake.Intake;
-import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakePosition;
+import frc.robot.subsystems.Intake.IntakeConstants;
 
 
-public class Position extends Command {
+public class collectingCommand extends Command {
   private final Intake intake;
-  private final IntakePosition position;
-
-  public Position(Intake intake, IntakePosition position)
+  public collectingCommand(Intake intake)
   {
     this.intake = intake;
-    this.position = position;
 
     addRequirements(intake);
   }
@@ -25,14 +22,19 @@ public class Position extends Command {
   @Override
   public void initialize()
   {
-    intake.setPositionMotorState(position);
+    intake.setRollersMotorDutyCycle(IntakeConstants.RollersMotor.DUTY_CYCLE);
+  }
+
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted)
+  {
+    intake.setRollersMotorDutyCycle(0);
   }
 
   // Returns true when the command should end.
   @Override
-  public boolean isFinished()
-  {
+  public boolean isFinished() {
     return false;
-    // return Constants.CALCULATIONS.epsilonEquals(intake.getCurrentPosition(), position.getAngle(), IntakeConstants.PositionMotor.POSITION_TOLERANCE);
   }
 }

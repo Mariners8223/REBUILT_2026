@@ -8,11 +8,13 @@ import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.RPM;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.util.FlippingUtil;
 
@@ -35,6 +37,8 @@ import frc.robot.commands.Drive.DriveCommand;
 import frc.robot.commands.Drive.DriveToPose;
 import frc.robot.commands.Drive.MinorAdjust;
 import frc.robot.commands.Drive.MinorAdjust.AdjustmentDirection;
+import frc.robot.commands.Intake.collectingCommand;
+import frc.robot.commands.Intake.pivotCommand;
 import frc.robot.commands.Shooter.ShootDistance;
 import frc.robot.commands.Shooter.ShootVelocity;
 import frc.robot.subsystems.DriveTrain.DriveBase;
@@ -66,6 +70,8 @@ public class RobotContainer {
     public static Vision vision;
 
     public static LoggedDashboardChooser<Command> autoChooser;
+    public static LoggedDashboardChooser<String> sideChooser;
+    public static HashMap<String, Command> mirroredAutoMap = new HashMap<>();
 
 
     public RobotContainer() {
@@ -80,9 +86,11 @@ public class RobotContainer {
 
         vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
 
+        configureNamedCommands();
         configureDriveBindings();
         // configureTestBindings();
-        configureChooser();
+        configureChoosers();
+        configureMirroredAutosMap();
     }
 
     // for tests!!
@@ -217,7 +225,53 @@ public class RobotContainer {
     }
     //#endregion
 
-    public static void configureChooser(){
+    public static void configureNamedCommands(){
+        NamedCommands.registerCommand("close intake", new pivotCommand(intake, IntakePosition.Closed));
+        NamedCommands.registerCommand("open intake", new pivotCommand(intake, IntakePosition.Open));
+        
+        NamedCommands.registerCommand("collect fuel", new collectingCommand(intake));
+
+        Command hookToTower = 
+            Commands.sequence(
+                new DriveToPose(driveBase, Constants.FieldConstants.PRE_TOWER_POSITION).withTimeout(2),
+                new DriveToPose(driveBase, Constants.FieldConstants.TOWER_POSITION).withTimeout(2)
+            );
+        Command fullClimb =
+            Commands.sequence(
+                climb.toPositionCommand(Heights.EXTENDED),
+                hookToTower,
+                new RunHookToHeight(climb, Heights.RESET, 1)
+            );
+        NamedCommands.registerCommand("climb auto", fullClimb);
+
+        Command fullShootCommand =
+            Commands.parallel(
+                new ShootDistance(shooter, RobotContainer::distanceFromHub),
+                Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
+                    .andThen(
+                        Commands.parallel(
+                            kicker.setKickerByDistance(RobotContainer::distanceFromHub),
+                            funnel.toShooterCommand()
+                        )
+                    )
+            );
+        Command passCommand =
+            Commands.parallel(
+              new ShootVelocity(shooter, () -> RPM.of(ShooterConstants.PASSING_VELOCITY)),
+                Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
+                    .andThen(
+                        Commands.parallel(
+                            kicker.setKickerCommand(1),
+                            funnel.toShooterCommand()
+                        )
+                    )
+            );
+        NamedCommands.registerCommand("shoot to hub", fullShootCommand);
+        NamedCommands.registerCommand("shoot to pass", passCommand);
+    }
+
+    //#regionchoosers
+    public static void configureChoosers(){
         List<String> namesOfAutos = AutoBuilder.getAllAutoNames();
         List<PathPlannerAuto> autosOfAutos = new ArrayList<>();
 
@@ -231,7 +285,39 @@ public class RobotContainer {
 
         autoChooser.addDefaultOption("Do Nothing", new InstantCommand());
         SmartDashboard.putData("chooser", autoChooser.getSendableChooser());
+
+        //configure the chooser for the side relative to the driver station.
+        //the default is right because the routes are planned for right.
+        sideChooser = new LoggedDashboardChooser<>("sideChooser");
+
+        sideChooser.addDefaultOption("right", "right");
+        sideChooser.addOption("left", "left");
+
+        SmartDashboard.putData("sideChooser",sideChooser.getSendableChooser());   
     }
+
+    public static void configureMirroredAutosMap(){
+        List<String> namesOfAutos = AutoBuilder.getAllAutoNames();
+        List<PathPlannerAuto> autosOfAutos = new ArrayList<>();
+
+        for (String autoName : namesOfAutos) {
+            PathPlannerAuto auto = new PathPlannerAuto(autoName,true);
+            autosOfAutos.add(auto);
+        }
+        
+        for (int i = 0; i < namesOfAutos.size(); i++){
+            mirroredAutoMap.put(namesOfAutos.get(i), autosOfAutos.get(i));
+        }
+    }
+
+    public static Command getAuto(){
+        return getSide().equals("right") ? autoChooser.get() : mirroredAutoMap.get(autoChooser.get().getName());
+    }
+
+    public static String getSide(){
+        return sideChooser.get();
+    }
+    //#endregion
 
     public static Distance distanceFromHub(){
         Pose2d hubLocation = Constants.FieldConstants.HUB_POSITION;

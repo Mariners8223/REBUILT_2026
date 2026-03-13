@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.7438686534216337,
-        "y": 6.445298013245033
+        "x": 7.795684326710818,
+        "y": 3.0282891832229564
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.5314586118721035,
-        "y": 6.313457297800498
+        "x": 7.583274285161288,
+        "y": 2.896448467778421
       },
       "isLocked": false,
       "linkedName": "depot high 7OC"
@@ -48,7 +48,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -131.83611638111927
+    "rotation": 86.10629244490292
   },
   "useDefaultConstraints": true
 }
