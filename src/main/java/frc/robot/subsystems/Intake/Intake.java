@@ -25,7 +25,7 @@ public class Intake extends SubsystemBase{
         this.resetPositionMotorEncoder();
         state = IntakePosition.Closed;
 
-        setDefaultCommand(this.moveToPositionCommand(this.state));
+        setDefaultCommand(this.moveToPositionCommand());
     }
 
     public void setPositionMotorRotation(Angle rotations)
@@ -65,19 +65,15 @@ public class Intake extends SubsystemBase{
         return this.runOnce(() -> setPositionMotorState(position));
     }
 
+    public Command moveToPositionCommand(){
+        return this.run(() -> this.setPositionMotorState(this.state));
+    }
+
     public Command spinRollersCommand(){
         return this.startEnd(
             () -> setRollersMotorDutyCycle(IntakeConstants.RollersMotor.DUTY_CYCLE),
             () -> setRollersMotorDutyCycle(0)
         );
-    }
-
-    public Command switchIntakePositionCommand(){
-        switch (this.state){
-            case Closed: { Logger.recordOutput("SwitchedPosition", IntakePosition.Open); return new InstantCommand(() -> setPositionMotorState(IntakePosition.Open));}
-            case Open: {Logger.recordOutput("SwitchedPosition", IntakePosition.Closed); return new InstantCommand(() -> setPositionMotorState(IntakePosition.Closed));}
-            default: {Logger.recordOutput("SwitchedPosition", IntakePosition.Open); return new InstantCommand(() -> setPositionMotorState(IntakePosition.Open));}
-        }
     }
 
     public Command bumpFuelCommand(){

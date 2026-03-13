@@ -15,10 +15,10 @@ public class FunnelConstants {
         public static final MotorType MOTOR_TYPE = MotorType.SPARK_FLEX;
         public static final double GearRatio = 1;
         public static final double MOMENT_OF_INERTIA_SIM = 1;
-        public static final int LEAD_MOTOR_CURRENT_LIMIT = 45;
+        public static final int LEAD_MOTOR_CURRENT_LIMIT = 50;
         public static final int LEAD_MOTOR_CURRENT_THRESHOLD = 60;
 
-        public static final double LeadSpeed = 0.5;
+        public static final double LeadSpeed = 0.3;
         public static final boolean IS_INVERTED = false;
     }
 

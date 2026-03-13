@@ -63,7 +63,7 @@ public class IntakeConstants
         public static final double SOFT_MINIMUM = IntakePosition.Open.getAngle().in(Rotations);
         public static final double SOFT_MAXIMUM = IntakePosition.Closed.getAngle().in(Rotations);
         public static final PIDFGains PID_GAINS = new PIDFGains(
-        350,
+        700,
         50,
         0,
         0.1);

@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.*;
+import frc.robot.commands.Climb.ResetHook;
 import frc.robot.commands.Climb.RunHookToHeight;
 import frc.robot.commands.Drive.AimDriving;
 import frc.robot.commands.Drive.DriveCommand;
@@ -38,6 +39,7 @@ import frc.robot.commands.Drive.MinorAdjust.AdjustmentDirection;
 import frc.robot.commands.Shooter.ShootDistance;
 import frc.robot.commands.Shooter.ShootVelocity;
 import frc.robot.subsystems.DriveTrain.DriveBase;
+import frc.robot.subsystems.DriveTrain.DriveBaseConstants;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Climb.Climb;
 import frc.robot.subsystems.Climb.ClimbConstants.Heights;
@@ -144,12 +146,16 @@ public class RobotContainer {
 
         Command hookToTower = 
             Commands.sequence(
-                new DriveToPose(driveBase, Constants.FieldConstants.PRE_TOWER_POSITION).withTimeout(2),
-                new DriveToPose(driveBase, Constants.FieldConstants.TOWER_POSITION).withTimeout(2)
+                AutoBuilder.pathfindToPose(Constants.FieldConstants.PRE_PRE_TOWER_POSITION, DriveBaseConstants.PathPlanner.PATH_CONSTRAINTS),
+                new DriveToPose(driveBase, Constants.FieldConstants.PRE_PRE_TOWER_POSITION, 0.1).withTimeout(2),
+                new DriveToPose(driveBase, Constants.FieldConstants.PRE_TOWER_POSITION, 0.1).withTimeout(2),
+                new DriveToPose(driveBase, Constants.FieldConstants.TOWER_POSITION, 0.1).withTimeout(2),
+                new DriveToPose(driveBase, Constants.FieldConstants.INNER_TOWER_POSITION, 0.1).withTimeout(2)
             );
 
         Command fullClimb =
             Commands.sequence(
+                // new ResetHook(climb),
                 climb.toPositionCommand(Heights.EXTENDED),
                 hookToTower,
                 new RunHookToHeight(climb, Heights.RESET, 1)
@@ -172,6 +178,7 @@ public class RobotContainer {
 
         driveController.options().whileTrue(climb.dutyCycleCommand(0.1));
         driveController.create().whileTrue(climb.dutyCycleCommand(-0.1));
+        driveController.create().multiPress(2, 0.5).onTrue(climb.toPositionCommand(Heights.RESET));
 
         driveController.povRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.RIGHT));
         driveController.povLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.LEFT));

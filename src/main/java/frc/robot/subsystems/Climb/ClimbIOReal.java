@@ -1,5 +1,7 @@
 package frc.robot.subsystems.Climb;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import frc.util.MarinersController.MarinersTalonFX;
@@ -47,7 +49,7 @@ public class ClimbIOReal implements ClimbIO
     }
 
     public double getCurrent(){
-        return motor.getMotor().getTorqueCurrent().getValueAsDouble();
+        return motor.getMotor().getSupplyCurrent().getValueAsDouble();
     }
 
     public void setPosition(double refrence){
