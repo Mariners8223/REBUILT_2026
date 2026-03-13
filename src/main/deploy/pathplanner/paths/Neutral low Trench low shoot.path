@@ -3,50 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.0,
-        "y": 0.5357119205298022
-      },
-      "prevControl": null,
-      "nextControl": {
-        "x": 6.890612582781456,
-        "y": 0.33243377483443626
-      },
-      "isLocked": false,
-      "linkedName": "Trench low"
-    },
-    {
-      "anchor": {
         "x": 7.834403973509934,
         "y": 3.4348454746136863
       },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.950562913907284,
+        "y": 0.7051103752759378
+      },
+      "isLocked": false,
+      "linkedName": "Neutral low"
+    },
+    {
+      "anchor": {
+        "x": 4.0,
+        "y": 0.5
+      },
       "prevControl": {
-        "x": 8.105441501103751,
-        "y": 0.8696688741721843
+        "x": 6.7163741721854295,
+        "y": 0.42439293598233807
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Neutral low"
+      "linkedName": "Trench low shoot"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.53,
-      "rotationDegrees": 59.16060521989189
+      "waypointRelativePos": 0.841807909604501,
+      "rotationDegrees": 90.0
     }
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "start collecting",
-      "waypointRelativePos": 0.53,
+      "name": "stop collecting",
+      "waypointRelativePos": 0.0734982332155445,
       "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "start collecting"
-        }
-      }
+      "command": null
     }
   ],
   "globalConstraints": {
@@ -59,13 +54,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 93.98252057182886
+    "rotation": 80.35918066545058
   },
   "reversed": false,
   "folder": "auto 1",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 93.98252057182886
   },
   "useDefaultConstraints": true
 }
