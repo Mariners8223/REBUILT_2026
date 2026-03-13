@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.185849889624725,
-        "y": 0.25015452538631167
+        "x": 7.311688741721856,
+        "y": 0.42439293598233807
       },
       "isLocked": false,
       "linkedName": "Trench low shoot"
@@ -49,15 +49,15 @@
     {
       "anchor": {
         "x": 6.5905353200883,
-        "y": 1.4843432671081678
+        "y": 1.406903973509934
       },
       "prevControl": {
         "x": 5.825751017843264,
-        "y": 2.1845888096700783
+        "y": 2.1071495160718445
       },
       "nextControl": {
         "x": 7.737604856512142,
-        "y": 0.4340728476821176
+        "y": 0.35663355408388386
       },
       "isLocked": false,
       "linkedName": null
@@ -77,6 +77,10 @@
     }
   ],
   "rotationTargets": [
+    {
+      "waypointRelativePos": 0.13882163034712613,
+      "rotationDegrees": 90.0
+    },
     {
       "waypointRelativePos": 0.34140435835351646,
       "rotationDegrees": 47.668878612578226
@@ -98,13 +102,13 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "start collecting",
+      "name": "collect fuel",
       "waypointRelativePos": 0.25253239104828856,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "start collecting"
+          "name": "collect fuel"
         }
       }
     }

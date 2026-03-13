@@ -7,7 +7,7 @@
         {
           "type": "named",
           "data": {
-            "name": "lower intake"
+            "name": "open intake"
           }
         },
         {
@@ -32,6 +32,12 @@
           "type": "path",
           "data": {
             "pathName": "Trench low Neutral clean up"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot to hub"
           }
         }
       ]
