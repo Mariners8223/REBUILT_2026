@@ -3,7 +3,7 @@
   "robotLength": 0.808,
   "holonomicMode": true,
   "pathFolders": [
-    "auto 1"
+    "Auto Trench shoot"
   ],
   "autoFolders": [],
   "defaultMaxVel": 3.0,

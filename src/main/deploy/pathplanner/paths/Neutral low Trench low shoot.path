@@ -48,6 +48,17 @@
       "waypointRelativePos": 0.0734982332155445,
       "endWaypointRelativePos": null,
       "command": null
+    },
+    {
+      "name": "warm up shooter",
+      "waypointRelativePos": 0.6659740259740283,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "warm up shooter"
+        }
+      }
     }
   ],
   "globalConstraints": {
@@ -63,7 +74,7 @@
     "rotation": 80.35918066545058
   },
   "reversed": false,
-  "folder": "auto 1",
+  "folder": "Auto Trench shoot",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 93.98252057182886

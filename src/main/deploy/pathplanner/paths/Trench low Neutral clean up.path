@@ -111,6 +111,17 @@
           "name": "collect fuel"
         }
       }
+    },
+    {
+      "name": "warm up shooter",
+      "waypointRelativePos": 3.2623376623376728,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "warm up shooter"
+        }
+      }
     }
   ],
   "globalConstraints": {
@@ -126,7 +137,7 @@
     "rotation": 80.35918066545058
   },
   "reversed": false,
-  "folder": "auto 1",
+  "folder": "Auto Trench shoot",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 80.35918066545058
