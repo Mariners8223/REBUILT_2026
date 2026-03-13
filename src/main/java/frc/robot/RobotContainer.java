@@ -50,6 +50,7 @@ import frc.robot.subsystems.Shooter.ShooterConstants;
 import frc.robot.subsystems.Funnel.Funnel;
 import frc.robot.subsystems.Funnel.FunnelConstants;
 import frc.robot.subsystems.Intake.Intake;
+import frc.robot.subsystems.Intake.IntakeConstants;
 import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakePosition;
 import frc.robot.subsystems.Kicker.Kicker;
 import frc.robot.subsystems.Kicker.KickerConstants;
@@ -224,13 +225,8 @@ public class RobotContainer {
         driveController.R3().onTrue(intake.bumpFuelCommand());
     }
     //#endregion
-
+    
     public static void configureNamedCommands(){
-        NamedCommands.registerCommand("close intake", new pivotCommand(intake, IntakePosition.Closed));
-        NamedCommands.registerCommand("open intake", new pivotCommand(intake, IntakePosition.Open));
-        
-        NamedCommands.registerCommand("collect fuel", new collectingCommand(intake));
-
         Command hookToTower = 
             Commands.sequence(
                 new DriveToPose(driveBase, Constants.FieldConstants.PRE_TOWER_POSITION).withTimeout(2),
@@ -242,8 +238,7 @@ public class RobotContainer {
                 hookToTower,
                 new RunHookToHeight(climb, Heights.RESET, 1)
             );
-        NamedCommands.registerCommand("climb auto", fullClimb);
-
+            
         Command fullShootCommand =
             Commands.parallel(
                 new ShootDistance(shooter, RobotContainer::distanceFromHub),
@@ -255,7 +250,7 @@ public class RobotContainer {
                         )
                     )
             );
-        Command passCommand =
+        Command passCommand = 
             Commands.parallel(
               new ShootVelocity(shooter, () -> RPM.of(ShooterConstants.PASSING_VELOCITY)),
                 Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
@@ -266,10 +261,20 @@ public class RobotContainer {
                         )
                     )
             );
-        NamedCommands.registerCommand("shoot to hub", fullShootCommand);
-        NamedCommands.registerCommand("shoot to pass", passCommand);
-    }
 
+        NamedCommands.registerCommand("close intake", new pivotCommand(intake, IntakePosition.Closed));
+        NamedCommands.registerCommand("open intake", new pivotCommand(intake, IntakePosition.Open));
+        
+        NamedCommands.registerCommand("start rollers", new collectingCommand(intake, IntakeConstants.RollersMotor.DUTY_CYCLE));
+        NamedCommands.registerCommand("stop rollers", new collectingCommand(intake, 0));
+
+        NamedCommands.registerCommand("shoot to hub", fullShootCommand);
+        NamedCommands.registerCommand("warm up shooter", new InstantCommand(() -> shooter.setVelocityByDistance(distanceFromHub()), shooter));
+        NamedCommands.registerCommand("shoot to pass", passCommand);
+        
+        NamedCommands.registerCommand("climb auto", fullClimb);
+    }
+    
     //#regionchoosers
     public static void configureChoosers(){
         List<String> namesOfAutos = AutoBuilder.getAllAutoNames();
@@ -291,6 +296,7 @@ public class RobotContainer {
         sideChooser = new LoggedDashboardChooser<>("sideChooser");
 
         sideChooser.addDefaultOption("right", "right");
+        sideChooser.addOption("middle", "middle");
         sideChooser.addOption("left", "left");
 
         SmartDashboard.putData("sideChooser",sideChooser.getSendableChooser());   
@@ -311,7 +317,8 @@ public class RobotContainer {
     }
 
     public static Command getAuto(){
-        return getSide().equals("right") ? autoChooser.get() : mirroredAutoMap.get(autoChooser.get().getName());
+        return getSide().equals("right") || getSide().equals("middle") ? 
+            autoChooser.get() : mirroredAutoMap.get(autoChooser.get().getName());
     }
 
     public static String getSide(){

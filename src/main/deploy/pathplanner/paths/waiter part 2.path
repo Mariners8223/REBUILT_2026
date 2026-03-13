@@ -3,37 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.834403973509934,
-        "y": 3.4348454746136863
+        "x": 7.868283664459161,
+        "y": 2.568493377483443
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.950562913907284,
-        "y": 0.7051103752759378
+        "x": 7.610042072415433,
+        "y": 2.5242069418969093
       },
       "isLocked": false,
-      "linkedName": "Neutral low"
+      "linkedName": "waiter part 1 end"
     },
     {
       "anchor": {
-        "x": 4.0,
-        "y": 0.5
+        "x": 7.853763796909492,
+        "y": 2.568493377483443
       },
       "prevControl": {
-        "x": 6.7163741721854295,
-        "y": 0.42439293598233807
+        "x": 7.6235582769006305,
+        "y": 2.4020953621805616
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Trench low shoot"
+      "linkedName": "waiter part 2 end"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.841807909604501,
-      "rotationDegrees": 90.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
@@ -45,18 +40,12 @@
     },
     {
       "name": "stop collecting",
-      "waypointRelativePos": 0.0734982332155445,
-      "endWaypointRelativePos": null,
-      "command": null
-    },
-    {
-      "name": "warm up shooter",
-      "waypointRelativePos": 0.6659740259740283,
+      "waypointRelativePos": 1.0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "warm up shooter"
+          "name": "stop rollers"
         }
       }
     }
@@ -71,13 +60,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 80.35918066545058
+    "rotation": 180.0
   },
   "reversed": false,
-  "folder": "Auto Trench shoot",
+  "folder": "paths for waiter auto",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 93.98252057182886
+    "rotation": 92.09525256462392
   },
   "useDefaultConstraints": true
 }

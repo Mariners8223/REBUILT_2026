@@ -6,14 +6,16 @@ package frc.robot.commands.Intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake.Intake;
-import frc.robot.subsystems.Intake.IntakeConstants;
 
 
 public class collectingCommand extends Command {
   private final Intake intake;
-  public collectingCommand(Intake intake)
+  private final double intakeDutyCycle;
+
+  public collectingCommand(Intake intake, double intakeDutyCycle)
   {
     this.intake = intake;
+    this.intakeDutyCycle = intakeDutyCycle;
 
     addRequirements(intake);
   }
@@ -22,15 +24,12 @@ public class collectingCommand extends Command {
   @Override
   public void initialize()
   {
-    intake.setRollersMotorDutyCycle(IntakeConstants.RollersMotor.DUTY_CYCLE);
+    intake.setRollersMotorDutyCycle(intakeDutyCycle);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted)
-  {
-    intake.setRollersMotorDutyCycle(0);
-  }
+  public void end(boolean interrupted){}
 
   // Returns true when the command should end.
   @Override
