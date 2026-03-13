@@ -3,41 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.668300220750552,
-        "y": 4.823912803532007
+        "x": 3.517163355408389,
+        "y": 4.020480132450331
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.8976490066225167,
-        "y": 5.2595088300220745
+        "x": 2.47173289183223,
+        "y": 3.894641280353201
       },
       "isLocked": false,
-      "linkedName": "hub/tower high"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.493736203090507,
-        "y": 5.869343267108167
+        "x": 1.5860209713024283,
+        "y": 3.730082781456953
       },
       "prevControl": {
-        "x": 5.493736203090507,
-        "y": 5.869343267108167
+        "x": 1.8570584988962473,
+        "y": 3.7058830022075036
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "bump high natural reverse"
+      "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.37033610854147214,
-      "rotationDegrees": -42.183
-    },
-    {
-      "waypointRelativePos": 0.7699660807893911,
-      "rotationDegrees": -42.183
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -51,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -10.5757414423775
+    "rotation": 179.3219750892487
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -13.924773220409417
+    "rotation": -0.6227556872063034
   },
   "useDefaultConstraints": true
 }

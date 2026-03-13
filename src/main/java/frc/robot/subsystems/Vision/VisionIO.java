@@ -23,17 +23,22 @@ public interface VisionIO {
             double tagCount){}
 
     enum EstimationType{
-        SINGLE_TARGET(VisionConstants.maxSingleAmbiguity),
-        MULTIPLE_TARGETS(VisionConstants.maxMultiAmbiguity);
+        SINGLE_TARGET(VisionConstants.maxSingleAmbiguity, VisionConstants.maxDistanceFromTargetSingle),
+        MULTIPLE_TARGETS(VisionConstants.maxMultiAmbiguity, VisionConstants.maxDistanceFromTargetMulti);
 
-        EstimationType(double maxAmbiguity) {
+        EstimationType(double maxAmbiguity, double maxDistance) {
             this.maxAmbiguity = maxAmbiguity;
+            this.maxDistance = maxDistance;
         }
 
         private final double maxAmbiguity;
+        private final double maxDistance;
 
         public double getMaxAmbiguity() {
             return maxAmbiguity;
+        }
+        public double getMaxDistance() {
+            return maxDistance;
         }
     }
 

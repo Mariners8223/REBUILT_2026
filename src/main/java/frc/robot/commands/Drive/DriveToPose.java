@@ -15,18 +15,14 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.DriveTrain.DriveBaseConstants;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class HookToTower extends Command {
+public class DriveToPose extends Command {
     private final DriveBase driveBase;
-    private Pose2d targetPose = 
-      Robot.isRedAlliance ? 
-      Constants.FieldConstants.TOWER_POSITION : 
-      FlippingUtil.flipFieldPose(Constants.FieldConstants.TOWER_POSITION);
+    private Pose2d targetPose;
 
     private final PIDController XController = DriveBaseConstants.DrivePID.X_PID;
     private final PIDController YController = DriveBaseConstants.DrivePID.Y_PID;
@@ -35,8 +31,12 @@ public class HookToTower extends Command {
     private final List<PIDController> controllers = List.of(XController, YController, ThetaController);
 
   /** Creates a new HookToTower. */
-  public HookToTower(DriveBase driveBase) {
+  public DriveToPose(DriveBase driveBase, Pose2d targetPose) {
     this.driveBase = driveBase;
+    this.targetPose = 
+        Robot.isRedAlliance ?
+        targetPose :
+        FlippingUtil.flipFieldPose(targetPose);
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(driveBase);
@@ -57,9 +57,11 @@ public class HookToTower extends Command {
         YController.calculate(currentPose.getY(), targetPose.getY());
         ThetaController.calculate(currentPose.getRotation().getRadians(), targetPose.getRotation().getRadians());
 
-        Logger.recordOutput("home to reef/target Theta", ThetaController.getSetpoint());
-        Logger.recordOutput("home to reef/target X", XController.getSetpoint());
-        Logger.recordOutput("home to reef/target Y", YController.getSetpoint());
+        Logger.recordOutput("Drive To Pose/Target Pose", targetPose);
+
+        Logger.recordOutput("Drive To Pose/target Theta", ThetaController.getSetpoint());
+        Logger.recordOutput("Drive To Pose/target X", XController.getSetpoint());
+        Logger.recordOutput("Drive To Pose/target Y", YController.getSetpoint());
 
         driveBase.drive(new ChassisSpeeds());
   }
@@ -81,8 +83,8 @@ public class HookToTower extends Command {
 
   public ChassisSpeeds calculatePID(){
     double XOutput = XController.calculate(driveBase.getPose().getX());
-    double YOutput = XController.calculate(driveBase.getPose().getY());
-    double ThetaOutput = XController.calculate(driveBase.getRotation2d().getRadians());
+    double YOutput = YController.calculate(driveBase.getPose().getY());
+    double ThetaOutput = ThetaController.calculate(driveBase.getRotation2d().getRadians());
 
     ChassisSpeeds fieldRelativeSpeeds = new ChassisSpeeds(XOutput, YOutput, ThetaOutput);
     ChassisSpeeds robotRelativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, driveBase.getPose().getRotation());
@@ -101,6 +103,9 @@ public class HookToTower extends Command {
     robotRelativeSpeeds.vxMetersPerSecond = MathUtil.clamp(robotRelativeSpeeds.vxMetersPerSecond, -maxXOutput, maxXOutput);
     robotRelativeSpeeds.vyMetersPerSecond = MathUtil.clamp(robotRelativeSpeeds.vyMetersPerSecond, -maxYOutput, maxYOutput);
     robotRelativeSpeeds.omegaRadiansPerSecond = MathUtil.clamp(robotRelativeSpeeds.omegaRadiansPerSecond, -maxThetaOutput, maxThetaOutput);
+
+    Logger.recordOutput("Drive To Pose/X Error", XController.getError());
+    Logger.recordOutput("Drive To Pose/Y Error", YController.getError());
 
     return robotRelativeSpeeds;
   }

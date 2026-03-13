@@ -20,6 +20,8 @@ import frc.robot.subsystems.DriveTrain.SwerveModules.SwerveModule;
 import frc.util.FastGyros.GyroIO;
 import frc.util.FastGyros.PigeonIO;
 import frc.util.FastGyros.SimGyroIO;
+
+import org.json.simple.parser.ParseException;
 import org.littletonrobotics.junction.AutoLog;
 import org.littletonrobotics.junction.Logger;
 
@@ -35,6 +37,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
+import java.io.IOException;
 import java.util.function.DoubleSupplier;
 
 
@@ -129,6 +132,15 @@ public class DriveBase extends SubsystemBase {
         SmartDashboard.putData("Gyro", gyro);
 
         RobotConfig config = DriveBaseConstants.PathPlanner.ROBOT_CONFIG;
+        try {
+            config = RobotConfig.fromGUISettings();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         PathFollowingController pathPlannerPIDController = new PPHolonomicDriveController(
                 DriveBaseConstants.PathPlanner.XY_PID.createPIDConstants(),
@@ -269,8 +281,24 @@ public class DriveBase extends SubsystemBase {
         return currentPose;
     }
 
-        public double getDistanceFromPoint2D(Pose2d point) {
+    public double getDistanceFromPoint2D(Pose2d point) {
         return currentPose.getTranslation().getDistance(point.getTranslation());
+    }
+
+    /**
+     * Gets the angle from the robot to a Pose on the field
+     * 
+     * @param pose The pose on the field
+     * @return The angle between the robot and the pose (in radians)
+     */
+    public double getAngleToPose(Pose2d pose){
+        // double angleTarget = poseSupplier.get().minus(driveBase.getPose()).getRotation().getRadians();
+
+        Rotation2d angleToTarget = new Rotation2d(
+            pose.getX() - getPose().getX(),
+            pose.getY() - getPose().getY() 
+        );
+        return angleToTarget.getRadians();
     }
 
     /**

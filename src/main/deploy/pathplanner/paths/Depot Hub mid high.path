@@ -45,10 +45,10 @@
     "rotation": -13.924773220409417
   },
   "reversed": false,
-  "folder": "Depot",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -49.11818970398874
+    "rotation": -49.11818970398875
   },
   "useDefaultConstraints": true
 }

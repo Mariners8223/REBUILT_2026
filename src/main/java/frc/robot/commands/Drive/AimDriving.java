@@ -5,7 +5,6 @@
 package frc.robot.commands.Drive;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -28,23 +27,21 @@ public class AimDriving extends Command {
     private final CommandPS5Controller controller;
     private static double MAX_FREE_WHEEL_SPEED;
     private static double MAX_OMEGA_RAD_PER_SEC;
-    Supplier<Pose2d> poseSupplier;
+    Supplier<Double> angleSupplier;
 
     PIDController thetaController = DriveBaseConstants.PathPlanner.THETA_PID.createPIDController();
 
-    public AimDriving(DriveBase driveBase, CommandPS5Controller controller, Supplier<Pose2d> poseSupplier) {
+    public AimDriving(DriveBase driveBase, CommandPS5Controller controller, Supplier<Double> angleSupplier) {
         this.driveBase = driveBase;
         this.controller = controller;
-        this.poseSupplier = poseSupplier;
+        this.angleSupplier = angleSupplier;
         addRequirements(this.driveBase);
         setName("AimDriving");
 
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
         MAX_FREE_WHEEL_SPEED = DevBotConstants.MAX_WHEEL_LINEAR_VELOCITY;
-
         double driveBaseRadius = Math.hypot(DISTANCE_BETWEEN_WHEELS_HORIZONTAL / 2, DISTANCE_BETWEEN_WHEELS_VERTICAL / 2);
-
         MAX_OMEGA_RAD_PER_SEC = MAX_FREE_WHEEL_SPEED / driveBaseRadius;
     }
 
@@ -81,10 +78,9 @@ public class AimDriving extends Command {
         //calculates a value from 1 to the max wheel speed based on the R2 axis
         // double R2Axis = (1 - (0.5 + controller.getR2Axis() / 2)) * (driveBase.MAX_FREE_WHEEL_SPEED - 1) + 1;
         // double R2Axis  = 1 - (0.5 + controller.getRightTriggerAxis() / 2);
-        double angleTarget = poseSupplier.get().minus(driveBase.getPose()).getRotation().getRadians();
-        thetaController.setSetpoint(angleTarget);
 
-        Logger.recordOutput("Angle to Hub", angleTarget);
+        thetaController.setSetpoint(angleSupplier.get());
+        Logger.recordOutput("Angle to Hub", angleSupplier.get());
 
         double R2Axis  = 1 - controller.getR2Axis();
 

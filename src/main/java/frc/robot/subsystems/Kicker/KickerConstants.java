@@ -18,26 +18,29 @@ public class KickerConstants {
         public static final MotorType MOTOR_TYPE = MotorType.SPARK_FLEX;
         public static final double GEAR_RATIO = 1;
 
-        public static final int LEAD_MOTOR_CURRENT_LIMIT = 30;
+        public static final int LEAD_MOTOR_CURRENT_LIMIT = 35;
         public static final int LEAD_MOTOR_CURRENT_THRESHOLD = 60;
 
-        public static final int LEAD_MOTOR_ID = 14;
-        public static final int FOLLOW_MOTOR_ID = 16;
+        public static final int LEAD_MOTOR_ID = 16;
+        public static final int FOLLOW_MOTOR_ID = 14;
 
         public static final boolean LEAD_MOTOR_IS_INVERTED = true;
         public static final boolean FOLLOW_MOTOR_INVERTED_FROM_LEAD = false;
     }
 
-    public static final InterpolatingDoubleTreeMap DistanceToRPM = new InterpolatingDoubleTreeMap();
+    public static final InterpolatingDoubleTreeMap DistantToDutyCycle = new InterpolatingDoubleTreeMap();
     static{
-        DistanceToRPM.put(3.3, 0.8);
-        DistanceToRPM.put(2.65, 0.8);
-        DistanceToRPM.put(1.8, 1d);
-        DistanceToRPM.put(2.1, 1d);
-        DistanceToRPM.put(4.1, 1d);
+        DistantToDutyCycle.put(1.8, 1.0);
+        DistantToDutyCycle.put(3.3, 1.0);
+        DistantToDutyCycle.put(3.8, 0.8);
+        DistantToDutyCycle.put(4.3, 0.8);
+        DistantToDutyCycle.put(4.8, 0.6);
+        DistantToDutyCycle.put(5.8, 0.6);
     }
 
     public static double getRPM(Distance distance){
-        return DistanceToRPM.get(distance.in(Meters));
+        return DistantToDutyCycle.get(distance.in(Meters));
     }
+
+    public static final double KICKER_EJECT_SPEED = -0.3;
 }

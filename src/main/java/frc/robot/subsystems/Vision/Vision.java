@@ -76,17 +76,20 @@ public class Vision extends SubsystemBase {
             for (VisionIO.VisionFrame frame : camera.inputs.visionFrames) {
                 if (!frame.hasTarget()) continue;
 
+                if (!checkPoseLocation(frame.robotPose())) {
+                    rejectedPoses.add(frame.robotPose());
+                    continue;
+                }
 
-                //TODO:Add this back
-                // if (!checkPoseLocation(frame.robotPose())) {
-                //     rejectedPoses.add(frame.robotPose());
-                //     continue;
-                // }
+                if (!checkPoseAmbiguity(frame.poseAmbiguity(), frame.estimationType())) {
+                    rejectedPoses.add(frame.robotPose());
+                    continue;
+                }
 
-                // if (!checkPoseAmbiguity(frame.poseAmbiguity(), frame.estimationType())) {
-                //     rejectedPoses.add(frame.robotPose());
-                //     continue;
-                // }
+                if (!checkDistance(frame.averageTargetDistance(), frame.estimationType())) {
+                    rejectedPoses.add(frame.robotPose());
+                    continue;
+                }
 
 
                 var stdDevs = getStdDevs(frame.averageTargetDistance(), frame.tagCount(), frame.estimationType(), camera);
@@ -134,6 +137,13 @@ public class Vision extends SubsystemBase {
         }
         return poseAmbiguity <= estimationType.getMaxAmbiguity();
 
+    }
+
+    private boolean checkDistance(double distanceX, VisionIO.EstimationType estimationType){
+        if (estimationType == null) {
+            return false;
+        }
+        return distanceX <= estimationType.getMaxDistance();
     }
 
         /**

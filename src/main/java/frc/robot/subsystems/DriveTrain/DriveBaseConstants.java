@@ -21,9 +21,9 @@ public class DriveBaseConstants {
             new Translation2d(-DISTANCE_BETWEEN_WHEELS_HORIZONTAL / 2, DISTANCE_BETWEEN_WHEELS_VERTICAL / 2),
             new Translation2d(-DISTANCE_BETWEEN_WHEELS_HORIZONTAL / 2, -DISTANCE_BETWEEN_WHEELS_VERTICAL / 2)};
 
-    public static final double THETA_KS = 0.11014;
-    public static final double THETA_KV = 0.87023;
-    public static final double THETA_KA = 0.35338;
+    public static final double THETA_KS = 0.092706;
+    public static final double THETA_KV = 0.91749;
+    public static final double THETA_KA = 0.26202;
 
     public static final class PathPlanner {
         public static final ModuleConfig MODULE_CONFIG = DevBotConstants.MODULE_CONFIG;
@@ -52,7 +52,7 @@ public class DriveBaseConstants {
         public static final double UPPER_SPEED_LIMIT_THETA = 4 * 1.1;
 
         public static final double XY_DEADBAND = 0;
-        public static final double THETA_DEADBAND = 0.4;
+        public static final double THETA_DEADBAND = 0.2;
 
         public static final double XY_TOLERANCE = 0.015;
         public static final double THETA_TOLERANCE = Units.degreesToRadians(2);

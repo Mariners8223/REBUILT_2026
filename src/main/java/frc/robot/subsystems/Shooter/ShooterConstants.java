@@ -28,15 +28,15 @@ import frc.util.MarinersController.MarinersController.ControllerLocation;
 public class ShooterConstants {
 
     public static class MOTOR_CONSTANTS{
-        public static final double Ks = 0.21571;
-        public static final double Kv = 0.11496;
-        public static final double Ka = 0.042404;
+        public static final double Ks = 0.0060295;
+        public static final double Kv = 0.11755;
+        public static final double Ka = 0.012639;
 
         public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
         public static final PIDFGains PID = new PIDFGains(
-            0.5,
-            0.7,
-            0.1,
+            0.4,
+            0,
+            0.07,
             Kv
         );
 
@@ -49,12 +49,8 @@ public class ShooterConstants {
         public static final int LEAD_MOTOR_ID = 5;
         public static final boolean LEAD_MOTOR_IS_INVERTED = false;
 
-        public record FollowMotor(int id, boolean inverted_from_leader){}
-        public static final FollowMotor FOLLOW_MOTOR_1 = new FollowMotor(21, true);
-        public static final FollowMotor FOLLOW_MOTOR_2 = new FollowMotor(22, true);
-        public static final FollowMotor FOLLOW_MOTOR_3 = new FollowMotor(8, false);
-
-        public static final FollowMotor[] FOLLOWERS = {FOLLOW_MOTOR_1, FOLLOW_MOTOR_2, FOLLOW_MOTOR_3};
+        public static final int FOLLOW_MOTOR_ID = 21;
+        public static final boolean IS_INVERTED_FROM_LEADER = true;
     }
 
     public static class HUB_CONSTANTS{
@@ -94,29 +90,29 @@ public class ShooterConstants {
     public static final Pose3d POSITION = new Pose3d(
         new Translation3d(0, 0, 0), new Rotation3d(0, 0, 0)
     );
-    public static final double PASSING_VELOCITY = 0;
+    
+    public static final double PASSING_VELOCITY = 4000;
 
     public static class Maps{
         public static final InterpolatingDoubleTreeMap DistanceToRPM = new InterpolatingDoubleTreeMap();
+        public static final InterpolatingDoubleTreeMap DistanceToRPMPassing = new InterpolatingDoubleTreeMap();
+
         public static final InterpolatingDoubleTreeMap DistanceToFlytime = new InterpolatingDoubleTreeMap();
 
-        public static final InterpolatingDoubleTreeMap DistanceToKicker = new InterpolatingDoubleTreeMap();
-
         static{
-            DistanceToRPM.put(3.3,3540.0);
-            DistanceToFlytime.put(3.3, 1.0);
+            DistanceToRPM.put(1.8, 2500.0);
+            DistanceToRPM.put(2.3, 2630.0);
+            DistanceToRPM.put(2.8, 2790.0);
+            DistanceToRPM.put(3.3, 2990.0);
+            DistanceToRPM.put(3.8, 3240.0);
+            DistanceToRPM.put(4.3, 3500.0);
+            DistanceToRPM.put(4.8, 3630.0);
+            DistanceToRPM.put(5.3, 3700.0);
+            DistanceToRPM.put(5.8, 3870.0);
 
-            DistanceToRPM.put(2.65,3150d);
-            DistanceToFlytime.put(2.65, 1.22);
-
-            DistanceToRPM.put(1.8, 2850d);
-            DistanceToFlytime.put(1.8, 0.9);
-
-            DistanceToRPM.put(2.1, 2900d);
-            DistanceToFlytime.put(2.1, 1d);
-
-            DistanceToRPM.put(4.1, 2900d);
-            DistanceToFlytime.put(4.1, 1d);
+            DistanceToRPMPassing.put(4.0, 3000.0);
+            DistanceToRPMPassing.put(6.2, 4000.0);
+            DistanceToRPMPassing.put(6.8, 5000.0);
         }
     }
 

@@ -23,8 +23,8 @@ public class IntakeConstants
         public enum IntakePosition
         {
             Closed(Degrees.of(0)),
-            Middle(Degrees.of(-55)),
-            Open(Rotations.of(-0.25)),
+            Middle(Degrees.of(-35)),
+            Open(Degrees.of(-90)),
             Reset(Degrees.of(0));
 
             private final Angle angle;
@@ -54,7 +54,7 @@ public class IntakeConstants
 
         }
         public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
-        public static final int MOTOR_ID = 12;
+        public static final int MOTOR_ID = 56;
         public static final boolean IS_BRUSHLESS = true;
         public static final MotorType MOTOR_TYPE = MotorType.SPARK_FLEX;
         public static final boolean IS_INVERTED = true;
