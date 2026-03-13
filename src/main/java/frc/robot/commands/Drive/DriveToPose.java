@@ -35,7 +35,7 @@ public class DriveToPose extends Command {
   /** Creates a new HookToTower. */
   public DriveToPose(DriveBase driveBase, Pose2d targetPose) {
     this.driveBase = driveBase;
-    this.targetPose = 
+    this.targetPose =
         Robot.isRedAlliance ?
         targetPose :
         FlippingUtil.flipFieldPose(targetPose);
@@ -47,7 +47,7 @@ public class DriveToPose extends Command {
 
     public DriveToPose(DriveBase driveBase, Pose2d targetPose, double upperSpeedLimit) {
     this.driveBase = driveBase;
-    this.targetPose = 
+    this.targetPose =
         Robot.isRedAlliance ?
         targetPose :
         FlippingUtil.flipFieldPose(targetPose);

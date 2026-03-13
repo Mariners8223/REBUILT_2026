@@ -22,20 +22,20 @@ public class VisionConstants {
     public static final double maxMultiAmbiguity = 0.3;
     public static final double maxSingleAmbiguity = 0.07;
     public static final double maxDistanceFromTargetSingle = 1.5;
-    public static final double maxDistanceFromTargetMulti = 4; //TODO: if there is a season where you can see one tag real close and one far fix this. 
-    
+    public static final double maxDistanceFromTargetMulti = 4; //TODO: if there is a season where you can see one tag real close and one far fix this.
+
     public enum CameraConstants{
         POINTING_IN_CAMERA("pointing_in_camera",
             new Transform3d(
                 0.11143, 0.281, 0.52,
                 new Rotation3d(0, Units.degreesToRadians(-12), Units.degreesToRadians(0))),
-                0, 0),   
-       POINTING_OUT_CAMERA("pointing_out_camera", 
+                0, 0),
+       POINTING_OUT_CAMERA("pointing_out_camera",
            new Transform3d(
                -0.23554, -0.26835, 0.51,
                new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(-14), Units.degreesToRadians(180))),
                0, 0);
-        
+
     //     POINTING_IN_CAMERA("pointing_in_camera",//this camera will be on a churo of the shooter
     //         new Transform3d(
     //             0.11143, 0.221, 0.574,
@@ -47,7 +47,7 @@ public class VisionConstants {
     //            0.23554, -0.26835, 0.47246,
     //            new Rotation3d(Units.degreesToRadians(-75), Units.degreesToRadians(0), Units.degreesToRadians(0))),
     //            0, 0);
-        
+
 
         public final String cameraName;
         public final double XYstdFactor;

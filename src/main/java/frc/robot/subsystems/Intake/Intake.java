@@ -2,7 +2,6 @@ package frc.robot.subsystems.Intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Robot;
@@ -23,7 +22,7 @@ public class Intake extends SubsystemBase{
     {
         io = Robot.isReal() ? new IntakeIOReal() : new IntakeIOSim();
         this.resetPositionMotorEncoder();
-        state = IntakePosition.Closed;
+        state = IntakePosition.Reset;
 
         setDefaultCommand(this.moveToPositionCommand());
     }

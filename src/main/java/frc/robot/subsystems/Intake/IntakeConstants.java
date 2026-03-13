@@ -25,7 +25,7 @@ public class IntakeConstants
             Closed(Degrees.of(0)),
             Middle(Degrees.of(-35)),
             Open(Degrees.of(-90)),
-            Reset(Degrees.of(0));
+            Reset(Degrees.of(-90)); //TODO: Change before competition
 
             private final Angle angle;
 
