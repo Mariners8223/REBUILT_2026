@@ -273,6 +273,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("shoot to pass", passCommand);
         
         NamedCommands.registerCommand("climb auto", fullClimb);
+
+        //NamedCommands.registerCommand("aim to alliance", )
     }
     
     //#regionchoosers
