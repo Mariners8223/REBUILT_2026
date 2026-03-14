@@ -220,13 +220,18 @@ public class RobotContainer {
     //#endregion
     
     public static void configureNamedCommands(){
-        Command hookToTower = 
+        Command hookToTower =
             Commands.sequence(
-                new DriveToPose(driveBase, Constants.FieldConstants.PRE_TOWER_POSITION).withTimeout(2),
-                new DriveToPose(driveBase, Constants.FieldConstants.TOWER_POSITION).withTimeout(2)
+                AutoBuilder.pathfindToPose(Constants.FieldConstants.PRE_PRE_TOWER_POSITION, DriveBaseConstants.PathPlanner.PATH_CONSTRAINTS),
+                new DriveToPose(driveBase, Constants.FieldConstants.PRE_PRE_TOWER_POSITION, 0.1).withTimeout(2),
+                new DriveToPose(driveBase, Constants.FieldConstants.PRE_TOWER_POSITION, 0.1).withTimeout(2),
+                new DriveToPose(driveBase, Constants.FieldConstants.TOWER_POSITION, 0.1).withTimeout(2),
+                new DriveToPose(driveBase, Constants.FieldConstants.INNER_TOWER_POSITION, 0.1).withTimeout(2)
             );
+
         Command fullClimb =
             Commands.sequence(
+                // new ResetHook(climb),
                 climb.toPositionCommand(Heights.EXTENDED),
                 hookToTower,
                 new RunHookToHeight(climb, Heights.RESET, 1)
