@@ -19,11 +19,7 @@
         {
           "type": "path",
           "data": {
-<<<<<<< Updated upstream:src/main/deploy/pathplanner/autos/Auto Trench shoot.auto
-            "pathName": null
-=======
             "pathName": "shoot auto part 2"
->>>>>>> Stashed changes:src/main/deploy/pathplanner/autos/shoot auto.auto
           }
         },
         {
