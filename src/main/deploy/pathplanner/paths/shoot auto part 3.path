@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.0,
-        "y": 0.5
+        "x": 4.240034090909091,
+        "y": 0.4791477272727275
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.311688741721856,
-        "y": 0.42439293598233807
+        "x": 7.507295454545453,
+        "y": 0.42761363636363625
       },
       "isLocked": false,
-      "linkedName": "Trench low shoot"
+      "linkedName": "shoot auto part 2 end"
     },
     {
       "anchor": {
@@ -32,16 +32,16 @@
     },
     {
       "anchor": {
-        "x": 6.5905353200883,
-        "y": 4.160838852097129
+        "x": 6.167409090909091,
+        "y": 3.622727272727273
       },
       "prevControl": {
-        "x": 8.488582440856156,
-        "y": 4.38061272923867
+        "x": 8.068588669487617,
+        "y": 4.593982057435866
       },
       "nextControl": {
-        "x": 5.211147902869757,
-        "y": 4.001120309050772
+        "x": 5.219181818181819,
+        "y": 3.1383068181818192
       },
       "isLocked": false,
       "linkedName": null
@@ -52,12 +52,12 @@
         "y": 1.406903973509934
       },
       "prevControl": {
-        "x": 5.825751017843264,
-        "y": 2.1071495160718445
+        "x": 6.233421079308675,
+        "y": 1.7522098075086638
       },
       "nextControl": {
-        "x": 7.737604856512142,
-        "y": 0.35663355408388386
+        "x": 7.8165,
+        "y": 0.22147727272727247
       },
       "isLocked": false,
       "linkedName": null
@@ -87,11 +87,11 @@
     },
     {
       "waypointRelativePos": 1.7820823244551907,
-      "rotationDegrees": 124.7176915124563
+      "rotationDegrees": 174.75285072526734
     },
     {
       "waypointRelativePos": 2.3,
-      "rotationDegrees": -97.63485352611806
+      "rotationDegrees": -94.21208513139264
     },
     {
       "waypointRelativePos": 3.5125100887812652,
@@ -102,19 +102,30 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "collect fuel",
-      "waypointRelativePos": 0.25253239104828856,
+      "name": "collecting",
+      "waypointRelativePos": 0.41176470588235264,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "collect fuel"
+          "name": "start rollers"
+        }
+      }
+    },
+    {
+      "name": "stop collecting",
+      "waypointRelativePos": 2.828877005347592,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "stop rollers"
         }
       }
     },
     {
       "name": "warm up shooter",
-      "waypointRelativePos": 3.2623376623376728,
+      "waypointRelativePos": 3.497326203208566,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -125,10 +136,10 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 2.5,
     "maxAcceleration": 3.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0,
+    "maxAngularVelocity": 400.0,
+    "maxAngularAcceleration": 600.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
@@ -137,10 +148,10 @@
     "rotation": 80.35918066545058
   },
   "reversed": false,
-  "folder": "Auto Trench shoot",
+  "folder": "shoot auto paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 80.35918066545058
+    "rotation": 84.45153370628195
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

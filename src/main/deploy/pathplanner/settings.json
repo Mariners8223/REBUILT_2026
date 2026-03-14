@@ -3,8 +3,8 @@
   "robotLength": 0.808,
   "holonomicMode": true,
   "pathFolders": [
-    "Auto Trench shoot",
-    "Auto Deport & Outpost shoot"
+    "shoot climb auto paths",
+    "shoot auto paths"
   ],
   "autoFolders": [],
   "defaultMaxVel": 3.0,

@@ -1,0 +1,75 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.0,
+        "y": 0.5
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.23424944812362,
+        "y": 0.4147130242825585
+      },
+      "isLocked": false,
+      "linkedName": "Trench low"
+    },
+    {
+      "anchor": {
+        "x": 7.834403973509934,
+        "y": 3.4348454746136863
+      },
+      "prevControl": {
+        "x": 7.810204194260486,
+        "y": 0.4340728476821174
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "shoot auto part 1 end"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.2082324455205879,
+      "rotationDegrees": 90.0
+    },
+    {
+      "waypointRelativePos": 0.44552058111380255,
+      "rotationDegrees": 64.96591765236981
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "collect fuel",
+      "waypointRelativePos": 0.3665488810365126,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "start rollers"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 93.98252057182886
+  },
+  "reversed": false,
+  "folder": "shoot auto paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 90.0
+  },
+  "useDefaultConstraints": true
+}

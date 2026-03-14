@@ -13,13 +13,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Trench low Neutral low"
+            "pathName": "shoot auto part 1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": null
+            "pathName": "shoot auto part 2"
           }
         },
         {
@@ -31,13 +31,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Trench low Neutral clean up"
+            "pathName": "shoot climb auto part 3"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "shoot to hub"
+            "name": "climb auto"
           }
         }
       ]

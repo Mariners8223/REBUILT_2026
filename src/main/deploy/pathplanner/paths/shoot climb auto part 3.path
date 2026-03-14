@@ -3,52 +3,43 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.0,
-        "y": 0.5
+        "x": 4.240034090909091,
+        "y": 0.4791477272727275
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.23424944812362,
-        "y": 0.4147130242825585
+        "x": 3.05475,
+        "y": 0.2730113636363638
       },
       "isLocked": false,
-      "linkedName": "Trench low"
+      "linkedName": "shoot auto part 2 end"
     },
     {
       "anchor": {
-        "x": 7.834403973509934,
-        "y": 3.4348454746136863
+        "x": 0.8490909090909087,
+        "y": 2.262227272727273
       },
       "prevControl": {
-        "x": 7.810204194260486,
-        "y": 0.4340728476821174
+        "x": 0.8387840909090905,
+        "y": 1.221238636363637
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Neutral low"
+      "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.2082324455205879,
-      "rotationDegrees": 90.0
-    },
-    {
-      "waypointRelativePos": 0.44552058111380255,
-      "rotationDegrees": 64.96591765236981
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "collect fuel",
-      "waypointRelativePos": 0.3665488810365126,
+      "name": "close intake",
+      "waypointRelativePos": 0.5013368983957216,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "collect fuel"
+          "name": "close intake"
         }
       }
     }
@@ -63,13 +54,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 93.98252057182886
+    "rotation": -90.0
   },
   "reversed": false,
-  "folder": "Auto Trench shoot",
+  "folder": "shoot climb auto paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 84.45153370628195
   },
   "useDefaultConstraints": true
 }
