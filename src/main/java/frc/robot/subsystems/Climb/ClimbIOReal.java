@@ -1,7 +1,6 @@
 package frc.robot.subsystems.Climb;
 
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
+
 import frc.util.MarinersController.MarinersTalonFX;
 import frc.util.MarinersController.MarinersController.ControlMode;
 
@@ -22,6 +21,7 @@ public class ClimbIOReal implements ClimbIO
         motor.setMotorInverted(ClimbConstants.IS_INVERTED);
 
         // motor.enableSoftLimits(ClimbConstants.SOFT_MINIMUM, ClimbConstants.SOFT_MAXIMUM); TODO: Add softlimits
+        motor.setMotorIdleMode(true);
         motor.setPIDF(ClimbConstants.PID);
         return motor;
     }
@@ -47,22 +47,15 @@ public class ClimbIOReal implements ClimbIO
     }
 
     public double getCurrent(){
-        return motor.getMotor().getTorqueCurrent().getValueAsDouble();
+        return motor.getMotor().getSupplyCurrent().getValueAsDouble();
     }
 
     public void setPosition(double refrence){
         motor.setReference(refrence, ControlMode.Position);
     }
 
-    @Override
-    public void setBrakeMode(boolean isBrake)
-    {
-        motor.setMotorIdleMode(isBrake);
-    }
-
     public void Update(ClimbInputs inputs)
     {
         inputs.height = getPosition();
-        inputs.pose = new Pose3d(ClimbConstants.X_ON_ROBOT, ClimbConstants.Y_ON_ROBOT, getPosition(), new Rotation3d());
     }
 }

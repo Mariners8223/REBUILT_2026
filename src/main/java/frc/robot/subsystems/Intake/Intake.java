@@ -2,7 +2,6 @@ package frc.robot.subsystems.Intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Robot;
@@ -23,7 +22,9 @@ public class Intake extends SubsystemBase{
     {
         io = Robot.isReal() ? new IntakeIOReal() : new IntakeIOSim();
         this.resetPositionMotorEncoder();
-        state = IntakePosition.Open;
+        state = IntakePosition.Reset;
+
+        setDefaultCommand(this.moveToPositionCommand());
     }
 
     public void setPositionMotorRotation(Angle rotations)
@@ -63,19 +64,15 @@ public class Intake extends SubsystemBase{
         return this.runOnce(() -> setPositionMotorState(position));
     }
 
+    public Command moveToPositionCommand(){
+        return this.run(() -> this.setPositionMotorState(this.state));
+    }
+
     public Command spinRollersCommand(){
         return this.startEnd(
             () -> setRollersMotorDutyCycle(IntakeConstants.RollersMotor.DUTY_CYCLE),
             () -> setRollersMotorDutyCycle(0)
         );
-    }
-
-    public Command switchIntakePositionCommand(){
-        switch (this.state){
-            case Closed: { Logger.recordOutput("SwitchedPosition", IntakePosition.Open); return new InstantCommand(() -> setPositionMotorState(IntakePosition.Open));}
-            case Open: {Logger.recordOutput("SwitchedPosition", IntakePosition.Closed); return new InstantCommand(() -> setPositionMotorState(IntakePosition.Closed));}
-            default: {Logger.recordOutput("SwitchedPosition", IntakePosition.Open); return new InstantCommand(() -> setPositionMotorState(IntakePosition.Open));}
-        }
     }
 
     public Command bumpFuelCommand(){

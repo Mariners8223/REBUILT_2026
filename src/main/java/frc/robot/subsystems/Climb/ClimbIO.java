@@ -21,8 +21,6 @@ public interface ClimbIO {
 
     void stopClimbMotor();
 
-    void setBrakeMode(boolean isBrake);
-
     double getCurrent();
 
     void Update(ClimbInputs inputs);

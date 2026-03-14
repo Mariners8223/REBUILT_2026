@@ -15,8 +15,6 @@ public class Climb extends SubsystemBase {
     {
         io = new ClimbIOReal();
         io.resetPosition();
-
-        io.setBrakeMode(true);
     }
 
     public void resetPosition(){

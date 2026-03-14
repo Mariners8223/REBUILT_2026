@@ -30,13 +30,28 @@ public class DriveToPose extends Command {
 
     private final List<PIDController> controllers = List.of(XController, YController, ThetaController);
 
+    private final double upperSpeedLimit;
+
   /** Creates a new HookToTower. */
   public DriveToPose(DriveBase driveBase, Pose2d targetPose) {
     this.driveBase = driveBase;
-    this.targetPose = 
+    this.targetPose =
         Robot.isRedAlliance ?
         targetPose :
         FlippingUtil.flipFieldPose(targetPose);
+    this.upperSpeedLimit = DriveBaseConstants.DrivePID.UPPER_SPEED_LIMIT_XY;
+
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(driveBase);
+  }
+
+    public DriveToPose(DriveBase driveBase, Pose2d targetPose, double upperSpeedLimit) {
+    this.driveBase = driveBase;
+    this.targetPose =
+        Robot.isRedAlliance ?
+        targetPose :
+        FlippingUtil.flipFieldPose(targetPose);
+    this.upperSpeedLimit = upperSpeedLimit;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(driveBase);
@@ -89,7 +104,7 @@ public class DriveToPose extends Command {
     ChassisSpeeds fieldRelativeSpeeds = new ChassisSpeeds(XOutput, YOutput, ThetaOutput);
     ChassisSpeeds robotRelativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, driveBase.getPose().getRotation());
 
-    double upperLimitXY = DriveBaseConstants.DrivePID.UPPER_SPEED_LIMIT_XY;
+    double upperLimitXY = this.upperSpeedLimit;
     double lowerLimitXY = DriveBaseConstants.DrivePID.LOWER_SPEED_LIMIT_XY;
 
     double upperLimitTheta = DriveBaseConstants.DrivePID.UPPER_SPEED_LIMIT_THETA;

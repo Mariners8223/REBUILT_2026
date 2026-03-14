@@ -25,7 +25,7 @@ public class IntakeConstants
             Closed(Degrees.of(0)),
             Middle(Degrees.of(-35)),
             Open(Degrees.of(-90)),
-            Reset(Degrees.of(0));
+            Reset(Degrees.of(-90)); //TODO: Change before competition
 
             private final Angle angle;
 
@@ -59,11 +59,11 @@ public class IntakeConstants
         public static final MotorType MOTOR_TYPE = MotorType.SPARK_FLEX;
         public static final boolean IS_INVERTED = true;
         public static final Angle POSITION_TOLERANCE = Degrees.of(2);
-        public static final double GEAR_RATIO = 20;
+        public static final double GEAR_RATIO = 60;
         public static final double SOFT_MINIMUM = IntakePosition.Open.getAngle().in(Rotations);
         public static final double SOFT_MAXIMUM = IntakePosition.Closed.getAngle().in(Rotations);
         public static final PIDFGains PID_GAINS = new PIDFGains(
-        350,
+        700,
         50,
         0,
         0.1);
@@ -80,7 +80,7 @@ public class IntakeConstants
         public static final MotorType MOTOR_TYPE = MotorType.SPARK_FLEX;
         public static final boolean IS_INVERTED = false;
         public static final double GEAR_RATIO = 1;
-        public static final double DUTY_CYCLE = 1; // i assume that you want a dutyCycle constat bc you have that in your io
+        public static final double DUTY_CYCLE = 1;
     }
 
     public static final double MOMENT_OF_INERTIA = 0;

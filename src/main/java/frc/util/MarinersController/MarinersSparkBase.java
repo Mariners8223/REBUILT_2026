@@ -443,7 +443,7 @@ public class MarinersSparkBase extends MarinersController {
         reportError("Error configuring motor idle mode", error);
 
     }
-    
+
 
     @Override
     protected void stopMotorOutput(){

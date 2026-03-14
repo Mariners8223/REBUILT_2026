@@ -77,7 +77,7 @@ public class VisionIOPhoton implements VisionIO {
         if(poseEstimatorResult.isEmpty()){
             return emptyFrame[0];
         }
-        
+
         EstimatedRobotPose robotPose = poseEstimatorResult.get();
 
         EstimationType estimationType;

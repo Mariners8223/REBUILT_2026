@@ -287,7 +287,7 @@ public class DriveBase extends SubsystemBase {
 
     /**
      * Gets the angle from the robot to a Pose on the field
-     * 
+     *
      * @param pose The pose on the field
      * @return The angle between the robot and the pose (in radians)
      */
@@ -296,7 +296,7 @@ public class DriveBase extends SubsystemBase {
 
         Rotation2d angleToTarget = new Rotation2d(
             pose.getX() - getPose().getX(),
-            pose.getY() - getPose().getY() 
+            pose.getY() - getPose().getY()
         );
         return angleToTarget.getRadians();
     }
