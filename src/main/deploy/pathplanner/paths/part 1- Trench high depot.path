@@ -1,0 +1,68 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.7236766899512705,
+        "y": 7.530478536772966
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.2927902756494825,
+        "y": 7.524301402511
+      },
+      "isLocked": false,
+      "linkedName": "Trench high"
+    },
+    {
+      "anchor": {
+        "x": 0.891594501220164,
+        "y": 7.076480628655767
+      },
+      "prevControl": {
+        "x": 1.138178896175161,
+        "y": 7.117664802371868
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "before depot"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.25,
+      "maxWaypointRelativePos": 0.8,
+      "constraints": {
+        "maxVelocity": 3.0,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 1.0,
+    "rotation": -120.96375653207359
+  },
+  "reversed": false,
+  "folder": "Auto Deport & Outpost shoot",
+  "idealStartingState": {
+    "velocity": 0.0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

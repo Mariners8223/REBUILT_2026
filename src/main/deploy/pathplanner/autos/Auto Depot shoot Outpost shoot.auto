@@ -13,13 +13,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Trench low Neutral low"
+            "pathName": "part 1- Trench high depot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": null
+            "pathName": "part 2- Depot collect hub"
           }
         },
         {
@@ -31,7 +31,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Trench low Neutral clean up"
+            "pathName": "part 3- Hub depot Outpost"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "part 4- Outpost shoot "
           }
         },
         {

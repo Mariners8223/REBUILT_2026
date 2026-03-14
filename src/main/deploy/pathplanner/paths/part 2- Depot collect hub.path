@@ -1,0 +1,108 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.891594501220164,
+        "y": 7.076480628655767
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 0.4576007344121001,
+        "y": 6.991228716644941
+      },
+      "isLocked": false,
+      "linkedName": "before depot"
+    },
+    {
+      "anchor": {
+        "x": 1.4868636984441617,
+        "y": 4.90163149860756
+      },
+      "prevControl": {
+        "x": 0.2845780809862455,
+        "y": 4.959289774488964
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "hub after depot"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0,
+      "maxWaypointRelativePos": 0.5965559655596554,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [
+    {
+      "fieldPosition": {
+        "x": 0.4,
+        "y": 4.0
+      },
+      "rotationOffset": 0.0,
+      "minWaypointRelativePos": 0.25,
+      "maxWaypointRelativePos": 0.6580565805658061,
+      "name": "Point Towards Zone"
+    }
+  ],
+  "eventMarkers": [
+    {
+      "name": "start rollers",
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "start rollers"
+        }
+      }
+    },
+    {
+      "name": "warm up shooter",
+      "waypointRelativePos": 0.5129151291512911,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "stop rollers",
+      "waypointRelativePos": 0.8856088560885568,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "stop rollers"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -15.027618909115716
+  },
+  "reversed": false,
+  "folder": "Auto Deport & Outpost shoot",
+  "idealStartingState": {
+    "velocity": 1.0,
+    "rotation": -120.96375653207359
+  },
+  "useDefaultConstraints": true
+}

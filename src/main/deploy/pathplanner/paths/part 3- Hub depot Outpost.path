@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.4868636984441617,
+        "y": 4.90163149860756
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.411072580643554,
+        "y": 4.415354838707507
+      },
+      "isLocked": false,
+      "linkedName": "hub after depot"
+    },
+    {
+      "anchor": {
+        "x": 0.46,
+        "y": 0.55
+      },
+      "prevControl": {
+        "x": 2.1504354838686957,
+        "y": 2.177201612906358
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "outpost"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 90.0
+  },
+  "reversed": false,
+  "folder": "Auto Deport & Outpost shoot",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -15.027618909115716
+  },
+  "useDefaultConstraints": true
+}
