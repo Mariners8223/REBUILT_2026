@@ -268,13 +268,11 @@ public class RobotContainer {
         NamedCommands.registerCommand("start rollers", new collectingCommand(intake, IntakeConstants.RollersMotor.DUTY_CYCLE));
         NamedCommands.registerCommand("stop rollers", new collectingCommand(intake, 0));
 
-        NamedCommands.registerCommand("shoot to hub", fullShootCommand);
+        NamedCommands.registerCommand("shoot to hub", fullShootCommand.withTimeout(3));
         NamedCommands.registerCommand("warm up shooter", new InstantCommand(() -> shooter.setVelocityByDistance(distanceFromHub()), shooter));
         NamedCommands.registerCommand("shoot to pass", passCommand);
         
         NamedCommands.registerCommand("climb auto", fullClimb);
-
-        //NamedCommands.registerCommand("aim to alliance", )
     }
     
     //#regionchoosers
