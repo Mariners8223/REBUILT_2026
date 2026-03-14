@@ -1,0 +1,43 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "middle depo climb auto part 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "middle depo climb auto part 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot to hub"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "middle depo climb auto part 3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "climb auto"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
