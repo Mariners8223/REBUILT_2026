@@ -3,6 +3,8 @@
   "robotLength": 0.808,
   "holonomicMode": true,
   "pathFolders": [
+    "Auto depot shoot outpost shoot",
+    "auto depot climb",
     "middle depo climb auto",
     "shoot auto paths",
     "shoot climb auto paths"

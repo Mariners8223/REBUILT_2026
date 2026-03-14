@@ -45,7 +45,7 @@
     "rotation": 90.0
   },
   "reversed": false,
-  "folder": "Auto Depot shoot Outpost shoot",
+  "folder": "Auto depot shoot outpost shoot",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -15.027618909115716

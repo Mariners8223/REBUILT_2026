@@ -45,7 +45,7 @@
     "rotation": 90.0
   },
   "reversed": false,
-  "folder": "Auto Depot climb",
+  "folder": "auto depot climb",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -15.027618909115716
