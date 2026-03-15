@@ -93,6 +93,7 @@ public class RobotContainer {
 
         // TODO: Define commands in a function so that namedCommands and driveBindings will share them (useful names) 
         // TODO: Separate rollers and pivot
+        // TODO: Alerts for stall
 
         configureNamedCommands();
         configureDriveBindings();
