@@ -4,6 +4,7 @@
 
 package frc.robot.commands.Shooter;
 
+import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Volts;
 
 import java.util.function.Supplier;
@@ -55,7 +56,7 @@ public class ShootDistance extends Command {
       boostTimer.stop();
     }
 
-    if (!boostTimer.isRunning()) shooter.setVelocity(requiredSpeed());
+    if (!boostTimer.isRunning()) shooter.setVelocity(requiredSpeed().plus(RPM.of(10)));
   }
 
   // Called once the command ends or is interrupted.

@@ -19,7 +19,7 @@ public class VisionConstants {
     public static final AprilTagFieldLayout FIELD_LAYOUT = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
 
     public static final double maxHeightDeviation = 0.1;
-    public static final double maxMultiAmbiguity = 0.3;
+    public static final double maxMultiAmbiguity = 0.1;
     public static final double maxSingleAmbiguity = 0.07;
     public static final double maxDistanceFromTargetSingle = 1.5;
     public static final double maxDistanceFromTargetMulti = 4; //TODO: if there is a season where you can see one tag real close and one far fix this.
@@ -32,7 +32,7 @@ public class VisionConstants {
                 0, 0),
        POINTING_OUT_CAMERA("pointing_out_camera",
            new Transform3d(
-               -0.23554, -0.26835, 0.51,
+               -0.23554, 0.15, 0.51,
                new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(-14), Units.degreesToRadians(180))),
                0, 0);
 

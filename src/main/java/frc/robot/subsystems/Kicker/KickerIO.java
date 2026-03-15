@@ -16,5 +16,11 @@ public interface KickerIO {
 
     void setDutyCycle(double targetDutyCycle);
 
+    double getLeadVelocity();
+    double getLeadSetpoint();
+
+    double getFollowVelocity();
+    double getFollowSetpoint();
+
     void update(KickerInputs inputs);
 }

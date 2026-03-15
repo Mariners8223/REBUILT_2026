@@ -49,6 +49,13 @@ public class IntakeIOSim implements IntakeIO
         positionMotor.startPIDTuning();
     }
 
+    public double getRollersVelocity(){
+        return rollersMotor.getVelocity();
+    }
+    public double getRollersSetpoint(){
+        return rollersMotor.getSetpoint();
+    }
+
     public void Update(IntakeInputs inputs)
     {
         inputs.currentPosition = getCurrentPosition();

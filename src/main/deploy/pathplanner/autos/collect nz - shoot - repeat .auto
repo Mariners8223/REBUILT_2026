@@ -17,9 +17,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "shoot auto part 2"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "shoot auto part 2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "eject"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "aim to hub"
           }
         },
         {
@@ -32,6 +51,12 @@
           "type": "path",
           "data": {
             "pathName": "shoot auto part 3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "aim to hub"
           }
         },
         {

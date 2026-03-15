@@ -28,6 +28,13 @@ public class Kicker extends SubsystemBase {
     io.setDutyCycle(0);
   }
 
+  public boolean leadInStall(){
+    return (io.getLeadSetpoint() != 0 && Math.abs(io.getLeadVelocity()) < 1);
+  }
+  public boolean followInStall(){
+    return (io.getFollowSetpoint() != 0 && Math.abs(io.getFollowVelocity()) < 1);
+  }
+
   public Command setKickerCommand(double dutyCycle){
     return this.startEnd(
       () -> setMotors(dutyCycle),

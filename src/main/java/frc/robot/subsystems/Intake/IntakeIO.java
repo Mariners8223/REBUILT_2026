@@ -29,5 +29,8 @@ public interface IntakeIO
 
     void startPIDTuning();
 
+    double getRollersSetpoint();
+    double getRollersVelocity();
+
     void Update(IntakeInputs inputs);
 }

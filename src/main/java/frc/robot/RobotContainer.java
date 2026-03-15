@@ -19,6 +19,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.util.FlippingUtil;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
@@ -28,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.commands.Climb.RunHookToHeight;
 import frc.robot.commands.Drive.AimDriving;
@@ -35,8 +37,6 @@ import frc.robot.commands.Drive.DriveCommand;
 import frc.robot.commands.Drive.DriveToPose;
 import frc.robot.commands.Drive.MinorAdjust;
 import frc.robot.commands.Drive.MinorAdjust.AdjustmentDirection;
-import frc.robot.commands.Intake.collectingCommand;
-import frc.robot.commands.Intake.pivotCommand;
 import frc.robot.commands.Shooter.ShootDistance;
 import frc.robot.commands.Shooter.ShootVelocity;
 import frc.robot.subsystems.DriveTrain.DriveBase;
@@ -57,6 +57,8 @@ import frc.robot.subsystems.Kicker.KickerConstants;
 
 
 public class RobotContainer {
+    
+
     public static CommandPS5Controller driveController;
     public static Constants.autoConstats.TrenchLocations trenchLocations = new Constants.autoConstats.TrenchLocations();
 
@@ -88,6 +90,9 @@ public class RobotContainer {
 
         feeder = new Feeder(intake, funnel, kicker, shooter);
         vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
+
+        // TODO: Define commands in a function so that namedCommands and driveBindings will share them (useful names) 
+        // TODO: Separate rollers and pivot
 
         configureNamedCommands();
         configureDriveBindings();
@@ -131,14 +136,13 @@ public class RobotContainer {
 
         Command fullShootCommand =
             Commands.parallel(
-                new ShootVelocity(shooter, () -> RPM.of(1000)),
-                // new ShootDistance(shooter, RobotContainer::distanceFromHub),
-                Commands.waitUntil(() -> true)
-                // Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
+                new ShootDistance(shooter, RobotContainer::distanceFromHub),
+                Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
                     .andThen(
                         Commands.parallel(
                             kicker.setKickerByDistance(RobotContainer::distanceFromHub),
-                            funnel.toShooterCommand()
+                            funnel.toShooterCommand(),
+                            intake.spinRollersCommand()
                         )
                     )
             );
@@ -173,6 +177,7 @@ public class RobotContainer {
             );
 
         Command ejectCommand = feeder.setSpeeds(0, 0, FunnelConstants.CenteringMotor.CENTERING_EJECT_SPEED, KickerConstants.KICKER_EJECT_SPEED, 0);
+        Command intakeCommand = feeder.setSpeeds(IntakeConstants.RollersMotor.DUTY_CYCLE, FunnelConstants.LeadingMotor.LeadSpeed, 0, 0, 0);
 
         driveController.PS().onTrue(driveBase.resetOnlyDirection());
 
@@ -201,9 +206,7 @@ public class RobotContainer {
             )
         );
 
-        driveController.circle().toggleOnTrue(
-            feeder.setSpeeds(IntakeConstants.RollersMotor.DUTY_CYCLE, FunnelConstants.LeadingMotor.LeadSpeed, 0.3, 0.3, 0.2)
-        );
+        driveController.circle().toggleOnTrue(intakeCommand);
         driveController.square().toggleOnTrue(ejectCommand);
 
         driveController.triangle().whileTrue(fullClimb);
@@ -260,17 +263,23 @@ public class RobotContainer {
                     )
             );
 
-        NamedCommands.registerCommand("close intake", new pivotCommand(intake, IntakePosition.Closed));
-        NamedCommands.registerCommand("open intake", new pivotCommand(intake, IntakePosition.Open));
+        Command ejectCommand = feeder.setSpeeds(0, 0, FunnelConstants.CenteringMotor.CENTERING_EJECT_SPEED, KickerConstants.KICKER_EJECT_SPEED, 0);
+
+
+        NamedCommands.registerCommand("close intake", intake.moveToPositionCommand(IntakePosition.Closed));
+        NamedCommands.registerCommand("open intake", intake.moveToPositionCommand(IntakePosition.Open).andThen(Commands.waitSeconds(0.7)));
         
-        NamedCommands.registerCommand("start rollers", new collectingCommand(intake, IntakeConstants.RollersMotor.DUTY_CYCLE));
-        NamedCommands.registerCommand("stop rollers", new collectingCommand(intake, 0));
+        NamedCommands.registerCommand("start rollers", new InstantCommand(() -> intake.setRollersMotorDutyCycle(IntakeConstants.RollersMotor.DUTY_CYCLE)));
+        NamedCommands.registerCommand("stop rollers", new InstantCommand(() -> intake.setRollersMotorDutyCycle(0)));
 
         NamedCommands.registerCommand("shoot to hub", fullShootCommand.withTimeout(3));
         NamedCommands.registerCommand("warm up shooter", new InstantCommand(() -> shooter.setVelocityByDistance(distanceFromHub()), shooter));
         NamedCommands.registerCommand("shoot to pass", passCommand);
+        NamedCommands.registerCommand("aim to hub", new AimDriving(driveBase, driveController, RobotContainer::angleToHub).withTimeout(0.8));
         
         NamedCommands.registerCommand("climb auto", fullClimb);
+
+        NamedCommands.registerCommand("eject", ejectCommand);
     }
     
     //#regionchoosers
@@ -307,8 +316,7 @@ public class RobotContainer {
         for (String autoName : namesOfAutos) {
             PathPlannerAuto auto = new PathPlannerAuto(autoName,true);
             autosOfAutos.add(auto);
-        }
-        
+         }
         for (int i = 0; i < namesOfAutos.size(); i++){
             mirroredAutoMap.put(namesOfAutos.get(i), autosOfAutos.get(i));
         }

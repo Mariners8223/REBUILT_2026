@@ -33,6 +33,14 @@ public class Funnel extends SubsystemBase {
     StopCenterMotors();
   }
 
+  public boolean funnelInStall(){
+    return (io.getFunnelSetpoint() != 0 && Math.abs(io.getFunnelVelocity()) < 1); 
+  }
+
+  public boolean centerringInStall(){
+    return (io.getCenterringSetpoint() != 0 && Math.abs(io.getCenterringVelocity()) < 1);
+  }
+
   public Command funnelingCommand(){
     return this.startEnd(
       () -> SpinLeadMotor(FunnelConstants.LeadingMotor.LeadSpeed),
@@ -50,8 +58,8 @@ public class Funnel extends SubsystemBase {
   public Command toShooterCommand(){
     return this.startEnd(
       () -> {
-        SpinLeadMotor(FunnelConstants.LeadingMotor.LeadSpeed);
-        SpinCenterMotors(FunnelConstants.CenteringMotor.CenteringHighSpeed);
+        SpinLeadMotor(FunnelConstants.LeadingMotor.FunnelShootingSpeed);
+        SpinCenterMotors(FunnelConstants.CenteringMotor.centeringShootingSpeed);
       },
       () -> stopAllMotors()
     );

@@ -37,8 +37,8 @@ public class FunnelIOReal implements FunnelIO{
          FunnelConstants.CenteringMotor.GearRatio);
 
          Motor.setMotorInverted(FunnelConstants.CenteringMotor.IS_INVERTED);
-         Motor.setCurrentLimits(FunnelConstants.CenteringMotor.CENTER_MOTOR_CURRENT_LIMIT,
-             FunnelConstants.CenteringMotor.CENTER_MOTOR_CURRENT_THRESHOLD);
+        //  Motor.setCurrentLimits(FunnelConstants.CenteringMotor.CENTER_MOTOR_CURRENT_LIMIT,
+        //      FunnelConstants.CenteringMotor.CENTER_MOTOR_CURRENT_THRESHOLD);
 
           return Motor;
     }
@@ -48,5 +48,19 @@ public class FunnelIOReal implements FunnelIO{
     }
     public void SetDutyCycleLead(double LeadDutyCycle){
         funnelMotor.setDutyCycle(LeadDutyCycle);
+    }
+
+    public double getFunnelVelocity(){
+        return funnelMotor.getVelocity();
+    }
+    public double getCenterringVelocity(){
+        return centerMotor.getVelocity();
+    }
+
+    public double getFunnelSetpoint(){
+        return funnelMotor.getSetpoint();
+    }
+    public double getCenterringSetpoint(){
+        return centerMotor.getSetpoint();
     }
 }

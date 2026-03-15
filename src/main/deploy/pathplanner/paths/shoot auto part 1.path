@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.23424944812362,
-        "y": 0.4147130242825585
+        "x": 7.2778090507726265,
+        "y": 0.46795253863134467
       },
       "isLocked": false,
       "linkedName": "Trench low"
@@ -30,12 +30,12 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.2082324455205879,
+      "waypointRelativePos": 0.2671509281678747,
       "rotationDegrees": 90.0
     },
     {
-      "waypointRelativePos": 0.44552058111380255,
-      "rotationDegrees": 64.96591765236981
+      "waypointRelativePos": 0.46811945117029896,
+      "rotationDegrees": 50.0
     }
   ],
   "constraintZones": [],
@@ -43,7 +43,7 @@
   "eventMarkers": [
     {
       "name": "collect fuel",
-      "waypointRelativePos": 0.3665488810365126,
+      "waypointRelativePos": 0.463604240282684,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

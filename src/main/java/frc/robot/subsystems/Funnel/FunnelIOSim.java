@@ -32,4 +32,18 @@ public class FunnelIOSim implements FunnelIO{
     public void SetDutyCycleLead(double DutyCycleLead){
         LeadMotor.setDutyCycle(DutyCycleLead);
     }
+
+    public double getFunnelVelocity(){
+        return LeadMotor.getVelocity();
+    }
+    public double getCenterringVelocity(){
+        return CenterHighMotor.getVelocity();
+    }
+
+    public double getFunnelSetpoint(){
+        return LeadMotor.getSetpoint();
+    }
+    public double getCenterringSetpoint(){
+        return CenterHighMotor.getSetpoint();
+    }
 }

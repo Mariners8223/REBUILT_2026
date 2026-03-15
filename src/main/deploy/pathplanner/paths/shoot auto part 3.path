@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.240034090909091,
-        "y": 0.4791477272727275
+        "x": 3.7349613686534218,
+        "y": 0.5260320088300228
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.507295454545453,
-        "y": 0.42761363636363625
+        "x": 7.002222732289784,
+        "y": 0.47449791792093154
       },
       "isLocked": false,
       "linkedName": "shoot auto part 2 end"
@@ -64,16 +64,16 @@
     },
     {
       "anchor": {
-        "x": 4.0,
-        "y": 0.5
+        "x": 3.7349613686534218,
+        "y": 0.5260320088300228
       },
       "prevControl": {
-        "x": 4.238189113135596,
-        "y": 0.5759338289807535
+        "x": 3.973150481789018,
+        "y": 0.6019658378107763
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Trench low shoot"
+      "linkedName": "shoot auto part 3 end"
     }
   ],
   "rotationTargets": [
@@ -145,13 +145,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 80.35918066545058
+    "rotation": 75.90829112876739
   },
   "reversed": false,
   "folder": "shoot auto paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 84.45153370628195
+    "rotation": 75.90829112876739
   },
   "useDefaultConstraints": false
 }

@@ -24,6 +24,20 @@ public class KickerIOSim implements KickerIO {
         kickerMotors.setDutyCycle(dutyCycle);
     }
 
+    public double getLeadVelocity(){
+        return kickerMotors.getVelocity();
+    }
+    public double getLeadSetpoint(){
+        return kickerMotors.getSetpoint();
+    }
+
+    public double getFollowVelocity(){
+        return kickerMotors.getVelocity();
+    }
+    public double getFollowSetpoint(){
+        return kickerMotors.getSetpoint(); // Following takes the setpoint of the lead
+    }
+
     public void update(KickerInputs inputs){
         inputs.dutyCycle = 0;
         inputs.velocity = 0;

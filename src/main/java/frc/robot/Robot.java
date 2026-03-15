@@ -13,8 +13,11 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.commands.PathfindThenFollowPath;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -93,6 +96,8 @@ public class Robot extends LoggedRobot {
         if (m_autonomousCommand != null){
             CommandScheduler.getInstance().schedule(m_autonomousCommand);
         }
+
+        PathPlannerLogging.setLogTargetPoseCallback(pose -> Logger.recordOutput("Path pose", pose));
     }
 
     /** This function is called periodically during autonomous. */
