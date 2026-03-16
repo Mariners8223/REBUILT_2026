@@ -10,6 +10,7 @@ import static edu.wpi.first.units.Units.RPM;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -232,8 +233,9 @@ public class RobotContainer {
         );
 
         driveController.circle().toggleOnTrue(intakeCommand);
-        driveController.square().toggleOnTrue(ejectCommand);
+        driveController.circle().multiPress(2, 0.5).onTrue(ejectCommand);
 
+        driveController.square().toggleOnTrue(Commands.defer(RobotContainer::passTrench, Set.of(driveBase)));
         driveController.triangle().whileTrue(fullClimb);
 
         driveController.cross().onTrue(
@@ -349,20 +351,22 @@ public class RobotContainer {
    //#region auto
     public static Command passTrench(){
         Pose2d pose = driveBase.getPose();
+        Pose2d targetPose;
 
         if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
             pose = FlippingUtil.flipFieldPose(driveBase.getPose());
         }
         if (pose.getY() >= 4){
-            if (pose.getX() <= 4.5){
-                return driveBase.findPath(trenchLocations.upRightTrench,2);
-            }
-            return driveBase.findPath(trenchLocations.upLeftTrench, 2);
+            if (pose.getX() <= 4.5) targetPose = trenchLocations.upRightTrench;
+            else targetPose = trenchLocations.upLeftTrench;
         }
-        if (pose.getX() <= 4.5){
-            return driveBase.findPath(trenchLocations.downRightTrench, 2);
+        else{
+            if (pose.getX() <= 4.5) targetPose = trenchLocations.downRightTrench;
+            else targetPose = trenchLocations.downLeftTrench;
         }
-        return driveBase.findPath(trenchLocations.downLeftTrench, 2);
+
+        Pose2d flippedTargetPose = Robot.isRedAlliance ? FlippingUtil.flipFieldPose(targetPose) : targetPose;
+        return driveBase.findPath(flippedTargetPose, 2);
    }
 
 
