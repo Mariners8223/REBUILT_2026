@@ -64,6 +64,8 @@ public class RobotContainer {
     public static Alert kickerFollowStall = new Alert("Stall", "Following Kicker in stall", AlertType.kWarning); // TODO: Front or back kicker
 
     public static Alert controllerDisconnected = new Alert("Drive Controller Disconnect", AlertType.kError);
+    public static Alert frontCameraDisconnected = new Alert("Front Camera Disconnected", AlertType.kWarning);
+    public static Alert backCameraDisconnected = new Alert("Back Camera Disconnected", AlertType.kWarning);
 
     public static CommandPS5Controller driveController;
     public static Constants.autoConstats.TrenchLocations trenchLocations = new Constants.autoConstats.TrenchLocations();
