@@ -106,8 +106,6 @@ public class RobotContainer {
         feeder = new Feeder(intake, funnel, kicker, shooter);
         vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
 
-        // TODO: Separate rollers and pivot
-
         configureCommands();
         configureNamedCommands();
         configureDriveBindings();

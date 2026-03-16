@@ -134,11 +134,7 @@ public class DriveBase extends SubsystemBase {
         RobotConfig config = DriveBaseConstants.PathPlanner.ROBOT_CONFIG;
         try {
             config = RobotConfig.fromGUISettings();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (ParseException e) {
-            // TODO Auto-generated catch block
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

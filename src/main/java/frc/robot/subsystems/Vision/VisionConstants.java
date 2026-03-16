@@ -22,7 +22,7 @@ public class VisionConstants {
     public static final double maxMultiAmbiguity = 0.1;
     public static final double maxSingleAmbiguity = 0.07;
     public static final double maxDistanceFromTargetSingle = 1.5;
-    public static final double maxDistanceFromTargetMulti = 4; //TODO: if there is a season where you can see one tag real close and one far fix this.
+    public static final double maxDistanceFromTargetMulti = 4; // If there is a season where you can see one tag real close and one far fix this.
 
     public enum CameraConstants{
         POINTING_IN_CAMERA("pointing_in_camera",
