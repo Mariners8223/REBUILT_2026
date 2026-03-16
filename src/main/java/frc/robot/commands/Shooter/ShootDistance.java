@@ -56,7 +56,7 @@ public class ShootDistance extends Command {
       boostTimer.stop();
     }
 
-    if (!boostTimer.isRunning()) shooter.setVelocity(requiredSpeed().plus(RPM.of(10)));
+    if (!boostTimer.isRunning()) shooter.setVelocity(requiredSpeed().plus(RPM.of(0)));
   }
 
   // Called once the command ends or is interrupted.

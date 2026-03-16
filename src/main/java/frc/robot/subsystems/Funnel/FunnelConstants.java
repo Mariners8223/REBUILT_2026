@@ -19,7 +19,7 @@ public class FunnelConstants {
         public static final int LEAD_MOTOR_CURRENT_THRESHOLD = 60;
 
         public static final double LeadSpeed = 0.3;
-        public static final double FunnelShootingSpeed = 0.5;
+        public static final double FunnelShootingSpeed = 0.4;
         public static final boolean IS_INVERTED = false;
     }
 
@@ -28,7 +28,7 @@ public class FunnelConstants {
         public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
         public static final double GearRatio = 3;
         public static final double MOMENT_OF_INERTIA_SIM = 1;
-        public static final int CENTER_MOTOR_CURRENT_LIMIT = 120;
+        public static final int CENTER_MOTOR_CURRENT_LIMIT = 100;
         public static final int CENTER_MOTOR_CURRENT_THRESHOLD = 120;
 
         public static final double CenteringHighSpeed = 0.5;
