@@ -57,8 +57,6 @@ import frc.robot.subsystems.Kicker.KickerConstants;
 
 
 public class RobotContainer {
-    
-
     public static CommandPS5Controller driveController;
     public static Constants.autoConstats.TrenchLocations trenchLocations = new Constants.autoConstats.TrenchLocations();
 
@@ -68,14 +66,21 @@ public class RobotContainer {
     public static Shooter shooter;
     public static Kicker kicker;
     public static Climb climb;
-    public static Feeder feeder;
 
-    public static CommandXboxController driveXboxController;
+    public static Feeder feeder;
     public static Vision vision;
 
     public static LoggedDashboardChooser<Command> autoChooser;
     public static LoggedDashboardChooser<String> sideChooser;
     public static HashMap<String, Command> mirroredAutoMap = new HashMap<>();
+    
+    public static LoggedDashboardChooser<IntakePosition> intakeChooser;
+
+    public static Command fullShootCommand;
+    public static Command passCommand;
+    public static Command fullClimb;
+    public static Command ejectCommand;
+    public static Command intakeCommand;
 
 
     public RobotContainer() {
@@ -91,14 +96,63 @@ public class RobotContainer {
         feeder = new Feeder(intake, funnel, kicker, shooter);
         vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
 
-        // TODO: Define commands in a function so that namedCommands and driveBindings will share them (useful names) 
         // TODO: Separate rollers and pivot
+        // TODO: Add stall alerts
 
+        configureCommands();
         configureNamedCommands();
         configureDriveBindings();
         // configureTestBindings();
         configureChoosers();
         configureMirroredAutosMap();
+        intakeChooser();
+    }
+
+    public void configureCommands(){
+        fullShootCommand =
+            Commands.parallel(
+                new ShootDistance(shooter, RobotContainer::distanceFromHub),
+                Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
+                    .andThen(
+                        Commands.parallel(
+                            kicker.setKickerByDistance(RobotContainer::distanceFromHub),
+                            funnel.toShooterCommand(),
+                            intake.spinRollersCommand()
+                        )
+                    )
+            );
+
+        passCommand =
+            Commands.parallel(
+              new ShootVelocity(shooter, () -> RPM.of(ShooterConstants.PASSING_VELOCITY)),
+                Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
+                    .andThen(
+                        Commands.parallel(
+                            kicker.setKickerCommand(1),
+                            funnel.toShooterCommand()
+                        )
+                    )
+            );
+
+        Command hookToTower =
+            Commands.sequence(
+                AutoBuilder.pathfindToPose(Constants.FieldConstants.PRE_PRE_TOWER_POSITION, DriveBaseConstants.PathPlanner.PATH_CONSTRAINTS),
+                new DriveToPose(driveBase, Constants.FieldConstants.PRE_PRE_TOWER_POSITION, 0.1).withTimeout(2),
+                new DriveToPose(driveBase, Constants.FieldConstants.PRE_TOWER_POSITION, 0.1).withTimeout(2),
+                new DriveToPose(driveBase, Constants.FieldConstants.TOWER_POSITION, 0.1).withTimeout(2),
+                new DriveToPose(driveBase, Constants.FieldConstants.INNER_TOWER_POSITION, 0.1).withTimeout(2)
+            );
+
+        fullClimb =
+            Commands.sequence(
+                // new ResetHook(climb),
+                climb.toPositionCommand(Heights.EXTENDED),
+                hookToTower,
+                new RunHookToHeight(climb, Heights.RESET, 1)
+            );
+
+        ejectCommand = feeder.setSpeeds(0, 0, FunnelConstants.CenteringMotor.CENTERING_EJECT_SPEED, KickerConstants.KICKER_EJECT_SPEED, 0);
+        intakeCommand = feeder.setSpeeds(IntakeConstants.RollersMotor.DUTY_CYCLE, FunnelConstants.LeadingMotor.LeadSpeed, 0, 0, 0);
     }
 
     // for tests!!
@@ -134,51 +188,6 @@ public class RobotContainer {
             driveBase::removeDefaultCommand)
             .ignoringDisable(true));
 
-        Command fullShootCommand =
-            Commands.parallel(
-                new ShootDistance(shooter, RobotContainer::distanceFromHub),
-                Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
-                    .andThen(
-                        Commands.parallel(
-                            kicker.setKickerByDistance(RobotContainer::distanceFromHub),
-                            funnel.toShooterCommand(),
-                            intake.spinRollersCommand()
-                        )
-                    )
-            );
-
-        Command passCommand =
-            Commands.parallel(
-              new ShootVelocity(shooter, () -> RPM.of(ShooterConstants.PASSING_VELOCITY)),
-                Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
-                    .andThen(
-                        Commands.parallel(
-                            kicker.setKickerCommand(1),
-                            funnel.toShooterCommand()
-                        )
-                    )
-            );
-
-        Command hookToTower =
-            Commands.sequence(
-                AutoBuilder.pathfindToPose(Constants.FieldConstants.PRE_PRE_TOWER_POSITION, DriveBaseConstants.PathPlanner.PATH_CONSTRAINTS),
-                new DriveToPose(driveBase, Constants.FieldConstants.PRE_PRE_TOWER_POSITION, 0.1).withTimeout(2),
-                new DriveToPose(driveBase, Constants.FieldConstants.PRE_TOWER_POSITION, 0.1).withTimeout(2),
-                new DriveToPose(driveBase, Constants.FieldConstants.TOWER_POSITION, 0.1).withTimeout(2),
-                new DriveToPose(driveBase, Constants.FieldConstants.INNER_TOWER_POSITION, 0.1).withTimeout(2)
-            );
-
-        Command fullClimb =
-            Commands.sequence(
-                // new ResetHook(climb),
-                climb.toPositionCommand(Heights.EXTENDED),
-                hookToTower,
-                new RunHookToHeight(climb, Heights.RESET, 1)
-            );
-
-        Command ejectCommand = feeder.setSpeeds(0, 0, FunnelConstants.CenteringMotor.CENTERING_EJECT_SPEED, KickerConstants.KICKER_EJECT_SPEED, 0);
-        Command intakeCommand = feeder.setSpeeds(IntakeConstants.RollersMotor.DUTY_CYCLE, FunnelConstants.LeadingMotor.LeadSpeed, 0, 0, 0);
-
         driveController.PS().onTrue(driveBase.resetOnlyDirection());
 
         driveController.options().whileTrue(climb.dutyCycleCommand(0.1));
@@ -194,9 +203,6 @@ public class RobotContainer {
         driveController.povDownLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_LEFT));
         driveController.povDownRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_RIGHT));
 
-        driveController.R1().toggleOnTrue(
-            new AimDriving(driveBase, driveController, RobotContainer::getShootingAngle)
-        );
 
         driveController.L1().toggleOnTrue(
             new ConditionalCommand(
@@ -204,6 +210,10 @@ public class RobotContainer {
                 passCommand,
                 RobotContainer::inAllianceZone
             )
+        );
+
+        driveController.R1().toggleOnTrue(
+            new AimDriving(driveBase, driveController, RobotContainer::getShootingAngle)
         );
 
         driveController.circle().toggleOnTrue(intakeCommand);
@@ -223,49 +233,6 @@ public class RobotContainer {
     //#endregion
     
     public static void configureNamedCommands(){
-        Command hookToTower =
-            Commands.sequence(
-                AutoBuilder.pathfindToPose(Constants.FieldConstants.PRE_PRE_TOWER_POSITION, DriveBaseConstants.PathPlanner.PATH_CONSTRAINTS),
-                new DriveToPose(driveBase, Constants.FieldConstants.PRE_PRE_TOWER_POSITION, 0.1).withTimeout(2),
-                new DriveToPose(driveBase, Constants.FieldConstants.PRE_TOWER_POSITION, 0.1).withTimeout(2),
-                new DriveToPose(driveBase, Constants.FieldConstants.TOWER_POSITION, 0.1).withTimeout(2),
-                new DriveToPose(driveBase, Constants.FieldConstants.INNER_TOWER_POSITION, 0.1).withTimeout(2)
-            );
-
-        Command fullClimb =
-            Commands.sequence(
-                // new ResetHook(climb),
-                climb.toPositionCommand(Heights.EXTENDED),
-                hookToTower,
-                new RunHookToHeight(climb, Heights.RESET, 1)
-            );
-            
-        Command fullShootCommand =
-            Commands.parallel(
-                new ShootDistance(shooter, RobotContainer::distanceFromHub),
-                Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
-                    .andThen(
-                        Commands.parallel(
-                            kicker.setKickerByDistance(RobotContainer::distanceFromHub),
-                            funnel.toShooterCommand()
-                        )
-                    )
-            );
-        Command passCommand = 
-            Commands.parallel(
-              new ShootVelocity(shooter, () -> RPM.of(ShooterConstants.PASSING_VELOCITY)),
-                Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
-                    .andThen(
-                        Commands.parallel(
-                            kicker.setKickerCommand(1),
-                            funnel.toShooterCommand()
-                        )
-                    )
-            );
-
-        Command ejectCommand = feeder.setSpeeds(0, 0, FunnelConstants.CenteringMotor.CENTERING_EJECT_SPEED, KickerConstants.KICKER_EJECT_SPEED, 0);
-
-
         NamedCommands.registerCommand("close intake", intake.moveToPositionCommand(IntakePosition.Closed));
         NamedCommands.registerCommand("open intake", intake.moveToPositionCommand(IntakePosition.Open).andThen(Commands.waitSeconds(0.7)));
         
@@ -283,6 +250,14 @@ public class RobotContainer {
     }
     
     //#regionchoosers
+    public static void intakeChooser(){
+        intakeChooser.addDefaultOption("Open", IntakePosition.Open);
+        intakeChooser.addOption("Closed", IntakePosition.Open);
+
+        intakeChooser.onChange(position -> intake.resetPositionMotorEncoder(position));
+        SmartDashboard.putData("Intake starting area", intakeChooser.getSendableChooser());
+    }
+
     public static void configureChoosers(){
         List<String> namesOfAutos = AutoBuilder.getAllAutoNames();
         List<PathPlannerAuto> autosOfAutos = new ArrayList<>();
@@ -401,7 +376,7 @@ public class RobotContainer {
         return driveBase.findPath(Constants.autoConstats.bottomShoot).until(RobotContainer::inRange);
     }
 
-   public static boolean inAllianceZone(){
+    public static boolean inAllianceZone(){
         if (Robot.isRedAlliance) return driveBase.getPose().getX() > Constants.FieldConstants.RED_ALLIANCE_ZONE_X;
         else return driveBase.getPose().getX() < Constants.FieldConstants.BLUE_ALLIANCE_ZONE_X;
     }

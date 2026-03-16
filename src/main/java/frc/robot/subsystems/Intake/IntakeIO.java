@@ -26,6 +26,7 @@ public interface IntakeIO
     Angle getCurrentPosition();
 
     void resetPositionMotorEncoder();
+    void resetPositionMotorEncoder(double angle);
 
     void startPIDTuning();
 

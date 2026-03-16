@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Robot;
 
+import static edu.wpi.first.units.Units.Rotation;
+
 import org.littletonrobotics.junction.Logger;
 
 import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakePosition;
@@ -55,6 +57,10 @@ public class Intake extends SubsystemBase{
     public void resetPositionMotorEncoder()
     {
         io.resetPositionMotorEncoder();
+    }
+
+    public void resetPositionMotorEncoder(IntakePosition state){
+        io.resetPositionMotorEncoder(state.getAngle().in(Rotation));
     }
 
     public boolean inStall(){

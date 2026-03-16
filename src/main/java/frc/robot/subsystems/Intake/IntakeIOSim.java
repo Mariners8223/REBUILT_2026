@@ -44,6 +44,9 @@ public class IntakeIOSim implements IntakeIO
     {
         positionMotor.setMotorEncoderPosition(IntakeConstants.PositionMotor.IntakePosition.Closed.getAngle().in(Rotation));
     }
+    public void resetPositionMotorEncoder(double angle){
+        positionMotor.setMotorEncoderPosition(angle);
+    }
 
     public void startPIDTuning(){
         positionMotor.startPIDTuning();
