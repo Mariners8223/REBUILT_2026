@@ -19,8 +19,9 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.util.FlippingUtil;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -29,7 +30,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.commands.Climb.RunHookToHeight;
 import frc.robot.commands.Drive.AimDriving;
@@ -57,6 +57,14 @@ import frc.robot.subsystems.Kicker.KickerConstants;
 
 
 public class RobotContainer {
+    public static Alert intakeStall = new Alert("Stall", "Intake Rollers in stall", AlertType.kWarning);
+    public static Alert funnelStall = new Alert("Stall", "Funnel in stall", AlertType.kWarning);
+    public static Alert centerringStall = new Alert("Stall", "Centerring in stall", AlertType.kWarning);
+    public static Alert kickerLeadStall = new Alert("Stall", "Lead Kicker in stall", AlertType.kWarning); // TODO: Front or back kicker
+    public static Alert kickerFollowStall = new Alert("Stall", "Following Kicker in stall", AlertType.kWarning); // TODO: Front or back kicker
+
+    public static Alert controllerDisconnected = new Alert("Drive Controller Disconnect", AlertType.kError);
+
     public static CommandPS5Controller driveController;
     public static Constants.autoConstats.TrenchLocations trenchLocations = new Constants.autoConstats.TrenchLocations();
 
@@ -73,7 +81,7 @@ public class RobotContainer {
     public static LoggedDashboardChooser<Command> autoChooser;
     public static LoggedDashboardChooser<String> sideChooser;
     public static HashMap<String, Command> mirroredAutoMap = new HashMap<>();
-    
+
     public static LoggedDashboardChooser<IntakePosition> intakeChooser;
 
     public static Command fullShootCommand;
@@ -97,7 +105,6 @@ public class RobotContainer {
         vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
 
         // TODO: Separate rollers and pivot
-        // TODO: Add stall alerts
 
         configureCommands();
         configureNamedCommands();
@@ -108,7 +115,7 @@ public class RobotContainer {
         intakeChooser();
     }
 
-    public void configureCommands(){
+    public static void configureCommands(){
         fullShootCommand =
             Commands.parallel(
                 new ShootDistance(shooter, RobotContainer::distanceFromHub),
@@ -155,8 +162,18 @@ public class RobotContainer {
         intakeCommand = feeder.setSpeeds(IntakeConstants.RollersMotor.DUTY_CYCLE, FunnelConstants.LeadingMotor.LeadSpeed, 0, 0, 0);
     }
 
+    public static void pollAlerts(){
+        intakeStall.set(intake.inStall());
+        funnelStall.set(funnel.funnelInStall());
+        centerringStall.set(funnel.centerringInStall());
+        kickerLeadStall.set(kicker.leadInStall());
+        kickerFollowStall.set(kicker.followInStall());
+
+        controllerDisconnected.set(!driveController.isConnected());
+    }
+
     // for tests!!
-    public void configureTestBindings(){
+    public static void configureTestBindings(){
         new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(
             new StartEndCommand(() ->driveBase.setDefaultCommand(new DriveCommand(driveBase, driveController)),
             driveBase::removeDefaultCommand)
@@ -182,7 +199,7 @@ public class RobotContainer {
     }
 
     //#region Drive
-    public void configureDriveBindings(){
+    public static void configureDriveBindings(){
         new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(
             new StartEndCommand(() ->driveBase.setDefaultCommand(new DriveCommand(driveBase, driveController)),
             driveBase::removeDefaultCommand)
@@ -231,11 +248,11 @@ public class RobotContainer {
         driveController.R3().onTrue(intake.bumpFuelCommand());
     }
     //#endregion
-    
+
     public static void configureNamedCommands(){
         NamedCommands.registerCommand("close intake", intake.moveToPositionCommand(IntakePosition.Closed));
         NamedCommands.registerCommand("open intake", intake.moveToPositionCommand(IntakePosition.Open).andThen(Commands.waitSeconds(0.7)));
-        
+
         NamedCommands.registerCommand("start rollers", new InstantCommand(() -> intake.setRollersMotorDutyCycle(IntakeConstants.RollersMotor.DUTY_CYCLE)));
         NamedCommands.registerCommand("stop rollers", new InstantCommand(() -> intake.setRollersMotorDutyCycle(0)));
 
@@ -243,12 +260,12 @@ public class RobotContainer {
         NamedCommands.registerCommand("warm up shooter", new InstantCommand(() -> shooter.setVelocityByDistance(distanceFromHub()), shooter));
         NamedCommands.registerCommand("shoot to pass", passCommand);
         NamedCommands.registerCommand("aim to hub", new AimDriving(driveBase, driveController, RobotContainer::angleToHub).withTimeout(0.8));
-        
+
         NamedCommands.registerCommand("climb auto", fullClimb);
 
         NamedCommands.registerCommand("eject", ejectCommand);
     }
-    
+
     //#regionchoosers
     public static void intakeChooser(){
         intakeChooser.addDefaultOption("Open", IntakePosition.Open);
@@ -281,7 +298,7 @@ public class RobotContainer {
         sideChooser.addOption("middle", "middle");
         sideChooser.addOption("left", "left");
 
-        SmartDashboard.putData("sideChooser",sideChooser.getSendableChooser());   
+        SmartDashboard.putData("sideChooser",sideChooser.getSendableChooser());
     }
 
     public static void configureMirroredAutosMap(){
@@ -298,7 +315,7 @@ public class RobotContainer {
     }
 
     public static Command getAuto(){
-        return getSide().equals("right") || getSide().equals("middle") ? 
+        return getSide().equals("right") || getSide().equals("middle") ?
             autoChooser.get() : mirroredAutoMap.get(autoChooser.get().getName());
     }
 
@@ -332,22 +349,22 @@ public class RobotContainer {
     }
 
    //#region auto
-    public Command passTrench(){
-    Pose2d pose = driveBase.getPose();
+    public static Command passTrench(){
+        Pose2d pose = driveBase.getPose();
 
-    if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
-        pose = FlippingUtil.flipFieldPose(driveBase.getPose());
-    }
-    if (pose.getY() >= 4){
-        if (pose.getX() <= 4.5){
-            return driveBase.findPath(trenchLocations.upRightTrench,2);
+        if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
+            pose = FlippingUtil.flipFieldPose(driveBase.getPose());
         }
-        return driveBase.findPath(trenchLocations.upLeftTrench, 2);
-    }
-    if (pose.getX() <= 4.5){
-        return driveBase.findPath(trenchLocations.downRightTrench, 2);
-    }
-    return driveBase.findPath(trenchLocations.downLeftTrench, 2);
+        if (pose.getY() >= 4){
+            if (pose.getX() <= 4.5){
+                return driveBase.findPath(trenchLocations.upRightTrench,2);
+            }
+            return driveBase.findPath(trenchLocations.upLeftTrench, 2);
+        }
+        if (pose.getX() <= 4.5){
+            return driveBase.findPath(trenchLocations.downRightTrench, 2);
+        }
+        return driveBase.findPath(trenchLocations.downLeftTrench, 2);
    }
 
 
@@ -365,7 +382,7 @@ public class RobotContainer {
    }
 
 
-    public Command getInRange(){
+    public static Command getInRange(){
         Pose2d pose = driveBase.getPose();
         if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
             pose = FlippingUtil.flipFieldPose(driveBase.getPose());

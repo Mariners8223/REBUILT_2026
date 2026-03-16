@@ -156,7 +156,7 @@ public class ShooterConstants {
         // }
 
         // public static AngularVelocity requiredAngularVelocity(LinearVelocity launchVelocity){
-        //     return RotationsPerSecond.of(launchVelocity.in(Meters.per(Minute)) / SHOOTER_WHEEL_RADIUS.in(Meter)); // TODO: MAKE MORE EXACT FUNCTION
+        //     return RotationsPerSecond.of(launchVelocity.in(Meters.per(Minute)) / SHOOTER_WHEEL_RADIUS.in(Meter));
         // }
 
         public static AngularVelocity requiredAngularVelocity(Distance distance){

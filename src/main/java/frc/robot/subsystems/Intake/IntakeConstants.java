@@ -19,11 +19,10 @@ public class IntakeConstants
 
     public static class PositionMotor
     {
-        //TODO find real info for constants!
         public enum IntakePosition
         {
             Closed(Degrees.of(0)),
-            Middle(Degrees.of(-35)),
+            Middle(Degrees.of(-35)), //TODO: Test bump heights
             Open(Degrees.of(-90)),
             Reset(Degrees.of(-90)); //TODO: Change before competition
 

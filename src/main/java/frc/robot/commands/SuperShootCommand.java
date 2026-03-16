@@ -31,10 +31,10 @@ public class SuperShootCommand extends ParallelCommandGroup {
     public SuperShootCommand(DriveBase driveBase, Shooter shooter, Kicker kicker, Funnel funnel, CommandPS5Controller controller) {
         this.driveBase = driveBase;
 
-        this.hubLocation = Robot.isRedAlliance ? 
-        FlippingUtil.flipFieldPose(Constants.FieldConstants.HUB_POSITION) : 
+        this.hubLocation = Robot.isRedAlliance ?
+        FlippingUtil.flipFieldPose(Constants.FieldConstants.HUB_POSITION) :
         Constants.FieldConstants.HUB_POSITION;
-        
+
         this.currentTarget = this.hubLocation;
 
         addCommands(
@@ -47,7 +47,7 @@ public class SuperShootCommand extends ParallelCommandGroup {
                 Rotation2d rotation = currentTarget.getTranslation().minus(driveBase.getPose().getTranslation()).getAngle();
                 return rotation.getRadians();
             }),
-            Commands.waitUntil(() -> 
+            Commands.waitUntil(() ->
                 shooter.isAtRequiredVelocity(Meters.of(currentTarget.getTranslation().getDistance(driveBase.getPose().getTranslation()))))
                 .andThen(kicker.setKickerCommand(0.6)).andThen(funnel.toShooterCommand())
         );

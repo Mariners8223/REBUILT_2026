@@ -34,7 +34,7 @@ public class Funnel extends SubsystemBase {
   }
 
   public boolean funnelInStall(){
-    return (io.getFunnelSetpoint() != 0 && Math.abs(io.getFunnelVelocity()) < 1); 
+    return (io.getFunnelSetpoint() != 0 && Math.abs(io.getFunnelVelocity()) < 1);
   }
 
   public boolean centerringInStall(){
