@@ -58,6 +58,9 @@ public class Robot extends LoggedRobot {
         SmartDashboard.putBoolean("IsHubActive", HubTracker.isActive(DriverStation.getAlliance().get()));
         SmartDashboard.putString("TimeLeftOnActivation", HubTracker.timeRemainingInCurrentShift().toString());
         SmartDashboard.putBoolean("InRange", RobotContainer.inRange());
+
+        Logger.recordOutput("Current Shift", HubTracker.getCurrentShift().toString());
+        SmartDashboard.putString("Current Shift", HubTracker.getCurrentShift().toString()); //TODO: Where is better to send?
     }
 
     /**
