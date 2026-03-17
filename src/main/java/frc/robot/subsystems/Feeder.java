@@ -5,7 +5,6 @@
 package frc.robot.subsystems;
 
 import java.util.ArrayList;
-import java.util.Set;
 import java.util.function.Supplier;
 
 import edu.wpi.first.units.measure.Distance;

@@ -29,7 +29,6 @@ import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.*;
@@ -50,12 +49,10 @@ import frc.robot.subsystems.Climb.ClimbConstants.ClimbStates;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterConstants;
 import frc.robot.subsystems.Funnel.Funnel;
-import frc.robot.subsystems.Funnel.FunnelConstants;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeConstants;
 import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakePosition;
 import frc.robot.subsystems.Kicker.Kicker;
-import frc.robot.subsystems.Kicker.KickerConstants;
 
 
 public class RobotContainer {
@@ -131,7 +128,7 @@ public class RobotContainer {
                 new DriveToPose(driveBase, Constants.FieldConstants.INNER_TOWER_POSITION, 0.1).withTimeout(2)
             );
 
-        fullClimb = () -> 
+        fullClimb = () ->
             Commands.sequence(
                 // new ResetHook(climb),
                 climb.toStateCommand(ClimbStates.EXTENDED),

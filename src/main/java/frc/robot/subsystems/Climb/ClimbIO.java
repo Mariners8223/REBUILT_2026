@@ -13,7 +13,7 @@ public interface ClimbIO {
 
     void setDutyCycle(double dutyCycle);
     void stopMotors();
-    
+
     void setPosition(double position);
     double getPosition();
     void resetPosition();
