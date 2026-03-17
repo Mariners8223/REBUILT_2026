@@ -113,6 +113,16 @@ public class ShooterConstants {
             DistanceToRPMPassing.put(4.0, 3000.0);
             DistanceToRPMPassing.put(6.2, 4000.0);
             DistanceToRPMPassing.put(6.8, 5000.0);
+
+            DistanceToFlytime.put(1.8,0.76);
+            DistanceToFlytime.put(2.3,0.96);
+            DistanceToFlytime.put(2.8,1.1);
+            DistanceToFlytime.put(3.3,1.2);
+            DistanceToFlytime.put(3.8,1.25);
+            DistanceToFlytime.put(4.3,1.36);
+            DistanceToFlytime.put(4.8,1.43);
+            DistanceToFlytime.put(5.3,1.44);
+            DistanceToFlytime.put(5.8,1.48);
         }
     }
 
@@ -161,6 +171,10 @@ public class ShooterConstants {
 
         public static AngularVelocity requiredAngularVelocity(Distance distance){
             return RPM.of(Maps.DistanceToRPM.get(distance.in(Meters)));
+        }
+
+        public static double flyTimeByDistance(Distance distance){
+            return Maps.DistanceToFlytime.get(distance.in(Meters));
         }
 
         public static <U extends Unit> boolean epsilonEquals(Measure<U> unit1, Measure<U> unit2, Measure<U> tolerance){
