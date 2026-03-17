@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Supplier;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -79,11 +80,9 @@ public class RobotContainer {
 
     public static LoggedDashboardChooser<IntakePosition> intakeChooser;
 
-    public static Command fullShootCommand;
-    public static Command passCommand;
-    public static Command fullClimb;
-    public static Command ejectCommand;
-    public static Command intakeCommand;
+    public static Supplier<Command> fullShootCommand;
+    public static Supplier<Command> passCommand;
+    public static Supplier<Command> fullClimb;
 
 
     public RobotContainer() {
@@ -109,32 +108,21 @@ public class RobotContainer {
     }
 
     public static void configureCommands(){
-        fullShootCommand =
+        fullShootCommand = () ->
             Commands.parallel(
                 new ShootDistance(shooter, RobotContainer::distanceFromHub),
                 Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
-                    .andThen(
-                        Commands.parallel(
-                            kicker.setKickerByDistance(RobotContainer::distanceFromHub),
-                            funnel.toShooterCommand(),
-                            intake.spinRollersCommand()
-                        )
-                    )
+                .andThen(feeder.smartFeedingShootCommand(RobotContainer::distanceFromHub))
             );
 
-        passCommand =
+        passCommand = () ->
             Commands.parallel(
-              new ShootVelocity(shooter, () -> RPM.of(ShooterConstants.PASSING_VELOCITY)),
+                new ShootVelocity(shooter, () -> RPM.of(ShooterConstants.PASSING_VELOCITY)),
                 Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
-                    .andThen(
-                        Commands.parallel(
-                            kicker.setKickerCommand(1),
-                            funnel.toShooterCommand()
-                        )
-                    )
+                .andThen(feeder.smartFeedingPassCommand())
             );
 
-        Command hookToTower =
+        Supplier<Command> hookToTower = () ->
             Commands.sequence(
                 AutoBuilder.pathfindToPose(Constants.FieldConstants.PRE_PRE_TOWER_POSITION, DriveBaseConstants.PathPlanner.PATH_CONSTRAINTS),
                 new DriveToPose(driveBase, Constants.FieldConstants.PRE_PRE_TOWER_POSITION, 0.1).withTimeout(2),
@@ -143,16 +131,13 @@ public class RobotContainer {
                 new DriveToPose(driveBase, Constants.FieldConstants.INNER_TOWER_POSITION, 0.1).withTimeout(2)
             );
 
-        fullClimb =
+        fullClimb = () -> 
             Commands.sequence(
                 // new ResetHook(climb),
                 climb.toStateCommand(ClimbStates.EXTENDED),
-                hookToTower,
+                hookToTower.get(),
                 new RunHookToHeight(climb, ClimbStates.RESET, 1)
             );
-
-        ejectCommand = feeder.setSpeeds(0, 0, FunnelConstants.CenteringMotor.CENTERING_EJECT_SPEED, KickerConstants.KICKER_EJECT_SPEED, 0);
-        intakeCommand = feeder.setSpeeds(IntakeConstants.RollersMotor.DUTY_CYCLE, FunnelConstants.funnelMotor.LEAD_SPEED, 0, 0, 0);
     }
 
     public static void pollAlerts(){
@@ -207,11 +192,13 @@ public class RobotContainer {
         driveController.povDownLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_LEFT));
         driveController.povDownRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_RIGHT));
 
+        // new Trigger(() -> feeder.inStall()).debounce(0.2).onTrue(ejectCommand.withTimeout(0.5));
+
 
         driveController.L1().toggleOnTrue(
-            new ConditionalCommand(
-                fullShootCommand,
-                passCommand,
+            Commands.either(
+                fullShootCommand.get(),
+                passCommand.get(),
                 RobotContainer::inAllianceZone
             )
         );
@@ -220,11 +207,11 @@ public class RobotContainer {
             new AimDriving(driveBase, driveController, RobotContainer::getShootingAngle)
         );
 
-        driveController.circle().toggleOnTrue(intakeCommand);
-        driveController.circle().multiPress(2, 0.5).onTrue(ejectCommand);
+        driveController.circle().toggleOnTrue(feeder.intakeCommand());
+        driveController.circle().multiPress(2, 0.5).onTrue(feeder.ejectCommand());
 
         driveController.square().toggleOnTrue(Commands.defer(RobotContainer::passTrench, Set.of(driveBase)));
-        driveController.triangle().whileTrue(fullClimb);
+        driveController.triangle().whileTrue(fullClimb.get());
 
         driveController.cross().onTrue(
             Commands.either(
@@ -244,14 +231,14 @@ public class RobotContainer {
         NamedCommands.registerCommand("start rollers", new InstantCommand(() -> intake.setRollersDutyCycle(IntakeConstants.RollersMotor.DUTY_CYCLE)));
         NamedCommands.registerCommand("stop rollers", new InstantCommand(() -> intake.setRollersDutyCycle(0)));
 
-        NamedCommands.registerCommand("shoot to hub", fullShootCommand.withTimeout(3));
+        NamedCommands.registerCommand("shoot to hub", fullShootCommand.get().withTimeout(3));
         NamedCommands.registerCommand("warm up shooter", new InstantCommand(() -> shooter.setVelocityByDistance(distanceFromHub()), shooter));
-        NamedCommands.registerCommand("shoot to pass", passCommand);
+        NamedCommands.registerCommand("shoot to pass", passCommand.get());
         NamedCommands.registerCommand("aim to hub", new AimDriving(driveBase, driveController, RobotContainer::angleToHub).withTimeout(0.8));
 
-        NamedCommands.registerCommand("climb auto", fullClimb);
+        NamedCommands.registerCommand("climb auto", fullClimb.get());
 
-        NamedCommands.registerCommand("eject", ejectCommand);
+        NamedCommands.registerCommand("eject", feeder.ejectCommand());
     }
 
     //#regionchoosers

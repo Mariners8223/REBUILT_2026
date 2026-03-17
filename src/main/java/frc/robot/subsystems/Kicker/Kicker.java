@@ -49,7 +49,7 @@ public class Kicker extends SubsystemBase {
 
   public Command setKickerByDistance(Supplier<Distance> distanceSupplier){
     return this.runEnd(
-      () -> this.setDutyCycle(KickerConstants.getRPM(distanceSupplier.get())),
+      () -> this.setDutyCycle(KickerConstants.getDutyCycle(distanceSupplier.get())),
       () -> this.stopMotors()
     );
   }

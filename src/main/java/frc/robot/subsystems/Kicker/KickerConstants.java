@@ -38,7 +38,7 @@ public class KickerConstants {
         DistantToDutyCycle.put(5.8, 0.6);
     }
 
-    public static double getRPM(Distance distance){
+    public static double getDutyCycle(Distance distance){
         return DistantToDutyCycle.get(distance.in(Meters));
     }
 
