@@ -56,7 +56,7 @@ public class ShooterConstants {
     public static class HUB_CONSTANTS{
         public static Distance HUB_HEIGHT = Inches.of(72);
         public static Distance HUB_INSCRIBED_CIRCLE_DIAMETER = Inches.of(41.7);
-        public static Distance HUB_CIRCUMSCRIBED_CIRCLE_DIAMETER = Inches.of(47);
+        public static Distance HUB_CIRCUMCISED_CIRCLE_DIAMETER = Inches.of(47);
     }
 
     public static double LOW_PASS_FILTER_ALPHA = 0.3;
@@ -127,47 +127,6 @@ public class ShooterConstants {
     }
 
     public static class Calculations{
-        // public static Distance practicalDistance(Translation2d hubPose, Pose2d robotPose, double velocityX, double velocityY){
-        //     Translation2d hubToRobot = hubPose.minus(robotPose.getTranslation());
-        //     double distance = hubToRobot.getNorm();
-
-        //     Translation2d velocity = new Translation2d(velocityX, velocityY);
-        //     double flightTime = LookupTable.DISTANCE_TO_TIME_OF_FLIGHT.get(distance);
-        //     Translation2d displacementFromRobotVelocity = velocity.times(flightTime);
-
-        //     hubToRobot.minus(displacementFromRobotVelocity);
-
-        //     return Meters.zero();
-        // }
-
-        // public static LinearVelocity requiredLinearVelocity(Distance distance){
-        //     /*  h = y0 + tan(alpha) * d - (g / (2 * (v * cos(alpha))^2)) * d^2
-        //         h - Hub Height
-        //         d - Distance from centre of Hub
-        //         y0 - Height of Shooter from ground
-        //         alpha - Launch Angle
-        //         g - Acceleration due to Gravity
-
-        //         v - Launch Velocity
-
-        //         Solve for v:
-        //         v^2 = g*d^2 / (2 * cos(alpha) * (x*sin(alpha) - (h-y0)*cos(alpha)))
-        //     */
-
-        //     double cos = Math.cos(SHOOTER_ANGLE.in(Radian));
-        //     double sin = Math.sin(SHOOTER_ANGLE.in(Radian));
-        //     double height_differential = (HUB_CONSTANTS.HUB_HEIGHT.minus(SHOOTER_HEIGHT)).in(Meter);
-
-        //     double numerator = ACCELERATION_DUE_TO_GRAVITY.baseUnitMagnitude() * (distance.times(distance)).baseUnitMagnitude();
-        //     double denominator = 2 * cos * (distance.baseUnitMagnitude() * sin - height_differential * cos);
-        //     double final_solution = Math.sqrt(numerator / denominator);
-
-        //     return MetersPerSecond.of(final_solution);
-        // }
-
-        // public static AngularVelocity requiredAngularVelocity(LinearVelocity launchVelocity){
-        //     return RotationsPerSecond.of(launchVelocity.in(Meters.per(Minute)) / SHOOTER_WHEEL_RADIUS.in(Meter)); // TODO: MAKE MORE EXACT FUNCTION
-        // }
 
         public static AngularVelocity requiredAngularVelocity(Distance distance){
             return RPM.of(Maps.DistanceToRPM.get(distance.in(Meters)));
