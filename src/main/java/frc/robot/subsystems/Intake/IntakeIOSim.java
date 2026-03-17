@@ -39,6 +39,9 @@ public class IntakeIOSim implements IntakeIO
     {
         return Rotation.of(positionMotor.getPosition());
     }
+    public double getPivotStallCurrent(){
+        return 0;
+    }
 
     public void resetPositionMotorEncoder()
     {

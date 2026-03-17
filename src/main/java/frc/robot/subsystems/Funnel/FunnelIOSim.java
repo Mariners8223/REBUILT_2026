@@ -16,13 +16,13 @@ public class FunnelIOSim implements FunnelIO{
         LeadMotor= new MarinersSimMotor(
             "Lead Motor",
             DCMotor.getNeoVortex(1),
-            FunnelConstants.LeadingMotor.GearRatio,
-            FunnelConstants.LeadingMotor.MOMENT_OF_INERTIA_SIM);
+            FunnelConstants.funnelMotor.GEAR_RATIO,
+            FunnelConstants.funnelMotor.MOMENT_OF_INERTIA_SIM);
 
         CenterHighMotor= new MarinersSimMotor(
             "Center Motor",
             DCMotor.getKrakenX60(1),
-            FunnelConstants.CenteringMotor.GearRatio,
+            FunnelConstants.CenteringMotor.GEAR_RATIO,
             FunnelConstants.CenteringMotor.MOMENT_OF_INERTIA_SIM);
     }
 

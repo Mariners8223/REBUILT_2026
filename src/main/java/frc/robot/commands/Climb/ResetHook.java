@@ -21,7 +21,7 @@ public class ResetHook extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        climb.setMotorPower(-0.1);
+        climb.setDutyCycle(-0.1);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -31,7 +31,7 @@ public class ResetHook extends Command {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        climb.setMotorPower(0);
+        climb.setDutyCycle(0);
         climb.resetPosition();
     }
 

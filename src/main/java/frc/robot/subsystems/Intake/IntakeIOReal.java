@@ -24,10 +24,10 @@ public class IntakeIOReal implements IntakeIO{
     private MarinersTalonFX configurePositionMotor()
     {
         MarinersTalonFX motor;
-        motor = new MarinersTalonFX("position motor", IntakeConstants.PositionMotor.CONTROLLER_LOCATION,
+        motor = new MarinersTalonFX("Intake/Pivot Motor", IntakeConstants.PositionMotor.CONTROLLER_LOCATION,
         IntakeConstants.PositionMotor.MOTOR_ID, IntakeConstants.PositionMotor.PID_GAINS, IntakeConstants.PositionMotor.GEAR_RATIO);
         motor.setMotorInverted(IntakeConstants.PositionMotor.IS_INVERTED);
-        // motor.enableSoftLimits(IntakeConstants.PositionMotor.SOFT_MINIMUM, IntakeConstants.PositionMotor.SOFT_MAXIMUM);
+        // motor.enableSoftLimits(IntakeConstants.PositionMotor.SOFT_MINIMUM, IntakeConstants.PositionMotor.SOFT_MAXIMUM); // TODO: Do we want softlimits?
         motor.setMotorIdleMode(true);
         // PID and Profile
         motor.setProfile(IntakeConstants.PositionMotor.PROFILE);
@@ -38,7 +38,7 @@ public class IntakeIOReal implements IntakeIO{
     private MarinersTalonFX configureRollersMotor()
     {
         MarinersTalonFX motor;
-        motor = new MarinersTalonFX("rollers motor", IntakeConstants.RollersMotor.CONTROLLER_LOCATION,
+        motor = new MarinersTalonFX("Intake/Rollers Motor", IntakeConstants.RollersMotor.CONTROLLER_LOCATION,
         IntakeConstants.RollersMotor.MOTOR_ID);
 
         motor.setMotorInverted(IntakeConstants.RollersMotor.IS_INVERTED);
@@ -59,6 +59,9 @@ public class IntakeIOReal implements IntakeIO{
     public Angle getCurrentPosition()
     {
         return Rotation.of(positionMotor.getPosition());
+    }
+    public double getPivotStallCurrent(){
+        return positionMotor.getMotor().getSupplyCurrent().getValueAsDouble();
     }
 
     public void resetPositionMotorEncoder()

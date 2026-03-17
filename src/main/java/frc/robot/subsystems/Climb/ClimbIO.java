@@ -11,17 +11,14 @@ public interface ClimbIO {
         Pose3d pose;
     }
 
-    void setPower(double power);
-
-    void resetPosition();
-
-    double getPosition();
-
+    void setDutyCycle(double dutyCycle);
+    void stopMotors();
+    
     void setPosition(double position);
-
-    void stopClimbMotor();
+    double getPosition();
+    void resetPosition();
 
     double getCurrent();
 
-    void Update(ClimbInputs inputs);
+    void update(ClimbInputs inputs);
 }

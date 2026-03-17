@@ -5,14 +5,14 @@ import frc.util.PIDFGains;
 
 public class ClimbConstants
 {
-    public enum Heights{
+    public enum ClimbStates{
         RESET(START_POSITION),
         EXTENDED(0.63),
         IN_AIR_AUTO(0.52);
 
         private final double height;
 
-        Heights(double height){
+        ClimbStates(double height){
             this.height = height;
         }
 

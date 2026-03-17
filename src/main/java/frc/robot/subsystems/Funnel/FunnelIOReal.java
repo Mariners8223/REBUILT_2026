@@ -19,22 +19,22 @@ public class FunnelIOReal implements FunnelIO{
     }
 
     private MarinersSparkBase configureFunnelMotor(){
-        MarinersSparkBase Motor;
-        Motor = new MarinersSparkBase("FunnelingMotor", FunnelConstants.LeadingMotor.CONTROLLER_LOCATION,
-         FunnelConstants.LeadingMotor.Lead_ID, FunnelConstants.LeadingMotor.Is_Brushless,
-         FunnelConstants.LeadingMotor.MOTOR_TYPE);
+        MarinersSparkBase motor;
+        motor = new MarinersSparkBase("Funnel/FunnelingMotor", FunnelConstants.funnelMotor.CONTROLLER_LOCATION,
+         FunnelConstants.funnelMotor.Lead_ID, FunnelConstants.funnelMotor.IS_BRUSHLESS,
+         FunnelConstants.funnelMotor.MOTOR_TYPE);
 
-         Motor.setMotorInverted(FunnelConstants.LeadingMotor.IS_INVERTED);
+         motor.setMotorInverted(FunnelConstants.funnelMotor.IS_INVERTED);
         //  Motor.setCurrentLimits(FunnelConstants.LeadingMotor.LEAD_MOTOR_CURRENT_LIMIT,
         //      FunnelConstants.LeadingMotor.LEAD_MOTOR_CURRENT_THRESHOLD);
-         return Motor;
+         return motor;
     }
 
     private MarinersTalonFX configureCenterMotor(){
         MarinersTalonFX Motor;
-        Motor = new MarinersTalonFX("CenteringHighMotor", FunnelConstants.CenteringMotor.CONTROLLER_LOCATION,
-         FunnelConstants.CenteringMotor.CenterHIGH_ID, new PIDFGains(0,0,0),
-         FunnelConstants.CenteringMotor.GearRatio);
+        Motor = new MarinersTalonFX("Funnel/CenteringMotor", FunnelConstants.CenteringMotor.CONTROLLER_LOCATION,
+         FunnelConstants.CenteringMotor.CENTERING_ID, new PIDFGains(0,0,0),
+         FunnelConstants.CenteringMotor.GEAR_RATIO);
 
          Motor.setMotorInverted(FunnelConstants.CenteringMotor.IS_INVERTED);
         //  Motor.setCurrentLimits(FunnelConstants.CenteringMotor.CENTER_MOTOR_CURRENT_LIMIT,

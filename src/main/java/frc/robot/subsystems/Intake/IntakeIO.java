@@ -20,10 +20,10 @@ public interface IntakeIO
     }
 
     void setPositionMotorRotation (Angle rotation);
-
     void setRollersMotorDutyCycle(double dutyCycle);
 
     Angle getCurrentPosition();
+    double getPivotStallCurrent();
 
     void resetPositionMotorEncoder();
     void resetPositionMotorEncoder(double angle);

@@ -27,17 +27,17 @@ public class Feeder extends SubsystemBase {
 
   public Runnable runMotors(double intakeSpeed, double funnellingSpeed, double centeringSpeed, double kickerSpeed, double shooterSpeed){
     return () -> {
-        intake.setRollersMotorDutyCycle(intakeSpeed);
-        funnel.SpinLeadMotor(funnellingSpeed);
-        funnel.SpinCenterMotors(centeringSpeed);
-        kicker.setMotors(kickerSpeed);
+        intake.setRollersDutyCycle(intakeSpeed);
+        funnel.setFunnelDutyCycle(funnellingSpeed);
+        funnel.setCenteringDutyCycle(centeringSpeed);
+        kicker.setDutyCycle(kickerSpeed);
         shooter.setDutyCycle(shooterSpeed);
       };
   }
 
   public Runnable stopMotors(){
       return () -> {
-        intake.setRollersMotorDutyCycle(0);
+        intake.setRollersDutyCycle(0);
         funnel.stopAllMotors();
         kicker.stopMotors();
         shooter.stopShooter();

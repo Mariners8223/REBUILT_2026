@@ -13,9 +13,14 @@ import org.littletonrobotics.junction.Logger;
 
 import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakePosition;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.Alert.AlertType;
 
 
 public class Intake extends SubsystemBase{
+    public static Alert rollersStall = new Alert("Stall", "Intake Rollers in stall", AlertType.kWarning);
+    public static Alert pivotStall = new Alert("Stall", "Intake Pivot in stall", AlertType.kWarning);
+
     private final IntakeIO io;
     private final IntakeInputsAutoLogged inputs = new IntakeInputsAutoLogged();
 
@@ -24,23 +29,23 @@ public class Intake extends SubsystemBase{
     public Intake()
     {
         io = Robot.isReal() ? new IntakeIOReal() : new IntakeIOSim();
-        this.resetPositionMotorEncoder();
+        this.resetPivotPosition();
         state = IntakePosition.Open; // TODO: Swap to Closed
 
         setDefaultCommand(this.moveToPositionCommand());
     }
 
-    public void setPositionMotorRotation(Angle rotations)
+    public void setPivotRotation(Angle rotations)
     {
         io.setPositionMotorRotation(rotations);
     }
 
-    public void setPositionMotorState(IntakePosition position){
-        setPositionMotorRotation(position.getAngle());
+    public void setPivotState(IntakePosition position){
+        setPivotRotation(position.getAngle());
         this.state = position;
     }
 
-    public void setRollersMotorDutyCycle(double dutyCycle)
+    public void setRollersDutyCycle(double dutyCycle)
     {
         io.setRollersMotorDutyCycle(dutyCycle);
     }
@@ -54,17 +59,20 @@ public class Intake extends SubsystemBase{
         return this.state;
     }
 
-    public void resetPositionMotorEncoder()
+    public void resetPivotPosition()
     {
         io.resetPositionMotorEncoder();
     }
 
-    public void resetPositionMotorEncoder(IntakePosition state){
+    public void resetPivotPosition(IntakePosition state){
         io.resetPositionMotorEncoder(state.getAngle().in(Rotation));
     }
 
-    public boolean inStall(){
+    public boolean rollersInStall(){
         return (io.getRollersSetpoint() != 0 && Math.abs(io.getRollersVelocity()) < 1);
+    }
+    public boolean pivotInStall(){
+        return (io.getPivotStallCurrent() > IntakeConstants.PositionMotor.STALL_CURRENT);
     }
 
     public void startPIDTuning(){
@@ -72,25 +80,25 @@ public class Intake extends SubsystemBase{
     }
 
     public Command moveToPositionCommand(IntakePosition position){
-        return this.runOnce(() -> setPositionMotorState(position));
+        return this.runOnce(() -> setPivotState(position));
     }
 
     public Command moveToPositionCommand(){
-        return this.run(() -> this.setPositionMotorState(this.state));
+        return this.run(() -> this.setPivotState(this.state));
     }
 
     public Command spinRollersCommand(){
         return this.startEnd(
-            () -> setRollersMotorDutyCycle(IntakeConstants.RollersMotor.DUTY_CYCLE),
-            () -> setRollersMotorDutyCycle(0)
+            () -> setRollersDutyCycle(IntakeConstants.RollersMotor.DUTY_CYCLE),
+            () -> setRollersDutyCycle(0)
         );
     }
 
     public Command bumpFuelCommand(){
         return Commands.sequence(
-            new InstantCommand(() -> this.setPositionMotorState(IntakePosition.Middle)),
+            new InstantCommand(() -> this.setPivotState(IntakePosition.Middle)),
             new WaitCommand(IntakeConstants.BUMP_WAIT_TIME),
-            new InstantCommand(() -> this.setPositionMotorState(IntakePosition.Open))
+            new InstantCommand(() -> this.setPivotState(IntakePosition.Open))
         );
     }
 
@@ -102,5 +110,8 @@ public class Intake extends SubsystemBase{
 
         Logger.recordOutput("Intake/State", state);
         Logger.recordOutput("Intake/Command", (getCurrentCommand() != null ? getCurrentCommand().toString() : "None"));
+
+        rollersStall.set(rollersInStall());
+        pivotStall.set(pivotInStall());
     }
 }

@@ -3,63 +3,68 @@ package frc.robot.subsystems.Funnel;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Funnel extends SubsystemBase {
+  public static Alert funnelStall = new Alert("Stall", "Funnel in stall", AlertType.kWarning);
+  public static Alert centeringStall = new Alert("Stall", "Centerring in stall", AlertType.kWarning);
+    
   public final FunnelIO io;
 
   public Funnel() {
     io = new FunnelIOReal();
   }
 
-  public void SpinLeadMotor(double LeadMotorSpeed){
-    io.SetDutyCycleLead(LeadMotorSpeed);
+  public void setFunnelDutyCycle(double dutyCycle){
+    io.SetDutyCycleLead(dutyCycle);
   }
 
-  public void StopLeadMotor(){
+  public void stopFunnel(){
     io.SetDutyCycleLead(0);
   }
 
-  public void SpinCenterMotors(double CenterMotorSpeedHIGH){
+  public void setCenteringDutyCycle(double CenterMotorSpeedHIGH){
     io.SetDutyCycleCenter(CenterMotorSpeedHIGH);
   }
-  public void StopCenterMotors(){
+  public void stopCentering(){
     io.SetDutyCycleCenter(0);
   }
 
   public void stopAllMotors(){
-    StopLeadMotor();
-    StopCenterMotors();
+    stopFunnel();
+    stopCentering();
   }
 
   public boolean funnelInStall(){
     return (io.getFunnelSetpoint() != 0 && Math.abs(io.getFunnelVelocity()) < 1);
   }
 
-  public boolean centerringInStall(){
+  public boolean centeringInStall(){
     return (io.getCenterringSetpoint() != 0 && Math.abs(io.getCenterringVelocity()) < 1);
   }
 
   public Command funnelingCommand(){
     return this.startEnd(
-      () -> SpinLeadMotor(FunnelConstants.LeadingMotor.LeadSpeed),
-      () -> StopLeadMotor()
+      () -> setFunnelDutyCycle(FunnelConstants.funnelMotor.LEAD_SPEED),
+      () -> stopFunnel()
     );
   }
 
-  public Command onlyCenterCommand(){
+  public Command centeringCommand(){
     return this.startEnd(
-      () -> SpinCenterMotors(FunnelConstants.CenteringMotor.CenteringHighSpeed),
-      () -> StopCenterMotors()
+      () -> setCenteringDutyCycle(FunnelConstants.CenteringMotor.CenteringHighSpeed),
+      () -> stopCentering()
       );
   }
 
   public Command toShooterCommand(){
     return this.startEnd(
       () -> {
-        SpinLeadMotor(FunnelConstants.LeadingMotor.FunnelShootingSpeed);
-        SpinCenterMotors(FunnelConstants.CenteringMotor.centeringShootingSpeed);
+        setFunnelDutyCycle(FunnelConstants.funnelMotor.FUNNEL_SHOOTING_SPEED);
+        setCenteringDutyCycle(FunnelConstants.CenteringMotor.centeringShootingSpeed);
       },
       () -> stopAllMotors()
     );
@@ -69,5 +74,8 @@ public class Funnel extends SubsystemBase {
   @Override
   public void periodic() {
     Logger.recordOutput("Funnel/Command", (getCurrentCommand() != null ? getCurrentCommand().toString() : "None"));
+
+    funnelStall.set(funnelInStall());
+    centeringStall.set(centeringInStall());
   }
 }

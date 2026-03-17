@@ -45,7 +45,7 @@ import frc.robot.subsystems.DriveTrain.DriveBaseConstants;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Climb.Climb;
-import frc.robot.subsystems.Climb.ClimbConstants.Heights;
+import frc.robot.subsystems.Climb.ClimbConstants.ClimbStates;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterConstants;
 import frc.robot.subsystems.Funnel.Funnel;
@@ -58,12 +58,6 @@ import frc.robot.subsystems.Kicker.KickerConstants;
 
 
 public class RobotContainer {
-    public static Alert intakeStall = new Alert("Stall", "Intake Rollers in stall", AlertType.kWarning);
-    public static Alert funnelStall = new Alert("Stall", "Funnel in stall", AlertType.kWarning);
-    public static Alert centerringStall = new Alert("Stall", "Centerring in stall", AlertType.kWarning);
-    public static Alert kickerLeadStall = new Alert("Stall", "Lead Kicker in stall", AlertType.kWarning); // TODO: Front or back kicker
-    public static Alert kickerFollowStall = new Alert("Stall", "Following Kicker in stall", AlertType.kWarning); // TODO: Front or back kicker
-
     public static Alert controllerDisconnected = new Alert("Drive Controller Disconnect", AlertType.kError);
 
     public static CommandPS5Controller driveController;
@@ -152,22 +146,16 @@ public class RobotContainer {
         fullClimb =
             Commands.sequence(
                 // new ResetHook(climb),
-                climb.toPositionCommand(Heights.EXTENDED),
+                climb.toStateCommand(ClimbStates.EXTENDED),
                 hookToTower,
-                new RunHookToHeight(climb, Heights.RESET, 1)
+                new RunHookToHeight(climb, ClimbStates.RESET, 1)
             );
 
         ejectCommand = feeder.setSpeeds(0, 0, FunnelConstants.CenteringMotor.CENTERING_EJECT_SPEED, KickerConstants.KICKER_EJECT_SPEED, 0);
-        intakeCommand = feeder.setSpeeds(IntakeConstants.RollersMotor.DUTY_CYCLE, FunnelConstants.LeadingMotor.LeadSpeed, 0, 0, 0);
+        intakeCommand = feeder.setSpeeds(IntakeConstants.RollersMotor.DUTY_CYCLE, FunnelConstants.funnelMotor.LEAD_SPEED, 0, 0, 0);
     }
 
     public static void pollAlerts(){
-        intakeStall.set(intake.inStall());
-        funnelStall.set(funnel.funnelInStall());
-        centerringStall.set(funnel.centerringInStall());
-        kickerLeadStall.set(kicker.leadInStall());
-        kickerFollowStall.set(kicker.followInStall());
-
         controllerDisconnected.set(!driveController.isConnected());
     }
 
@@ -188,8 +176,8 @@ public class RobotContainer {
         driveController.povDownLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_LEFT));
         driveController.povDownRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_RIGHT));
 
-        driveController.triangle().onTrue(climb.toPositionCommand(Heights.EXTENDED));
-        driveController.cross().onTrue(new RunHookToHeight(climb, Heights.RESET, 0.7));
+        driveController.triangle().onTrue(climb.toStateCommand(ClimbStates.EXTENDED));
+        driveController.cross().onTrue(new RunHookToHeight(climb, ClimbStates.RESET, 0.7));
 
         driveController.options().whileTrue(climb.dutyCycleCommand(0.1));
         driveController.create().whileTrue(climb.dutyCycleCommand(-0.1));
@@ -208,7 +196,7 @@ public class RobotContainer {
 
         driveController.options().whileTrue(climb.dutyCycleCommand(0.1));
         driveController.create().whileTrue(climb.dutyCycleCommand(-0.1));
-        driveController.create().multiPress(2, 0.5).onTrue(climb.toPositionCommand(Heights.RESET));
+        driveController.create().multiPress(2, 0.5).onTrue(climb.toStateCommand(ClimbStates.RESET));
 
         driveController.povRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.RIGHT));
         driveController.povLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.LEFT));
@@ -253,8 +241,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("close intake", intake.moveToPositionCommand(IntakePosition.Closed));
         NamedCommands.registerCommand("open intake", intake.moveToPositionCommand(IntakePosition.Open).andThen(Commands.waitSeconds(0.7)));
 
-        NamedCommands.registerCommand("start rollers", new InstantCommand(() -> intake.setRollersMotorDutyCycle(IntakeConstants.RollersMotor.DUTY_CYCLE)));
-        NamedCommands.registerCommand("stop rollers", new InstantCommand(() -> intake.setRollersMotorDutyCycle(0)));
+        NamedCommands.registerCommand("start rollers", new InstantCommand(() -> intake.setRollersDutyCycle(IntakeConstants.RollersMotor.DUTY_CYCLE)));
+        NamedCommands.registerCommand("stop rollers", new InstantCommand(() -> intake.setRollersDutyCycle(0)));
 
         NamedCommands.registerCommand("shoot to hub", fullShootCommand.withTimeout(3));
         NamedCommands.registerCommand("warm up shooter", new InstantCommand(() -> shooter.setVelocityByDistance(distanceFromHub()), shooter));
@@ -271,7 +259,7 @@ public class RobotContainer {
         intakeChooser.addDefaultOption("Open", IntakePosition.Open);
         intakeChooser.addOption("Closed", IntakePosition.Open);
 
-        intakeChooser.onChange(position -> intake.resetPositionMotorEncoder(position));
+        intakeChooser.onChange(position -> intake.resetPivotPosition(position));
         SmartDashboard.putData("Intake starting area", intakeChooser.getSendableChooser());
     }
 

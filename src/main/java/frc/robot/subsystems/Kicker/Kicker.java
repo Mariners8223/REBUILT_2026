@@ -7,11 +7,17 @@ package frc.robot.subsystems.Kicker;
 import java.util.function.Supplier;
 
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 
 public class Kicker extends SubsystemBase {
+  public static Alert kickerLeadStall = new Alert("Stall", "Lead Kicker in stall", AlertType.kWarning); // TODO: Front or back kicker
+  public static Alert kickerFollowStall = new Alert("Stall", "Following Kicker in stall", AlertType.kWarning); // TODO: Front or back kicker
+
+
   KickerIO io;
   KickerInputsAutoLogged inputs = new KickerInputsAutoLogged();
 
@@ -20,7 +26,7 @@ public class Kicker extends SubsystemBase {
     io = Robot.isReal() ? new KickerIOReal() : new KickerIOSim();
   }
 
-  public void setMotors(double dutyCycle){
+  public void setDutyCycle(double dutyCycle){
     io.setDutyCycle(dutyCycle);
   }
 
@@ -37,13 +43,13 @@ public class Kicker extends SubsystemBase {
 
   public Command setKickerCommand(double dutyCycle){
     return this.startEnd(
-      () -> setMotors(dutyCycle),
+      () -> setDutyCycle(dutyCycle),
       () -> stopMotors());
   }
 
   public Command setKickerByDistance(Supplier<Distance> distanceSupplier){
     return this.runEnd(
-      () -> this.setMotors(KickerConstants.getRPM(distanceSupplier.get())),
+      () -> this.setDutyCycle(KickerConstants.getRPM(distanceSupplier.get())),
       () -> this.stopMotors()
     );
   }
@@ -52,5 +58,8 @@ public class Kicker extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     io.update(inputs);
+
+    kickerLeadStall.set(leadInStall());
+    kickerFollowStall.set(followInStall());
   }
 }

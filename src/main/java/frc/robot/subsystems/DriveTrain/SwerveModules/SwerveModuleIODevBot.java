@@ -21,7 +21,7 @@ public class SwerveModuleIODevBot extends SwerveModuleIO {
         this.DRIVE_KA = constants.DRIVE_KA;
 
         driveMotor = new MarinersTalonFX(
-                name.name() + " Drive Motor",
+                "Chassis/" + name.name() + " Drive Motor",
                 MarinersController.ControllerLocation.MOTOR,
                 constants.DRIVE_MOTOR_ID,
                 constants.DRIVE_MOTOR_PID,
@@ -38,7 +38,7 @@ public class SwerveModuleIODevBot extends SwerveModuleIO {
         driveMotor.setProfile(DevBotConstants.DRIVE_CONSTRAINTS);
 
         steerMotor = new MarinersSparkBase(
-                name.name() + " Steer Motor",
+                "Chassis/" + name.name() + " Steer Motor",
                 MarinersController.ControllerLocation.RIO,
                 constants.STEER_MOTOR_ID,
                 true,

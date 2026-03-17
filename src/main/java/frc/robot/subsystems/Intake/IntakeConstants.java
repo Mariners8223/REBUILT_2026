@@ -69,6 +69,7 @@ public class IntakeConstants
         public static final TrapezoidProfile PROFILE = new TrapezoidProfile(
             new Constraints(2, 0.8)
         );
+        public static final double STALL_CURRENT = 40;
     }
 
     public static class RollersMotor
