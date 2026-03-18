@@ -16,6 +16,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import com.pathplanner.lib.util.PathPlannerLogging;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
@@ -34,9 +35,8 @@ import frc.util.HubTracker;
 public class Robot extends LoggedRobot {
     private Command m_autonomousCommand;
     public static boolean isRedAlliance = false;
-    HubTracker tracker = new HubTracker();
 
-    Field2d field;
+    private static Field2d field;
 
     /**
      * This function is run when the robot is first started up and should be used for any
@@ -66,6 +66,10 @@ public class Robot extends LoggedRobot {
         SmartDashboard.putData("Field", field);
     }
 
+    public static void setRobotPoseOnField(Pose2d pose){
+        field.setRobotPose(pose); // Check if we need to flip
+    }
+
     /**
      * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
      * that you want ran during disabled, autonomous, teleoperated and test.
@@ -88,9 +92,10 @@ public class Robot extends LoggedRobot {
         
         SmartDashboard.putBoolean("IsHubActive", HubTracker.isActive(DriverStation.getAlliance().get()));
         SmartDashboard.putString("TimeLeftOnActivation", HubTracker.timeRemainingInCurrentShift().toString());
-        SmartDashboard.putBoolean("InRange", RobotContainer.inRange());
-
         SmartDashboard.putString("Current Shift", HubTracker.getCurrentShift().toString());
+
+        SmartDashboard.putBoolean("InRange", RobotContainer.inRange());
+        SmartDashboard.putBoolean("In Alliance Zone", RobotContainer.inAllianceZone());
 
         RobotContainer.pollAlerts();
     }
