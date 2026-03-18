@@ -232,6 +232,7 @@ public class RobotContainer {
 
         new Trigger(RobotState::isEnabled).and(RobotState::isTeleop).onTrue(new InstantCommand(() -> Robot.clearObjectPoseField("AutoPath")).ignoringDisable(true));
         new Trigger(RobotState::isDisabled).and(checkForPathChoiceUpdate).onTrue(new InstantCommand(() -> updateFieldFromAuto(autoChooser.get().getName())).ignoringDisable(true));
+        
         //configure the chooser for the side relative to the driver station.
         //the default is right because the routes are planned for right.
         sideChooser = new LoggedDashboardChooser<>("sideChooser");
@@ -320,6 +321,19 @@ public class RobotContainer {
 
     public static double getShootingAngle(){
         return inAllianceZone() ? angleToHub() : angleToAllianceZone();
+    }
+
+    public static boolean inRange(){
+        Pose2d pose = driveBase.getPose();
+        Pose2d hub = Constants.autoConstats.hub;
+        if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
+            pose = FlippingUtil.flipFieldPose(driveBase.getPose());
+            hub = FlippingUtil.flipFieldPose(hub);
+        }
+        double distanceFromHub = driveBase.getDistanceFromPoint2D(hub);
+
+        if (pose.getX() > 4.5) return false;
+        return distanceFromHub < Constants.autoConstats.maxRange;
     }
 
    //#region auto

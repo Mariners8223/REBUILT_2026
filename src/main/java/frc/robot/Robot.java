@@ -17,6 +17,7 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+import com.pathplanner.lib.util.FlippingUtil;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
 
@@ -71,13 +72,13 @@ public class Robot extends LoggedRobot {
         field.getObject(name).setPoses(poses);
     }
 
-    /**
-     * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
-     * that you want ran during disabled, autonomous, teleoperated and test.
-     *
-     * <p>This runs after the mode specific periodic functions, but before LiveWindow and
-     * SmartDashboard integrated updating.
-     */
+    public static void setRobotPoseOnField(Pose2d pose) {
+        if(Robot.isRedAlliance){
+            pose = FlippingUtil.flipFieldPose(pose);
+        }
+        field.setRobotPose(pose);
+    }
+
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
