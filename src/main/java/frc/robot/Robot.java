@@ -6,6 +6,7 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.Meter;
 
+import org.littletonrobotics.conduit.ConduitApi;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -16,6 +17,9 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -31,6 +35,8 @@ public class Robot extends LoggedRobot {
     private Command m_autonomousCommand;
     public static boolean isRedAlliance = false;
     HubTracker tracker = new HubTracker();
+
+    Field2d field;
 
     /**
      * This function is run when the robot is first started up and should be used for any
@@ -55,12 +61,9 @@ public class Robot extends LoggedRobot {
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
         new RobotContainer();
-        SmartDashboard.putBoolean("IsHubActive", HubTracker.isActive(DriverStation.getAlliance().get()));
-        SmartDashboard.putString("TimeLeftOnActivation", HubTracker.timeRemainingInCurrentShift().toString());
-        SmartDashboard.putBoolean("InRange", RobotContainer.inRange());
 
-        Logger.recordOutput("Current Shift", HubTracker.getCurrentShift().toString());
-        SmartDashboard.putString("Current Shift", HubTracker.getCurrentShift().toString()); //TODO: Where is better to send?
+        field = new Field2d();
+        SmartDashboard.putData("Field", field);
     }
 
     /**
@@ -77,6 +80,17 @@ public class Robot extends LoggedRobot {
         // and running subsystem periodic() methods.  This must be called from the robot's periodic
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
+
+        SmartDashboard.putNumber("Battery Voltage", RobotController.getBatteryVoltage());
+        SmartDashboard.putNumber("Robot Velocity", RobotContainer.driveBase.getVelocity());
+        SmartDashboard.putNumber("Match Time", Timer.getMatchTime());
+        SmartDashboard.putNumber("PDH Voltage", ConduitApi.getInstance().getPDPVoltage());
+        
+        SmartDashboard.putBoolean("IsHubActive", HubTracker.isActive(DriverStation.getAlliance().get()));
+        SmartDashboard.putString("TimeLeftOnActivation", HubTracker.timeRemainingInCurrentShift().toString());
+        SmartDashboard.putBoolean("InRange", RobotContainer.inRange());
+
+        SmartDashboard.putString("Current Shift", HubTracker.getCurrentShift().toString());
 
         RobotContainer.pollAlerts();
     }

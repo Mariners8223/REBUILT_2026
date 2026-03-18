@@ -19,6 +19,7 @@ import frc.robot.subsystems.Intake.IntakeConstants;
 import frc.robot.subsystems.Kicker.Kicker;
 import frc.robot.subsystems.Kicker.KickerConstants;
 import frc.robot.subsystems.Shooter.Shooter;
+import frc.util.ContinuousConditionalCommand;
 
 public class Feeder extends SubsystemBase {
   private final Intake intake;
@@ -94,17 +95,17 @@ public class Feeder extends SubsystemBase {
 
   public Command smartFeedingShootCommand(Supplier<Distance> distanceSupplier){
     return Commands.repeatingSequence(
-      Commands.either(
-        toShooterCommand(distanceSupplier.get()),
+      new ContinuousConditionalCommand(
         ejectCommand().withTimeout(0.4),
+        toShooterCommand(distanceSupplier.get()).withTimeout(0.4),
         this::inStall)
     );
   }
   public Command smartFeedingPassCommand(){
     return Commands.repeatingSequence(
-      Commands.either(
-        toPassCommand(),
+      new ContinuousConditionalCommand(
         ejectCommand().withTimeout(0.4),
+        toPassCommand(),
         this::inStall)
     );
   }

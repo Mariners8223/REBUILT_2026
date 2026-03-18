@@ -15,6 +15,7 @@ import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakePosition;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj.RobotState;
 
 
 public class Intake extends SubsystemBase{
@@ -32,7 +33,7 @@ public class Intake extends SubsystemBase{
         this.resetPivotPosition();
         state = IntakePosition.Open; // TODO: Swap to Closed
 
-        setDefaultCommand(this.moveToPositionCommand());
+        // setDefaultCommand(this.moveToPositionCommand());
     }
 
     public void setPivotRotation(Angle rotations)
@@ -69,10 +70,10 @@ public class Intake extends SubsystemBase{
     }
 
     public boolean rollersInStall(){
-        return (io.getRollersSetpoint() != 0 && Math.abs(io.getRollersVelocity()) < 1);
+        return (RobotState.isEnabled()) && (io.getRollersSetpoint() != 0 && Math.abs(io.getRollersVelocity()) < 1);
     }
     public boolean pivotInStall(){
-        return (io.getPivotStallCurrent() > IntakeConstants.PositionMotor.STALL_CURRENT);
+        return (RobotState.isEnabled()) && (io.getPivotStallCurrent() > IntakeConstants.PositionMotor.STALL_CURRENT);
     }
 
     public void startPIDTuning(){
@@ -110,6 +111,9 @@ public class Intake extends SubsystemBase{
 
         Logger.recordOutput("Intake/State", state);
         Logger.recordOutput("Intake/Command", (getCurrentCommand() != null ? getCurrentCommand().toString() : "None"));
+
+        Logger.recordOutput("Intake/Rollers in Stall", rollersInStall());
+        Logger.recordOutput("Intake/Pivot in Stall", pivotInStall());
 
         rollersStall.set(rollersInStall());
         pivotStall.set(pivotInStall());

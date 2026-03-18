@@ -30,7 +30,7 @@ public class ShooterIOReal implements ShooterIO {
     //#region Configuration
     public void configureShooterMotors(){
         leadMotor = new MarinersTalonFX(
-            "Shooter Motor", ShooterConstants.MOTOR_CONSTANTS.CONTROLLER_LOCATION,
+            "Shooter/Lead Motor", ShooterConstants.MOTOR_CONSTANTS.CONTROLLER_LOCATION,
             ShooterConstants.MOTOR_CONSTANTS.LEAD_MOTOR_ID, ShooterConstants.MOTOR_CONSTANTS.PID,
             ShooterConstants.MOTOR_CONSTANTS.GEAR_RATIO
             );
@@ -44,7 +44,7 @@ public class ShooterIOReal implements ShooterIO {
 
         leadMotor.startPIDTuning();
 
-        followMotor = new MarinersTalonFX("Shooter Follower Motor", MOTOR_CONSTANTS.CONTROLLER_LOCATION, MOTOR_CONSTANTS.FOLLOW_MOTOR_ID);
+        followMotor = new MarinersTalonFX("Shooter/Follower Motor", MOTOR_CONSTANTS.CONTROLLER_LOCATION, MOTOR_CONSTANTS.FOLLOW_MOTOR_ID);
         followMotor.setMotorAsFollower(leadMotor, MOTOR_CONSTANTS.IS_INVERTED_FROM_LEADER);
     }
     //#endregion

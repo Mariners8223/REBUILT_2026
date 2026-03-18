@@ -5,6 +5,7 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -39,11 +40,11 @@ public class Funnel extends SubsystemBase {
   }
 
   public boolean funnelInStall(){
-    return (io.getFunnelSetpoint() != 0 && Math.abs(io.getFunnelVelocity()) < 1);
+    return (RobotState.isEnabled()) && (io.getFunnelSetpoint() != 0 && Math.abs(io.getFunnelVelocity()) < 1);
   }
 
   public boolean centeringInStall(){
-    return (io.getCenterringSetpoint() != 0 && Math.abs(io.getCenterringVelocity()) < 1);
+    return (RobotState.isEnabled()) && (io.getCenterringSetpoint() != 0 && Math.abs(io.getCenterringVelocity()) < 1);
   }
 
   public Command funnelingCommand(){
@@ -74,6 +75,9 @@ public class Funnel extends SubsystemBase {
   @Override
   public void periodic() {
     Logger.recordOutput("Funnel/Command", (getCurrentCommand() != null ? getCurrentCommand().toString() : "None"));
+
+    Logger.recordOutput("Funnel/Funnel in Stall", funnelInStall());
+    Logger.recordOutput("Funnel/Centering in Stall", centeringInStall());
 
     funnelStall.set(funnelInStall());
     centeringStall.set(centeringInStall());

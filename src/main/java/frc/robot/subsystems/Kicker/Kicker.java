@@ -6,8 +6,11 @@ package frc.robot.subsystems.Kicker;
 
 import java.util.function.Supplier;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -35,10 +38,10 @@ public class Kicker extends SubsystemBase {
   }
 
   public boolean leadInStall(){
-    return (io.getLeadSetpoint() != 0 && Math.abs(io.getLeadVelocity()) < 1);
+    return (RobotState.isEnabled()) && (io.getLeadSetpoint() != 0 && Math.abs(io.getLeadVelocity()) < 1);
   }
   public boolean followInStall(){
-    return (io.getFollowSetpoint() != 0 && Math.abs(io.getFollowVelocity()) < 1);
+    return (RobotState.isEnabled()) && (io.getFollowSetpoint() != 0 && Math.abs(io.getFollowVelocity()) < 1);
   }
 
   public Command setKickerCommand(double dutyCycle){
@@ -58,6 +61,9 @@ public class Kicker extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     io.update(inputs);
+
+    Logger.recordOutput("Kicker/Follow in Stall", followInStall());
+    Logger.recordOutput("Kicker/Lead in Stall", leadInStall());
 
     kickerLeadStall.set(leadInStall());
     kickerFollowStall.set(followInStall());

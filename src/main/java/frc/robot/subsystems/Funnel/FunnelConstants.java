@@ -28,8 +28,8 @@ public class FunnelConstants {
         public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
         public static final double GEAR_RATIO = 3;
         public static final double MOMENT_OF_INERTIA_SIM = 1;
-        public static final int CENTER_MOTOR_CURRENT_LIMIT = 100;
-        public static final int CENTER_MOTOR_CURRENT_THRESHOLD = 120;
+        public static final int CENTER_MOTOR_CURRENT_LIMIT = 80;
+        public static final int CENTER_MOTOR_CURRENT_THRESHOLD = 100;
 
         public static final double CenteringHighSpeed = 0.5;
         public static final double centeringShootingSpeed = 0.8;

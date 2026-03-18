@@ -75,7 +75,7 @@ public class RobotContainer {
     public static LoggedDashboardChooser<String> sideChooser;
     public static HashMap<String, Command> mirroredAutoMap = new HashMap<>();
 
-    public static LoggedDashboardChooser<IntakePosition> intakeChooser;
+    public static LoggedDashboardChooser<IntakePosition> intakeChooser = new LoggedDashboardChooser<>("Intake Chooser");
 
     public static Supplier<Command> fullShootCommand;
     public static Supplier<Command> passCommand;
@@ -94,6 +94,8 @@ public class RobotContainer {
 
         feeder = new Feeder(intake, funnel, kicker, shooter);
         vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
+
+        // TODO: Add time to shift 
 
         configureCommands();
         configureNamedCommands();
@@ -188,8 +190,6 @@ public class RobotContainer {
         driveController.povUpRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.FRONT_RIGHT));
         driveController.povDownLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_LEFT));
         driveController.povDownRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_RIGHT));
-
-        // new Trigger(() -> feeder.inStall()).debounce(0.2).onTrue(ejectCommand.withTimeout(0.5));
 
 
         driveController.L1().toggleOnTrue(
