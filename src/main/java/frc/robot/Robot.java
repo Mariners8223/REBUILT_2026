@@ -5,6 +5,7 @@
 package frc.robot;
 
 import static edu.wpi.first.units.Units.Meter;
+import static edu.wpi.first.units.Units.Second;
 
 import org.littletonrobotics.conduit.ConduitApi;
 import org.littletonrobotics.junction.LogFileUtil;
@@ -17,6 +18,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
@@ -64,11 +66,11 @@ public class Robot extends LoggedRobot {
         SmartDashboard.putNumber("Match Time", Timer.getMatchTime());
         SmartDashboard.putNumber("PDH Voltage", ConduitApi.getInstance().getPDPVoltage());
         
-        SmartDashboard.putBoolean("IsHubActive", HubTracker.isActive(DriverStation.getAlliance().get()));
-        SmartDashboard.putString("TimeLeftOnActivation", HubTracker.timeRemainingInCurrentShift().toString());
-        SmartDashboard.putString("Current Shift", HubTracker.getCurrentShift().toString());
+        SmartDashboard.putBoolean("Is Hub Active", HubTracker.isActive(DriverStation.getAlliance().get()));
+        SmartDashboard.putNumber("Time left in Shift", Math.floor(HubTracker.timeRemainingInCurrentShift().orElseGet(() -> Second.zero()).in(Second)));
+        SmartDashboard.putString("Current Shift", HubTracker.getCurrentShift().orElseGet(() -> HubTracker.Shift.AUTO).toString());
 
-        SmartDashboard.putBoolean("InRange", RobotContainer.inRange());
+        SmartDashboard.putString("Distant to Hub", String.format("%.2f", RobotContainer.distanceFromHub().in(Meter)));
         SmartDashboard.putBoolean("In Alliance Zone", RobotContainer.inAllianceZone());
 
         RobotContainer.pollAlerts();
