@@ -22,8 +22,10 @@ import com.pathplanner.lib.util.PathPlannerLogging;
 
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.net.WebServer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -56,6 +58,7 @@ public class Robot extends LoggedRobot {
 
         isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
         Logger.start(); 
+        WebServer.start(5800, Filesystem.getDeployDirectory().getPath());
         new RobotContainer();
         SmartDashboard.putBoolean("IsHubActive", HubTracker.isActive(DriverStation.getAlliance().get()));
         SmartDashboard.putString("TimeLeftOnActivation", HubTracker.timeRemainingInCurrentShift().toString());
@@ -89,7 +92,7 @@ public class Robot extends LoggedRobot {
         SmartDashboard.putNumber("PDH Voltage", ConduitApi.getInstance().getPDPVoltage());
         
         SmartDashboard.putBoolean("Is Hub Active", HubTracker.isActive(DriverStation.getAlliance().get()));
-        SmartDashboard.putNumber("Time left in Shift", Math.floor(HubTracker.timeRemainingInCurrentShift().orElseGet(() -> Second.zero()).in(Second)));
+        SmartDashboard.putNumber("Time left in Shift", Math.floor(HubTracker.timeRemainingInCurrentShift().orElseGet(() -> Second.zero()).in(Second) * 100) / 100);
         SmartDashboard.putString("Current Shift", HubTracker.getCurrentShift().orElseGet(() -> HubTracker.Shift.AUTO).toString());
 
         SmartDashboard.putString("Distant to Hub", String.format("%.2f", RobotContainer.distanceFromHub().in(Meter)));
