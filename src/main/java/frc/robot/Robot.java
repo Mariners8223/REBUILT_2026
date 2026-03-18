@@ -7,6 +7,8 @@ package frc.robot;
 import static edu.wpi.first.units.Units.Meter;
 import static edu.wpi.first.units.Units.Second;
 
+import java.util.List;
+
 import org.littletonrobotics.conduit.ConduitApi;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -23,7 +25,6 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -38,7 +39,6 @@ public class Robot extends LoggedRobot {
     private static final Field2d field = new Field2d();
 
     
-
     public Robot() {
         Logger.recordMetadata("ProjectName", "MyProject"); 
 
