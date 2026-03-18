@@ -7,10 +7,14 @@ package frc.robot;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.RPM;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.BooleanSupplier;
 
+import org.json.simple.parser.ParseException;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -103,7 +107,6 @@ public class RobotContainer {
         // configureTestBindings();
         configureChoosers();
         configureMirroredAutosMap();
-        intakeChooser();
     }
 
     public void configureCommands(){
@@ -154,30 +157,7 @@ public class RobotContainer {
     }
 
     // for tests!!
-    public void configureTestBindings(){
-        new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(
-            new StartEndCommand(() ->driveBase.setDefaultCommand(new DriveCommand(driveBase, driveController)),
-            driveBase::removeDefaultCommand)
-            .ignoringDisable(true));
-        driveController.options().onTrue(driveBase.resetOnlyDirection());
-
-        driveController.povRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.RIGHT));
-        driveController.povLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.LEFT));
-        driveController.povUp().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.FORWARD));
-        driveController.povDown().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACKWARDS));
-        driveController.povUpLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.FRONT_LEFT));
-        driveController.povUpRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.FRONT_RIGHT));
-        driveController.povDownLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_LEFT));
-        driveController.povDownRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_RIGHT));
-
-        driveController.triangle().onTrue(climb.toPositionCommand(Heights.EXTENDED));
-        driveController.cross().onTrue(new RunHookToHeight(climb, Heights.RESET, 0.7));
-
-        driveController.options().whileTrue(climb.dutyCycleCommand(0.1));
-        driveController.create().whileTrue(climb.dutyCycleCommand(-0.1));
-
-        driveController.R1().onTrue(new InstantCommand(() -> climb.resetPosition()));
-    }
+    public void configureTestBindings(){}
 
     //#region Drive
     public void configureDriveBindings(){
@@ -248,14 +228,6 @@ public class RobotContainer {
     }
     
     //#regionchoosers
-    public static void intakeChooser(){
-        intakeChooser.addDefaultOption("Open", IntakePosition.Open);
-        intakeChooser.addOption("Closed", IntakePosition.Open);
-
-        intakeChooser.onChange(position -> intake.resetPositionMotorEncoder(position));
-        SmartDashboard.putData("Intake starting area", intakeChooser.getSendableChooser());
-    }
-
     public static void configureChoosers(){
         List<String> namesOfAutos = AutoBuilder.getAllAutoNames();
         List<PathPlannerAuto> autosOfAutos = new ArrayList<>();
@@ -271,6 +243,8 @@ public class RobotContainer {
         autoChooser.addDefaultOption("Do Nothing", new InstantCommand());
         SmartDashboard.putData("chooser", autoChooser.getSendableChooser());
 
+        new Trigger(RobotState::isEnabled).and(RobotState::isTeleop).onTrue(new InstantCommand(() -> Robot.clearObjectPoseField("AutoPath")).ignoringDisable(true));
+        new Trigger(RobotState::isDisabled).and(checkForPathChoiceUpdate).onTrue(new InstantCommand(() -> updateFieldFromAuto(autoChooser.get().getName())).ignoringDisable(true));
         //configure the chooser for the side relative to the driver station.
         //the default is right because the routes are planned for right.
         sideChooser = new LoggedDashboardChooser<>("sideChooser");
@@ -281,6 +255,38 @@ public class RobotContainer {
 
         SmartDashboard.putData("sideChooser",sideChooser.getSendableChooser());   
     }
+
+    private static void updateFieldFromAuto(String autoName) {
+        List<Pose2d> poses = new ArrayList<>();
+
+        try {
+            PathPlannerAuto.getPathGroupFromAutoFile(autoName).forEach(path -> {
+                poses.addAll(path.getPathPoses());
+            });
+        } catch (IOException | ParseException e) {
+            DriverStation.reportError("Error loading auto path", e.getStackTrace());
+        }
+
+        Robot.setTrajectoryField("AutoPath", poses);
+    }
+
+    private static final BooleanSupplier checkForPathChoiceUpdate = new BooleanSupplier() {
+        private String lastAutoName = "InstantCommand";
+
+        @Override
+        public boolean getAsBoolean() {
+            if (autoChooser.get() == null) return false;
+
+            String currentAutoName = autoChooser.get().getName();
+
+            try {
+                return !Objects.equals(lastAutoName, currentAutoName);
+            } finally {
+                lastAutoName = currentAutoName;
+            }
+
+        }
+    };
 
     public static void configureMirroredAutosMap(){
         List<String> namesOfAutos = AutoBuilder.getAllAutoNames();
