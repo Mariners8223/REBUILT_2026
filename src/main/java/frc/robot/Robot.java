@@ -27,23 +27,14 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.util.HubTracker;
 
 
-/**
- * The methods in this class are called automatically corresponding to each mode, as described in
- * the TimedRobot documentation. If you change the name of this class or the package after creating
- * this project, you must also update the Main.java file in the project.
- */
 public class Robot extends LoggedRobot {
     private Command m_autonomousCommand;
     public static boolean isRedAlliance = false;
 
     private static Field2d field;
 
-    /**
-     * This function is run when the robot is first started up and should be used for any
-     * initialization code.
-     */
     public Robot() {
-        Logger.recordMetadata("ProjectName", "MyProject"); // Set a metadata value
+        Logger.recordMetadata("ProjectName", "MyProject"); 
 
         if (isReal()) {
             Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
@@ -57,32 +48,15 @@ public class Robot extends LoggedRobot {
         }
 
         isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
-        Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
-        // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
-        // autonomous chooser on the dashboard.
+        Logger.start(); 
         new RobotContainer();
 
         field = new Field2d();
         SmartDashboard.putData("Field", field);
     }
 
-    public static void setRobotPoseOnField(Pose2d pose){
-        field.setRobotPose(pose); // Check if we need to flip
-    }
-
-    /**
-     * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
-     * that you want ran during disabled, autonomous, teleoperated and test.
-     *
-     * <p>This runs after the mode specific periodic functions, but before LiveWindow and
-     * SmartDashboard integrated updating.
-     */
     @Override
     public void robotPeriodic() {
-        // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
-        // commands, running already-scheduled commands, removing finished or interrupted commands,
-        // and running subsystem periodic() methods.  This must be called from the robot's periodic
-        // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
 
         SmartDashboard.putNumber("Battery Voltage", RobotController.getBatteryVoltage());
@@ -100,14 +74,12 @@ public class Robot extends LoggedRobot {
         RobotContainer.pollAlerts();
     }
 
-    /** This function is called once each time the robot enters Disabled mode. */
     @Override
     public void disabledInit() {}
 
     @Override
     public void disabledPeriodic() {}
-
-    /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
+    
     @Override
     public void autonomousInit() {
         m_autonomousCommand = RobotContainer.getAuto();
@@ -119,22 +91,20 @@ public class Robot extends LoggedRobot {
         PathPlannerLogging.setLogTargetPoseCallback(pose -> Logger.recordOutput("Path pose", pose));
     }
 
-    /** This function is called periodically during autonomous. */
+    public void resetAllEncoders(){
+
+    }
+
     @Override
     public void autonomousPeriodic() {}
 
     @Override
     public void teleopInit() {
-        // This makes sure that the autonomous stops running when
-        // teleop starts running. If you want the autonomous to
-        // continue until interrupted by another command, remove
-        // this line or comment it out.
         if (m_autonomousCommand != null) {
             m_autonomousCommand.cancel();
         }
     }
 
-    /** This function is called periodically during operator control. */
     @Override
     public void teleopPeriodic() {
         Logger.recordOutput("Distance To Hub", RobotContainer.distanceFromHub().in(Meter));
@@ -142,19 +112,15 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void testInit() {
-        // Cancels all running commands at the start of test mode.
         CommandScheduler.getInstance().cancelAll();
     }
 
-    /** This function is called periodically during test mode. */
     @Override
     public void testPeriodic() {}
 
-    /** This function is called once when the robot is first started up. */
     @Override
     public void simulationInit() {}
 
-    /** This function is called periodically whilst in simulation. */
     @Override
     public void simulationPeriodic() {}
 }

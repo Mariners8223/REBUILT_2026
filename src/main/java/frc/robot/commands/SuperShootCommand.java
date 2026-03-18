@@ -5,7 +5,6 @@ import static edu.wpi.first.units.Units.Meters;
 import com.pathplanner.lib.util.FlippingUtil;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -44,8 +43,7 @@ public class SuperShootCommand extends ParallelCommandGroup {
                 return getRPM(distance);
             }),
             new AimDriving(driveBase, controller,  () -> {
-                Rotation2d rotation = currentTarget.getTranslation().minus(driveBase.getPose().getTranslation()).getAngle();
-                return rotation.getRadians();
+                return currentTarget.getTranslation().minus(driveBase.getPose().getTranslation()).getAngle().getRadians();
             }),
             Commands.waitUntil(() ->
                 shooter.isAtRequiredVelocity(Meters.of(currentTarget.getTranslation().getDistance(driveBase.getPose().getTranslation()))))

@@ -98,10 +98,9 @@ public class RobotContainer {
         configureCommands();
         configureNamedCommands();
         configureDriveBindings();
-        // configureTestBindings();
+        //configureTestBindings();
         configureChoosers();
         configureMirroredAutosMap();
-        intakeChooser();
     }
 
     public static void configureCommands(){
@@ -142,30 +141,7 @@ public class RobotContainer {
     }
 
     // for tests!!
-    public static void configureTestBindings(){
-        new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(
-            new StartEndCommand(() ->driveBase.setDefaultCommand(new DriveCommand(driveBase, driveController)),
-            driveBase::removeDefaultCommand)
-            .ignoringDisable(true));
-        driveController.options().onTrue(driveBase.resetOnlyDirection());
-
-        driveController.povRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.RIGHT));
-        driveController.povLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.LEFT));
-        driveController.povUp().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.FORWARD));
-        driveController.povDown().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACKWARDS));
-        driveController.povUpLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.FRONT_LEFT));
-        driveController.povUpRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.FRONT_RIGHT));
-        driveController.povDownLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_LEFT));
-        driveController.povDownRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_RIGHT));
-
-        driveController.triangle().onTrue(climb.toStateCommand(ClimbStates.EXTENDED));
-        driveController.cross().onTrue(new RunHookToHeight(climb, ClimbStates.RESET, 0.7));
-
-        driveController.options().whileTrue(climb.dutyCycleCommand(0.1));
-        driveController.create().whileTrue(climb.dutyCycleCommand(-0.1));
-
-        driveController.R1().onTrue(new InstantCommand(() -> climb.resetPosition()));
-    }
+    public static void configureTestBindings(){}
 
     //#region Drive
     public static void configureDriveBindings(){
@@ -237,14 +213,6 @@ public class RobotContainer {
     }
 
     //#regionchoosers
-    public static void intakeChooser(){
-        intakeChooser.addDefaultOption("Open", IntakeStates.Open);
-        intakeChooser.addOption("Closed", IntakeStates.Open);
-
-        intakeChooser.onChange(position -> intake.resetPivotPosition(position));
-        SmartDashboard.putData("Intake starting area", intakeChooser.getSendableChooser());
-    }
-
     public static void configureChoosers(){
         List<String> namesOfAutos = AutoBuilder.getAllAutoNames();
         List<PathPlannerAuto> autosOfAutos = new ArrayList<>();
