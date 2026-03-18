@@ -45,7 +45,7 @@ public class IntakeIOSim implements IntakeIO
 
     public void resetPositionMotorEncoder()
     {
-        positionMotor.setMotorEncoderPosition(IntakeConstants.PositionMotor.IntakePosition.Closed.getAngle().in(Rotation));
+        positionMotor.setMotorEncoderPosition(IntakeConstants.PositionMotor.IntakeStates.Closed.getAngle().in(Rotation));
     }
     public void resetPositionMotorEncoder(double angle){
         positionMotor.setMotorEncoderPosition(angle);

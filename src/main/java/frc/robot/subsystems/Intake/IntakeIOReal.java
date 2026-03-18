@@ -1,6 +1,6 @@
 package frc.robot.subsystems.Intake;
 
-import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakePosition;
+import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakeStates;
 import frc.util.MarinersController.MarinersTalonFX;
 import static edu.wpi.first.units.Units.Rotation;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
@@ -66,7 +66,7 @@ public class IntakeIOReal implements IntakeIO{
 
     public void resetPositionMotorEncoder()
     {
-        positionMotor.setMotorEncoderPosition(IntakeConstants.PositionMotor.IntakePosition.Reset.getAngle().in(Rotation));
+        positionMotor.setMotorEncoderPosition(IntakeConstants.PositionMotor.IntakeStates.Reset.getAngle().in(Rotation));
     }
     public void resetPositionMotorEncoder(double angle){
         positionMotor.setMotorEncoderPosition(angle);
@@ -88,7 +88,7 @@ public class IntakeIOReal implements IntakeIO{
         inputs.currentPosition = getCurrentPosition();
         inputs.positionMotorSpeed = RotationsPerSecond.of(positionMotor.getVelocity()).in(RPM);
         inputs.rollersMotorSpeed = RotationsPerSecond.of(rollersMotor.getVelocity()).in(RPM);
-        inputs.intakeState = IntakePosition.findNearestPosition(inputs.currentPosition);
+        inputs.intakeState = IntakeStates.findNearestPosition(inputs.currentPosition);
         Logger.recordOutput("Setpoint", positionMotor.getSetpoint());
     }
 }

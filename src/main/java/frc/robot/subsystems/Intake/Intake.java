@@ -11,7 +11,7 @@ import static edu.wpi.first.units.Units.Rotation;
 
 import org.littletonrobotics.junction.Logger;
 
-import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakePosition;
+import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakeStates;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
@@ -25,13 +25,13 @@ public class Intake extends SubsystemBase{
     private final IntakeIO io;
     private final IntakeInputsAutoLogged inputs = new IntakeInputsAutoLogged();
 
-    private IntakePosition state;
+    private IntakeStates state;
 
     public Intake()
     {
         io = Robot.isReal() ? new IntakeIOReal() : new IntakeIOSim();
         this.resetPivotPosition();
-        state = IntakePosition.Open; // TODO: Swap to Closed
+        state = IntakeStates.Open; // TODO: Swap to Closed
 
         // setDefaultCommand(this.moveToPositionCommand());
     }
@@ -41,7 +41,7 @@ public class Intake extends SubsystemBase{
         io.setPositionMotorRotation(rotations);
     }
 
-    public void setPivotState(IntakePosition position){
+    public void setPivotState(IntakeStates position){
         setPivotRotation(position.getAngle());
         this.state = position;
     }
@@ -56,7 +56,7 @@ public class Intake extends SubsystemBase{
         return io.getCurrentPosition();
     }
 
-    public IntakePosition getCurrentState(){
+    public IntakeStates getCurrentState(){
         return this.state;
     }
 
@@ -65,7 +65,7 @@ public class Intake extends SubsystemBase{
         io.resetPositionMotorEncoder();
     }
 
-    public void resetPivotPosition(IntakePosition state){
+    public void resetPivotPosition(IntakeStates state){
         io.resetPositionMotorEncoder(state.getAngle().in(Rotation));
     }
 
@@ -80,7 +80,7 @@ public class Intake extends SubsystemBase{
         io.startPIDTuning();
     }
 
-    public Command moveToPositionCommand(IntakePosition position){
+    public Command moveToPositionCommand(IntakeStates position){
         return this.runOnce(() -> setPivotState(position));
     }
 
@@ -97,9 +97,9 @@ public class Intake extends SubsystemBase{
 
     public Command bumpFuelCommand(){
         return Commands.sequence(
-            new InstantCommand(() -> this.setPivotState(IntakePosition.Middle)),
+            new InstantCommand(() -> this.setPivotState(IntakeStates.Middle)),
             new WaitCommand(IntakeConstants.BUMP_WAIT_TIME),
-            new InstantCommand(() -> this.setPivotState(IntakePosition.Open))
+            new InstantCommand(() -> this.setPivotState(IntakeStates.Open))
         );
     }
 

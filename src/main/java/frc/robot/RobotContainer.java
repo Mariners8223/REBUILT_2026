@@ -51,7 +51,7 @@ import frc.robot.subsystems.Shooter.ShooterConstants;
 import frc.robot.subsystems.Funnel.Funnel;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeConstants;
-import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakePosition;
+import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakeStates;
 import frc.robot.subsystems.Kicker.Kicker;
 
 
@@ -75,7 +75,7 @@ public class RobotContainer {
     public static LoggedDashboardChooser<String> sideChooser;
     public static HashMap<String, Command> mirroredAutoMap = new HashMap<>();
 
-    public static LoggedDashboardChooser<IntakePosition> intakeChooser = new LoggedDashboardChooser<>("Intake Chooser");
+    public static LoggedDashboardChooser<IntakeStates> intakeChooser = new LoggedDashboardChooser<>("Intake Chooser");
 
     public static Supplier<Command> fullShootCommand;
     public static Supplier<Command> passCommand;
@@ -92,10 +92,8 @@ public class RobotContainer {
         shooter = new Shooter();
         kicker = new Kicker();
 
-        feeder = new Feeder(intake, funnel, kicker, shooter);
+        feeder = new Feeder(intake, funnel, kicker);
         vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
-
-        // TODO: Add time to shift 
 
         configureCommands();
         configureNamedCommands();
@@ -212,9 +210,9 @@ public class RobotContainer {
 
         driveController.cross().onTrue(
             Commands.either(
-                intake.moveToPositionCommand(IntakePosition.Closed),
-                intake.moveToPositionCommand(IntakePosition.Open),
-                () -> intake.getCurrentState() == IntakePosition.Open
+                intake.moveToPositionCommand(IntakeStates.Closed),
+                intake.moveToPositionCommand(IntakeStates.Open),
+                () -> intake.getCurrentState() == IntakeStates.Open
             )
         );
         driveController.R3().onTrue(intake.bumpFuelCommand());
@@ -222,8 +220,8 @@ public class RobotContainer {
     //#endregion
 
     public static void configureNamedCommands(){
-        NamedCommands.registerCommand("close intake", intake.moveToPositionCommand(IntakePosition.Closed));
-        NamedCommands.registerCommand("open intake", intake.moveToPositionCommand(IntakePosition.Open).andThen(Commands.waitSeconds(0.7)));
+        NamedCommands.registerCommand("close intake", intake.moveToPositionCommand(IntakeStates.Closed));
+        NamedCommands.registerCommand("open intake", intake.moveToPositionCommand(IntakeStates.Open).andThen(Commands.waitSeconds(0.7)));
 
         NamedCommands.registerCommand("start rollers", new InstantCommand(() -> intake.setRollersDutyCycle(IntakeConstants.RollersMotor.DUTY_CYCLE)));
         NamedCommands.registerCommand("stop rollers", new InstantCommand(() -> intake.setRollersDutyCycle(0)));
@@ -240,8 +238,8 @@ public class RobotContainer {
 
     //#regionchoosers
     public static void intakeChooser(){
-        intakeChooser.addDefaultOption("Open", IntakePosition.Open);
-        intakeChooser.addOption("Closed", IntakePosition.Open);
+        intakeChooser.addDefaultOption("Open", IntakeStates.Open);
+        intakeChooser.addOption("Closed", IntakeStates.Open);
 
         intakeChooser.onChange(position -> intake.resetPivotPosition(position));
         SmartDashboard.putData("Intake starting area", intakeChooser.getSendableChooser());
