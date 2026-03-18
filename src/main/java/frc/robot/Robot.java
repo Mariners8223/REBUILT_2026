@@ -17,8 +17,9 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import com.pathplanner.lib.util.PathPlannerLogging;
 
+
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.units.measure.Time;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
@@ -32,8 +33,11 @@ import frc.util.HubTracker;
 public class Robot extends LoggedRobot {
     private Command m_autonomousCommand;
     public static boolean isRedAlliance = false;
+    HubTracker tracker = new HubTracker();
 
-    private static Field2d field;
+    private static final Field2d field = new Field2d();
+
+    
 
     public Robot() {
         Logger.recordMetadata("ProjectName", "MyProject"); 
@@ -52,11 +56,28 @@ public class Robot extends LoggedRobot {
         isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
         Logger.start(); 
         new RobotContainer();
+        SmartDashboard.putBoolean("IsHubActive", HubTracker.isActive(DriverStation.getAlliance().get()));
+        SmartDashboard.putString("TimeLeftOnActivation", HubTracker.timeRemainingInCurrentShift().toString());
+        SmartDashboard.putBoolean("InRange", RobotContainer.inRange());
 
-        field = new Field2d();
         SmartDashboard.putData("Field", field);
     }
 
+    public static void clearObjectPoseField(String name) {
+        field.getObject(name).setPoses();
+    }
+
+    public static void setTrajectoryField(String name, List<Pose2d> poses) {
+        field.getObject(name).setPoses(poses);
+    }
+
+    /**
+     * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
+     * that you want ran during disabled, autonomous, teleoperated and test.
+     *
+     * <p>This runs after the mode specific periodic functions, but before LiveWindow and
+     * SmartDashboard integrated updating.
+     */
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();

@@ -7,12 +7,16 @@ package frc.robot;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.RPM;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.BooleanSupplier;
 import java.util.Set;
 import java.util.function.Supplier;
 
+import org.json.simple.parser.ParseException;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -226,6 +230,8 @@ public class RobotContainer {
         autoChooser.addDefaultOption("Do Nothing", new InstantCommand());
         SmartDashboard.putData("chooser", autoChooser.getSendableChooser());
 
+        new Trigger(RobotState::isEnabled).and(RobotState::isTeleop).onTrue(new InstantCommand(() -> Robot.clearObjectPoseField("AutoPath")).ignoringDisable(true));
+        new Trigger(RobotState::isDisabled).and(checkForPathChoiceUpdate).onTrue(new InstantCommand(() -> updateFieldFromAuto(autoChooser.get().getName())).ignoringDisable(true));
         //configure the chooser for the side relative to the driver station.
         //the default is right because the routes are planned for right.
         sideChooser = new LoggedDashboardChooser<>("sideChooser");
@@ -236,6 +242,38 @@ public class RobotContainer {
 
         SmartDashboard.putData("sideChooser",sideChooser.getSendableChooser());
     }
+
+    private static void updateFieldFromAuto(String autoName) {
+        List<Pose2d> poses = new ArrayList<>();
+
+        try {
+            PathPlannerAuto.getPathGroupFromAutoFile(autoName).forEach(path -> {
+                poses.addAll(path.getPathPoses());
+            });
+        } catch (IOException | ParseException e) {
+            DriverStation.reportError("Error loading auto path", e.getStackTrace());
+        }
+
+        Robot.setTrajectoryField("AutoPath", poses);
+    }
+
+    private static final BooleanSupplier checkForPathChoiceUpdate = new BooleanSupplier() {
+        private String lastAutoName = "InstantCommand";
+
+        @Override
+        public boolean getAsBoolean() {
+            if (autoChooser.get() == null) return false;
+
+            String currentAutoName = autoChooser.get().getName();
+
+            try {
+                return !Objects.equals(lastAutoName, currentAutoName);
+            } finally {
+                lastAutoName = currentAutoName;
+            }
+
+        }
+    };
 
     public static void configureMirroredAutosMap(){
         List<String> namesOfAutos = AutoBuilder.getAllAutoNames();
