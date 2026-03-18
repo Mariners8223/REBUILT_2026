@@ -75,8 +75,6 @@ public class RobotContainer {
     public static LoggedDashboardChooser<String> sideChooser;
     public static HashMap<String, Command> mirroredAutoMap = new HashMap<>();
 
-    public static LoggedDashboardChooser<IntakeStates> intakeChooser = new LoggedDashboardChooser<>("Intake Chooser");
-
     public static Supplier<Command> fullShootCommand;
     public static Supplier<Command> passCommand;
     public static Supplier<Command> fullClimb;
@@ -101,7 +99,6 @@ public class RobotContainer {
         // configureTestBindings();
         configureChoosers();
         configureMirroredAutosMap();
-        intakeChooser();
     }
 
     public static void configureCommands(){
@@ -237,13 +234,6 @@ public class RobotContainer {
     }
 
     //#regionchoosers
-    public static void intakeChooser(){
-        intakeChooser.addDefaultOption("Open", IntakeStates.Open);
-        intakeChooser.addOption("Closed", IntakeStates.Open);
-
-        intakeChooser.onChange(position -> intake.resetPivotPosition(position));
-        SmartDashboard.putData("Intake starting area", intakeChooser.getSendableChooser());
-    }
 
     public static void configureChoosers(){
         List<String> namesOfAutos = AutoBuilder.getAllAutoNames();
@@ -338,32 +328,6 @@ public class RobotContainer {
         Pose2d flippedTargetPose = Robot.isRedAlliance ? FlippingUtil.flipFieldPose(targetPose) : targetPose;
         return driveBase.findPath(flippedTargetPose, 2);
    }
-
-
-   public static boolean inRange(){
-    Pose2d pose = driveBase.getPose();
-    Pose2d hub = Constants.autoConstats.hub;
-    if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
-        pose = FlippingUtil.flipFieldPose(driveBase.getPose());
-        hub = FlippingUtil.flipFieldPose(hub);
-    }
-    double distanceFromHub = driveBase.getDistanceFromPoint2D(hub);
-
-    if (pose.getX() > 4.5) return false;
-    return distanceFromHub < Constants.autoConstats.maxRange;
-   }
-
-
-    public static Command getInRange(){
-        Pose2d pose = driveBase.getPose();
-        if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
-            pose = FlippingUtil.flipFieldPose(driveBase.getPose());
-        }
-        if (pose.getY() >= 4.5){
-            return driveBase.findPath(Constants.autoConstats.topShoot).until(RobotContainer::inRange);
-        }
-        return driveBase.findPath(Constants.autoConstats.bottomShoot).until(RobotContainer::inRange);
-    }
 
     public static boolean inAllianceZone(){
         if (Robot.isRedAlliance) return driveBase.getPose().getX() > Constants.FieldConstants.RED_ALLIANCE_ZONE_X;
