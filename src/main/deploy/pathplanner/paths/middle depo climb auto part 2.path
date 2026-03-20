@@ -79,6 +79,12 @@
   ],
   "eventMarkers": [
     {
+      "name": "start rollers",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
       "name": "stop rollers",
       "waypointRelativePos": 1.2459893048128383,
       "endWaypointRelativePos": null,

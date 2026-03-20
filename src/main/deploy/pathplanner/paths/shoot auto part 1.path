@@ -42,8 +42,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "collect fuel",
-      "waypointRelativePos": 0.463604240282684,
+      "name": "start rollers",
+      "waypointRelativePos": 0.29210836277974095,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

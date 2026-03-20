@@ -4,10 +4,12 @@
   "holonomicMode": true,
   "pathFolders": [
     "Auto depot shoot outpost shoot",
+    "auto nz shoot and nz clean",
     "auto depot climb",
     "middle depo climb auto",
     "shoot auto paths",
-    "shoot climb auto paths"
+    "shoot climb auto paths",
+    "start mid - collect depot - shoot - outpost"
   ],
   "autoFolders": [],
   "defaultMaxVel": 3.0,
