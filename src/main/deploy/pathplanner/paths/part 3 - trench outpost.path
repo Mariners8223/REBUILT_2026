@@ -8,42 +8,30 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.549677277744331,
-        "y": 0.3198956451936592
+        "x": 2.7349613686534218,
+        "y": 0.5260320088300229
       },
       "isLocked": false,
       "linkedName": "shoot auto part 2 end"
     },
     {
       "anchor": {
-        "x": 0.8490909090909087,
-        "y": 2.262227272727273
+        "x": 0.46,
+        "y": 0.55
       },
       "prevControl": {
-        "x": 0.8387840909090906,
-        "y": 1.221238636363637
+        "x": 1.46,
+        "y": 0.5499999999999999
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "outpost"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "close intake",
-      "waypointRelativePos": 0.5013368983957216,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "close intake"
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -54,10 +42,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 90.0
   },
   "reversed": false,
-  "folder": "shoot climb auto paths",
+  "folder": "collect nz - shoot - collect outpost - shoot",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 75.90829112876739
