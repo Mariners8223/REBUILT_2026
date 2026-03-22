@@ -25,6 +25,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.util.FlippingUtil;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
@@ -35,7 +36,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.*;
+import frc.robot.commands.SuperShootCommand;
 import frc.robot.commands.Climb.RunHookToHeight;
 import frc.robot.commands.Drive.AimDriving;
 import frc.robot.commands.Drive.DriveCommand;
@@ -130,7 +133,7 @@ public class RobotContainer {
             );
 
         fullClimb = () ->
-            Commands.sequence(
+            Commands.sequence( // TODO: Return climb things
                 // new ResetHook(climb),
                 //climb.toStateCommand(ClimbStates.EXTENDED),
                 hookToTower.get()
@@ -167,12 +170,14 @@ public class RobotContainer {
         driveController.povDownLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_LEFT));
         driveController.povDownRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_RIGHT));
 
-
         driveController.L1().toggleOnTrue(
-            Commands.either(
-                fullShootCommand.get(),
-                passCommand.get(),
-                RobotContainer::inAllianceZone
+            Commands.parallel(
+                Commands.either(
+                    fullShootCommand.get(),
+                    passCommand.get(),
+                    RobotContainer::inAllianceZone
+                ),
+                intake.bumpFuelCommand().repeatedly()
             )
         );
 
@@ -181,19 +186,18 @@ public class RobotContainer {
         );
 
         driveController.circle().toggleOnTrue(feeder.intakeCommand());
-        // driveController.circle().multiPress(2, 0.5).onTrue(feeder.ejectCommand());
 
         driveController.square().toggleOnTrue(Commands.defer(RobotContainer::passTrench, Set.of(driveBase)));
         driveController.triangle().whileTrue(fullClimb.get());
 
-        driveController.cross().onTrue(
+        driveController.cross().multiPress(2, 0.5).onTrue(
             Commands.either(
                 intake.moveToPositionCommand(IntakeStates.Closed),
                 intake.moveToPositionCommand(IntakeStates.Open),
                 () -> intake.getCurrentState() == IntakeStates.Open
             )
         );
-        driveController.R3().onTrue(intake.bumpFuelCommand());
+        driveController.cross().onTrue(intake.bumpFuelCommand());
     }
     //#endregion
 

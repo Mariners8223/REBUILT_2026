@@ -99,7 +99,8 @@ public class Intake extends SubsystemBase{
         return Commands.sequence(
             new InstantCommand(() -> this.setPivotState(IntakeStates.Middle)),
             new WaitCommand(IntakeConstants.BUMP_WAIT_TIME),
-            new InstantCommand(() -> this.setPivotState(IntakeStates.Open))
+            new InstantCommand(() -> this.setPivotState(IntakeStates.Open)),
+            new WaitCommand(IntakeConstants.BUMP_WAIT_TIME)
         );
     }
 

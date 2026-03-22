@@ -22,7 +22,7 @@ public class IntakeConstants
         public enum IntakeStates
         {
             Closed(Degrees.of(0)),
-            Middle(Degrees.of(-35)), //TODO: Test bump heights
+            Middle(Degrees.of(-53)), //TODO: Test bump heights
             Open(Degrees.of(-90)),
             Reset(Degrees.of(-90)); //TODO: Change before competition
 
@@ -62,7 +62,7 @@ public class IntakeConstants
         public static final double SOFT_MINIMUM = IntakeStates.Open.getAngle().in(Rotations);
         public static final double SOFT_MAXIMUM = IntakeStates.Closed.getAngle().in(Rotations);
         public static final PIDFGains PID_GAINS = new PIDFGains(
-        700,
+        800,
         50,
         0,
         0.1);
@@ -80,7 +80,7 @@ public class IntakeConstants
         public static final MotorType MOTOR_TYPE = MotorType.SPARK_FLEX;
         public static final boolean IS_INVERTED = false;
         public static final double GEAR_RATIO = 5;
-        public static final double DUTY_CYCLE = 1;
+        public static final double DUTY_CYCLE = 0.9;
     }
 
     public static final double MOMENT_OF_INERTIA = 0;

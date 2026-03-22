@@ -61,7 +61,7 @@ public class DriveBaseConstants {
 
         public static final PIDController X_PID = new PIDController(5, 2, 0.1);
         public static final PIDController Y_PID = new PIDController(5, 2, 0.1);
-        public static final PIDController THETA_PID = new PIDController(10, 4, 0);
+        public static final PIDController THETA_PID = new PIDController(15, 4, 0);
 
         static{
             X_PID.setIntegratorRange(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);

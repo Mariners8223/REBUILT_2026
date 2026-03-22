@@ -11,6 +11,7 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
+import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.Funnel.Funnel;
 import frc.robot.subsystems.Kicker.Kicker;
@@ -27,7 +28,7 @@ public class SuperShootCommand extends ParallelCommandGroup {
     private Pose2d hubLocation;
     private Pose2d currentTarget;
 
-    public SuperShootCommand(DriveBase driveBase, Shooter shooter, Kicker kicker, Funnel funnel, CommandPS5Controller controller) {
+    public SuperShootCommand(DriveBase driveBase, Shooter shooter, Feeder feeder, CommandPS5Controller controller) {
         this.driveBase = driveBase;
 
         this.hubLocation = Robot.isRedAlliance ?
@@ -47,7 +48,7 @@ public class SuperShootCommand extends ParallelCommandGroup {
             }),
             Commands.waitUntil(() ->
                 shooter.isAtRequiredVelocity(Meters.of(currentTarget.getTranslation().getDistance(driveBase.getPose().getTranslation()))))
-                .andThen(kicker.setKickerCommand(0.6)).andThen(funnel.toShooterCommand())
+                .andThen(feeder.smartFeedingShootCommand(() -> Meters.of(currentTarget.getTranslation().getDistance(driveBase.getPose().getTranslation()))))
         );
     }
 
