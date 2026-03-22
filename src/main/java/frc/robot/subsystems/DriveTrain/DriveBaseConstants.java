@@ -46,7 +46,7 @@ public class DriveBaseConstants {
 
     public static final class DrivePID{
         public static final double LOWER_SPEED_LIMIT_XY = 0.5;
-        public static final double UPPER_SPEED_LIMIT_XY = 1.5;
+        public static final double UPPER_SPEED_LIMIT_XY = 0.5;
 
         public static double LOWER_SPEED_LIMIT_THETA = 1;
         public static final double UPPER_SPEED_LIMIT_THETA = 4 * 1.1;

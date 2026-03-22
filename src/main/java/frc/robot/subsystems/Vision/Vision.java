@@ -208,7 +208,7 @@ public class Vision extends SubsystemBase {
             };
 
             this.cameraName = cameraName;
-            this.constants = CameraConstants.POINTING_IN_CAMERA;
+            this.constants = CameraConstants.FRONT_CAMERA;
             inputs = new VisionInputsAutoLogged();
 
         }

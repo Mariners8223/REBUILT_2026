@@ -33,8 +33,8 @@ public final class Constants {
     public static final Pose2d HUB_POSITION = new Pose2d(4.611,4.046,new Rotation2d());
     public static final Pose2d PRE_PRE_TOWER_POSITION = new Pose2d(15.86,5.5, Rotation2d.kCCW_90deg);
     public static final Pose2d PRE_TOWER_POSITION = new Pose2d(15.86,5.15, Rotation2d.kCCW_90deg);
-    public static final Pose2d TOWER_POSITION = new Pose2d(15.46,5.15, Rotation2d.kCCW_90deg);
-    public static final Pose2d INNER_TOWER_POSITION = new Pose2d(15.46,5.1, Rotation2d.kCCW_90deg);
+    public static final Pose2d TOWER_POSITION = new Pose2d(15.85,5.15, Rotation2d.kCCW_90deg); 
+    public static final Pose2d INNER_TOWER_POSITION = new Pose2d(15.85,5.1, Rotation2d.kCCW_90deg);
 
     public static final double RED_ALLIANCE_ZONE_X = 12;
     public static final double BLUE_ALLIANCE_ZONE_X = 4;

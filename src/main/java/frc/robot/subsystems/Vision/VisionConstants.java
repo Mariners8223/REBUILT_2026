@@ -19,22 +19,26 @@ public class VisionConstants {
     public static final AprilTagFieldLayout FIELD_LAYOUT = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
 
     public static final double maxHeightDeviation = 0.1;
-    public static final double maxMultiAmbiguity = 0.1;
-    public static final double maxSingleAmbiguity = 0.07;
-    public static final double maxDistanceFromTargetSingle = 1.5;
+    public static final double maxMultiAmbiguity = 0.2;
+    public static final double maxSingleAmbiguity = 0.2;
+    public static final double maxDistanceFromTargetSingle = 2.5;
     public static final double maxDistanceFromTargetMulti = 4; // If there is a season where you can see one tag real close and one far fix this.
 
     public enum CameraConstants{
-        POINTING_IN_CAMERA("pointing_in_camera",
+        FRONT_CAMERA("Front Camera",
             new Transform3d(
                 0.11143, 0.281, 0.52,
                 new Rotation3d(0, Units.degreesToRadians(-12), Units.degreesToRadians(0))),
                 0, 0),
-       POINTING_OUT_CAMERA("pointing_out_camera",
+       BACK_CAMERA("Back Camera",
            new Transform3d(
                -0.23554, 0.15, 0.51,
                new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(-14), Units.degreesToRadians(180))),
-               0, 0);
+               0, 0),
+        RIGHT_CAMERA("Right Camera",
+            new Transform3d(-0.23554, -0.15, 0.46,
+                new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(-10), Units.degreesToRadians(-90))),
+            0, 0);
 
     //     POINTING_IN_CAMERA("pointing_in_camera",//this camera will be on a churo of the shooter
     //         new Transform3d(

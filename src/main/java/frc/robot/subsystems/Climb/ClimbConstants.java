@@ -29,7 +29,7 @@ public class ClimbConstants
     public static final PIDFGains PID = new PIDFGains(1000, 40, 0, 0);
 
     public static final double CLIMB_TOLERANCE = 0.01;
-    public static final double START_POSITION = 0.44; // From bottom of hook to floor
+    public static final double START_POSITION = 0.445; // From bottom of hook to floor
     public static final double STALL_CURRENT = 3;
     public static final double GETTING_DOWN_DUTY_CYCLE = 0.7;
 
@@ -42,3 +42,4 @@ public class ClimbConstants
     public static final double Z_OFFSET = 0;
 
 }
+

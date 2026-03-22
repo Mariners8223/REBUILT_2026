@@ -132,9 +132,9 @@ public class RobotContainer {
         fullClimb = () ->
             Commands.sequence(
                 // new ResetHook(climb),
-                climb.toStateCommand(ClimbStates.EXTENDED),
-                hookToTower.get(),
-                new RunHookToHeight(climb, ClimbStates.RESET, 1)
+                //climb.toStateCommand(ClimbStates.EXTENDED),
+                hookToTower.get()
+                //new RunHookToHeight(climb, ClimbStates.RESET, 1)
             );
     }
 
@@ -152,7 +152,7 @@ public class RobotContainer {
             driveBase::removeDefaultCommand)
             .ignoringDisable(true));
 
-        driveController.PS().onTrue(driveBase.resetOnlyDirection());
+        driveController.PS().onTrue(driveBase.resetOnlyDirection().alongWith(new InstantCommand(() -> climb.resetPosition())));
 
         driveController.options().whileTrue(climb.dutyCycleCommand(0.1));
         driveController.create().whileTrue(climb.dutyCycleCommand(-0.1));
@@ -181,7 +181,7 @@ public class RobotContainer {
         );
 
         driveController.circle().toggleOnTrue(feeder.intakeCommand());
-        driveController.circle().multiPress(2, 0.5).onTrue(feeder.ejectCommand());
+        // driveController.circle().multiPress(2, 0.5).onTrue(feeder.ejectCommand());
 
         driveController.square().toggleOnTrue(Commands.defer(RobotContainer::passTrench, Set.of(driveBase)));
         driveController.triangle().whileTrue(fullClimb.get());
