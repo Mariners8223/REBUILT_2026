@@ -60,6 +60,9 @@ public class Vision extends SubsystemBase {
 
     @Override
     public void periodic() {
+        ArrayList<Pose3d> allAcceptedPoses = new ArrayList<>();
+        ArrayList<Pose3d> allRejectedPoses = new ArrayList<>();
+
         for (VisionCamera camera : cameras) {
             camera.update();
             camera.log();
@@ -106,10 +109,14 @@ public class Vision extends SubsystemBase {
                 acceptedPoses.add(frame.robotPose());
             }
 
+            allAcceptedPoses.addAll(acceptedPoses);
+            allRejectedPoses.addAll(allRejectedPoses);
+
             Logger.recordOutput("Vision/" + camera.cameraName + "/Accepted Poses", acceptedPoses.toArray(new Pose3d[0]));
             Logger.recordOutput("Vision/" + camera.cameraName + "/Rejected Poses", rejectedPoses.toArray(new Pose3d[0]));
         }
-
+        Logger.recordOutput("Vision/All Accepted", allAcceptedPoses.toArray(new Pose3d[0]));
+        Logger.recordOutput("Vision/All Rejected", allRejectedPoses.toArray(new Pose3d[0]));
     }
 
     /**
