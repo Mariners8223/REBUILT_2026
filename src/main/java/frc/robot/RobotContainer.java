@@ -139,7 +139,7 @@ public class RobotContainer {
     //#region Periodic Updates
     public static void pollAlerts(){
         controllerDisconnected.set(!driveController.isConnected());
-        brownoutBattery.set(!RobotController.isBrownedOut());
+        brownoutBattery.set(RobotController.isBrownedOut());
     }
 
     public static void updateElastic(){
