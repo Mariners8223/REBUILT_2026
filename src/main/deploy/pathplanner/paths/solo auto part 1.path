@@ -64,12 +64,12 @@
     },
     {
       "anchor": {
-        "x": 3.7349613686534218,
-        "y": 7.505248344370861
+        "x": 3.6139624724061807,
+        "y": 7.558487858719646
       },
       "prevControl": {
-        "x": 7.447207505517463,
-        "y": 7.7617660044202115
+        "x": 7.326208609270222,
+        "y": 7.815005518768997
       },
       "nextControl": null,
       "isLocked": false,
@@ -93,10 +93,10 @@
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 1.0,
+      "minWaypointRelativePos": 0.525177172696747,
       "maxWaypointRelativePos": 3.5356890459363934,
       "constraints": {
-        "maxVelocity": 3.0,
+        "maxVelocity": 3.5,
         "maxAcceleration": 3.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
@@ -128,10 +128,16 @@
           "name": "warm up shooter"
         }
       }
+    },
+    {
+      "name": "eject",
+      "waypointRelativePos": 3.69,
+      "endWaypointRelativePos": null,
+      "command": null
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 3.5,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -140,7 +146,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -76.84545536468035
+    "rotation": -82.62623363866973
   },
   "reversed": false,
   "folder": "solo auto",
@@ -148,5 +154,5 @@
     "velocity": 0,
     "rotation": 89.53037298031037
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

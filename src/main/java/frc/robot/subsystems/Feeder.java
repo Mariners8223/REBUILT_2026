@@ -74,17 +74,17 @@ public class Feeder extends SubsystemBase {
   }
 
   public Command intakeCommand(){
-    return setSpeeds(IntakeConstants.RollersMotor.DUTY_CYCLE, FunnelConstants.funnelMotor.LEAD_SPEED, 0, 0);
+    return setSpeeds(IntakeConstants.RollersMotor.DUTY_CYCLE, FunnelConstants.funnelMotor.FUNNEL_INTAKE_SPEED, 0, 0);
   }
   public Command ejectCommand(){
     return setSpeeds(0, 0, FunnelConstants.CenteringMotor.CENTERING_EJECT_SPEED, KickerConstants.KICKER_EJECT_SPEED);
   }
 
   public Command toShooterCommand(Distance distanceToHub){
-    return setSpeeds(1, FunnelConstants.funnelMotor.FUNNEL_SHOOTING_SPEED, FunnelConstants.CenteringMotor.CenteringHighSpeed, KickerConstants.getDutyCycle(distanceToHub));
+    return setSpeeds(1, FunnelConstants.funnelMotor.FUNNEL_SHOOTING_SPEED, FunnelConstants.CenteringMotor.CENTERING_SHOOTING_SPEED, KickerConstants.getDutyCycle(distanceToHub));
   }
   public Command toPassCommand(){
-    return setSpeeds(1, FunnelConstants.funnelMotor.FUNNEL_SHOOTING_SPEED, FunnelConstants.CenteringMotor.CenteringHighSpeed, 1);
+    return setSpeeds(1, FunnelConstants.funnelMotor.FUNNEL_SHOOTING_SPEED, FunnelConstants.CenteringMotor.CENTERING_SHOOTING_SPEED, 1);
   }
 
   public Command smartFeedingShootCommand(Supplier<Distance> distanceSupplier){

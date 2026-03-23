@@ -16,7 +16,7 @@ public class KickerIOReal implements KickerIO {
 
     public KickerIOReal(){
         leadMotor = new MarinersSparkBase(
-            "Kicker/Kicker Lead Motor",
+            "Kicker/Back Motor",
             KickerConstants.MOTOR_CONSTANTS.CONTROLLER_LOCATION,
             KickerConstants.MOTOR_CONSTANTS.LEAD_MOTOR_ID,
             true,
@@ -27,7 +27,7 @@ public class KickerIOReal implements KickerIO {
         //    KickerConstants.MOTOR_CONSTANTS.LEAD_MOTOR_CURRENT_THRESHOLD);
 
         followMotor = new MarinersSparkBase(
-            "Kicker/Kicker Follow Motor",
+            "Kicker/Front Motor",
             KickerConstants.MOTOR_CONSTANTS.CONTROLLER_LOCATION,
             KickerConstants.MOTOR_CONSTANTS.FOLLOW_MOTOR_ID,
             true,

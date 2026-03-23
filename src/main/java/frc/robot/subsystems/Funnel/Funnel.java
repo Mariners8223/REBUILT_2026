@@ -49,7 +49,7 @@ public class Funnel extends SubsystemBase {
 
   public Command funnelingCommand(){
     return this.startEnd(
-      () -> setFunnelDutyCycle(FunnelConstants.funnelMotor.LEAD_SPEED),
+      () -> setFunnelDutyCycle(FunnelConstants.funnelMotor.FUNNEL_INTAKE_SPEED),
       () -> stopFunnel()
     );
   }
@@ -65,7 +65,7 @@ public class Funnel extends SubsystemBase {
     return this.startEnd(
       () -> {
         setFunnelDutyCycle(FunnelConstants.funnelMotor.FUNNEL_SHOOTING_SPEED);
-        setCenteringDutyCycle(FunnelConstants.CenteringMotor.centeringShootingSpeed);
+        setCenteringDutyCycle(FunnelConstants.CenteringMotor.CENTERING_SHOOTING_SPEED);
       },
       () -> stopAllMotors()
     );

@@ -9,9 +9,7 @@ import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Second;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -71,6 +69,7 @@ import frc.robot.subsystems.Kicker.Kicker;
 
 public class RobotContainer {
     public static Alert controllerDisconnected = new Alert("Drive Controller Disconnect", AlertType.kError);
+    public static Alert brownoutBattery = new Alert("BROWNOUT", AlertType.kError);
 
     public static CommandPS5Controller driveController;
     public static Constants.AutoConstants.TrenchLocations trenchLocations = new Constants.AutoConstants.TrenchLocations();
@@ -88,8 +87,9 @@ public class RobotContainer {
     public static LoggedDashboardChooser<String> sideChooser;
     public static HashMap<String, Command> mirroredAutoMap = new HashMap<>();
 
-    public static Supplier<Command> fullShootCommand;
+    public static Supplier<Command> shootCommand;
     public static Supplier<Command> passCommand;
+    public static Supplier<Command> fullShootCommand;
 
 
     public RobotContainer() {
@@ -104,8 +104,7 @@ public class RobotContainer {
         feeder = new Feeder(intake, funnel, kicker);
         vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
 
-        // TODO: Separate rollers and pivot
-        // TODO: Add stall alerts
+        // TODO: Passing through rollers?
 
         configureCommands();
         configureNamedCommands();
@@ -115,7 +114,7 @@ public class RobotContainer {
     }
 
     public static void configureCommands(){
-        fullShootCommand = () ->
+        shootCommand = () ->
             Commands.parallel(
                 new ShootDistance(shooter, RobotContainer::distanceFromHub),
                 Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
@@ -128,11 +127,19 @@ public class RobotContainer {
                 Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
                 .andThen(feeder.smartFeedingPassCommand())
             );
+
+        fullShootCommand = () ->
+            Commands.either(
+                shootCommand.get(),
+                passCommand.get(),
+                RobotContainer::inAllianceZone
+            );
     }
 
     //#region Periodic Updates
     public static void pollAlerts(){
         controllerDisconnected.set(!driveController.isConnected());
+        brownoutBattery.set(!RobotController.isBrownedOut());
     }
 
     public static void updateElastic(){
@@ -173,18 +180,14 @@ public class RobotContainer {
         driveController.povDownRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_RIGHT));
 
         driveController.L1().toggleOnTrue(
-            Commands.parallel(
-                Commands.either(
-                    fullShootCommand.get(),
-                    passCommand.get(),
-                    RobotContainer::inAllianceZone
-                ),
-                intake.bumpFuelCommand().repeatedly().beforeStarting(Commands.waitSeconds(2))
-            )
-        );
-
-        driveController.R1().toggleOnTrue(
-            new AimDriving(driveBase, driveController, RobotContainer::getShootingAngle)
+            new AimDriving(driveBase, driveController, RobotContainer::getShootingAngle).alongWith(
+                feeder.ejectCommand().withTimeout(0.5).andThen(
+                    Commands.parallel(
+                        fullShootCommand.get(),
+                        intake.bumpFuelCommand().repeatedly().beforeStarting(Commands.waitSeconds(2))
+                    )
+                )
+            ).finallyDo(() -> intake.moveToPositionCommand(IntakeStates.Open))
         );
 
         driveController.circle().toggleOnTrue(feeder.intakeCommand());
@@ -205,15 +208,18 @@ public class RobotContainer {
 
     public static void configureNamedCommands(){
         NamedCommands.registerCommand("close intake", intake.moveToPositionCommand(IntakeStates.Closed));
-        NamedCommands.registerCommand("open intake", intake.moveToPositionCommand(IntakeStates.Open).andThen(Commands.waitSeconds(0.7)));
+        NamedCommands.registerCommand("open intake", intake.moveToPositionCommand(IntakeStates.Open).andThen(Commands.waitSeconds(0.6)));
 
         NamedCommands.registerCommand("start rollers", new InstantCommand(() -> intake.setRollersDutyCycle(IntakeConstants.RollersMotor.DUTY_CYCLE)));
         NamedCommands.registerCommand("stop rollers", new InstantCommand(() -> intake.setRollersDutyCycle(0)));
 
-        NamedCommands.registerCommand("shoot to hub", fullShootCommand.get().withTimeout(3));
+        NamedCommands.registerCommand("shoot to hub", shootCommand.get().
+            // alongWith(intake.bumpFuelCommand().repeatedly().beforeStarting(Commands.waitSeconds(2))).
+            withTimeout(4)
+            );
         NamedCommands.registerCommand("warm up shooter", new InstantCommand(() -> shooter.setVelocityByDistance(distanceFromHub()), shooter));
         NamedCommands.registerCommand("shoot to pass", passCommand.get());
-        NamedCommands.registerCommand("aim to hub", new AimDriving(driveBase, driveController, RobotContainer::angleToHub).withTimeout(0.8));
+        NamedCommands.registerCommand("aim to hub", new AimDriving(driveBase, driveController, RobotContainer::angleToHub).withTimeout(0.2));
 
         NamedCommands.registerCommand("eject", feeder.ejectCommand());
     }
@@ -353,7 +359,7 @@ public class RobotContainer {
         try{
             targetPath = PathPlannerPath.fromPathFile(pathName);
             targetPath = pose.getY() >= 4 ? targetPath : targetPath.mirrorPath();
-        } 
+        }
         catch (IOException | ParseException | FileVersionException e){
             DriverStation.reportError("Error loading trench path", e.getStackTrace());
             targetPath = PathPlannerPath.fromPathPoints(new ArrayList<>(), PathConstraints.unlimitedConstraints(12.0), new GoalEndState(0, Rotation2d.kZero));

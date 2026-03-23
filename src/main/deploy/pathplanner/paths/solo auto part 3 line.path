@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 3.7349613686534218,
-        "y": 7.505248344370861
+        "x": 3.6139624724061807,
+        "y": 7.558487858719646
       },
       "prevControl": {
-        "x": 6.6873344370858145,
-        "y": 7.626247240620657
+        "x": 6.5663355408385735,
+        "y": 7.679486754969442
       },
       "nextControl": null,
       "isLocked": false,
@@ -65,13 +65,30 @@
     },
     {
       "name": "stop rollers",
-      "waypointRelativePos": 0.4,
+      "waypointRelativePos": 0.40283476314807903,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "warm up shooter",
+      "waypointRelativePos": 1.378590078328977,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "warm up shooter"
+        }
+      }
+    },
+    {
+      "name": "eject",
+      "waypointRelativePos": 1.38,
       "endWaypointRelativePos": null,
       "command": null
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 3.5,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -80,7 +97,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -76.84545536468035
+    "rotation": -82.62623363866973
   },
   "reversed": false,
   "folder": "solo auto",
@@ -88,5 +105,5 @@
     "velocity": 0,
     "rotation": -118.07248693585292
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

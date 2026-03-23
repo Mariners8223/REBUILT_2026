@@ -25,11 +25,12 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakeStates;
 import frc.util.Elastic;
 
 
 public class Robot extends LoggedRobot {
-    private Command m_autonomousCommand;
+    private Command autonomousCommand;
     public static boolean isRedAlliance = false;
 
     private static final Field2d field = new Field2d();
@@ -92,11 +93,12 @@ public class Robot extends LoggedRobot {
     @Override
     public void autonomousInit() {
         Elastic.selectTab("Autonomous");
+        isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
+        RobotContainer.intake.resetPivotPosition(IntakeStates.Closed);
 
-        m_autonomousCommand = RobotContainer.getAuto();
-
-        if (m_autonomousCommand != null){
-            CommandScheduler.getInstance().schedule(m_autonomousCommand);
+        autonomousCommand = RobotContainer.getAuto();
+        if (autonomousCommand != null){
+            CommandScheduler.getInstance().schedule(autonomousCommand);
         }
     }
 
@@ -107,8 +109,8 @@ public class Robot extends LoggedRobot {
     public void teleopInit() {
         Elastic.selectTab("Teleop");
 
-        if (m_autonomousCommand != null) {
-            m_autonomousCommand.cancel();
+        if (autonomousCommand != null) {
+            autonomousCommand.cancel();
         }
     }
 
