@@ -52,7 +52,7 @@ public class Vision extends SubsystemBase {
             if(Constants.ROBOT_TYPE != RobotType.REPLAY) cameras[i] = new VisionCamera(constants[i], VisionConstants.FIELD_LAYOUT, referncePoseSupplier);
             else cameras[i] = new VisionCamera(constants[i].cameraName);
 
-            disconnectedAlerts.put(cameras[i], new Alert("Camera Disconnect", cameras[i].cameraName + " Disconnected", AlertType.kWarning));
+            disconnectedAlerts.put(cameras[i], new Alert(cameras[i].cameraName + " Disconnected", AlertType.kWarning));
         }
 
         this.poseConsumer = poseConsumer;

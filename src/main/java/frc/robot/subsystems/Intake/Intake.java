@@ -19,8 +19,8 @@ import edu.wpi.first.wpilibj.RobotState;
 
 
 public class Intake extends SubsystemBase{
-    public static Alert rollersStall = new Alert("Stall", "Intake Rollers in stall", AlertType.kWarning);
-    public static Alert pivotStall = new Alert("Stall", "Intake Pivot in stall", AlertType.kWarning);
+    public static Alert rollersStall = new Alert("Intake Rollers in stall", AlertType.kWarning);
+    public static Alert pivotStall = new Alert("Intake Pivot in stall", AlertType.kWarning);
 
     private final IntakeIO io;
     private final IntakeInputsAutoLogged inputs = new IntakeInputsAutoLogged();

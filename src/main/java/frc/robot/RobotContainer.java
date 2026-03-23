@@ -99,7 +99,6 @@ public class RobotContainer {
         configureCommands();
         configureNamedCommands();
         configureDriveBindings();
-        //configureTestBindings();
         configureChoosers();
         configureMirroredAutosMap();
     }
@@ -140,9 +139,6 @@ public class RobotContainer {
     public static void pollAlerts(){
         controllerDisconnected.set(!driveController.isConnected());
     }
-
-    // for tests!!
-    public static void configureTestBindings(){}
 
     //#region Drive
     public static void configureDriveBindings(){

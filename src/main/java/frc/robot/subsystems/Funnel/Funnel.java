@@ -10,8 +10,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Funnel extends SubsystemBase {
-  public static Alert funnelStall = new Alert("Stall", "Funnel in stall", AlertType.kWarning);
-  public static Alert centeringStall = new Alert("Stall", "Centerring in stall", AlertType.kWarning);
+  public static Alert funnelStall = new Alert("Funnel in stall", AlertType.kWarning);
+  public static Alert centeringStall = new Alert("Centerring in stall", AlertType.kWarning);
 
   public final FunnelIO io;
 
