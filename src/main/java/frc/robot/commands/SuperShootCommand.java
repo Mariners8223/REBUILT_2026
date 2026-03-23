@@ -13,8 +13,6 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.DriveTrain.DriveBase;
-import frc.robot.subsystems.Funnel.Funnel;
-import frc.robot.subsystems.Kicker.Kicker;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterConstants;
 import frc.robot.commands.Shooter.ShootVelocity;

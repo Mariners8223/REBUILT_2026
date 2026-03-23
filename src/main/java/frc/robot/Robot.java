@@ -41,9 +41,9 @@ public class Robot extends LoggedRobot {
 
     private static final Field2d field = new Field2d();
 
-    
+
     public Robot() {
-        Logger.recordMetadata("ProjectName", "MyProject"); 
+        Logger.recordMetadata("ProjectName", "MyProject");
 
         if (isReal()) {
             Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
@@ -57,7 +57,7 @@ public class Robot extends LoggedRobot {
         }
 
         isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
-        Logger.start(); 
+        Logger.start();
         WebServer.start(5800, Filesystem.getDeployDirectory().getPath());
         new RobotContainer();
         SmartDashboard.putBoolean("IsHubActive", HubTracker.isActive(DriverStation.getAlliance().get()));
@@ -90,7 +90,7 @@ public class Robot extends LoggedRobot {
         SmartDashboard.putNumber("Robot Velocity", RobotContainer.driveBase.getVelocity());
         SmartDashboard.putNumber("Match Time", Timer.getMatchTime());
         SmartDashboard.putNumber("PDH Voltage", ConduitApi.getInstance().getPDPVoltage());
-        
+
         SmartDashboard.putBoolean("Is Hub Active", HubTracker.isActive(DriverStation.getAlliance().get()));
         SmartDashboard.putNumber("Time left in Shift", Math.floor(HubTracker.timeRemainingInCurrentShift().orElseGet(() -> Second.zero()).in(Second) * 100) / 100);
         SmartDashboard.putString("Current Shift", HubTracker.getCurrentShift().orElseGet(() -> HubTracker.Shift.AUTO).toString());
@@ -106,7 +106,7 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void disabledPeriodic() {}
-    
+
     @Override
     public void autonomousInit() {
         m_autonomousCommand = RobotContainer.getAuto();

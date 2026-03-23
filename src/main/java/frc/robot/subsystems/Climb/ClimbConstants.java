@@ -42,4 +42,3 @@ public class ClimbConstants
     public static final double Z_OFFSET = 0;
 
 }
-
