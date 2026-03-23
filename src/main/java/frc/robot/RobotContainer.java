@@ -305,7 +305,7 @@ public class RobotContainer {
 
     public static Distance distanceFromHub(){
         Pose2d hubLocation = Constants.FieldConstants.HUB_POSITION;
-        if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
+        if(Robot.isRedAlliance){
             hubLocation = FlippingUtil.flipFieldPose(hubLocation);
         }
         return Meters.of(
@@ -330,7 +330,7 @@ public class RobotContainer {
     public static boolean inRange(){
         Pose2d pose = driveBase.getPose();
         Pose2d hub = Constants.autoConstats.hub;
-        if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
+        if(Robot.isRedAlliance){
             pose = FlippingUtil.flipFieldPose(driveBase.getPose());
             hub = FlippingUtil.flipFieldPose(hub);
         }
@@ -345,7 +345,7 @@ public class RobotContainer {
         Pose2d pose = driveBase.getPose();
         Pose2d targetPose;
 
-        if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
+        if(Robot.isRedAlliance){
             pose = FlippingUtil.flipFieldPose(driveBase.getPose());
         }
         if (pose.getY() >= 4){
