@@ -42,24 +42,6 @@ public class DriveCommand extends Command {
         return Math.abs(value) > 0.1 ? value : 0;
     }
 
-    public static void halfSpeed(){
-        MAX_FREE_WHEEL_SPEED = DevBotConstants.MAX_WHEEL_LINEAR_VELOCITY / 2;
-
-        double driveBaseRadius = Math.hypot(DISTANCE_BETWEEN_WHEELS_HORIZONTAL / 2, DISTANCE_BETWEEN_WHEELS_VERTICAL / 2);
-
-
-        MAX_OMEGA_RAD_PER_SEC = MAX_FREE_WHEEL_SPEED / driveBaseRadius;
-    }
-
-    public static void normalSpeed(){
-        MAX_FREE_WHEEL_SPEED = DevBotConstants.MAX_WHEEL_LINEAR_VELOCITY;
-
-        double driveBaseRadius = Math.hypot(DISTANCE_BETWEEN_WHEELS_HORIZONTAL / 2, DISTANCE_BETWEEN_WHEELS_VERTICAL / 2);
-
-        MAX_OMEGA_RAD_PER_SEC = MAX_FREE_WHEEL_SPEED / driveBaseRadius;
-    }
-
-
     @Override
     public void execute() {
         //calculates a value from 1 to the max wheel speed based on the R2 axis

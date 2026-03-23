@@ -6,16 +6,16 @@ package frc.robot.commands.Climb;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Climb.Climb;
-import frc.robot.subsystems.Climb.ClimbConstants.Heights;
+import frc.robot.subsystems.Climb.ClimbConstants.ClimbStates;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class RunHookToHeight extends Command {
   Climb climb;
   double dutyCycle;
-  Heights desiredHeight;
+  ClimbStates desiredHeight;
 
   /** Creates a new RaiseRobot. */
-  public RunHookToHeight(Climb climb, Heights desiredHeight, double dutyCycle) {
+  public RunHookToHeight(Climb climb, ClimbStates desiredHeight, double dutyCycle) {
     this.climb = climb;
     this.desiredHeight = desiredHeight;
     this.dutyCycle = dutyCycle;
@@ -28,13 +28,13 @@ public class RunHookToHeight extends Command {
   @Override
   public void initialize() {
     dutyCycle = Math.signum(desiredHeight.getHeight() - climb.getPosition()) * Math.abs(dutyCycle);
-    climb.setMotorPower(dutyCycle);
+    climb.setDutyCycle(dutyCycle);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    climb.stopClimbMotor();
+    climb.stopMotors();
   }
 
   // Returns true when the command should end.

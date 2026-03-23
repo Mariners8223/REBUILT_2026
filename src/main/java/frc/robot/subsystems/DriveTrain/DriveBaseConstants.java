@@ -46,7 +46,7 @@ public class DriveBaseConstants {
 
     public static final class DrivePID{
         public static final double LOWER_SPEED_LIMIT_XY = 0.5;
-        public static final double UPPER_SPEED_LIMIT_XY = 1.5;
+        public static final double UPPER_SPEED_LIMIT_XY = 0.5;
 
         public static double LOWER_SPEED_LIMIT_THETA = 1;
         public static final double UPPER_SPEED_LIMIT_THETA = 4 * 1.1;
@@ -55,13 +55,13 @@ public class DriveBaseConstants {
         public static final double THETA_DEADBAND = 0.2;
 
         public static final double XY_TOLERANCE = 0.015;
-        public static final double THETA_TOLERANCE = Units.degreesToRadians(2);
+        public static final double THETA_TOLERANCE = Units.degreesToRadians(1);
 
         public static final double THETA_IZONE = Units.degreesToRadians(10);
 
         public static final PIDController X_PID = new PIDController(5, 2, 0.1);
         public static final PIDController Y_PID = new PIDController(5, 2, 0.1);
-        public static final PIDController THETA_PID = new PIDController(8, 4, 0);
+        public static final PIDController THETA_PID = new PIDController(15, 4, 0);
 
         static{
             X_PID.setIntegratorRange(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);

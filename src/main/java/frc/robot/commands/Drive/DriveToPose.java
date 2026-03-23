@@ -81,14 +81,18 @@ public class DriveToPose extends Command {
         driveBase.drive(new ChassisSpeeds());
   }
 
-  public boolean isOutOfTolerance(){
-    Pose2d currentPose = driveBase.getPose();
+    // public boolean isOutOfTolerance(){
+    //     Pose2d currentPose = driveBase.getPose();
 
-    return Math.abs(targetPose.getX() - currentPose.getX()) > XController.getErrorTolerance() ||
-        Math.abs(targetPose.getY() - currentPose.getY()) > YController.getErrorTolerance() ||
-        Math.abs(targetPose.getRotation().getRadians() - currentPose.getRotation().getRadians())
-        > ThetaController.getErrorTolerance();
-  }
+    //     return Math.abs(targetPose.getX() - currentPose.getX()) > XController.getErrorTolerance() ||
+    //         Math.abs(targetPose.getY() - currentPose.getY()) > YController.getErrorTolerance() ||
+    //         Math.abs(targetPose.getRotation().getRadians() - currentPose.getRotation().getRadians())
+    //         > ThetaController.getErrorTolerance();
+    // }
+
+    public boolean isInTolerance(){
+        return XController.atSetpoint() && YController.atSetpoint() && ThetaController.atSetpoint();
+    }
 
     private double getClampValue(double error, double upperLimit, double lowerLimit){
       double value = Math.abs(error) * upperLimit;
@@ -140,6 +144,8 @@ public class DriveToPose extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return !isOutOfTolerance();
+    // return !isOutOfTolerance();
+    return isInTolerance();
+    // TODO: Make sure that isInTolerance still works
   }
 }

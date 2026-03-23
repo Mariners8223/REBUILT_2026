@@ -4,7 +4,7 @@ import org.littletonrobotics.junction.AutoLog;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.units.measure.Angle;
-import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakePosition;
+import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakeStates;
 
 public interface IntakeIO
 {
@@ -16,14 +16,15 @@ public interface IntakeIO
         double positionMotorSpeed;//RPM
         double rollersMotorSpeed;//RPM
 
-        IntakePosition intakeState;
+        IntakeStates intakeState;
     }
 
     void setPositionMotorRotation (Angle rotation);
-
     void setRollersMotorDutyCycle(double dutyCycle);
+    void setPivotDutyCycle(double dutyCycle);
 
     Angle getCurrentPosition();
+    double getPivotStallCurrent();
 
     void resetPositionMotorEncoder();
     void resetPositionMotorEncoder(double angle);

@@ -4,50 +4,103 @@
 
 package frc.robot.subsystems;
 
+import java.util.ArrayList;
+import java.util.function.Supplier;
+
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Funnel.Funnel;
+import frc.robot.subsystems.Funnel.FunnelConstants;
 import frc.robot.subsystems.Intake.Intake;
+import frc.robot.subsystems.Intake.IntakeConstants;
 import frc.robot.subsystems.Kicker.Kicker;
-import frc.robot.subsystems.Shooter.Shooter;
+import frc.robot.subsystems.Kicker.KickerConstants;
+import frc.util.ContinuousConditionalCommand;
 
 public class Feeder extends SubsystemBase {
   private final Intake intake;
   private final Funnel funnel;
   private final Kicker kicker;
-  private final Shooter shooter;
 
   /** Creates a new Feeder. */
-  public Feeder(Intake intake, Funnel funnel, Kicker kicker, Shooter shooter) {
+  public Feeder(Intake intake, Funnel funnel, Kicker kicker) {
     this.intake = intake;
     this.funnel = funnel;
     this.kicker = kicker;
-    this.shooter = shooter;
   }
 
-  public Runnable runMotors(double intakeSpeed, double funnellingSpeed, double centeringSpeed, double kickerSpeed, double shooterSpeed){
+  public ArrayList<Subsystem> requiredSubsystems(double intakeSpeed, double funnellingSpeed, double centeringSpeed, double kickerSpeed){
+    ArrayList<Subsystem> requiredSubsystems = new ArrayList<>();
+
+    if (intakeSpeed != 0) requiredSubsystems.add(intake);
+    if (funnellingSpeed != 0 || centeringSpeed != 0) requiredSubsystems.add(funnel);
+    if (kickerSpeed != 0) requiredSubsystems.add(kicker);
+
+    return requiredSubsystems;
+  }
+
+  public Runnable runMotors(double intakeSpeed, double funnellingSpeed, double centeringSpeed, double kickerSpeed){
     return () -> {
-        intake.setRollersMotorDutyCycle(intakeSpeed);
-        funnel.SpinLeadMotor(funnellingSpeed);
-        funnel.SpinCenterMotors(centeringSpeed);
-        kicker.setMotors(kickerSpeed);
-        shooter.setDutyCycle(shooterSpeed);
+        intake.setRollersDutyCycle(intakeSpeed);
+        funnel.setFunnelDutyCycle(funnellingSpeed);
+        funnel.setCenteringDutyCycle(centeringSpeed);
+        kicker.setDutyCycle(kickerSpeed);
       };
   }
 
   public Runnable stopMotors(){
       return () -> {
-        intake.setRollersMotorDutyCycle(0);
+        intake.setRollersDutyCycle(0);
         funnel.stopAllMotors();
         kicker.stopMotors();
-        shooter.stopShooter();
       };
   }
 
-  public Command setSpeeds(double intakeSpeed, double funnellingSpeed, double centeringSpeed, double kickerSpeed, double shooterSpeed){
-    return this.startEnd(
-      runMotors(intakeSpeed, funnellingSpeed, centeringSpeed, kickerSpeed, shooterSpeed),
-      stopMotors()
+  public Command setSpeeds(double intakeSpeed, double funnellingSpeed, double centeringSpeed, double kickerSpeed){
+    Subsystem[] requirementsArray = requiredSubsystems(intakeSpeed, funnellingSpeed, centeringSpeed, kickerSpeed).toArray(new Subsystem[0]);
+
+    return Commands.startEnd(
+      runMotors(intakeSpeed, funnellingSpeed, centeringSpeed, kickerSpeed),
+      stopMotors(),
+      requirementsArray
+    );
+  }
+
+  public boolean inStall(){
+    return funnel.funnelInStall() || funnel.centeringInStall() || kicker.leadInStall() || kicker.followInStall();
+  }
+
+  public Command intakeCommand(){
+    return setSpeeds(IntakeConstants.RollersMotor.DUTY_CYCLE, FunnelConstants.funnelMotor.LEAD_SPEED, 0, 0);
+  }
+  public Command ejectCommand(){
+    return setSpeeds(0, 0, FunnelConstants.CenteringMotor.CENTERING_EJECT_SPEED, KickerConstants.KICKER_EJECT_SPEED);
+  }
+
+  public Command toShooterCommand(Distance distanceToHub){
+    return setSpeeds(1, FunnelConstants.funnelMotor.FUNNEL_SHOOTING_SPEED, FunnelConstants.CenteringMotor.CenteringHighSpeed, KickerConstants.getDutyCycle(distanceToHub));
+  }
+  public Command toPassCommand(){
+    return setSpeeds(1, FunnelConstants.funnelMotor.FUNNEL_SHOOTING_SPEED, FunnelConstants.CenteringMotor.CenteringHighSpeed, 1);
+  }
+
+  public Command smartFeedingShootCommand(Supplier<Distance> distanceSupplier){
+    return Commands.repeatingSequence(
+      new ContinuousConditionalCommand(
+        ejectCommand().withTimeout(0.4),
+        toShooterCommand(distanceSupplier.get()).withTimeout(0.4),
+        this::inStall)
+    );
+  }
+  public Command smartFeedingPassCommand(){
+    return Commands.repeatingSequence(
+      new ContinuousConditionalCommand(
+        ejectCommand().withTimeout(0.4),
+        toPassCommand(),
+        this::inStall)
     );
   }
 

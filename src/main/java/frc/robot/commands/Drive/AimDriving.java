@@ -14,9 +14,6 @@ import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.DriveTrain.DriveBaseConstants;
 import frc.robot.subsystems.DriveTrain.SwerveModules.DevBotConstants;
 
-import static frc.robot.subsystems.DriveTrain.DriveBaseConstants.DISTANCE_BETWEEN_WHEELS_HORIZONTAL;
-import static frc.robot.subsystems.DriveTrain.DriveBaseConstants.DISTANCE_BETWEEN_WHEELS_VERTICAL;
-
 import java.util.function.Supplier;
 
 import org.littletonrobotics.junction.Logger;
@@ -26,7 +23,6 @@ public class AimDriving extends Command {
     private final DriveBase driveBase;
     private final CommandPS5Controller controller;
     private static double MAX_FREE_WHEEL_SPEED;
-    private static double MAX_OMEGA_RAD_PER_SEC;
     Supplier<Double> angleSupplier;
 
     PIDController thetaController = DriveBaseConstants.PathPlanner.THETA_PID.createPIDController();
@@ -41,8 +37,6 @@ public class AimDriving extends Command {
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
         MAX_FREE_WHEEL_SPEED = DevBotConstants.MAX_WHEEL_LINEAR_VELOCITY;
-        double driveBaseRadius = Math.hypot(DISTANCE_BETWEEN_WHEELS_HORIZONTAL / 2, DISTANCE_BETWEEN_WHEELS_VERTICAL / 2);
-        MAX_OMEGA_RAD_PER_SEC = MAX_FREE_WHEEL_SPEED / driveBaseRadius;
     }
 
     @Override
@@ -54,24 +48,6 @@ public class AimDriving extends Command {
     public static double deadBand(double value) {
         return Math.abs(value) > 0.1 ? value : 0;
     }
-
-    public static void halfSpeed(){
-        MAX_FREE_WHEEL_SPEED = DevBotConstants.MAX_WHEEL_LINEAR_VELOCITY / 2;
-
-        double driveBaseRadius = Math.hypot(DISTANCE_BETWEEN_WHEELS_HORIZONTAL / 2, DISTANCE_BETWEEN_WHEELS_VERTICAL / 2);
-
-
-        MAX_OMEGA_RAD_PER_SEC = MAX_FREE_WHEEL_SPEED / driveBaseRadius;
-    }
-
-    public static void normalSpeed(){
-        MAX_FREE_WHEEL_SPEED = DevBotConstants.MAX_WHEEL_LINEAR_VELOCITY;
-
-        double driveBaseRadius = Math.hypot(DISTANCE_BETWEEN_WHEELS_HORIZONTAL / 2, DISTANCE_BETWEEN_WHEELS_VERTICAL / 2);
-
-        MAX_OMEGA_RAD_PER_SEC = MAX_FREE_WHEEL_SPEED / driveBaseRadius;
-    }
-
 
     @Override
     public void execute() {
