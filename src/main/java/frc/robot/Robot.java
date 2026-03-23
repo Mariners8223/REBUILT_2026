@@ -6,6 +6,8 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.Meter;
 
+import java.util.List;
+
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -19,6 +21,9 @@ import com.pathplanner.lib.commands.PathfindThenFollowPath;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -36,6 +41,10 @@ public class Robot extends LoggedRobot {
     private Command m_autonomousCommand;
     public static boolean isRedAlliance = false;
     HubTracker tracker = new HubTracker();
+
+    public static final Field2d field = new Field2d();
+
+    
 
     /**
      * This function is run when the robot is first started up and should be used for any
@@ -63,6 +72,16 @@ public class Robot extends LoggedRobot {
         SmartDashboard.putBoolean("IsHubActive", HubTracker.isActive(DriverStation.getAlliance().get()));
         SmartDashboard.putString("TimeLeftOnActivation", HubTracker.timeRemainingInCurrentShift().toString());
         SmartDashboard.putBoolean("InRange", RobotContainer.inRange());
+
+        SmartDashboard.putData("Field", field);
+    }
+
+    public static void clearObjectPoseField(String name) {
+        field.getObject(name).setPoses();
+    }
+
+    public static void setTrajectoryField(String name, List<Pose2d> poses) {
+        field.getObject(name).setPoses(poses);
     }
 
     /**

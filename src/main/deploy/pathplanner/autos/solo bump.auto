@@ -13,13 +13,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "part 1- Trench high depot"
+            "pathName": "solo auto part 1"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "part 2- Depot collect hub"
+            "name": "aim to hub"
           }
         },
         {
@@ -31,13 +31,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "part 3- climb high"
+            "pathName": "solo auto part 2 bump"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "climb auto"
+            "name": "aim to hub"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot to hub"
           }
         }
       ]

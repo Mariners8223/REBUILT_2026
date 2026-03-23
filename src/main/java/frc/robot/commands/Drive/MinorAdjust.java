@@ -4,8 +4,10 @@
 
 package frc.robot.commands.Drive;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Robot;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -54,7 +56,13 @@ public class MinorAdjust extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    driveBase.drive(new ChassisSpeeds(direcation.getVX(), direcation.getVY(), 0));
+    Rotation2d gyroAngle = driveBase.getRotation2d();
+    if(Robot.isRedAlliance) gyroAngle = gyroAngle.plus(Rotation2d.fromDegrees(180));
+
+    ChassisSpeeds fieldRelative = new ChassisSpeeds(direcation.getVX(), direcation.getVY(), 0);
+    ChassisSpeeds robotRelative = ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelative, gyroAngle);
+
+    driveBase.drive(robotRelative);
   }
 
   // Called once the command ends or is interrupted.

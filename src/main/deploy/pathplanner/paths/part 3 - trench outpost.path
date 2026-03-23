@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4868636984441617,
-        "y": 4.90163149860756
+        "x": 3.6139624724102895,
+        "y": 0.5889514348793716
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3043205508244649,
-        "y": 5.072447186578816
+        "x": 2.6139624724102895,
+        "y": 0.5889514348793717
       },
       "isLocked": false,
-      "linkedName": "hub after depot"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.1237177419354845,
-        "y": 4.90163149860756
+        "x": 0.46,
+        "y": 0.55
       },
       "prevControl": {
-        "x": 1.0005496268530316,
-        "y": 5.1191852056020295
+        "x": 1.46,
+        "y": 0.5499999999999999
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "climb high"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -45,10 +45,10 @@
     "rotation": 90.0
   },
   "reversed": false,
-  "folder": "auto depot climb",
+  "folder": "start mid - collect depot - shoot - outpost",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -15.027618909115716
+    "rotation": 89.53037298031037
   },
   "useDefaultConstraints": true
 }

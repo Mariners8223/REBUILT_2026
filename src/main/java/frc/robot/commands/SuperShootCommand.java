@@ -54,7 +54,7 @@ public class SuperShootCommand extends ParallelCommandGroup {
     }
 
     private double getFlightTime(double distance) {
-        return distance * 8223; // dummy — replace with tree table lookup
+        return ShooterConstants.Calculations.flyTimeByDistance(Meters.of(distance));
     }
 
     private AngularVelocity getRPM(double distance) {
@@ -62,35 +62,33 @@ public class SuperShootCommand extends ParallelCommandGroup {
     }
 
     private Pose2d getVirtualTarget() {
-        return getVirtualTarget(hubLocation, 0);
-    }
+        Pose2d virtualTarget = hubLocation;
 
-    private Pose2d getVirtualTarget(Pose2d virtualTarget, int depth) {
-        if (depth >= 5) return virtualTarget;
+        for (int depth = 0; depth < 5; depth++) {
+            ChassisSpeeds fieldRelative = ChassisSpeeds.fromRobotRelativeSpeeds(
+                driveBase.getChassisSpeeds(), driveBase.getRotation2d()
+            );
 
-        ChassisSpeeds fieldRelative = ChassisSpeeds.fromRobotRelativeSpeeds(
-            driveBase.getChassisSpeeds(), driveBase.getRotation2d()
-        );
+            double distance = driveBase.getPose().getTranslation().getDistance(virtualTarget.getTranslation());
+            double flightTime = getFlightTime(distance);
 
-        double distance = driveBase.getPose().getTranslation().getDistance(virtualTarget.getTranslation());
+            Translation2d virtualOffset = new Translation2d(
+                -fieldRelative.vxMetersPerSecond * flightTime,
+                -fieldRelative.vyMetersPerSecond * flightTime
+            );
 
-        double flightTime = getFlightTime(distance);
+            Pose2d newVirtualTarget = new Pose2d(
+                hubLocation.getTranslation().plus(virtualOffset),
+                hubLocation.getRotation()
+            );
 
-        Translation2d virtualOffset = new Translation2d(
-            -fieldRelative.vxMetersPerSecond * flightTime,
-            -fieldRelative.vyMetersPerSecond * flightTime
-        );
+            if (newVirtualTarget.getTranslation().getDistance(virtualTarget.getTranslation()) < 0.05) {
+                virtualTarget = newVirtualTarget;
+                break;
+            }
 
-        Pose2d newVirtualTarget = new Pose2d(
-            hubLocation.getTranslation().plus(virtualOffset),
-            hubLocation.getRotation()
-        );
-
-        if (newVirtualTarget.getTranslation()
-                .getDistance(virtualTarget.getTranslation()) < 0.1) {
-            return newVirtualTarget;
+            virtualTarget = newVirtualTarget;
         }
-
-        return getVirtualTarget(newVirtualTarget, depth + 1);
+        return virtualTarget;
     }
 }

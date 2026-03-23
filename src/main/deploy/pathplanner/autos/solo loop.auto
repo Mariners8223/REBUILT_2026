@@ -13,26 +13,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "shoot auto part 1"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "shoot auto part 2"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "eject"
-                }
-              }
-            ]
+            "pathName": "solo auto part 1"
           }
         },
         {
@@ -50,7 +31,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "shoot auto part 3"
+            "pathName": "solo auto part 2 loop"
           }
         },
         {
@@ -69,6 +50,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "old shit",
+  "folder": null,
   "choreoAuto": false
 }

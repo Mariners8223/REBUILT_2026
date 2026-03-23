@@ -5,15 +5,21 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "middle depo climb auto part 1"
+            "name": "open intake"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "middle depo climb auto part 2"
+            "pathName": "solo auto part 1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "aim to hub"
           }
         },
         {
@@ -25,13 +31,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "middle depo climb auto part 3"
+            "pathName": "solo auto part 2 line"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "solo auto part 3 line"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "climb auto"
+            "name": "aim to hub"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot to hub"
           }
         }
       ]

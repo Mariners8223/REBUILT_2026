@@ -3,47 +3,35 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.46,
-        "y": 0.55
+        "x": 1.9003863636368274,
+        "y": 5.787159090912426
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.0804663742004663,
-        "y": 1.1433484072008921
+        "x": 2.2587748344320597,
+        "y": 3.8220419426045815
       },
       "isLocked": false,
-      "linkedName": "outpost"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.4037580645161296,
-        "y": 2.2429435483870974
+        "x": 0.46,
+        "y": 0.55
       },
       "prevControl": {
-        "x": 2.2089859119062747,
-        "y": 2.0862150935114006
+        "x": 1.6005408388470705,
+        "y": 1.4891832229577826
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "hub after outpost"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "warm up shooter",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "warm up shooter"
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -54,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 40.287348310211534
+    "rotation": 90.0
   },
   "reversed": false,
-  "folder": "Auto depot shoot outpost shoot",
+  "folder": "start mid - collect depot - shoot - outpost",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": -32.00538320813838
   },
   "useDefaultConstraints": true
 }

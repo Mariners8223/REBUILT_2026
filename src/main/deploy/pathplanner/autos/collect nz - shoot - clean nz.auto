@@ -13,13 +13,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "part 1- Trench high depot"
+            "pathName": "shoot auto part 1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "part 2- Depot collect hub"
+            "pathName": "shoot auto part 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "aim to hub"
           }
         },
         {
@@ -31,19 +37,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "part 3- Hub depot Outpost"
+            "pathName": "part 3 - nz clenup"
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 2.5
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "part 4- Outpost shoot "
+            "name": "aim to hub"
           }
         },
         {
@@ -56,6 +56,6 @@
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "old shit",
   "choreoAuto": false
 }
