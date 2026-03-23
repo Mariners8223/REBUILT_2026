@@ -4,12 +4,8 @@
 
 package frc.robot;
 
-import static edu.wpi.first.units.Units.Meter;
-import static edu.wpi.first.units.Units.Second;
-
 import java.util.List;
 
-import org.littletonrobotics.conduit.ConduitApi;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -26,18 +22,15 @@ import edu.wpi.first.net.WebServer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.util.HubTracker;
+import frc.util.Elastic;
 
 
 public class Robot extends LoggedRobot {
     private Command m_autonomousCommand;
     public static boolean isRedAlliance = false;
-    HubTracker tracker = new HubTracker();
 
     private static final Field2d field = new Field2d();
 
@@ -60,9 +53,8 @@ public class Robot extends LoggedRobot {
         Logger.start();
         WebServer.start(5800, Filesystem.getDeployDirectory().getPath());
         new RobotContainer();
-        SmartDashboard.putBoolean("IsHubActive", HubTracker.isActive(DriverStation.getAlliance().get()));
-        SmartDashboard.putString("TimeLeftOnActivation", HubTracker.timeRemainingInCurrentShift().toString());
-        SmartDashboard.putBoolean("InRange", RobotContainer.inRange());
+
+        PathPlannerLogging.setLogTargetPoseCallback(pose -> Logger.recordOutput("Path Pose", pose));
 
         SmartDashboard.putData("Field", field);
     }
@@ -86,19 +78,9 @@ public class Robot extends LoggedRobot {
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
 
-        SmartDashboard.putNumber("Battery Voltage", RobotController.getBatteryVoltage());
-        SmartDashboard.putNumber("Robot Velocity", RobotContainer.driveBase.getVelocity());
-        SmartDashboard.putNumber("Match Time", Timer.getMatchTime());
-        SmartDashboard.putNumber("PDH Voltage", ConduitApi.getInstance().getPDPVoltage());
-
-        SmartDashboard.putBoolean("Is Hub Active", HubTracker.isActive(DriverStation.getAlliance().get()));
-        SmartDashboard.putNumber("Time left in Shift", Math.floor(HubTracker.timeRemainingInCurrentShift().orElseGet(() -> Second.zero()).in(Second) * 100) / 100);
-        SmartDashboard.putString("Current Shift", HubTracker.getCurrentShift().orElseGet(() -> HubTracker.Shift.AUTO).toString());
-
-        SmartDashboard.putString("Distant to Hub", String.format("%.2f", RobotContainer.distanceFromHub().in(Meter)));
-        SmartDashboard.putBoolean("In Alliance Zone", RobotContainer.inAllianceZone());
-
         RobotContainer.pollAlerts();
+        RobotContainer.updateElastic();
+        RobotContainer.updateLogging();
     }
 
     @Override
@@ -109,17 +91,13 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void autonomousInit() {
+        Elastic.selectTab("Autonomous");
+
         m_autonomousCommand = RobotContainer.getAuto();
 
         if (m_autonomousCommand != null){
             CommandScheduler.getInstance().schedule(m_autonomousCommand);
         }
-
-        PathPlannerLogging.setLogTargetPoseCallback(pose -> Logger.recordOutput("Path pose", pose));
-    }
-
-    public void resetAllEncoders(){
-
     }
 
     @Override
@@ -127,6 +105,8 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void teleopInit() {
+        Elastic.selectTab("Teleop");
+
         if (m_autonomousCommand != null) {
             m_autonomousCommand.cancel();
         }
@@ -134,7 +114,6 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void teleopPeriodic() {
-        Logger.recordOutput("Distance To Hub", RobotContainer.distanceFromHub().in(Meter));
     }
 
     @Override

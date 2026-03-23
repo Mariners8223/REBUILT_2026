@@ -4,8 +4,10 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Meter;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.Second;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,6 +19,8 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 import org.json.simple.parser.ParseException;
+import org.littletonrobotics.conduit.ConduitApi;
+import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -28,8 +32,11 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -38,17 +45,14 @@ import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.commands.Drive.AimDriving;
 import frc.robot.commands.Drive.DriveCommand;
-import frc.robot.commands.Drive.DriveToPose;
 import frc.robot.commands.Drive.MinorAdjust;
 import frc.robot.commands.Drive.MinorAdjust.AdjustmentDirection;
 import frc.robot.commands.Shooter.ShootDistance;
 import frc.robot.commands.Shooter.ShootVelocity;
 import frc.robot.subsystems.DriveTrain.DriveBase;
-import frc.robot.subsystems.DriveTrain.DriveBaseConstants;
 import frc.robot.subsystems.Vision.Vision;
+import frc.util.HubTracker;
 import frc.robot.subsystems.Feeder;
-import frc.robot.subsystems.Climb.Climb;
-import frc.robot.subsystems.Climb.ClimbConstants.ClimbStates;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterConstants;
 import frc.robot.subsystems.Funnel.Funnel;
@@ -62,14 +66,13 @@ public class RobotContainer {
     public static Alert controllerDisconnected = new Alert("Drive Controller Disconnect", AlertType.kError);
 
     public static CommandPS5Controller driveController;
-    public static Constants.autoConstats.TrenchLocations trenchLocations = new Constants.autoConstats.TrenchLocations();
+    public static Constants.AutoConstants.TrenchLocations trenchLocations = new Constants.AutoConstants.TrenchLocations();
 
     public static DriveBase driveBase;
     public static Funnel funnel;
     public static Intake intake;
     public static Shooter shooter;
     public static Kicker kicker;
-    public static Climb climb;
 
     public static Feeder feeder;
     public static Vision vision;
@@ -80,14 +83,12 @@ public class RobotContainer {
 
     public static Supplier<Command> fullShootCommand;
     public static Supplier<Command> passCommand;
-    public static Supplier<Command> fullClimb;
 
 
     public RobotContainer() {
         driveController = new CommandPS5Controller(0);
 
         driveBase = new DriveBase();
-        climb = new Climb();
         funnel = new Funnel();
         intake = new Intake();
         shooter = new Shooter();
@@ -117,28 +118,31 @@ public class RobotContainer {
                 Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
                 .andThen(feeder.smartFeedingPassCommand())
             );
-
-        Supplier<Command> hookToTower = () ->
-            Commands.sequence(
-                AutoBuilder.pathfindToPose(Constants.FieldConstants.PRE_PRE_TOWER_POSITION, DriveBaseConstants.PathPlanner.PATH_CONSTRAINTS),
-                new DriveToPose(driveBase, Constants.FieldConstants.PRE_PRE_TOWER_POSITION, 0.1).withTimeout(2),
-                new DriveToPose(driveBase, Constants.FieldConstants.PRE_TOWER_POSITION, 0.1).withTimeout(2),
-                new DriveToPose(driveBase, Constants.FieldConstants.TOWER_POSITION, 0.1).withTimeout(2),
-                new DriveToPose(driveBase, Constants.FieldConstants.INNER_TOWER_POSITION, 0.1).withTimeout(2)
-            );
-
-        fullClimb = () ->
-            Commands.sequence( // TODO: Return climb things
-                // new ResetHook(climb),
-                //climb.toStateCommand(ClimbStates.EXTENDED),
-                hookToTower.get()
-                //new RunHookToHeight(climb, ClimbStates.RESET, 1)
-            );
     }
 
+    //#region Periodic Updates
     public static void pollAlerts(){
         controllerDisconnected.set(!driveController.isConnected());
     }
+
+    public static void updateElastic(){
+        SmartDashboard.putNumber("Battery Voltage", RobotController.getBatteryVoltage());
+        SmartDashboard.putNumber("Robot Velocity", driveBase.getVelocity());
+        SmartDashboard.putNumber("Match Time", Timer.getMatchTime());
+        SmartDashboard.putNumber("PDH Voltage", ConduitApi.getInstance().getPDPVoltage());
+
+        SmartDashboard.putBoolean("Is Hub Active", HubTracker.isActive(DriverStation.getAlliance().orElseGet(() -> Alliance.Red)));
+        SmartDashboard.putNumber("Time left in Shift", Math.floor(HubTracker.timeRemainingInCurrentShift().orElseGet(() -> Second.zero()).in(Second) * 100) / 100);
+        SmartDashboard.putString("Current Shift", HubTracker.getCurrentShift().orElseGet(() -> HubTracker.Shift.AUTO).toString());
+
+        SmartDashboard.putString("Distance to Hub", String.format("%.2f", distanceFromHub().in(Meter)));
+        SmartDashboard.putBoolean("In Alliance Zone", inAllianceZone());
+    }
+
+    public static void updateLogging(){
+        Logger.recordOutput("Distance To Hub", distanceFromHub().in(Meters));
+    }
+    //#endregion
 
     //#region Drive
     public static void configureDriveBindings(){
@@ -147,11 +151,7 @@ public class RobotContainer {
             driveBase::removeDefaultCommand)
             .ignoringDisable(true));
 
-        driveController.PS().onTrue(driveBase.resetOnlyDirection().alongWith(new InstantCommand(() -> climb.resetPosition())));
-
-        driveController.options().whileTrue(climb.dutyCycleCommand(0.1));
-        driveController.create().whileTrue(climb.dutyCycleCommand(-0.1));
-        driveController.create().multiPress(2, 0.5).onTrue(climb.toStateCommand(ClimbStates.RESET));
+        driveController.PS().onTrue(driveBase.resetOnlyDirection());
 
         driveController.povRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.RIGHT));
         driveController.povLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.LEFT));
@@ -180,7 +180,6 @@ public class RobotContainer {
         driveController.circle().toggleOnTrue(feeder.intakeCommand());
 
         driveController.square().toggleOnTrue(Commands.defer(RobotContainer::passTrench, Set.of(driveBase)));
-        driveController.triangle().whileTrue(fullClimb.get());
 
         driveController.cross().multiPress(2, 0.5).onTrue(
             Commands.either(
@@ -204,8 +203,6 @@ public class RobotContainer {
         NamedCommands.registerCommand("warm up shooter", new InstantCommand(() -> shooter.setVelocityByDistance(distanceFromHub()), shooter));
         NamedCommands.registerCommand("shoot to pass", passCommand.get());
         NamedCommands.registerCommand("aim to hub", new AimDriving(driveBase, driveController, RobotContainer::angleToHub).withTimeout(0.8));
-
-        NamedCommands.registerCommand("climb auto", fullClimb.get());
 
         NamedCommands.registerCommand("eject", feeder.ejectCommand());
     }
@@ -295,6 +292,7 @@ public class RobotContainer {
     }
     //#endregion
 
+    //#region Shoot Helpers
     public static Distance distanceFromHub(){
         Pose2d hubLocation = Constants.FieldConstants.HUB_POSITION;
         if(Robot.isRedAlliance){
@@ -321,7 +319,7 @@ public class RobotContainer {
 
     public static boolean inRange(){
         Pose2d pose = driveBase.getPose();
-        Pose2d hub = Constants.autoConstats.hub;
+        Pose2d hub = Constants.AutoConstants.hub;
         if(Robot.isRedAlliance){
             pose = FlippingUtil.flipFieldPose(driveBase.getPose());
             hub = FlippingUtil.flipFieldPose(hub);
@@ -329,8 +327,9 @@ public class RobotContainer {
         double distanceFromHub = driveBase.getDistanceFromPoint2D(hub);
 
         if (pose.getX() > 4.5) return false;
-        return distanceFromHub < Constants.autoConstats.maxRange;
+        return distanceFromHub < Constants.AutoConstants.maxRange;
     }
+    //#endregion
 
    //#region auto
     public static Command passTrench(){
