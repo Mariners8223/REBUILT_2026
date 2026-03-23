@@ -35,6 +35,9 @@ public class IntakeIOSim implements IntakeIO
         rollersMotor.setDutyCycle(dutyCycle);
     }
 
+    public void setPivotDutyCycle(double dutyCycle){
+    }
+
     public Angle getCurrentPosition()
     {
         return Rotation.of(positionMotor.getPosition());

@@ -53,10 +53,10 @@ public final class Constants {
         static Pose2d bottomShoot = new Pose2d(3.045,3.495,new Rotation2d());
 
     public static final class TrenchLocations{
-        Pose2d upRightTrench = new Pose2d(5.825,7.341,new Rotation2d());
-        Pose2d upLeftTrench = new Pose2d(3.573,7.341,new Rotation2d());
-        Pose2d downRightTrench = new Pose2d(5.760,0.652,new Rotation2d());
-        Pose2d downLeftTrench = new Pose2d(3.560,0.652,new Rotation2d());
+        Pose2d upRightTrench = new Pose2d(5.825,7.341, new Rotation2d());
+        Pose2d upLeftTrench = new Pose2d(3.573,7.341, new Rotation2d());
+        Pose2d downRightTrench = new Pose2d(5.760,0.652, new Rotation2d());
+        Pose2d downLeftTrench = new Pose2d(3.560,0.652, new Rotation2d());
     }
   }
 }

@@ -56,6 +56,10 @@ public class IntakeIOReal implements IntakeIO{
         rollersMotor.setDutyCycle(dutyCycle);
     }
 
+    public void setPivotDutyCycle(double dutyCycle){
+        positionMotor.setDutyCycle(dutyCycle);
+    }
+
     public Angle getCurrentPosition()
     {
         return Rotation.of(positionMotor.getPosition());

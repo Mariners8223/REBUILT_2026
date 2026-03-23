@@ -57,7 +57,7 @@ public class MinorAdjust extends Command {
     Rotation2d gyroAngle = driveBase.getRotation2d();
     if(Robot.isRedAlliance) gyroAngle = gyroAngle.plus(Rotation2d.fromDegrees(180));
 
-    ChassisSpeeds fieldRelative = new ChassisSpeeds(direction.getVX(), direction.getVY(), 0);
+    ChassisSpeeds fieldRelative = new ChassisSpeeds(direction.getVX() * 8, direction.getVY() * 8, 0);
     ChassisSpeeds robotRelative = ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelative, gyroAngle);
 
     driveBase.drive(robotRelative);

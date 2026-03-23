@@ -22,7 +22,7 @@ public class IntakeConstants
         public enum IntakeStates
         {
             Closed(Degrees.of(0)),
-            Middle(Degrees.of(-53)), //TODO: Test bump heights
+            Middle(Degrees.of(-45)), //TODO: Test bump heights
             Open(Degrees.of(-90)),
             Reset(Degrees.of(-90)); //TODO: Change before competition
 
