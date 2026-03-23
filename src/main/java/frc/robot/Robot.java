@@ -50,7 +50,8 @@ public class Robot extends LoggedRobot {
             Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
         }
 
-        isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
+        // isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
+        isRedAlliance = true;
         Logger.start();
         WebServer.start(5800, Filesystem.getDeployDirectory().getPath());
         new RobotContainer();
@@ -93,7 +94,8 @@ public class Robot extends LoggedRobot {
     @Override
     public void autonomousInit() {
         Elastic.selectTab("Autonomous");
-        isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
+        // isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
+        isRedAlliance = true;
         RobotContainer.intake.resetPivotPosition(IntakeStates.Closed);
 
         autonomousCommand = RobotContainer.getAuto();
