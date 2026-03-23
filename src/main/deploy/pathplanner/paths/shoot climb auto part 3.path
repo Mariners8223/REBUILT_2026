@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.7349613686534218,
-        "y": 0.5260320088300228
+        "x": 3.6139624724102895,
+        "y": 0.5889514348793716
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.549677277744331,
-        "y": 0.3198956451936592
+        "x": 2.4286783815011987,
+        "y": 0.38281507124300795
       },
       "isLocked": false,
-      "linkedName": "shoot auto part 2 end"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -60,7 +60,7 @@
   "folder": "shoot climb auto paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 75.90829112876739
+    "rotation": 89.53037298031037
   },
   "useDefaultConstraints": true
 }

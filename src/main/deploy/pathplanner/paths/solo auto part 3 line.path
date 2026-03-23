@@ -1,0 +1,92 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 6.58085540838852,
+        "y": 4.320557395143488
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.7550938189842675,
+        "y": 4.930391832232135
+      },
+      "isLocked": false,
+      "linkedName": "end solo auto part 2 line"
+    },
+    {
+      "anchor": {
+        "x": 6.367897350993099,
+        "y": 7.360049668876727
+      },
+      "prevControl": {
+        "x": 6.723545081753565,
+        "y": 7.10998485818284
+      },
+      "nextControl": {
+        "x": 6.058140176600164,
+        "y": 7.5778476821243155
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.7349613686534218,
+        "y": 7.505248344370861
+      },
+      "prevControl": {
+        "x": 6.6873344370858145,
+        "y": 7.626247240620657
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "end solo auto part 1"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.9346246973365565,
+      "rotationDegrees": -90.0
+    },
+    {
+      "waypointRelativePos": 1.841807909604509,
+      "rotationDegrees": -90.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "start rollers",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "stop rollers",
+      "waypointRelativePos": 0.4,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -76.84545536468035
+  },
+  "reversed": false,
+  "folder": "solo auto",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -118.07248693585292
+  },
+  "useDefaultConstraints": true
+}

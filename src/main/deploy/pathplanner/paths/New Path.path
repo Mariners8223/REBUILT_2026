@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4868636984441617,
-        "y": 4.90163149860756
+        "x": 2.0,
+        "y": 7.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.411072580643554,
-        "y": 4.415354838707507
+        "x": 3.0,
+        "y": 7.0
       },
       "isLocked": false,
-      "linkedName": "hub after depot"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.46,
-        "y": 0.55
+        "x": 1.4601821192052982,
+        "y": 3.289646799116996
       },
       "prevControl": {
-        "x": 2.1504354838686957,
-        "y": 2.177201612906358
+        "x": 0.46018211920529817,
+        "y": 3.289646799116996
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "outpost"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Auto depot shoot outpost shoot",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -15.027618909115716
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

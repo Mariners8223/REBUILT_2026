@@ -13,13 +13,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "shoot auto part 1"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "shoot auto part 2"
+            "pathName": "solo auto part 1"
           }
         },
         {
@@ -37,19 +31,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "part 3 - trench outpost"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 2.0
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "part 4- Outpost shoot "
+            "pathName": "solo auto part 2 loop"
           }
         },
         {

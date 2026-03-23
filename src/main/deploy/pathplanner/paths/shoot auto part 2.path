@@ -12,20 +12,20 @@
         "y": 0.5925227272727271
       },
       "isLocked": false,
-      "linkedName": "shoot auto part 1 end"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.7349613686534218,
-        "y": 0.5260320088300228
+        "x": 3.6139624724102895,
+        "y": 0.5889514348793716
       },
       "prevControl": {
-        "x": 5.501545253863135,
-        "y": 0.40019315673289046
+        "x": 5.380546357620003,
+        "y": 0.4631125827822393
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "shoot auto part 2 end"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -76,7 +76,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 75.90829112876739
+    "rotation": 89.53037298031037
   },
   "reversed": false,
   "folder": "shoot auto paths",

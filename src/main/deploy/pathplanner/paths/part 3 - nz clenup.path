@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.7349613686534218,
-        "y": 0.5260320088300228
+        "x": 3.6139624724102895,
+        "y": 0.5889514348793716
       },
       "prevControl": null,
       "nextControl": {
-        "x": 9.368669977926274,
-        "y": 0.056556291395115865
+        "x": 9.24767108168314,
+        "y": 0.11947571744446484
       },
       "isLocked": false,
-      "linkedName": "shoot auto part 2 end"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 5.375667770419425
       },
       "prevControl": {
-        "x": 7.491584554894662,
-        "y": 5.13270449505325
+        "x": 7.491584554894664,
+        "y": 5.132704495053244
       },
       "nextControl": {
         "x": 7.093797599761748,
@@ -41,7 +41,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "nz cleanup part 3"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
@@ -112,7 +112,7 @@
   "folder": "auto nz shoot and nz clean",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 75.90829112876739
+    "rotation": 89.53037298031037
   },
   "useDefaultConstraints": true
 }
