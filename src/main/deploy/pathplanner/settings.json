@@ -3,6 +3,7 @@
   "robotLength": 0.808,
   "holonomicMode": true,
   "pathFolders": [
+    "Trench",
     "auto nz shoot and nz clean",
     "shoot auto paths",
     "shoot climb auto paths",

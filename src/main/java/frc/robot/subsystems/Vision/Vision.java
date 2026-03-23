@@ -5,6 +5,7 @@
 package frc.robot.subsystems.Vision;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -13,6 +14,8 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.littletonrobotics.junction.Logger;
@@ -27,6 +30,7 @@ import frc.robot.subsystems.Vision.VisionConstants.CameraConstants;
 
 
 public class Vision extends SubsystemBase {
+    private final HashMap<VisionCamera, Alert> disconnectedAlerts = new HashMap<>();
 
     private final VisionCamera[] cameras;
 
@@ -47,6 +51,8 @@ public class Vision extends SubsystemBase {
         for (int i = 0; i < numOfCameras; i++) {
             if(Constants.ROBOT_TYPE != RobotType.REPLAY) cameras[i] = new VisionCamera(constants[i], VisionConstants.FIELD_LAYOUT, referncePoseSupplier);
             else cameras[i] = new VisionCamera(constants[i].cameraName);
+
+            disconnectedAlerts.put(cameras[i], new Alert(cameras[i].cameraName + " Disconnected", AlertType.kWarning));
         }
 
         this.poseConsumer = poseConsumer;
@@ -54,11 +60,15 @@ public class Vision extends SubsystemBase {
 
     @Override
     public void periodic() {
+        ArrayList<Pose3d> allAcceptedPoses = new ArrayList<>();
+        ArrayList<Pose3d> allRejectedPoses = new ArrayList<>();
+
         for (VisionCamera camera : cameras) {
             camera.update();
             camera.log();
 
             SmartDashboard.putBoolean(camera.cameraName + " is connected", camera.inputs.isConnected);
+            disconnectedAlerts.get(camera).set(camera.inputs.isConnected);
 
             // For logging purposes
             ArrayList<Pose3d> acceptedPoses = new ArrayList<>();
@@ -99,10 +109,14 @@ public class Vision extends SubsystemBase {
                 acceptedPoses.add(frame.robotPose());
             }
 
+            allAcceptedPoses.addAll(acceptedPoses);
+            allRejectedPoses.addAll(allRejectedPoses);
+
             Logger.recordOutput("Vision/" + camera.cameraName + "/Accepted Poses", acceptedPoses.toArray(new Pose3d[0]));
             Logger.recordOutput("Vision/" + camera.cameraName + "/Rejected Poses", rejectedPoses.toArray(new Pose3d[0]));
         }
-
+        Logger.recordOutput("Vision/All Accepted", allAcceptedPoses.toArray(new Pose3d[0]));
+        Logger.recordOutput("Vision/All Rejected", allRejectedPoses.toArray(new Pose3d[0]));
     }
 
     /**
@@ -201,7 +215,7 @@ public class Vision extends SubsystemBase {
             };
 
             this.cameraName = cameraName;
-            this.constants = CameraConstants.POINTING_IN_CAMERA;
+            this.constants = CameraConstants.FRONT_CAMERA;
             inputs = new VisionInputsAutoLogged();
 
         }

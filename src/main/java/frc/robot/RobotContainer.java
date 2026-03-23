@@ -4,70 +4,82 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Meter;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.Second;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BooleanSupplier;
+import java.util.Set;
+import java.util.function.Supplier;
 
 import org.json.simple.parser.ParseException;
+import org.littletonrobotics.conduit.ConduitApi;
+import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.FileVersionException;
 import com.pathplanner.lib.util.FlippingUtil;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.*;
-import frc.robot.commands.Climb.RunHookToHeight;
 import frc.robot.commands.Drive.AimDriving;
 import frc.robot.commands.Drive.DriveCommand;
-import frc.robot.commands.Drive.DriveToPose;
 import frc.robot.commands.Drive.MinorAdjust;
 import frc.robot.commands.Drive.MinorAdjust.AdjustmentDirection;
 import frc.robot.commands.Shooter.ShootDistance;
 import frc.robot.commands.Shooter.ShootVelocity;
 import frc.robot.subsystems.DriveTrain.DriveBase;
-import frc.robot.subsystems.DriveTrain.DriveBaseConstants;
 import frc.robot.subsystems.Vision.Vision;
+import frc.util.HubTracker;
 import frc.robot.subsystems.Feeder;
-import frc.robot.subsystems.Climb.Climb;
-import frc.robot.subsystems.Climb.ClimbConstants.Heights;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterConstants;
 import frc.robot.subsystems.Funnel.Funnel;
-import frc.robot.subsystems.Funnel.FunnelConstants;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeConstants;
-import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakePosition;
+import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakeStates;
 import frc.robot.subsystems.Kicker.Kicker;
-import frc.robot.subsystems.Kicker.KickerConstants;
 
 
 public class RobotContainer {
+    public static Alert controllerDisconnected = new Alert("Drive Controller Disconnect", AlertType.kError);
+
     public static CommandPS5Controller driveController;
-    public static Constants.autoConstats.TrenchLocations trenchLocations = new Constants.autoConstats.TrenchLocations();
+    public static Constants.AutoConstants.TrenchLocations trenchLocations = new Constants.AutoConstants.TrenchLocations();
 
     public static DriveBase driveBase;
     public static Funnel funnel;
     public static Intake intake;
     public static Shooter shooter;
     public static Kicker kicker;
-    public static Climb climb;
 
     public static Feeder feeder;
     public static Vision vision;
@@ -75,102 +87,81 @@ public class RobotContainer {
     public static LoggedDashboardChooser<Command> autoChooser;
     public static LoggedDashboardChooser<String> sideChooser;
     public static HashMap<String, Command> mirroredAutoMap = new HashMap<>();
-    
-    public static LoggedDashboardChooser<IntakePosition> intakeChooser;
 
-    public static Command fullShootCommand;
-    public static Command passCommand;
-    public static Command fullClimb;
-    public static Command ejectCommand;
-    public static Command intakeCommand;
+    public static Supplier<Command> fullShootCommand;
+    public static Supplier<Command> passCommand;
 
 
     public RobotContainer() {
         driveController = new CommandPS5Controller(0);
 
         driveBase = new DriveBase();
-        climb = new Climb();
         funnel = new Funnel();
         intake = new Intake();
         shooter = new Shooter();
         kicker = new Kicker();
 
-        feeder = new Feeder(intake, funnel, kicker, shooter);
+        feeder = new Feeder(intake, funnel, kicker);
         vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
 
         // TODO: Separate rollers and pivot
-        // TODO: Alerts for stall
+        // TODO: Add stall alerts
 
         configureCommands();
         configureNamedCommands();
         configureDriveBindings();
-        // configureTestBindings();
         configureChoosers();
         configureMirroredAutosMap();
     }
 
-    public void configureCommands(){
-        fullShootCommand =
+    public static void configureCommands(){
+        fullShootCommand = () ->
             Commands.parallel(
                 new ShootDistance(shooter, RobotContainer::distanceFromHub),
                 Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
-                    .andThen(
-                        Commands.parallel(
-                            kicker.setKickerByDistance(RobotContainer::distanceFromHub),
-                            funnel.toShooterCommand(),
-                            intake.spinRollersCommand()
-                        )
-                    )
+                .andThen(feeder.smartFeedingShootCommand(RobotContainer::distanceFromHub))
             );
 
-        passCommand =
+        passCommand = () ->
             Commands.parallel(
-              new ShootVelocity(shooter, () -> RPM.of(ShooterConstants.PASSING_VELOCITY)),
+                new ShootVelocity(shooter, () -> RPM.of(ShooterConstants.PASSING_VELOCITY)),
                 Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
-                    .andThen(
-                        Commands.parallel(
-                            kicker.setKickerCommand(1),
-                            funnel.toShooterCommand()
-                        )
-                    )
+                .andThen(feeder.smartFeedingPassCommand())
             );
-
-        Command hookToTower =
-            Commands.sequence(
-                AutoBuilder.pathfindToPose(Constants.FieldConstants.PRE_PRE_TOWER_POSITION, DriveBaseConstants.PathPlanner.PATH_CONSTRAINTS),
-                new DriveToPose(driveBase, Constants.FieldConstants.PRE_PRE_TOWER_POSITION, 0.1).withTimeout(2),
-                new DriveToPose(driveBase, Constants.FieldConstants.PRE_TOWER_POSITION, 0.1).withTimeout(2),
-                new DriveToPose(driveBase, Constants.FieldConstants.TOWER_POSITION, 0.1).withTimeout(2),
-                new DriveToPose(driveBase, Constants.FieldConstants.INNER_TOWER_POSITION, 0.1).withTimeout(2)
-            );
-
-        fullClimb =
-            Commands.sequence(
-                // new ResetHook(climb),
-                climb.toPositionCommand(Heights.EXTENDED),
-                hookToTower,
-                new RunHookToHeight(climb, Heights.RESET, 1)
-            );
-
-        ejectCommand = feeder.setSpeeds(0, 0, FunnelConstants.CenteringMotor.CENTERING_EJECT_SPEED, KickerConstants.KICKER_EJECT_SPEED, 0);
-        intakeCommand = feeder.setSpeeds(IntakeConstants.RollersMotor.DUTY_CYCLE, FunnelConstants.LeadingMotor.LeadSpeed, 0, 0, 0);
     }
 
-    // for tests!!
-    public void configureTestBindings(){}
+    //#region Periodic Updates
+    public static void pollAlerts(){
+        controllerDisconnected.set(!driveController.isConnected());
+    }
+
+    public static void updateElastic(){
+        SmartDashboard.putNumber("Battery Voltage", RobotController.getBatteryVoltage());
+        SmartDashboard.putNumber("Robot Velocity", driveBase.getVelocity());
+        SmartDashboard.putNumber("Match Time", Timer.getMatchTime());
+        SmartDashboard.putNumber("PDH Voltage", ConduitApi.getInstance().getPDPVoltage());
+
+        SmartDashboard.putBoolean("Is Hub Active", HubTracker.isActive(DriverStation.getAlliance().orElseGet(() -> Alliance.Red)));
+        SmartDashboard.putNumber("Time left in Shift", Math.floor(HubTracker.timeRemainingInCurrentShift().orElseGet(() -> Second.zero()).in(Second) * 100) / 100);
+        SmartDashboard.putString("Current Shift", HubTracker.getCurrentShift().orElseGet(() -> HubTracker.Shift.AUTO).toString());
+
+        SmartDashboard.putString("Distance to Hub", String.format("%.2f", distanceFromHub().in(Meter)));
+        SmartDashboard.putBoolean("In Alliance Zone", inAllianceZone());
+    }
+
+    public static void updateLogging(){
+        Logger.recordOutput("Distance To Hub", distanceFromHub().in(Meters));
+    }
+    //#endregion
 
     //#region Drive
-    public void configureDriveBindings(){
+    public static void configureDriveBindings(){
         new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(
             new StartEndCommand(() ->driveBase.setDefaultCommand(new DriveCommand(driveBase, driveController)),
             driveBase::removeDefaultCommand)
             .ignoringDisable(true));
 
         driveController.PS().onTrue(driveBase.resetOnlyDirection());
-
-        driveController.options().whileTrue(climb.dutyCycleCommand(0.1));
-        driveController.create().whileTrue(climb.dutyCycleCommand(-0.1));
-        driveController.create().multiPress(2, 0.5).onTrue(climb.toPositionCommand(Heights.RESET));
 
         driveController.povRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.RIGHT));
         driveController.povLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.LEFT));
@@ -181,12 +172,14 @@ public class RobotContainer {
         driveController.povDownLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_LEFT));
         driveController.povDownRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_RIGHT));
 
-
         driveController.L1().toggleOnTrue(
-            new ConditionalCommand(
-                fullShootCommand,
-                passCommand,
-                RobotContainer::inAllianceZone
+            Commands.parallel(
+                Commands.either(
+                    fullShootCommand.get(),
+                    passCommand.get(),
+                    RobotContainer::inAllianceZone
+                ),
+                intake.bumpFuelCommand().repeatedly().beforeStarting(Commands.waitSeconds(2))
             )
         );
 
@@ -194,40 +187,38 @@ public class RobotContainer {
             new AimDriving(driveBase, driveController, RobotContainer::getShootingAngle)
         );
 
-        driveController.circle().toggleOnTrue(intakeCommand);
-        driveController.square().toggleOnTrue(ejectCommand);
+        driveController.circle().toggleOnTrue(feeder.intakeCommand());
+        driveController.square().toggleOnTrue(feeder.ejectCommand());
 
-        driveController.triangle().whileTrue(fullClimb);
+        driveController.triangle().whileTrue(Commands.defer(RobotContainer::passTrench, Set.of(driveBase)));
 
-        driveController.cross().onTrue(
+        driveController.options().onTrue(
             Commands.either(
-                intake.moveToPositionCommand(IntakePosition.Closed),
-                intake.moveToPositionCommand(IntakePosition.Open),
-                () -> intake.getCurrentState() == IntakePosition.Open
+                intake.moveToPositionCommand(IntakeStates.Closed),
+                intake.moveToPositionCommand(IntakeStates.Open),
+                () -> intake.getCurrentState() == IntakeStates.Open
             )
         );
-        driveController.R3().onTrue(intake.bumpFuelCommand());
+        driveController.cross().onTrue(intake.bumpFuelCommand());
     }
     //#endregion
-    
+
     public static void configureNamedCommands(){
-        NamedCommands.registerCommand("close intake", intake.moveToPositionCommand(IntakePosition.Closed));
-        NamedCommands.registerCommand("open intake", intake.moveToPositionCommand(IntakePosition.Open).andThen(Commands.waitSeconds(0.7)));
-        
-        NamedCommands.registerCommand("start rollers", new InstantCommand(() -> intake.setRollersMotorDutyCycle(IntakeConstants.RollersMotor.DUTY_CYCLE)));
-        NamedCommands.registerCommand("stop rollers", new InstantCommand(() -> intake.setRollersMotorDutyCycle(0)));
+        NamedCommands.registerCommand("close intake", intake.moveToPositionCommand(IntakeStates.Closed));
+        NamedCommands.registerCommand("open intake", intake.moveToPositionCommand(IntakeStates.Open).andThen(Commands.waitSeconds(0.7)));
 
-        NamedCommands.registerCommand("shoot to hub", fullShootCommand.withTimeout(3));
+        NamedCommands.registerCommand("start rollers", new InstantCommand(() -> intake.setRollersDutyCycle(IntakeConstants.RollersMotor.DUTY_CYCLE)));
+        NamedCommands.registerCommand("stop rollers", new InstantCommand(() -> intake.setRollersDutyCycle(0)));
+
+        NamedCommands.registerCommand("shoot to hub", fullShootCommand.get().withTimeout(3));
         NamedCommands.registerCommand("warm up shooter", new InstantCommand(() -> shooter.setVelocityByDistance(distanceFromHub()), shooter));
-        NamedCommands.registerCommand("shoot to pass", passCommand);
+        NamedCommands.registerCommand("shoot to pass", passCommand.get());
         NamedCommands.registerCommand("aim to hub", new AimDriving(driveBase, driveController, RobotContainer::angleToHub).withTimeout(0.8));
-        
-        NamedCommands.registerCommand("climb auto", fullClimb);
 
-        NamedCommands.registerCommand("eject", ejectCommand);
+        NamedCommands.registerCommand("eject", feeder.ejectCommand());
     }
-    
-    //#regionchoosers
+
+    //#region Choosers
     public static void configureChoosers(){
         List<String> namesOfAutos = AutoBuilder.getAllAutoNames();
         List<PathPlannerAuto> autosOfAutos = new ArrayList<>();
@@ -245,6 +236,7 @@ public class RobotContainer {
 
         new Trigger(RobotState::isEnabled).and(RobotState::isTeleop).onTrue(new InstantCommand(() -> Robot.clearObjectPoseField("AutoPath")).ignoringDisable(true));
         new Trigger(RobotState::isDisabled).and(checkForPathChoiceUpdate).onTrue(new InstantCommand(() -> updateFieldFromAuto(autoChooser.get().getName())).ignoringDisable(true));
+
         //configure the chooser for the side relative to the driver station.
         //the default is right because the routes are planned for right.
         sideChooser = new LoggedDashboardChooser<>("sideChooser");
@@ -253,7 +245,7 @@ public class RobotContainer {
         sideChooser.addOption("middle", "middle");
         sideChooser.addOption("left", "left");
 
-        SmartDashboard.putData("sideChooser",sideChooser.getSendableChooser());   
+        SmartDashboard.putData("sideChooser",sideChooser.getSendableChooser());
     }
 
     private static void updateFieldFromAuto(String autoName) {
@@ -302,7 +294,7 @@ public class RobotContainer {
     }
 
     public static Command getAuto(){
-        return getSide().equals("right") || getSide().equals("middle") ? 
+        return getSide().equals("right") || getSide().equals("middle") ?
             autoChooser.get() : mirroredAutoMap.get(autoChooser.get().getName());
     }
 
@@ -311,9 +303,10 @@ public class RobotContainer {
     }
     //#endregion
 
+    //#region Shoot Helpers
     public static Distance distanceFromHub(){
         Pose2d hubLocation = Constants.FieldConstants.HUB_POSITION;
-        if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
+        if(Robot.isRedAlliance){
             hubLocation = FlippingUtil.flipFieldPose(hubLocation);
         }
         return Meters.of(
@@ -335,50 +328,40 @@ public class RobotContainer {
         return inAllianceZone() ? angleToHub() : angleToAllianceZone();
     }
 
-   //#region auto
-    public Command passTrench(){
-    Pose2d pose = driveBase.getPose();
-
-    if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
-        pose = FlippingUtil.flipFieldPose(driveBase.getPose());
-    }
-    if (pose.getY() >= 4){
-        if (pose.getX() <= 4.5){
-            return driveBase.findPath(trenchLocations.upRightTrench,2);
-        }
-        return driveBase.findPath(trenchLocations.upLeftTrench, 2);
-    }
-    if (pose.getX() <= 4.5){
-        return driveBase.findPath(trenchLocations.downRightTrench, 2);
-    }
-    return driveBase.findPath(trenchLocations.downLeftTrench, 2);
-   }
-
-
-   public static boolean inRange(){
-    Pose2d pose = driveBase.getPose();
-    Pose2d hub = Constants.autoConstats.hub;
-    if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
-        pose = FlippingUtil.flipFieldPose(driveBase.getPose());
-        hub = FlippingUtil.flipFieldPose(hub);
-    }
-    double distanceFromHub = driveBase.getDistanceFromPoint2D(hub);
-
-    if (pose.getX() > 4.5) return false;
-    return distanceFromHub < Constants.autoConstats.maxRange;
-   }
-
-
-    public Command getInRange(){
+    public static boolean inRange(){
         Pose2d pose = driveBase.getPose();
-        if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
+        Pose2d hub = Constants.AutoConstants.hub;
+        if(Robot.isRedAlliance){
             pose = FlippingUtil.flipFieldPose(driveBase.getPose());
+            hub = FlippingUtil.flipFieldPose(hub);
         }
-        if (pose.getY() >= 4.5){
-            return driveBase.findPath(Constants.autoConstats.topShoot).until(RobotContainer::inRange);
-        }
-        return driveBase.findPath(Constants.autoConstats.bottomShoot).until(RobotContainer::inRange);
+        double distanceFromHub = driveBase.getDistanceFromPoint2D(hub);
+
+        if (pose.getX() > 4.5) return false;
+        return distanceFromHub < Constants.AutoConstants.maxRange;
     }
+    //#endregion
+
+   //#region auto
+    public static Command passTrench(){
+        Pose2d pose = driveBase.getPose();
+        PathPlannerPath targetPath;
+
+        if(Robot.isRedAlliance) pose = FlippingUtil.flipFieldPose(driveBase.getPose());
+        String pathName = pose.getX() <= 4.5 ? "UpLeft" : "UpRight";
+
+        try{
+            targetPath = PathPlannerPath.fromPathFile(pathName);
+            targetPath = pose.getY() >= 4 ? targetPath : targetPath.mirrorPath();
+        } 
+        catch (IOException | ParseException | FileVersionException e){
+            DriverStation.reportError("Error loading trench path", e.getStackTrace());
+            targetPath = PathPlannerPath.fromPathPoints(new ArrayList<>(), PathConstraints.unlimitedConstraints(12.0), new GoalEndState(0, Rotation2d.kZero));
+        }
+
+        PathPlannerPath flippedTargetPose = Robot.isRedAlliance ? targetPath.flipPath() : targetPath;
+        return driveBase.pathFindToPathAndFollow(flippedTargetPose);
+   }
 
     public static boolean inAllianceZone(){
         if (Robot.isRedAlliance) return driveBase.getPose().getX() > Constants.FieldConstants.RED_ALLIANCE_ZONE_X;

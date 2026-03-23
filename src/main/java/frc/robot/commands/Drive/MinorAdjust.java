@@ -40,15 +40,13 @@ public class MinorAdjust extends Command {
   }
 
   private final DriveBase driveBase;
-
-  private final AdjustmentDirection direcation;
+  private final AdjustmentDirection direction;
 
   /** Creates a new MinorAdjust. */
   public MinorAdjust(DriveBase driveBase, AdjustmentDirection direcation) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.driveBase = driveBase;
-
-    this.direcation = direcation;
+    this.direction = direcation;
 
     addRequirements(driveBase);
   }
@@ -59,7 +57,7 @@ public class MinorAdjust extends Command {
     Rotation2d gyroAngle = driveBase.getRotation2d();
     if(Robot.isRedAlliance) gyroAngle = gyroAngle.plus(Rotation2d.fromDegrees(180));
 
-    ChassisSpeeds fieldRelative = new ChassisSpeeds(direcation.getVX(), direcation.getVY(), 0);
+    ChassisSpeeds fieldRelative = new ChassisSpeeds(direction.getVX() * 8, direction.getVY() * 8, 0);
     ChassisSpeeds robotRelative = ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelative, gyroAngle);
 
     driveBase.drive(robotRelative);

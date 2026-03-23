@@ -35,14 +35,20 @@ public class IntakeIOSim implements IntakeIO
         rollersMotor.setDutyCycle(dutyCycle);
     }
 
+    public void setPivotDutyCycle(double dutyCycle){
+    }
+
     public Angle getCurrentPosition()
     {
         return Rotation.of(positionMotor.getPosition());
     }
+    public double getPivotStallCurrent(){
+        return 0;
+    }
 
     public void resetPositionMotorEncoder()
     {
-        positionMotor.setMotorEncoderPosition(IntakeConstants.PositionMotor.IntakePosition.Closed.getAngle().in(Rotation));
+        positionMotor.setMotorEncoderPosition(IntakeConstants.PositionMotor.IntakeStates.Closed.getAngle().in(Rotation));
     }
     public void resetPositionMotorEncoder(double angle){
         positionMotor.setMotorEncoderPosition(angle);

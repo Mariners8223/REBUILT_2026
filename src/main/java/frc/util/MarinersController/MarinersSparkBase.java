@@ -6,8 +6,8 @@ import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.PersistMode;
+import com.revrobotics.ResetMode;
 import com.revrobotics.spark.config.AbsoluteEncoderConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.ExternalEncoderConfig;
@@ -106,6 +106,7 @@ public class MarinersSparkBase extends MarinersController {
         config.voltageCompensation(12);
 
         REVLibError error = sparkBase.configure(config, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+        sparkBase.configure(config, com.revrobotics.ResetMode.kResetSafeParameters, com.revrobotics.PersistMode.kNoPersistParameters);
 
         reportError("Error configuring motor", error);
     }
@@ -514,7 +515,7 @@ public class MarinersSparkBase extends MarinersController {
         };
 
         // REVLibError error = motor.getClosedLoopController().setReference(output, controlType, 0, feedForward);
-        REVLibError error = motor.getClosedLoopController().setReference(output, controlType, ClosedLoopSlot.kSlot0, feedForward);
+        REVLibError error = motor.getClosedLoopController().setSetpoint(output, controlType, ClosedLoopSlot.kSlot0, feedForward);
 
         reportError("Error setting motor output", error);
     }

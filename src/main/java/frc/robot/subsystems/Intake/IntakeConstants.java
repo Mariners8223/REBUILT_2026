@@ -19,17 +19,16 @@ public class IntakeConstants
 
     public static class PositionMotor
     {
-        //TODO find real info for constants!
-        public enum IntakePosition
+        public enum IntakeStates
         {
             Closed(Degrees.of(0)),
-            Middle(Degrees.of(-35)),
+            Middle(Degrees.of(-45)), //TODO: Test bump heights
             Open(Degrees.of(-90)),
             Reset(Degrees.of(-90)); //TODO: Change before competition
 
             private final Angle angle;
 
-            IntakePosition(Angle angle)
+            IntakeStates(Angle angle)
             {
                 this.angle = angle;
             }
@@ -39,9 +38,9 @@ public class IntakeConstants
                 return this.angle;
             }
 
-            public static IntakePosition findNearestPosition(Angle angle)
+            public static IntakeStates findNearestPosition(Angle angle)
             {
-                for(IntakePosition position : IntakePosition.values())
+                for(IntakeStates position : IntakeStates.values())
                 {
                     if (Constants.CALCULATIONS.epsilonEquals(
                         angle,
@@ -60,16 +59,17 @@ public class IntakeConstants
         public static final boolean IS_INVERTED = true;
         public static final Angle POSITION_TOLERANCE = Degrees.of(2);
         public static final double GEAR_RATIO = 60;
-        public static final double SOFT_MINIMUM = IntakePosition.Open.getAngle().in(Rotations);
-        public static final double SOFT_MAXIMUM = IntakePosition.Closed.getAngle().in(Rotations);
+        public static final double SOFT_MINIMUM = IntakeStates.Open.getAngle().in(Rotations);
+        public static final double SOFT_MAXIMUM = IntakeStates.Closed.getAngle().in(Rotations);
         public static final PIDFGains PID_GAINS = new PIDFGains(
-        700,
+        800,
         50,
         0,
         0.1);
         public static final TrapezoidProfile PROFILE = new TrapezoidProfile(
             new Constraints(2, 0.8)
         );
+        public static final double STALL_CURRENT = 40;
     }
 
     public static class RollersMotor
@@ -79,8 +79,8 @@ public class IntakeConstants
         public static final boolean IS_BRUSHLESS = false;
         public static final MotorType MOTOR_TYPE = MotorType.SPARK_FLEX;
         public static final boolean IS_INVERTED = false;
-        public static final double GEAR_RATIO = 1;
-        public static final double DUTY_CYCLE = 1;
+        public static final double GEAR_RATIO = 5;
+        public static final double DUTY_CYCLE = 0.9;
     }
 
     public static final double MOMENT_OF_INERTIA = 0;

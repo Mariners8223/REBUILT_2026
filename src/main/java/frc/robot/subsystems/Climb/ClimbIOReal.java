@@ -26,12 +26,12 @@ public class ClimbIOReal implements ClimbIO
         return motor;
     }
 
-    public void setPower(double power)
+    public void setDutyCycle(double dutyCycle)
     {
-        motor.setDutyCycle(power);
+        motor.setDutyCycle(dutyCycle);
     }
 
-    public void stopClimbMotor()
+    public void stopMotors()
     {
         motor.stopMotor();
     }
@@ -50,11 +50,11 @@ public class ClimbIOReal implements ClimbIO
         return motor.getMotor().getSupplyCurrent().getValueAsDouble();
     }
 
-    public void setPosition(double refrence){
-        motor.setReference(refrence, ControlMode.Position);
+    public void setPosition(double position){
+        motor.setReference(position, ControlMode.Position);
     }
 
-    public void Update(ClimbInputs inputs)
+    public void update(ClimbInputs inputs)
     {
         inputs.height = getPosition();
     }
