@@ -5,8 +5,10 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Constants;
 import frc.robot.Robot;
 
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Rotation;
 
 import org.littletonrobotics.junction.Logger;
@@ -31,7 +33,7 @@ public class Intake extends SubsystemBase{
     {
         io = Robot.isReal() ? new IntakeIOReal() : new IntakeIOSim();
         this.resetPivotPosition();
-        state = IntakeStates.Open; // TODO: Swap to Closed
+        state = IntakeStates.Reset; // TODO: Swap to Closed
 
         // setDefaultCommand(this.moveToPositionCommand());
     }
@@ -69,6 +71,10 @@ public class Intake extends SubsystemBase{
         io.resetPositionMotorEncoder(state.getAngle().in(Rotation));
     }
 
+    public boolean pivotAtState(){
+        return Constants.CALCULATIONS.epsilonEquals(io.getCurrentPosition(), state.getAngle(), Degrees.of(3));
+    }
+
     public boolean rollersInStall(){
         return (RobotState.isEnabled()) && (io.getRollersSetpoint() != 0 && Math.abs(io.getRollersVelocity()) < 1);
     }
@@ -96,11 +102,15 @@ public class Intake extends SubsystemBase{
     }
 
     public Command bumpFuelCommand(){
+        // return Commands.sequence(
+        //     new InstantCommand(() -> this.setPivotState(IntakeStates.Middle)),
+        //     new WaitCommand(IntakeConstants.BUMP_WAIT_TIME),
+        //     new InstantCommand(() -> this.setPivotState(IntakeStates.Open)),
+        //     new WaitCommand(IntakeConstants.BUMP_WAIT_TIME)
+        // );
         return Commands.sequence(
-            new InstantCommand(() -> this.setPivotState(IntakeStates.Middle)),
-            new WaitCommand(IntakeConstants.BUMP_WAIT_TIME),
-            new InstantCommand(() -> this.setPivotState(IntakeStates.Open)),
-            new WaitCommand(IntakeConstants.BUMP_WAIT_TIME)
+            new InstantCommand(() -> this.setPivotState(IntakeStates.Middle)).until(this::pivotAtState),
+            new InstantCommand(() -> this.setPivotState(IntakeStates.Open)).until(this::pivotAtState)
         );
     }
 

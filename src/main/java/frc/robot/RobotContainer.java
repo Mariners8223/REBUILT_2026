@@ -89,7 +89,7 @@ public class RobotContainer {
 
     public static Supplier<Command> shootCommand;
     public static Supplier<Command> passCommand;
-    public static Supplier<Command> fullShootCommand;
+    public static Supplier<Command> conditionalShootCommand;
 
 
     public RobotContainer() {
@@ -128,7 +128,7 @@ public class RobotContainer {
                 .andThen(feeder.smartFeedingPassCommand())
             );
 
-        fullShootCommand = () ->
+        conditionalShootCommand = () ->
             Commands.either(
                 shootCommand.get(),
                 passCommand.get(),
@@ -183,11 +183,11 @@ public class RobotContainer {
             new AimDriving(driveBase, driveController, RobotContainer::getShootingAngle).alongWith(
                 feeder.ejectCommand().withTimeout(0.5).andThen(
                     Commands.parallel(
-                        fullShootCommand.get(),
+                        conditionalShootCommand.get(),
                         intake.bumpFuelCommand().repeatedly().beforeStarting(Commands.waitSeconds(2))
                     )
                 )
-            ).finallyDo(() -> intake.moveToPositionCommand(IntakeStates.Open))
+            ).finallyDo(() -> intake.setPivotState(IntakeStates.Open))
         );
 
         driveController.circle().toggleOnTrue(feeder.intakeCommand());
@@ -219,7 +219,8 @@ public class RobotContainer {
             );
         NamedCommands.registerCommand("warm up shooter", new InstantCommand(() -> shooter.setVelocityByDistance(distanceFromHub()), shooter));
         NamedCommands.registerCommand("shoot to pass", passCommand.get());
-        NamedCommands.registerCommand("aim to hub", new AimDriving(driveBase, driveController, RobotContainer::angleToHub).withTimeout(0.2));
+        // NamedCommands.registerCommand("aim to hub", new AimDriving(driveBase, driveController, RobotContainer::angleToHub).withTimeout(0.2));
+        NamedCommands.registerCommand("aim to hub", new InstantCommand());
 
         NamedCommands.registerCommand("eject", feeder.ejectCommand());
     }

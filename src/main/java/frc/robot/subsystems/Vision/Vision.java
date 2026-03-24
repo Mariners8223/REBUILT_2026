@@ -75,6 +75,8 @@ public class Vision extends SubsystemBase {
             ArrayList<Pose3d> rejectedPoses = new ArrayList<>();
             ArrayList<Translation3d> targetLocations = new ArrayList<>();
 
+            String rejectionReason = "";
+
             for(int i = 0; i < camera.inputs.targetIDs.length; i++){
                 Optional<Pose3d> targetPose = VisionConstants.FIELD_LAYOUT.getTagPose(camera.inputs.targetIDs[i]);
 
@@ -88,16 +90,19 @@ public class Vision extends SubsystemBase {
 
                 if (!checkPoseLocation(frame.robotPose())) {
                     rejectedPoses.add(frame.robotPose());
+                    if (!rejectionReason.contains("Invalid Location")) rejectionReason.concat("Invalid Location + ");
                     continue;
                 }
 
                 if (!checkPoseAmbiguity(frame.poseAmbiguity(), frame.estimationType())) {
                     rejectedPoses.add(frame.robotPose());
+                    if (!rejectionReason.contains("High Ambiguity")) rejectionReason.concat("High Ambiguity + ");
                     continue;
                 }
 
                 if (!checkDistance(frame.averageTargetDistance(), frame.estimationType())) {
                     rejectedPoses.add(frame.robotPose());
+                    if (!rejectionReason.contains("Distance from Tag")) rejectionReason.concat("Distance from Tag");
                     continue;
                 }
 
@@ -114,6 +119,7 @@ public class Vision extends SubsystemBase {
 
             Logger.recordOutput("Vision/" + camera.cameraName + "/Accepted Poses", acceptedPoses.toArray(new Pose3d[0]));
             Logger.recordOutput("Vision/" + camera.cameraName + "/Rejected Poses", rejectedPoses.toArray(new Pose3d[0]));
+            Logger.recordOutput("Vision/" + camera.cameraName + "/Rejected Reason", rejectionReason);
         }
         Logger.recordOutput("Vision/All Accepted", allAcceptedPoses.toArray(new Pose3d[0]));
         Logger.recordOutput("Vision/All Rejected", allRejectedPoses.toArray(new Pose3d[0]));
@@ -225,7 +231,7 @@ public class Vision extends SubsystemBase {
         }
 
         public void log() {
-            Logger.processInputs(cameraName, inputs);
+            Logger.processInputs("Camera/" + cameraName, inputs);
         }
     }
 }

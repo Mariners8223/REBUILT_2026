@@ -20,6 +20,7 @@ import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.net.WebServer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -50,13 +51,17 @@ public class Robot extends LoggedRobot {
             Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
         }
 
+        // DataLogManager.start();
+        // DriverStation.startDataLog(DataLogManager.getLog());
+
         // isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
         isRedAlliance = true;
         Logger.start();
         WebServer.start(5800, Filesystem.getDeployDirectory().getPath());
-        new RobotContainer();
 
-        PathPlannerLogging.setLogTargetPoseCallback(pose -> Logger.recordOutput("Path Pose", pose));
+        new RobotContainer();
+        PathPlannerLogging.setLogTargetPoseCallback(pose -> Logger.recordOutput("Current Path Target", pose));
+        PathPlannerLogging.setLogActivePathCallback(path -> Logger.recordOutput("Current Path", path.toArray(new Pose2d[0])));
 
         SmartDashboard.putData("Field", field);
     }
@@ -105,12 +110,13 @@ public class Robot extends LoggedRobot {
     }
 
     @Override
-    public void autonomousPeriodic() {}
+    public void autonomousExit(){
+        Robot.clearObjectPoseField("AutoPath");
+        Elastic.selectTab("Teleop");
+    }
 
     @Override
     public void teleopInit() {
-        Elastic.selectTab("Teleop");
-
         if (autonomousCommand != null) {
             autonomousCommand.cancel();
         }
