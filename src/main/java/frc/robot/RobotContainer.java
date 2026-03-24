@@ -89,10 +89,12 @@ public class RobotContainer {
     public static LoggedDashboardChooser<String> sideChooser;
     public static HashMap<String, Command> mirroredAutoMap = new HashMap<>();
 
+    public static Supplier<Command> warmupShooter;
     public static Supplier<Command> shootCommand;
     public static Supplier<Command> passCommand;
     public static Supplier<Command> conditionalShootCommand;
 
+    public static boolean withAutoEject = false;
 
     public RobotContainer() {
         driveController = new CommandPS5Controller(0);
@@ -116,18 +118,22 @@ public class RobotContainer {
     }
 
     public static void configureCommands(){
+        warmupShooter = () ->
+            new ShootDistance(shooter, RobotContainer::distanceFromHub).
+            withName("Warmup Shooter");
+
         shootCommand = () ->
             Commands.parallel(
                 new ShootDistance(shooter, RobotContainer::distanceFromHub),
                 Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
-                .andThen(feeder.smartFeedingShootCommand(RobotContainer::distanceFromHub))
+                .andThen(feeder.smartFeedingShootCommand(RobotContainer::distanceFromHub, () -> withAutoEject))
             ).withName("Shooting");
 
         passCommand = () ->
             Commands.parallel(
                 new ShootVelocity(shooter, () -> RPM.of(ShooterConstants.PASSING_VELOCITY)),
                 Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
-                .andThen(feeder.smartFeedingPassCommand())
+                .andThen(feeder.smartFeedingPassCommand(() -> withAutoEject))
             ).withName("Passing");
 
         conditionalShootCommand = () ->
@@ -183,7 +189,7 @@ public class RobotContainer {
 
         driveController.L1().toggleOnTrue(
             new AimDriving(driveBase, driveController, RobotContainer::getShootingAngle).alongWith(
-                feeder.ejectCommand().withTimeout(0.5).andThen(
+                (feeder.ejectCommand().alongWith(warmupShooter.get())).withTimeout(0.5).andThen(
                     Commands.parallel(
                         conditionalShootCommand.get(),
                         new InstantCommand(() -> intake.setPivotState(IntakeStates.Middle)).beforeStarting(Commands.waitSeconds(2))
@@ -193,6 +199,7 @@ public class RobotContainer {
             .withName("Full Shooting")
         );
 
+        driveController.create().onTrue(new InstantCommand(() -> withAutoEject = !withAutoEject));
 
         driveController.circle().toggleOnTrue(feeder.intakeCommand());
         driveController.square().toggleOnTrue(feeder.passEjectCommand());
@@ -374,7 +381,7 @@ public class RobotContainer {
         Logger.recordOutput("Trench/Trench Path", targetPath.getPathPoses().toArray(new Pose2d[0]));
         PathPlannerPath flippedTargetPath = Robot.isRedAlliance ? targetPath.flipPath() : targetPath;
         Logger.recordOutput("Trench/Flipped Trench Path", flippedTargetPath.getPathPoses().toArray(new Pose2d[0]));
-        return driveBase.pathFindToPathAndFollow(flippedTargetPath);
+        return driveBase.pathFindToPathAndFollow(targetPath);
    }
 
     public static boolean inAllianceZone(){

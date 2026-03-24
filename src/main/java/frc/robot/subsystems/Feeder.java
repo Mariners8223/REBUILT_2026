@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import java.util.ArrayList;
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 import edu.wpi.first.units.measure.Distance;
@@ -82,32 +83,33 @@ public class Feeder extends SubsystemBase {
         withName("Feeder Eject");
   }
   public Command passEjectCommand(){
-    return setSpeeds(-1, -0.6, -0.2, 0);
+    return setSpeeds(-0.8, -0.6, -0.2, 0).
+        withName("Feeder Eject Pass");
   }
 
   public Command toShooterCommand(Distance distanceToHub){
-    return setSpeeds(1, FunnelConstants.funnelMotor.FUNNEL_SHOOTING_SPEED, FunnelConstants.CenteringMotor.CENTERING_SHOOTING_SPEED, KickerConstants.getDutyCycle(distanceToHub)).
+    return setSpeeds(0.8, FunnelConstants.funnelMotor.FUNNEL_SHOOTING_SPEED, FunnelConstants.CenteringMotor.CENTERING_SHOOTING_SPEED, KickerConstants.getDutyCycle(distanceToHub)).
         withName("Feeder to Shoot");
   }
   public Command toPassCommand(){
-    return setSpeeds(1, FunnelConstants.funnelMotor.FUNNEL_SHOOTING_SPEED, FunnelConstants.CenteringMotor.CENTERING_SHOOTING_SPEED, 1).
+    return setSpeeds(0.8, FunnelConstants.funnelMotor.FUNNEL_SHOOTING_SPEED, FunnelConstants.CenteringMotor.CENTERING_SHOOTING_SPEED, 1).
         withName("Feeder to Pass");
   }
 
-  public Command smartFeedingShootCommand(Supplier<Distance> distanceSupplier){
+  public Command smartFeedingShootCommand(Supplier<Distance> distanceSupplier, BooleanSupplier withAutoEjecting){
     return Commands.repeatingSequence(
       new ContinuousConditionalCommand(
         ejectCommand().withTimeout(0.4),
         toShooterCommand(distanceSupplier.get()).withTimeout(0.4),
-        this::inStall)
+        () -> (inStall() && withAutoEjecting.getAsBoolean()))
     ).withName("Smart Feeding to Shoot");
   }
-  public Command smartFeedingPassCommand(){
+  public Command smartFeedingPassCommand(BooleanSupplier withAutoEjecting){
     return Commands.repeatingSequence(
       new ContinuousConditionalCommand(
         ejectCommand().withTimeout(0.4),
         toPassCommand(),
-        this::inStall)
+        () -> (inStall() && withAutoEjecting.getAsBoolean()))
     ).withName("Smart Feeding to Pass");
   }
 

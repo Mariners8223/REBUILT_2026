@@ -79,8 +79,8 @@ public class IntakeConstants
         public static final boolean IS_BRUSHLESS = false;
         public static final MotorType MOTOR_TYPE = MotorType.SPARK_FLEX;
         public static final boolean IS_INVERTED = false;
-        public static final double GEAR_RATIO = 5;
-        public static final double DUTY_CYCLE = 1.0;
+        public static final double GEAR_RATIO = 3;
+        public static final double DUTY_CYCLE = 0.8;
     }
 
     public static final double MOMENT_OF_INERTIA = 0;
