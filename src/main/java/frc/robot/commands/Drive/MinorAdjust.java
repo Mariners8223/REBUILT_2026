@@ -43,11 +43,12 @@ public class MinorAdjust extends Command {
   private final AdjustmentDirection direction;
 
   /** Creates a new MinorAdjust. */
-  public MinorAdjust(DriveBase driveBase, AdjustmentDirection direcation) {
+  public MinorAdjust(DriveBase driveBase, AdjustmentDirection direction) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.driveBase = driveBase;
-    this.direction = direcation;
-
+    this.direction = direction;
+    
+    setName("Minor Adjust " + direction);
     addRequirements(driveBase);
   }
 

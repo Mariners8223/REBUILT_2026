@@ -74,17 +74,21 @@ public class Feeder extends SubsystemBase {
   }
 
   public Command intakeCommand(){
-    return setSpeeds(IntakeConstants.RollersMotor.DUTY_CYCLE, FunnelConstants.funnelMotor.FUNNEL_INTAKE_SPEED, 0, 0);
+    return setSpeeds(IntakeConstants.RollersMotor.DUTY_CYCLE, FunnelConstants.funnelMotor.FUNNEL_INTAKE_SPEED, 0, 0).
+        withName("Feeder Intake");
   }
   public Command ejectCommand(){
-    return setSpeeds(0, 0, FunnelConstants.CenteringMotor.CENTERING_EJECT_SPEED, KickerConstants.KICKER_EJECT_SPEED);
+    return setSpeeds(0, 0, FunnelConstants.CenteringMotor.CENTERING_EJECT_SPEED, KickerConstants.KICKER_EJECT_SPEED).
+        withName("Feeder Eject");
   }
 
   public Command toShooterCommand(Distance distanceToHub){
-    return setSpeeds(1, FunnelConstants.funnelMotor.FUNNEL_SHOOTING_SPEED, FunnelConstants.CenteringMotor.CENTERING_SHOOTING_SPEED, KickerConstants.getDutyCycle(distanceToHub));
+    return setSpeeds(1, FunnelConstants.funnelMotor.FUNNEL_SHOOTING_SPEED, FunnelConstants.CenteringMotor.CENTERING_SHOOTING_SPEED, KickerConstants.getDutyCycle(distanceToHub)).
+        withName("Feeder to Shoot");
   }
   public Command toPassCommand(){
-    return setSpeeds(1, FunnelConstants.funnelMotor.FUNNEL_SHOOTING_SPEED, FunnelConstants.CenteringMotor.CENTERING_SHOOTING_SPEED, 1);
+    return setSpeeds(1, FunnelConstants.funnelMotor.FUNNEL_SHOOTING_SPEED, FunnelConstants.CenteringMotor.CENTERING_SHOOTING_SPEED, 1).
+        withName("Feeder to Pass");
   }
 
   public Command smartFeedingShootCommand(Supplier<Distance> distanceSupplier){
@@ -93,7 +97,7 @@ public class Feeder extends SubsystemBase {
         ejectCommand().withTimeout(0.4),
         toShooterCommand(distanceSupplier.get()).withTimeout(0.4),
         this::inStall)
-    );
+    ).withName("Smart Feeding to Shoot");
   }
   public Command smartFeedingPassCommand(){
     return Commands.repeatingSequence(
@@ -101,7 +105,7 @@ public class Feeder extends SubsystemBase {
         ejectCommand().withTimeout(0.4),
         toPassCommand(),
         this::inStall)
-    );
+    ).withName("Smart Feeding to Pass");
   }
 
   @Override

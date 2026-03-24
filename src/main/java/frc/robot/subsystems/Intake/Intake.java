@@ -111,7 +111,7 @@ public class Intake extends SubsystemBase{
         return Commands.sequence(
             new InstantCommand(() -> this.setPivotState(IntakeStates.Middle)).until(this::pivotAtState),
             new InstantCommand(() -> this.setPivotState(IntakeStates.Open)).until(this::pivotAtState)
-        );
+        ).withName("Bump Intake");
     }
 
     @Override

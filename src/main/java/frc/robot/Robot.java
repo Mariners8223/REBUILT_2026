@@ -64,6 +64,7 @@ public class Robot extends LoggedRobot {
         PathPlannerLogging.setLogActivePathCallback(path -> Logger.recordOutput("Current Path", path.toArray(new Pose2d[0])));
 
         SmartDashboard.putData("Field", field);
+        SmartDashboard.putData("Command Scheduler", CommandScheduler.getInstance());
     }
 
     public static void clearObjectPoseField(String name) {

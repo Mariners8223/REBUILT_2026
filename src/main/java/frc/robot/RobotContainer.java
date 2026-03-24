@@ -119,21 +119,21 @@ public class RobotContainer {
                 new ShootDistance(shooter, RobotContainer::distanceFromHub),
                 Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
                 .andThen(feeder.smartFeedingShootCommand(RobotContainer::distanceFromHub))
-            );
+            ).withName("Shooting");
 
         passCommand = () ->
             Commands.parallel(
                 new ShootVelocity(shooter, () -> RPM.of(ShooterConstants.PASSING_VELOCITY)),
                 Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
                 .andThen(feeder.smartFeedingPassCommand())
-            );
+            ).withName("Passing");
 
         conditionalShootCommand = () ->
             Commands.either(
                 shootCommand.get(),
                 passCommand.get(),
                 RobotContainer::inAllianceZone
-            );
+            ).withName("Conditional Shooting");
     }
 
     //#region Periodic Updates
@@ -188,19 +188,20 @@ public class RobotContainer {
                     )
                 )
             ).finallyDo(() -> intake.setPivotState(IntakeStates.Open))
+            .withName("Full Shooting")
         );
 
         driveController.circle().toggleOnTrue(feeder.intakeCommand());
         driveController.square().toggleOnTrue(feeder.ejectCommand());
 
-        driveController.triangle().whileTrue(Commands.defer(RobotContainer::passTrench, Set.of(driveBase)));
+        driveController.triangle().whileTrue(Commands.defer(RobotContainer::passTrench, Set.of(driveBase)).withName("Passing Trench"));
 
         driveController.options().onTrue(
             Commands.either(
                 intake.moveToPositionCommand(IntakeStates.Closed),
                 intake.moveToPositionCommand(IntakeStates.Open),
                 () -> intake.getCurrentState() == IntakeStates.Open
-            )
+            ).withName("Swap Intake State")
         );
         driveController.cross().onTrue(intake.bumpFuelCommand());
     }
