@@ -29,6 +29,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.PathPoint;
 import com.pathplanner.lib.util.FileVersionException;
 import com.pathplanner.lib.util.FlippingUtil;
 
@@ -47,6 +48,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.commands.Drive.AimDriving;
 import frc.robot.commands.Drive.DriveCommand;
@@ -184,21 +186,22 @@ public class RobotContainer {
                 feeder.ejectCommand().withTimeout(0.5).andThen(
                     Commands.parallel(
                         conditionalShootCommand.get(),
-                        intake.bumpFuelCommand().repeatedly().beforeStarting(Commands.waitSeconds(2))
+                        new InstantCommand(() -> intake.setPivotState(IntakeStates.Middle)).beforeStarting(Commands.waitSeconds(2))
                     )
                 )
             ).finallyDo(() -> intake.setPivotState(IntakeStates.Open))
             .withName("Full Shooting")
         );
 
+
         driveController.circle().toggleOnTrue(feeder.intakeCommand());
-        driveController.square().toggleOnTrue(feeder.ejectCommand());
+        driveController.square().toggleOnTrue(feeder.passEjectCommand());
 
         driveController.triangle().whileTrue(Commands.defer(RobotContainer::passTrench, Set.of(driveBase)).withName("Passing Trench"));
 
         driveController.options().onTrue(
             Commands.either(
-                intake.moveToPositionCommand(IntakeStates.Closed),
+                intake.moveToPositionCommand(IntakeStates.Middle),
                 intake.moveToPositionCommand(IntakeStates.Open),
                 () -> intake.getCurrentState() == IntakeStates.Open
             ).withName("Swap Intake State")
@@ -220,8 +223,7 @@ public class RobotContainer {
             );
         NamedCommands.registerCommand("warm up shooter", new InstantCommand(() -> shooter.setVelocityByDistance(distanceFromHub()), shooter));
         NamedCommands.registerCommand("shoot to pass", passCommand.get());
-        // NamedCommands.registerCommand("aim to hub", new AimDriving(driveBase, driveController, RobotContainer::angleToHub).withTimeout(0.2));
-        NamedCommands.registerCommand("aim to hub", new InstantCommand());
+        NamedCommands.registerCommand("aim to hub", new AimDriving(driveBase, driveController, RobotContainer::angleToHub).withTimeout(0.5));
 
         NamedCommands.registerCommand("eject", feeder.ejectCommand());
     }
@@ -356,7 +358,9 @@ public class RobotContainer {
         PathPlannerPath targetPath;
 
         if(Robot.isRedAlliance) pose = FlippingUtil.flipFieldPose(driveBase.getPose());
+        Logger.recordOutput("Trench/Flipped Pose", pose);
         String pathName = pose.getX() <= 4.5 ? "UpLeft" : "UpRight";
+        Logger.recordOutput("Trench/Path Name", pathName);
 
         try{
             targetPath = PathPlannerPath.fromPathFile(pathName);
@@ -367,8 +371,10 @@ public class RobotContainer {
             targetPath = PathPlannerPath.fromPathPoints(new ArrayList<>(), PathConstraints.unlimitedConstraints(12.0), new GoalEndState(0, Rotation2d.kZero));
         }
 
-        PathPlannerPath flippedTargetPose = Robot.isRedAlliance ? targetPath.flipPath() : targetPath;
-        return driveBase.pathFindToPathAndFollow(flippedTargetPose);
+        Logger.recordOutput("Trench/Trench Path", targetPath.getPathPoses().toArray(new Pose2d[0]));
+        PathPlannerPath flippedTargetPath = Robot.isRedAlliance ? targetPath.flipPath() : targetPath;
+        Logger.recordOutput("Trench/Flipped Trench Path", flippedTargetPath.getPathPoses().toArray(new Pose2d[0]));
+        return driveBase.pathFindToPathAndFollow(flippedTargetPath);
    }
 
     public static boolean inAllianceZone(){

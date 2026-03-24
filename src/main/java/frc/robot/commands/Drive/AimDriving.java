@@ -82,4 +82,9 @@ public class AimDriving extends Command {
         //drives the robot with the values
         driveBase.drive(robotRelativeSpeeds);
     }
+
+    @Override
+    public void end(boolean interrupted){
+        driveBase.drive(new ChassisSpeeds());
+    }
 }

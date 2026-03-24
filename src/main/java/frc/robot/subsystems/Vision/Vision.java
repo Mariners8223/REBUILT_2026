@@ -68,7 +68,7 @@ public class Vision extends SubsystemBase {
             camera.log();
 
             SmartDashboard.putBoolean(camera.cameraName + " is connected", camera.inputs.isConnected);
-            disconnectedAlerts.get(camera).set(camera.inputs.isConnected);
+            disconnectedAlerts.get(camera).set(!camera.inputs.isConnected);
 
             // For logging purposes
             ArrayList<Pose3d> acceptedPoses = new ArrayList<>();

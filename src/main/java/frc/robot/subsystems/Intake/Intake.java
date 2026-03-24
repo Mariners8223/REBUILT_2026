@@ -102,16 +102,16 @@ public class Intake extends SubsystemBase{
     }
 
     public Command bumpFuelCommand(){
-        // return Commands.sequence(
-        //     new InstantCommand(() -> this.setPivotState(IntakeStates.Middle)),
-        //     new WaitCommand(IntakeConstants.BUMP_WAIT_TIME),
-        //     new InstantCommand(() -> this.setPivotState(IntakeStates.Open)),
-        //     new WaitCommand(IntakeConstants.BUMP_WAIT_TIME)
-        // );
         return Commands.sequence(
-            new InstantCommand(() -> this.setPivotState(IntakeStates.Middle)).until(this::pivotAtState),
-            new InstantCommand(() -> this.setPivotState(IntakeStates.Open)).until(this::pivotAtState)
+            new InstantCommand(() -> this.setPivotState(IntakeStates.Middle)),
+            new WaitCommand(IntakeConstants.BUMP_WAIT_TIME),
+            new InstantCommand(() -> this.setPivotState(IntakeStates.Open)),
+            new WaitCommand(IntakeConstants.BUMP_WAIT_TIME)
         ).withName("Bump Intake");
+        // return Commands.sequence(
+        //     new InstantCommand(() -> this.setPivotState(IntakeStates.Middle)).until(this::pivotAtState),
+        //     new InstantCommand(() -> this.setPivotState(IntakeStates.Open)).until(this::pivotAtState)
+        // ).withName("Bump Intake");
     }
 
     @Override
@@ -122,6 +122,7 @@ public class Intake extends SubsystemBase{
 
         Logger.recordOutput("Intake/State", state);
         Logger.recordOutput("Intake/Command", (getCurrentCommand() != null ? getCurrentCommand().toString() : "None"));
+        Logger.recordOutput("Pivot at State", pivotAtState());
 
         Logger.recordOutput("Intake/Rollers in Stall", rollersInStall());
         Logger.recordOutput("Intake/Pivot in Stall", pivotInStall());

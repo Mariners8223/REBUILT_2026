@@ -48,7 +48,7 @@ public class IntakeIOReal implements IntakeIO{
 
     public void setPositionMotorRotation(Angle rotation)
     {
-        positionMotor.setReference(rotation.in(Rotation), ControlMode.ProfiledPosition);
+        positionMotor.setReference(rotation.in(Rotation), ControlMode.Position);
     }
 
     public void setRollersMotorDutyCycle(double dutyCycle)

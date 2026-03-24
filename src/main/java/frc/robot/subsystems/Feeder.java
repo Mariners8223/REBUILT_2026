@@ -81,6 +81,9 @@ public class Feeder extends SubsystemBase {
     return setSpeeds(0, 0, FunnelConstants.CenteringMotor.CENTERING_EJECT_SPEED, KickerConstants.KICKER_EJECT_SPEED).
         withName("Feeder Eject");
   }
+  public Command passEjectCommand(){
+    return setSpeeds(-1, -0.6, -0.2, 0);
+  }
 
   public Command toShooterCommand(Distance distanceToHub){
     return setSpeeds(1, FunnelConstants.funnelMotor.FUNNEL_SHOOTING_SPEED, FunnelConstants.CenteringMotor.CENTERING_SHOOTING_SPEED, KickerConstants.getDutyCycle(distanceToHub)).
