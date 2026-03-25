@@ -40,8 +40,8 @@ public class PivotConstants {
     public static final boolean IS_INVERTED = true;
     public static final double GEAR_RATIO = 60;
 
-    public static final double SOFT_MINIMUM = PivotStates.Open.getAngle().in(Rotations);
-    public static final double SOFT_MAXIMUM = PivotStates.Closed.getAngle().in(Rotations);
+    public static final double SOFT_MINIMUM = PivotStates.Open.getAngle().minus(Degrees.of(5)).in(Rotations);
+    public static final double SOFT_MAXIMUM = PivotStates.Closed.getAngle().plus(Degrees.of(5)).in(Rotations);
     public static final PivotStates RESET = PivotStates.Open; //TODO: Swap to Closed
 
     public static final PIDFGains PID_GAINS = new PIDFGains(

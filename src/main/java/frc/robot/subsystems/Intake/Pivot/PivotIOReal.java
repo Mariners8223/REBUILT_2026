@@ -16,7 +16,7 @@ public class PivotIOReal implements PivotIO {
                                     PivotConstants.MOTOR_ID, PivotConstants.PID_GAINS,
                                      PivotConstants.GEAR_RATIO);
         motor.setMotorInverted(PivotConstants.IS_INVERTED);
-        // motor.enableSoftLimits(PivotConstants.SOFT_MINIMUM, PivotConstants.SOFT_MAXIMUM); // TODO: Do we want softlimits?
+        motor.enableSoftLimits(PivotConstants.SOFT_MINIMUM, PivotConstants.SOFT_MAXIMUM); // TODO: Do we want softlimits?
         motor.setMotorIdleMode(true);
     }
 
