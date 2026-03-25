@@ -377,6 +377,7 @@ public class RobotContainer {
     }
 
     public static void updateLogging(){
+        Logger.recordOutput("Shooting/Angle to Hub", angleToHub());
         Logger.recordOutput("Shooting/Distance To Hub", distanceFromHub().in(Meters));
         Logger.recordOutput("Shooting/In Alliance Zone", inAllianceZone());
     }

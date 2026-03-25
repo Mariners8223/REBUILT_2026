@@ -16,15 +16,13 @@ import frc.robot.subsystems.DriveTrain.SwerveModules.DevBotConstants;
 
 import java.util.function.Supplier;
 
-import org.littletonrobotics.junction.Logger;
-
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AimDriving extends Command {
     private final DriveBase driveBase;
     private final CommandPS5Controller controller;
     private static double MAX_FREE_WHEEL_SPEED;
-    Supplier<Double> angleSupplier;
 
+    Supplier<Double> angleSupplier;
     PIDController thetaController = DriveBaseConstants.PathPlanner.THETA_PID.createPIDController();
 
     public AimDriving(DriveBase driveBase, CommandPS5Controller controller, Supplier<Double> angleSupplier) {
@@ -51,18 +49,11 @@ public class AimDriving extends Command {
 
     @Override
     public void execute() {
-        //calculates a value from 1 to the max wheel speed based on the R2 axis
-        // double R2Axis = (1 - (0.5 + controller.getR2Axis() / 2)) * (driveBase.MAX_FREE_WHEEL_SPEED - 1) + 1;
-        // double R2Axis  = 1 - (0.5 + controller.getRightTriggerAxis() / 2);
-
         thetaController.setSetpoint(angleSupplier.get());
-        Logger.recordOutput("Angle to Hub", angleSupplier.get());
 
         double R2Axis  = 1 - controller.getR2Axis();
 
-        if(R2Axis <= 0.1) {
-            R2Axis = 0.1;
-        }
+        if(R2Axis <= 0.1) R2Axis = 0.1;
 
         //sets the value of the 3 vectors we need (accounting for drift)
         double leftX = -deadBand(controller.getLeftY());
@@ -74,7 +65,6 @@ public class AimDriving extends Command {
         ChassisSpeeds fieldRelativeSpeeds = new ChassisSpeeds(leftX, leftY, thetaController.calculate(driveBase.getPose().getRotation().getRadians()));
 
         Rotation2d gyroAngle = driveBase.getRotation2d();
-
         if(Robot.isRedAlliance) gyroAngle = gyroAngle.plus(Rotation2d.fromDegrees(180));
 
         ChassisSpeeds robotRelativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, gyroAngle);
