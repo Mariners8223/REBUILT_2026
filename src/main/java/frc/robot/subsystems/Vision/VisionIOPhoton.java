@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+@SuppressWarnings("removal")
 public class VisionIOPhoton implements VisionIO {
     private final PhotonCamera camera;
     private final PhotonPoseEstimator poseEstimator;

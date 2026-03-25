@@ -47,7 +47,7 @@ public class MinorAdjust extends Command {
     // Use addRequirements() here to declare subsystem dependencies.
     this.driveBase = driveBase;
     this.direction = direction;
-    
+
     setName("Minor Adjust " + direction);
     addRequirements(driveBase);
   }

@@ -44,7 +44,6 @@ import java.util.function.DoubleSupplier;
  * The DriveBase class represents the drivetrain of the robot.
  * It controls the movement and positioning of the robot using swerve drive.
  */
-@SuppressWarnings("unused")
 public class DriveBase extends SubsystemBase {
     /**
      * the array of the modules themselves

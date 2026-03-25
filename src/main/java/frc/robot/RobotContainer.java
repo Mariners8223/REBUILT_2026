@@ -295,7 +295,7 @@ public class RobotContainer {
     };
 
     public static Command getAuto(){
-        return sideChooser.get().equals("right") ? 
+        return sideChooser.get().equals("right") ?
             autoChooser.get() : mirroredAutoMap.get(autoChooser.get().getName());
     }
     //#endregion

@@ -17,9 +17,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 
 public class Kicker extends SubsystemBase {
-  public static Alert kickerLeadStall = new Alert("Back Kicker in stall", AlertType.kWarning); // TODO: Front or back kicker
-  public static Alert kickerFollowStall = new Alert("Front Kicker in stall", AlertType.kWarning); // TODO: Front or back kicker
-
+  public static Alert kickerLeadStall = new Alert("Back Kicker in stall", AlertType.kWarning);
+  public static Alert kickerFollowStall = new Alert("Front Kicker in stall", AlertType.kWarning);
 
   KickerIO io;
   KickerInputsAutoLogged inputs = new KickerInputsAutoLogged();

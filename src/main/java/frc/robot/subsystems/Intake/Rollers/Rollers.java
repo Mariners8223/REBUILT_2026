@@ -29,7 +29,7 @@ public class Rollers extends SubsystemBase {
   public void stopMotor(){
     io.setDutyCycle(0);
   }
-  
+
   public boolean inStall(){
     return (RobotState.isEnabled()) && (io.getSetpoint() != 0 && Math.abs(io.getVelocity()) < 1);
   }

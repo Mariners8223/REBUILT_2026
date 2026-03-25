@@ -17,7 +17,7 @@ public class RollersIOReal implements RollersIO{
         motor.setMotorInverted(RollerConstants.IS_INVERTED);
         motor.getMeasurements().setGearRatio(RollerConstants.GEAR_RATIO);
     }
-    
+
     public void setDutyCycle(double dutyCycle){
         motor.setDutyCycle(dutyCycle);
     }
