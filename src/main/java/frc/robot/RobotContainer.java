@@ -29,7 +29,6 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.path.PathPoint;
 import com.pathplanner.lib.util.FileVersionException;
 import com.pathplanner.lib.util.FlippingUtil;
 
@@ -48,7 +47,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.commands.Drive.AimDriving;
 import frc.robot.commands.Drive.DriveCommand;
@@ -89,10 +87,16 @@ public class RobotContainer {
     public static LoggedDashboardChooser<String> sideChooser;
     public static HashMap<String, Command> mirroredAutoMap = new HashMap<>();
 
+    //#region Premade Commands
     public static Supplier<Command> warmupShooter;
+    public static Supplier<Command> preShooting;
     public static Supplier<Command> shootCommand;
     public static Supplier<Command> passCommand;
     public static Supplier<Command> conditionalShootCommand;
+    public static Supplier<Command> shootWithBump;
+    public static Supplier<Command> swapIntakeStateClosed;
+    public static Supplier<Command> swapIntakeStateMiddle;
+    //#endregion
 
     public static boolean withAutoEject = false;
 
@@ -108,19 +112,24 @@ public class RobotContainer {
         feeder = new Feeder(intake, funnel, kicker);
         vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
 
-        // TODO: Passing through rollers?
-
         configureCommands();
         configureNamedCommands();
         configureDriveBindings();
         configureChoosers();
-        configureMirroredAutosMap();
     }
 
+    //#region Commands
     public static void configureCommands(){
         warmupShooter = () ->
-            new ShootDistance(shooter, RobotContainer::distanceFromHub).
-            withName("Warmup Shooter");
+            Commands.either(
+                new ShootDistance(shooter, RobotContainer::distanceFromHub),
+                new ShootVelocity(shooter, () -> RPM.of(ShooterConstants.PASSING_VELOCITY)),
+                RobotContainer::inAllianceZone
+            ).withName("Warmup Shooter");
+
+        preShooting = () ->
+            warmupShooter.get().alongWith(feeder.ejectCommand()).withTimeout(0.5)
+            .withName("Pre Shooting");
 
         shootCommand = () ->
             Commands.parallel(
@@ -142,34 +151,30 @@ public class RobotContainer {
                 passCommand.get(),
                 RobotContainer::inAllianceZone
             ).withName("Conditional Shooting");
+
+        shootWithBump = () ->
+            Commands.parallel(
+                conditionalShootCommand.get(),
+                Commands.waitSeconds(2).andThen(new InstantCommand(() -> intake.setPivotState(IntakeStates.Middle)))
+            ).finallyDo(() -> intake.setPivotState(IntakeStates.Open))
+            .withName("Shoot with Bump");
+
+        swapIntakeStateClosed = () ->
+            Commands.either(
+                intake.moveToPositionCommand(IntakeStates.Closed),
+                intake.moveToPositionCommand(IntakeStates.Open),
+                () -> intake.getCurrentState() == IntakeStates.Open
+            ).withName("Swap Intake State to Closed");
+
+        swapIntakeStateClosed = () ->
+            Commands.either(
+                intake.moveToPositionCommand(IntakeStates.Middle),
+                intake.moveToPositionCommand(IntakeStates.Open),
+                () -> intake.getCurrentState() == IntakeStates.Open
+            ).withName("Swap Intake State to Middle");
     }
 
-    //#region Periodic Updates
-    public static void pollAlerts(){
-        controllerDisconnected.set(!driveController.isConnected());
-        brownoutBattery.set(RobotController.isBrownedOut());
-    }
 
-    public static void updateElastic(){
-        SmartDashboard.putNumber("Battery Voltage", RobotController.getBatteryVoltage());
-        SmartDashboard.putNumber("Robot Velocity", driveBase.getVelocity());
-        SmartDashboard.putNumber("Match Time", Timer.getMatchTime());
-        SmartDashboard.putNumber("PDH Voltage", ConduitApi.getInstance().getPDPVoltage());
-
-        SmartDashboard.putBoolean("Is Hub Active", HubTracker.isActive(DriverStation.getAlliance().orElseGet(() -> Alliance.Red)));
-        SmartDashboard.putNumber("Time left in Shift", Math.floor(HubTracker.timeRemainingInCurrentShift().orElseGet(() -> Second.zero()).in(Second) * 100) / 100);
-        SmartDashboard.putString("Current Shift", HubTracker.getCurrentShift().orElseGet(() -> HubTracker.Shift.AUTO).toString());
-
-        SmartDashboard.putString("Distance to Hub", String.format("%.2f", distanceFromHub().in(Meter)));
-        SmartDashboard.putBoolean("In Alliance Zone", inAllianceZone());
-    }
-
-    public static void updateLogging(){
-        Logger.recordOutput("Distance To Hub", distanceFromHub().in(Meters));
-    }
-    //#endregion
-
-    //#region Drive
     public static void configureDriveBindings(){
         new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(
             new StartEndCommand(() ->driveBase.setDefaultCommand(new DriveCommand(driveBase, driveController)),
@@ -188,34 +193,23 @@ public class RobotContainer {
         driveController.povDownRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_RIGHT));
 
         driveController.L1().toggleOnTrue(
-            new AimDriving(driveBase, driveController, RobotContainer::getShootingAngle).alongWith(
-                (feeder.ejectCommand().alongWith(warmupShooter.get())).withTimeout(0.5).andThen(
-                    Commands.parallel(
-                        conditionalShootCommand.get(),
-                        new InstantCommand(() -> intake.setPivotState(IntakeStates.Middle)).beforeStarting(Commands.waitSeconds(2))
-                    )
-                )
-            ).finallyDo(() -> intake.setPivotState(IntakeStates.Open))
-            .withName("Full Shooting")
+            Commands.parallel(
+                new AimDriving(driveBase, driveController, RobotContainer::getShootingAngle),
+                preShooting.get().andThen(shootWithBump.get())
+            ).withName("Full Shooting")
         );
 
         driveController.create().onTrue(new InstantCommand(() -> withAutoEject = !withAutoEject));
+        driveController.options().onTrue(swapIntakeStateClosed.get());
 
         driveController.circle().toggleOnTrue(feeder.intakeCommand());
         driveController.square().toggleOnTrue(feeder.passEjectCommand());
 
-        driveController.triangle().whileTrue(Commands.defer(RobotContainer::passTrench, Set.of(driveBase)).withName("Passing Trench"));
-
-        driveController.options().onTrue(
-            Commands.either(
-                intake.moveToPositionCommand(IntakeStates.Middle),
-                intake.moveToPositionCommand(IntakeStates.Open),
-                () -> intake.getCurrentState() == IntakeStates.Open
-            ).withName("Swap Intake State")
+        driveController.triangle().whileTrue(
+            Commands.defer(RobotContainer::passTrench, Set.of(driveBase)).withName("Passing Trench")
         );
-        driveController.cross().onTrue(intake.bumpFuelCommand());
+        driveController.cross().onTrue(swapIntakeStateMiddle.get());
     }
-    //#endregion
 
     public static void configureNamedCommands(){
         NamedCommands.registerCommand("close intake", intake.moveToPositionCommand(IntakeStates.Closed));
@@ -224,16 +218,14 @@ public class RobotContainer {
         NamedCommands.registerCommand("start rollers", new InstantCommand(() -> intake.setRollersDutyCycle(IntakeConstants.RollersMotor.DUTY_CYCLE)));
         NamedCommands.registerCommand("stop rollers", new InstantCommand(() -> intake.setRollersDutyCycle(0)));
 
-        NamedCommands.registerCommand("shoot to hub", shootCommand.get().
-            // alongWith(intake.bumpFuelCommand().repeatedly().beforeStarting(Commands.waitSeconds(2))).
-            withTimeout(4)
-            );
+        NamedCommands.registerCommand("shoot to hub", shootWithBump.get().withTimeout(4));
         NamedCommands.registerCommand("warm up shooter", new InstantCommand(() -> shooter.setVelocityByDistance(distanceFromHub()), shooter));
         NamedCommands.registerCommand("shoot to pass", passCommand.get());
         NamedCommands.registerCommand("aim to hub", new AimDriving(driveBase, driveController, RobotContainer::angleToHub).withTimeout(0.5));
 
         NamedCommands.registerCommand("eject", feeder.ejectCommand());
     }
+    //#endregion
 
     //#region Choosers
     public static void configureChoosers(){
@@ -244,6 +236,11 @@ public class RobotContainer {
         for (String autoName : namesOfAutos) {
             PathPlannerAuto auto = new PathPlannerAuto(autoName);
             autosOfAutos.add(auto);
+        }
+
+        // Mirror all autos from right to left
+        for (int i = 0; i < namesOfAutos.size(); i++){
+            mirroredAutoMap.put(namesOfAutos.get(i), autosOfAutos.get(i));
         }
 
         autosOfAutos.forEach(auto -> autoChooser.addOption(auto.getName(), auto));
@@ -259,7 +256,6 @@ public class RobotContainer {
         sideChooser = new LoggedDashboardChooser<>("sideChooser");
 
         sideChooser.addDefaultOption("right", "right");
-        sideChooser.addOption("middle", "middle");
         sideChooser.addOption("left", "left");
 
         SmartDashboard.putData("sideChooser",sideChooser.getSendableChooser());
@@ -297,30 +293,13 @@ public class RobotContainer {
         }
     };
 
-    public static void configureMirroredAutosMap(){
-        List<String> namesOfAutos = AutoBuilder.getAllAutoNames();
-        List<PathPlannerAuto> autosOfAutos = new ArrayList<>();
-
-        for (String autoName : namesOfAutos) {
-            PathPlannerAuto auto = new PathPlannerAuto(autoName,true);
-            autosOfAutos.add(auto);
-         }
-        for (int i = 0; i < namesOfAutos.size(); i++){
-            mirroredAutoMap.put(namesOfAutos.get(i), autosOfAutos.get(i));
-        }
-    }
-
     public static Command getAuto(){
-        return getSide().equals("right") || getSide().equals("middle") ?
+        return sideChooser.get().equals("right") ? 
             autoChooser.get() : mirroredAutoMap.get(autoChooser.get().getName());
-    }
-
-    public static String getSide(){
-        return sideChooser.get();
     }
     //#endregion
 
-    //#region Shoot Helpers
+    //#region Shooting Helpers
     public static Distance distanceFromHub(){
         Pose2d hubLocation = Constants.FieldConstants.HUB_POSITION;
         if(Robot.isRedAlliance){
@@ -349,7 +328,7 @@ public class RobotContainer {
         Pose2d pose = driveBase.getPose();
         Pose2d hub = Constants.AutoConstants.hub;
         if(Robot.isRedAlliance){
-            pose = FlippingUtil.flipFieldPose(driveBase.getPose());
+            // pose = FlippingUtil.flipFieldPose(driveBase.getPose());
             hub = FlippingUtil.flipFieldPose(hub);
         }
         double distanceFromHub = driveBase.getDistanceFromPoint2D(hub);
@@ -359,7 +338,7 @@ public class RobotContainer {
     }
     //#endregion
 
-   //#region auto
+    //#region Auto
     public static Command passTrench(){
         Pose2d pose = driveBase.getPose();
         PathPlannerPath targetPath;
@@ -389,4 +368,30 @@ public class RobotContainer {
         else return driveBase.getPose().getX() < Constants.FieldConstants.BLUE_ALLIANCE_ZONE_X;
     }
    //#endregion
+
+    //#region Periodic Updates
+    public static void pollAlerts(){
+        controllerDisconnected.set(!driveController.isConnected());
+        brownoutBattery.set(RobotController.isBrownedOut());
+    }
+
+    public static void updateElastic(){
+        SmartDashboard.putNumber("Battery Voltage", RobotController.getBatteryVoltage());
+        SmartDashboard.putNumber("Robot Velocity", driveBase.getVelocity());
+        SmartDashboard.putNumber("Match Time", Timer.getMatchTime());
+        SmartDashboard.putNumber("PDH Voltage", ConduitApi.getInstance().getPDPVoltage());
+
+        SmartDashboard.putBoolean("Is Hub Active", HubTracker.isActive(DriverStation.getAlliance().orElseGet(() -> Alliance.Red)));
+        SmartDashboard.putNumber("Time left in Shift", Math.floor(HubTracker.timeRemainingInCurrentShift().orElseGet(() -> Second.zero()).in(Second) * 100) / 100);
+        SmartDashboard.putString("Current Shift", HubTracker.getCurrentShift().orElseGet(() -> HubTracker.Shift.AUTO).toString());
+
+        SmartDashboard.putString("Distance to Hub", String.format("%.2f", distanceFromHub().in(Meter)));
+        SmartDashboard.putBoolean("In Alliance Zone", inAllianceZone());
+    }
+
+    public static void updateLogging(){
+        Logger.recordOutput("Shooting/Distance To Hub", distanceFromHub().in(Meters));
+        Logger.recordOutput("Shooting/In Alliance Zone", inAllianceZone());
+    }
+    //#endregion
 }
