@@ -20,8 +20,6 @@ public final class Main {
    * <p>If you change your main robot class, change the parameter type.
    */
 
-   // TODO: Refactor functions
-
   public static void main(String... args) {
     RobotBase.startRobot(Robot::new);
   }
