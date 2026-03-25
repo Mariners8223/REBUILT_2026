@@ -72,7 +72,7 @@ public class RobotContainer {
     public static Alert brownoutBattery = new Alert("BROWNOUT", AlertType.kError);
 
     public static CommandPS5Controller driveController;
-    public static Constants.AutoConstants.TrenchLocations trenchLocations = new Constants.AutoConstants.TrenchLocations();
+    public static Constants.TrenchLocations trenchLocations = new Constants.TrenchLocations();
 
     public static DriveBase driveBase;
     public static Funnel funnel;
@@ -322,19 +322,6 @@ public class RobotContainer {
 
     public static double getShootingAngle(){
         return inAllianceZone() ? angleToHub() : angleToAllianceZone();
-    }
-
-    public static boolean inRange(){
-        Pose2d pose = driveBase.getPose();
-        Pose2d hub = Constants.AutoConstants.hub;
-        if(Robot.isRedAlliance){
-            // pose = FlippingUtil.flipFieldPose(driveBase.getPose());
-            hub = FlippingUtil.flipFieldPose(hub);
-        }
-        double distanceFromHub = driveBase.getDistanceFromPoint2D(hub);
-
-        if (pose.getX() > 4.5) return false;
-        return distanceFromHub < Constants.AutoConstants.maxRange;
     }
     //#endregion
 
