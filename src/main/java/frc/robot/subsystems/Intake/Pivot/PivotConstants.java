@@ -1,0 +1,72 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
+package frc.robot.subsystems.Intake.Pivot;
+
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Rotations;
+
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.units.measure.Angle;
+import frc.robot.Constants;
+import frc.robot.subsystems.Intake.IntakeConstants;
+import frc.util.PIDFGains;
+import frc.util.MarinersController.MarinersController.ControllerLocation;
+import frc.util.MarinersController.MarinersSparkBase.MotorType;
+
+/** Add your docs here. */
+public class PivotConstants {
+    public enum PivotStates
+    {
+        Closed(Degrees.of(0)),
+        Middle(Degrees.of(-40)),
+        Open(Degrees.of(-90));
+
+        private final Angle angle;
+
+        PivotStates(Angle angle)
+        {
+            this.angle = angle;
+        }
+
+        public Angle getAngle()
+        {
+            return this.angle;
+        }
+
+        public static PivotStates findNearestPosition(Angle angle)
+        {
+            for(PivotStates position : PivotStates.values())
+            {
+                if (Constants.CALCULATIONS.epsilonEquals(
+                    angle,
+                    position.getAngle(),
+                    IntakeConstants.PositionMotor.POSITION_TOLERANCE)
+                ) return position;
+            }
+            return null;
+        }
+
+    }
+    public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
+    public static final int MOTOR_ID = 56;
+    public static final boolean IS_BRUSHLESS = true;
+    public static final MotorType MOTOR_TYPE = MotorType.SPARK_FLEX;
+    public static final boolean IS_INVERTED = true;
+    public static final Angle POSITION_TOLERANCE = Degrees.of(2);
+    public static final double GEAR_RATIO = 60;
+    public static final double SOFT_MINIMUM = PivotStates.Open.getAngle().in(Rotations);
+    public static final double SOFT_MAXIMUM = PivotStates.Closed.getAngle().in(Rotations);
+    public static final PivotStates RESET = PivotStates.Open; //TODO: Swap to Closed
+    public static final PIDFGains PID_GAINS = new PIDFGains(
+    600,
+    50,
+    0,
+    0.1);
+    public static final TrapezoidProfile PROFILE = new TrapezoidProfile(
+        new Constraints(3, 1.5)
+    );
+    public static final double STALL_CURRENT = 40;
+}
