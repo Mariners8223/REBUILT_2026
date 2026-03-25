@@ -26,10 +26,10 @@ public class FunnelIOSim implements FunnelIO{
             FunnelConstants.CenteringMotor.MOMENT_OF_INERTIA_SIM);
     }
 
-    public void SetDutyCycleCenter(double DutyCycleCenter){
+    public void setDutyCycleCenter(double DutyCycleCenter){
         CenterHighMotor.setDutyCycle(DutyCycleCenter);
     }
-    public void SetDutyCycleLead(double DutyCycleLead){
+    public void setDutyCycleFunnel(double DutyCycleLead){
         LeadMotor.setDutyCycle(DutyCycleLead);
     }
 

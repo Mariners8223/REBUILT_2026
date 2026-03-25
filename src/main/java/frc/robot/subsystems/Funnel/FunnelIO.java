@@ -1,8 +1,8 @@
 package frc.robot.subsystems.Funnel;
 
 public interface FunnelIO {
-    void SetDutyCycleLead(double DutyCycleLead);
-    void SetDutyCycleCenter(double DutyCycleCenter);
+    void setDutyCycleFunnel(double DutyCycleLead);
+    void setDutyCycleCenter(double DutyCycleCenter);
 
     double getFunnelVelocity();
     double getCenterringVelocity();

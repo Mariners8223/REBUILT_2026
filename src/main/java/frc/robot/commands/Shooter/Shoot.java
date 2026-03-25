@@ -8,6 +8,7 @@ import static edu.wpi.first.units.Units.Volts;
 
 import java.util.function.Supplier;
 
+
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -15,29 +16,26 @@ import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterConstants;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ShootDistance extends Command {
+public class Shoot extends Command {
   Shooter shooter;
-  Supplier<Distance> distanceSupplier;
+  Supplier<AngularVelocity> velocitySupplier;
 
   boolean boosting = false;
 
   /** Creates a new Shoot. */
-  public ShootDistance(Shooter shooter, Supplier<Distance> distanceSupplier) {
+  public Shoot(Shooter shooter, Supplier<AngularVelocity> velocitySupplier) {
     this.shooter = shooter;
-    this.distanceSupplier = distanceSupplier;
+    this.velocitySupplier = velocitySupplier;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
-  }
-
-  public AngularVelocity requiredSpeed(){
-    return ShooterConstants.Calculations.requiredAngularVelocity(distanceSupplier.get());
+    setName("Shoot Velocity");
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    AngularVelocity requiredSpeed = requiredSpeed();
+    AngularVelocity requiredSpeed = velocitySupplier.get();
     shooter.setVelocity(requiredSpeed);
   }
 
@@ -49,11 +47,11 @@ public class ShootDistance extends Command {
       shooter.setDutyCycle(1);
     }
 
-    if (shooter.getShooterVelocity().gte(requiredSpeed())){
+    if (shooter.getShooterVelocity().gte(velocitySupplier.get())){
       boosting = false;
     }
 
-    if (!boosting) shooter.setVelocity(requiredSpeed());
+    if (!boosting) shooter.setVelocity(velocitySupplier.get());
   }
 
   // Called once the command ends or is interrupted.
@@ -66,5 +64,14 @@ public class ShootDistance extends Command {
   @Override
   public boolean isFinished() {
     return false;
+  }
+
+
+  public static AngularVelocity requiredSpeed(Distance distance){
+    return ShooterConstants.Calculations.requiredAngularVelocity(distance);
+  }
+
+  public static Command ShootDistance(Shooter shooter, Supplier<Distance> distanceSupplier){
+    return new Shoot(shooter, () -> requiredSpeed(distanceSupplier.get())).withName("Shoot Distance");
   }
 }

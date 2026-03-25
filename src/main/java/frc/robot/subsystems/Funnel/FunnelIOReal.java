@@ -43,10 +43,10 @@ public class FunnelIOReal implements FunnelIO{
           return Motor;
     }
 
-    public void SetDutyCycleCenter(double HighDutyCycle){
+    public void setDutyCycleCenter(double HighDutyCycle){
         centerMotor.setDutyCycle(HighDutyCycle);
     }
-    public void SetDutyCycleLead(double LeadDutyCycle){
+    public void setDutyCycleFunnel(double LeadDutyCycle){
         funnelMotor.setDutyCycle(LeadDutyCycle);
     }
 

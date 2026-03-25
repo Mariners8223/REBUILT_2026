@@ -20,18 +20,18 @@ public class Funnel extends SubsystemBase {
   }
 
   public void setFunnelDutyCycle(double dutyCycle){
-    io.SetDutyCycleLead(dutyCycle);
+    io.setDutyCycleFunnel(dutyCycle);
   }
 
   public void stopFunnel(){
-    io.SetDutyCycleLead(0);
+    io.setDutyCycleFunnel(0);
   }
 
-  public void setCenteringDutyCycle(double CenterMotorSpeedHIGH){
-    io.SetDutyCycleCenter(CenterMotorSpeedHIGH);
+  public void setCenteringDutyCycle(double centeringDutyCycle){
+    io.setDutyCycleCenter(centeringDutyCycle);
   }
   public void stopCentering(){
-    io.SetDutyCycleCenter(0);
+    io.setDutyCycleCenter(0);
   }
 
   public void stopAllMotors(){

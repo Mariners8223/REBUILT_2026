@@ -52,8 +52,7 @@ import frc.robot.commands.Drive.AimDriving;
 import frc.robot.commands.Drive.DriveCommand;
 import frc.robot.commands.Drive.MinorAdjust;
 import frc.robot.commands.Drive.MinorAdjust.AdjustmentDirection;
-import frc.robot.commands.Shooter.ShootDistance;
-import frc.robot.commands.Shooter.ShootVelocity;
+import frc.robot.commands.Shooter.Shoot;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.Vision.Vision;
 import frc.util.HubTracker;
@@ -122,8 +121,8 @@ public class RobotContainer {
     public static void configureCommands(){
         warmupShooter = () ->
             Commands.either(
-                new ShootDistance(shooter, RobotContainer::distanceFromHub),
-                new ShootVelocity(shooter, () -> RPM.of(ShooterConstants.PASSING_VELOCITY)),
+                Shoot.ShootDistance(shooter, RobotContainer::distanceFromHub),
+                new Shoot(shooter, () -> RPM.of(ShooterConstants.PASSING_VELOCITY)),
                 RobotContainer::inAllianceZone
             ).withName("Warmup Shooter");
 
@@ -133,14 +132,14 @@ public class RobotContainer {
 
         shootCommand = () ->
             Commands.parallel(
-                new ShootDistance(shooter, RobotContainer::distanceFromHub),
+                Shoot.ShootDistance(shooter, RobotContainer::distanceFromHub),
                 Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
                 .andThen(feeder.smartFeedingShootCommand(RobotContainer::distanceFromHub, () -> withAutoEject))
             ).withName("Shooting");
 
         passCommand = () ->
             Commands.parallel(
-                new ShootVelocity(shooter, () -> RPM.of(ShooterConstants.PASSING_VELOCITY)),
+                new Shoot(shooter, () -> RPM.of(ShooterConstants.PASSING_VELOCITY)),
                 Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
                 .andThen(feeder.smartFeedingPassCommand(() -> withAutoEject))
             ).withName("Passing");
