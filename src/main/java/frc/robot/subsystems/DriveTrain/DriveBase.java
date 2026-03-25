@@ -286,8 +286,6 @@ public class DriveBase extends SubsystemBase {
      * @return The angle between the robot and the pose (in radians)
      */
     public double getAngleToPose(Pose2d pose){
-        // double angleTarget = poseSupplier.get().minus(driveBase.getPose()).getRotation().getRadians();
-
         Rotation2d angleToTarget = new Rotation2d(
             pose.getX() - getPose().getX(),
             pose.getY() - getPose().getY()
