@@ -43,7 +43,7 @@ public class FunnelIOSim implements FunnelIO{
     public double getFunnelSetpoint(){
         return LeadMotor.getSetpoint();
     }
-    public double getCenterringSetpoint(){
+    public double getCenteringSetpoint(){
         return CenterHighMotor.getSetpoint();
     }
 }

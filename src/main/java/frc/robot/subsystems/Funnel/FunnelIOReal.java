@@ -60,7 +60,7 @@ public class FunnelIOReal implements FunnelIO{
     public double getFunnelSetpoint(){
         return funnelMotor.getSetpoint();
     }
-    public double getCenterringSetpoint(){
+    public double getCenteringSetpoint(){
         return centerMotor.getSetpoint();
     }
 }

@@ -44,7 +44,7 @@ public class Funnel extends SubsystemBase {
   }
 
   public boolean centeringInStall(){
-    return (RobotState.isEnabled()) && (io.getCenterringSetpoint() != 0 && Math.abs(io.getCenterringVelocity()) < 1);
+    return (RobotState.isEnabled()) && (io.getCenteringSetpoint() != 0 && Math.abs(io.getCenterringVelocity()) < 1);
   }
 
   public Command funnelingCommand(){
