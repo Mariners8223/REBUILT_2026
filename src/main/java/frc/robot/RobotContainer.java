@@ -167,7 +167,7 @@ public class RobotContainer {
                 () -> pivot.getState() == PivotStates.Open
             ).withName("Swap Pivot State to and from Closed");
 
-        swapIntakeStateClosed = () ->
+        swapIntakeStateMiddle = () ->
             Commands.either(
                 pivot.moveToStateCommand(PivotStates.Middle),
                 pivot.moveToStateCommand(PivotStates.Open),
