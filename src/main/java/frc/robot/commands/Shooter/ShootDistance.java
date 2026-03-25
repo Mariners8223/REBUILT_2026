@@ -4,14 +4,12 @@
 
 package frc.robot.commands.Shooter;
 
-import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Volts;
 
 import java.util.function.Supplier;
 
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterConstants;
@@ -21,13 +19,12 @@ public class ShootDistance extends Command {
   Shooter shooter;
   Supplier<Distance> distanceSupplier;
 
-  Timer boostTimer;
+  boolean boosting = false;
 
   /** Creates a new Shoot. */
   public ShootDistance(Shooter shooter, Supplier<Distance> distanceSupplier) {
     this.shooter = shooter;
     this.distanceSupplier = distanceSupplier;
-    boostTimer = new Timer();
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
@@ -48,15 +45,15 @@ public class ShootDistance extends Command {
   @Override
   public void execute() {
     if (shooter.getShooterAcceleration().unaryMinus().gte(ShooterConstants.FALL_ACCELERATION)){
-      boostTimer.restart();
+      boosting = true;
       shooter.setDutyCycle(1);
     }
 
     if (shooter.getShooterVelocity().gte(requiredSpeed())){
-      boostTimer.stop();
+      boosting = false;
     }
 
-    if (!boostTimer.isRunning()) shooter.setVelocity(requiredSpeed().plus(RPM.of(0)));
+    if (!boosting) shooter.setVelocity(requiredSpeed());
   }
 
   // Called once the command ends or is interrupted.

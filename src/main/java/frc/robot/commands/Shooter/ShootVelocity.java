@@ -10,7 +10,6 @@ import java.util.function.Supplier;
 
 
 import edu.wpi.first.units.measure.AngularVelocity;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterConstants;
@@ -20,13 +19,12 @@ public class ShootVelocity extends Command {
   Shooter shooter;
   Supplier<AngularVelocity> velocitySupplier;
 
-  Timer boostTimer;
+  boolean boosting = false;
 
   /** Creates a new Shoot. */
   public ShootVelocity(Shooter shooter, Supplier<AngularVelocity> velocitySupplier) {
     this.shooter = shooter;
     this.velocitySupplier = velocitySupplier;
-    boostTimer = new Timer();
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
@@ -43,15 +41,15 @@ public class ShootVelocity extends Command {
   @Override
   public void execute() {
     if (shooter.getShooterAcceleration().unaryMinus().gte(ShooterConstants.FALL_ACCELERATION)){
-      boostTimer.restart();
+      boosting = true;
       shooter.setDutyCycle(1);
     }
 
     if (shooter.getShooterVelocity().gte(velocitySupplier.get())){
-      boostTimer.stop();
+      boosting = false;
     }
 
-    if (!boostTimer.isRunning()) shooter.setVelocity(velocitySupplier.get());
+    if (!boosting) shooter.setVelocity(velocitySupplier.get());
   }
 
   // Called once the command ends or is interrupted.

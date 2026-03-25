@@ -15,7 +15,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.pathplanner.lib.util.PathPlannerLogging;
-
+import com.revrobotics.util.StatusLogger;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.net.WebServer;
@@ -51,6 +51,7 @@ public class Robot extends LoggedRobot {
         }
 
         SignalLogger.enableAutoLogging(false);
+        StatusLogger.disableAutoLogging();
         DataLogManager.stop();
 
         // isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
