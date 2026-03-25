@@ -25,17 +25,15 @@ public final class Constants {
     }
     public static final RobotType ROBOT_TYPE = RobotType.DEVELOPMENT;
 
+    public static <U extends Unit> boolean epsilonEquals(Measure<U> unit1, Measure<U> unit2, Measure<U> tolerance){
+        return Math.abs(unit1.baseUnitMagnitude() - unit2.baseUnitMagnitude()) <= tolerance.baseUnitMagnitude();
+    }
+
     public static class FieldConstants{
         public static final Pose2d HUB_POSITION = new Pose2d(4.611,4.046,new Rotation2d());
 
         public static final double RED_ALLIANCE_ZONE_X = 12;
         public static final double BLUE_ALLIANCE_ZONE_X = 4;
-    }
-
-    public static class CALCULATIONS{
-        public static <U extends Unit> boolean epsilonEquals(Measure<U> unit1, Measure<U> unit2, Measure<U> tolerance){
-            return Math.abs(unit1.baseUnitMagnitude() - unit2.baseUnitMagnitude()) <= tolerance.baseUnitMagnitude();
-        }
     }
 
     public static final class TrenchLocations{

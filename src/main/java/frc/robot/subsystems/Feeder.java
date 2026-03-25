@@ -88,11 +88,11 @@ public class Feeder extends SubsystemBase {
   }
 
   public Command toShooterCommand(Distance distanceToHub){
-    return setSpeeds(0.8, FunnelConstants.funnelMotor.FUNNEL_SHOOTING_SPEED, FunnelConstants.CenteringMotor.CENTERING_SHOOTING_SPEED, KickerConstants.getDutyCycle(distanceToHub)).
+    return setSpeeds(RollerConstants.DUTY_CYCLE, FunnelConstants.funnelMotor.FUNNEL_SHOOTING_SPEED, FunnelConstants.CenteringMotor.CENTERING_SHOOTING_SPEED, KickerConstants.getDutyCycle(distanceToHub)).
         withName("Feeder to Shoot");
   }
   public Command toPassCommand(){
-    return setSpeeds(0.8, FunnelConstants.funnelMotor.FUNNEL_SHOOTING_SPEED, FunnelConstants.CenteringMotor.CENTERING_SHOOTING_SPEED, 1).
+    return setSpeeds(RollerConstants.DUTY_CYCLE, FunnelConstants.funnelMotor.FUNNEL_SHOOTING_SPEED, FunnelConstants.CenteringMotor.CENTERING_SHOOTING_SPEED, 1).
         withName("Feeder to Pass");
   }
 

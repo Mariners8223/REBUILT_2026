@@ -68,7 +68,7 @@ public class Shoot extends Command {
 
 
   public static AngularVelocity requiredSpeed(Distance distance){
-    return ShooterConstants.Calculations.requiredAngularVelocity(distance);
+    return ShooterConstants.requiredAngularVelocity(distance);
   }
 
   public static Command ShootDistance(Shooter shooter, Supplier<Distance> distanceSupplier){

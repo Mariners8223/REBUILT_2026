@@ -5,15 +5,9 @@
 package frc.robot.subsystems.Shooter;
 
 import static edu.wpi.first.units.Units.KilogramSquareMeters;
-import static edu.wpi.first.units.Units.Meter;
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.Minute;
-import static edu.wpi.first.units.Units.RPM;
-import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
-import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import frc.util.MarinersController.MarinersSimMotor;
 
@@ -45,28 +39,12 @@ public class ShooterIOSim implements ShooterIO{
     public void setVelocity(double targetVelocity){
         flywheel.setInput(targetVelocity);
     }
-    public void setVelocityWithFeedforward(double targetVelocity, double ff){}
     public void setVoltage(double voltage){
         flywheel.setInput(voltage);
     }
     public void setDutyCycle(double targetDutyCycle){
         flywheel.setInputVoltage(targetDutyCycle / flywheel.getGearbox().nominalVoltageVolts);
     }
-    public void feedForwardBoost(double boost){
-        return;
-    }
-    public void resetFeedForward(){
-        return;
-    }
 
-    public void update(ShooterInputs inputs){
-        inputs.shooterVelocity = (RotationsPerSecond.of(getVelocity())).in(RPM);
-
-        LinearVelocity shooterLinearVelocity = Meter.per(Minute).of(
-            getVelocity() * ShooterConstants.SHOOTER_WHEEL_CIRCUMFERENCE.in(Meter)
-        );
-        inputs.shooterLinearVelocity = shooterLinearVelocity.in(MetersPerSecond);
-
-        inputs.pose = ShooterConstants.POSITION;
-    }
+    public void update(ShooterInputs inputs){}
 }

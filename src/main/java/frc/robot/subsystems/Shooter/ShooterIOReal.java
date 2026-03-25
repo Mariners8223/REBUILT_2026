@@ -4,14 +4,6 @@
 
 package frc.robot.subsystems.Shooter;
 
-import static edu.wpi.first.units.Units.Meter;
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.Minute;
-import static edu.wpi.first.units.Units.RPM;
-import static edu.wpi.first.units.Units.RotationsPerSecond;
-
-import edu.wpi.first.units.measure.LinearVelocity;
-import frc.util.PIDFGains;
 import frc.util.MarinersController.MarinersController;
 import frc.util.MarinersController.MarinersTalonFX;
 import frc.util.MarinersController.MarinersController.ControlMode;
@@ -58,36 +50,12 @@ public class ShooterIOReal implements ShooterIO {
     public void setVelocity(double targetVelocity){
         leadMotor.setReference(targetVelocity, ControlMode.Velocity);
     }
-    public void setVelocityWithFeedforward(double targetVelocity, double ff){
-        leadMotor.setReference(targetVelocity, ControlMode.Velocity, ff);
-    }
     public void setVoltage(double voltage){
         leadMotor.setVoltage(voltage);
     }
     public void setDutyCycle(double targetDutyCycle){
         leadMotor.setReference(targetDutyCycle, ControlMode.DutyCycle);
     }
-    public void feedForwardBoost(double boost){
-        PIDFGains newGains = new PIDFGains(leadMotor.getPIDF().getP(), leadMotor.getPIDF().getI(), leadMotor.getPIDF().getD(),
-        leadMotor.getPIDF().getF() + boost);
-        leadMotor.setPIDF(newGains);
-        // leadMotor.setFeedForward(leadMotor.getPIDF().getF() + boost);
-    }
-    public void resetFeedForward(){
-        leadMotor.setPIDF(ShooterConstants.MOTOR_CONSTANTS.PID);
-    }
 
-
-    public void update(ShooterInputs inputs){
-        inputs.shooterVelocity = (RotationsPerSecond.of(getVelocity())).in(RPM);
-
-        LinearVelocity shooterLinearVelocity = Meter.per(Minute).of(
-            getVelocity() * ShooterConstants.SHOOTER_WHEEL_CIRCUMFERENCE.in(Meter)
-        );
-        inputs.shooterLinearVelocity = shooterLinearVelocity.in(MetersPerSecond);
-
-        inputs.feedForward = leadMotor.getPIDF().getF();
-
-        inputs.pose = ShooterConstants.POSITION;
-    }
+    public void update(ShooterInputs inputs){}
 }
