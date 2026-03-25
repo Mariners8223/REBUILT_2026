@@ -43,7 +43,7 @@ public class ShooterConstants {
         public static final boolean IS_INVERTED_FROM_LEADER = true;
     }
 
-    public static final double PASSING_VELOCITY = 4000;
+    public static final AngularVelocity PASSING_VELOCITY = RPM.of(4000);
     public static final AngularAcceleration FALL_ACCELERATION = RotationsPerSecondPerSecond.of(30);
     public static final AngularVelocity SHOOTER_ANGULAR_VELOCITY_TOLERANCE = RPM.of(100);
 

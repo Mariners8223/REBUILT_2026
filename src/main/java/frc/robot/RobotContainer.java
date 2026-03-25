@@ -4,9 +4,7 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot;
 
-import static edu.wpi.first.units.Units.Meter;
 import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Second;
 
 import java.io.IOException;
@@ -125,7 +123,7 @@ public class RobotContainer {
         warmupShooter = () ->
             Commands.either(
                 Shoot.ShootDistance(shooter, RobotContainer::distanceFromHub),
-                new Shoot(shooter, () -> RPM.of(ShooterConstants.PASSING_VELOCITY)),
+                new Shoot(shooter, () -> ShooterConstants.PASSING_VELOCITY),
                 RobotContainer::inAllianceZone
             ).withName("Warmup Shooter");
 
@@ -142,7 +140,7 @@ public class RobotContainer {
 
         passCommand = () ->
             Commands.parallel(
-                new Shoot(shooter, () -> RPM.of(ShooterConstants.PASSING_VELOCITY)),
+                new Shoot(shooter, () -> ShooterConstants.PASSING_VELOCITY),
                 Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
                 .andThen(feeder.smartFeedingPassCommand(() -> withAutoEject))
             ).withName("Passing");
@@ -373,7 +371,7 @@ public class RobotContainer {
         SmartDashboard.putNumber("Time left in Shift", Math.floor(HubTracker.timeRemainingInCurrentShift().orElseGet(() -> Second.zero()).in(Second) * 100) / 100);
         SmartDashboard.putString("Current Shift", HubTracker.getCurrentShift().orElseGet(() -> HubTracker.Shift.AUTO).toString());
 
-        SmartDashboard.putString("Distance to Hub", String.format("%.2f", distanceFromHub().in(Meter)));
+        SmartDashboard.putString("Distance to Hub", String.format("%.2f", distanceFromHub().in(Meters)));
         SmartDashboard.putBoolean("In Alliance Zone", inAllianceZone());
     }
 
