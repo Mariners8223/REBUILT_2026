@@ -30,28 +30,16 @@ public class VisionConstants {
                 0.11143, 0.281, 0.52,
                 new Rotation3d(0, Units.degreesToRadians(-12), Units.degreesToRadians(0))),
                 0, 0),
-       BACK_CAMERA("Back Camera",
-           new Transform3d(
-               -0.23554, 0.15, 0.51,
-               new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(-14), Units.degreesToRadians(180))),
-               0, 0),
+    //    BACK_CAMERA("Back Camera",
+    //        new Transform3d(
+    //            -0.23554, 0.15, 0.51,
+    //            new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(-14), Units.degreesToRadians(180))),
+    //            0, 0),
         RIGHT_CAMERA("Right Camera",
             new Transform3d(-0.23554, -0.15, 0.46,
                 new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(-10), Units.degreesToRadians(-90))),
             0, 0);
-
-    //     POINTING_IN_CAMERA("pointing_in_camera",//this camera will be on a churo of the shooter
-    //         new Transform3d(
-    //             0.11143, 0.221, 0.574,
-    //             new Rotation3d(0, Units.degreesToRadians(-26), Units.degreesToRadians(0))),
-    //             0, 0),
-
-    //    POINTING_OUT_CAMERA("pointing_out_camera", //this camera will be placed on the side of the shooter, pointing backwards
-    //        new Transform3d(
-    //            0.23554, -0.26835, 0.47246,
-    //            new Rotation3d(Units.degreesToRadians(-75), Units.degreesToRadians(0), Units.degreesToRadians(0))),
-    //            0, 0);
-
+            
 
         public final String cameraName;
         public final double XYstdFactor;
