@@ -15,37 +15,37 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Funnel.Funnel;
 import frc.robot.subsystems.Funnel.FunnelConstants;
-import frc.robot.subsystems.Intake.Intake;
-import frc.robot.subsystems.Intake.IntakeConstants;
+import frc.robot.subsystems.Intake.Rollers.RollerConstants;
+import frc.robot.subsystems.Intake.Rollers.Rollers;
 import frc.robot.subsystems.Kicker.Kicker;
 import frc.robot.subsystems.Kicker.KickerConstants;
 import frc.util.ContinuousConditionalCommand;
 
 public class Feeder extends SubsystemBase {
-  private final Intake intake;
+  private final Rollers rollers;
   private final Funnel funnel;
   private final Kicker kicker;
 
   /** Creates a new Feeder. */
-  public Feeder(Intake intake, Funnel funnel, Kicker kicker) {
-    this.intake = intake;
+  public Feeder(Rollers rollers, Funnel funnel, Kicker kicker) {
+    this.rollers = rollers;
     this.funnel = funnel;
     this.kicker = kicker;
   }
 
-  public ArrayList<Subsystem> requiredSubsystems(double intakeSpeed, double funnellingSpeed, double centeringSpeed, double kickerSpeed){
+  public ArrayList<Subsystem> requiredSubsystems(double rollersSpeed, double funnellingSpeed, double centeringSpeed, double kickerSpeed){
     ArrayList<Subsystem> requiredSubsystems = new ArrayList<>();
 
-    if (intakeSpeed != 0) requiredSubsystems.add(intake);
+    if (rollersSpeed != 0) requiredSubsystems.add(rollers);
     if (funnellingSpeed != 0 || centeringSpeed != 0) requiredSubsystems.add(funnel);
     if (kickerSpeed != 0) requiredSubsystems.add(kicker);
 
     return requiredSubsystems;
   }
 
-  public Runnable runMotors(double intakeSpeed, double funnellingSpeed, double centeringSpeed, double kickerSpeed){
+  public Runnable runMotors(double rollersSpeed, double funnellingSpeed, double centeringSpeed, double kickerSpeed){
     return () -> {
-        intake.setRollersDutyCycle(intakeSpeed);
+        rollers.setDutyCycle(rollersSpeed);
         funnel.setFunnelDutyCycle(funnellingSpeed);
         funnel.setCenteringDutyCycle(centeringSpeed);
         kicker.setDutyCycle(kickerSpeed);
@@ -54,17 +54,17 @@ public class Feeder extends SubsystemBase {
 
   public Runnable stopMotors(){
       return () -> {
-        intake.setRollersDutyCycle(0);
+        rollers.stopMotor();
         funnel.stopAllMotors();
         kicker.stopMotors();
       };
   }
 
-  public Command setSpeeds(double intakeSpeed, double funnellingSpeed, double centeringSpeed, double kickerSpeed){
-    Subsystem[] requirementsArray = requiredSubsystems(intakeSpeed, funnellingSpeed, centeringSpeed, kickerSpeed).toArray(new Subsystem[0]);
+  public Command setSpeeds(double rollersSpeed, double funnellingSpeed, double centeringSpeed, double kickerSpeed){
+    Subsystem[] requirementsArray = requiredSubsystems(rollersSpeed, funnellingSpeed, centeringSpeed, kickerSpeed).toArray(new Subsystem[0]);
 
     return Commands.startEnd(
-      runMotors(intakeSpeed, funnellingSpeed, centeringSpeed, kickerSpeed),
+      runMotors(rollersSpeed, funnellingSpeed, centeringSpeed, kickerSpeed),
       stopMotors(),
       requirementsArray
     );
@@ -75,7 +75,7 @@ public class Feeder extends SubsystemBase {
   }
 
   public Command intakeCommand(){
-    return setSpeeds(IntakeConstants.RollersMotor.DUTY_CYCLE, FunnelConstants.funnelMotor.FUNNEL_INTAKE_SPEED, 0, 0).
+    return setSpeeds(RollerConstants.DUTY_CYCLE, FunnelConstants.funnelMotor.FUNNEL_INTAKE_SPEED, 0, 0).
         withName("Feeder Intake");
   }
   public Command ejectCommand(){
@@ -83,7 +83,7 @@ public class Feeder extends SubsystemBase {
         withName("Feeder Eject");
   }
   public Command passEjectCommand(){
-    return setSpeeds(-IntakeConstants.RollersMotor.DUTY_CYCLE, -0.6, -0.2, 0).
+    return setSpeeds(-RollerConstants.DUTY_CYCLE, -0.6, -0.2, 0).
         withName("Feeder Eject Pass");
   }
 

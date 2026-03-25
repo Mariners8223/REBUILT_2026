@@ -60,9 +60,10 @@ import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterConstants;
 import frc.robot.subsystems.Funnel.Funnel;
-import frc.robot.subsystems.Intake.Intake;
-import frc.robot.subsystems.Intake.IntakeConstants;
-import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakeStates;
+import frc.robot.subsystems.Intake.Pivot.Pivot;
+import frc.robot.subsystems.Intake.Pivot.PivotConstants.PivotStates;
+import frc.robot.subsystems.Intake.Rollers.RollerConstants;
+import frc.robot.subsystems.Intake.Rollers.Rollers;
 import frc.robot.subsystems.Kicker.Kicker;
 
 
@@ -75,7 +76,8 @@ public class RobotContainer {
 
     public static DriveBase driveBase;
     public static Funnel funnel;
-    public static Intake intake;
+    public static Pivot pivot;
+    public static Rollers rollers;
     public static Shooter shooter;
     public static Kicker kicker;
 
@@ -104,11 +106,12 @@ public class RobotContainer {
 
         driveBase = new DriveBase();
         funnel = new Funnel();
-        intake = new Intake();
+        pivot = new Pivot();
+        rollers = new Rollers();
         shooter = new Shooter();
         kicker = new Kicker();
 
-        feeder = new Feeder(intake, funnel, kicker);
+        feeder = new Feeder(rollers, funnel, kicker);
         vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
 
         configureCommands();
@@ -134,7 +137,7 @@ public class RobotContainer {
             Commands.parallel(
                 Shoot.ShootDistance(shooter, RobotContainer::distanceFromHub),
                 Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
-                .andThen(feeder.smartFeedingShootCommand(RobotContainer::distanceFromHub, () -> withAutoEject))
+                        .andThen(feeder.smartFeedingShootCommand(RobotContainer::distanceFromHub, () -> withAutoEject))
             ).withName("Shooting");
 
         passCommand = () ->
@@ -154,23 +157,22 @@ public class RobotContainer {
         shootWithBump = () ->
             Commands.parallel(
                 conditionalShootCommand.get(),
-                Commands.waitSeconds(2).andThen(new InstantCommand(() -> intake.setPivotState(IntakeStates.Middle)))
-            ).finallyDo(() -> intake.setPivotState(IntakeStates.Open))
-            .withName("Shoot with Bump");
+                Commands.waitSeconds(2).andThen(pivot.raisePivot(PivotStates.Middle))
+            ).withName("Shoot with Bump");
 
         swapIntakeStateClosed = () ->
             Commands.either(
-                intake.moveToPositionCommand(IntakeStates.Closed),
-                intake.moveToPositionCommand(IntakeStates.Open),
-                () -> intake.getCurrentState() == IntakeStates.Open
-            ).withName("Swap Intake State to Closed");
+                pivot.moveToStateCommand(PivotStates.Closed),
+                pivot.moveToStateCommand(PivotStates.Open),
+                () -> pivot.getState() == PivotStates.Open
+            ).withName("Swap Pivot State to and from Closed");
 
         swapIntakeStateClosed = () ->
             Commands.either(
-                intake.moveToPositionCommand(IntakeStates.Middle),
-                intake.moveToPositionCommand(IntakeStates.Open),
-                () -> intake.getCurrentState() == IntakeStates.Open
-            ).withName("Swap Intake State to Middle");
+                pivot.moveToStateCommand(PivotStates.Middle),
+                pivot.moveToStateCommand(PivotStates.Open),
+                () -> pivot.getState() == PivotStates.Open
+            ).withName("Swap Pivot State to and from Middle");
     }
 
 
@@ -211,11 +213,11 @@ public class RobotContainer {
     }
 
     public static void configureNamedCommands(){
-        NamedCommands.registerCommand("close intake", intake.moveToPositionCommand(IntakeStates.Closed));
-        NamedCommands.registerCommand("open intake", intake.moveToPositionCommand(IntakeStates.Open).andThen(Commands.waitSeconds(0.6)));
+        NamedCommands.registerCommand("close intake", pivot.moveToStateCommand(PivotStates.Closed));
+        NamedCommands.registerCommand("open intake", pivot.moveToStateCommand(PivotStates.Open).andThen(Commands.waitSeconds(0.6)));
 
-        NamedCommands.registerCommand("start rollers", new InstantCommand(() -> intake.setRollersDutyCycle(IntakeConstants.RollersMotor.DUTY_CYCLE)));
-        NamedCommands.registerCommand("stop rollers", new InstantCommand(() -> intake.setRollersDutyCycle(0)));
+        NamedCommands.registerCommand("start rollers", new InstantCommand(() -> rollers.setDutyCycle(RollerConstants.DUTY_CYCLE)));
+        NamedCommands.registerCommand("stop rollers", new InstantCommand(() -> rollers.stopMotor()));
 
         NamedCommands.registerCommand("shoot to hub", shootWithBump.get().withTimeout(4));
         NamedCommands.registerCommand("warm up shooter", new InstantCommand(() -> shooter.setVelocityByDistance(distanceFromHub()), shooter));

@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.Intake.IntakeConstants.PositionMotor.IntakeStates;
+import frc.robot.subsystems.Intake.Pivot.PivotConstants.PivotStates;
 import frc.util.Elastic;
 
 
@@ -100,7 +100,7 @@ public class Robot extends LoggedRobot {
         Elastic.selectTab("Autonomous");
         // isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
         isRedAlliance = true;
-        RobotContainer.intake.resetPivotPosition(IntakeStates.Closed);
+        RobotContainer.pivot.resetPosition(PivotStates.Closed);
 
         autonomousCommand = RobotContainer.getAuto();
         if (autonomousCommand != null){

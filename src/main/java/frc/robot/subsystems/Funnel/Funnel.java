@@ -6,7 +6,6 @@ import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.RobotState;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Funnel extends SubsystemBase {
@@ -46,31 +45,6 @@ public class Funnel extends SubsystemBase {
   public boolean centeringInStall(){
     return (RobotState.isEnabled()) && (io.getCenteringSetpoint() != 0 && Math.abs(io.getCenterringVelocity()) < 1);
   }
-
-  public Command funnelingCommand(){
-    return this.startEnd(
-      () -> setFunnelDutyCycle(FunnelConstants.funnelMotor.FUNNEL_INTAKE_SPEED),
-      () -> stopFunnel()
-    );
-  }
-
-  public Command centeringCommand(){
-    return this.startEnd(
-      () -> setCenteringDutyCycle(FunnelConstants.CenteringMotor.CenteringHighSpeed),
-      () -> stopCentering()
-      );
-  }
-
-  public Command toShooterCommand(){
-    return this.startEnd(
-      () -> {
-        setFunnelDutyCycle(FunnelConstants.funnelMotor.FUNNEL_SHOOTING_SPEED);
-        setCenteringDutyCycle(FunnelConstants.CenteringMotor.CENTERING_SHOOTING_SPEED);
-      },
-      () -> stopAllMotors()
-    );
-  }
-
 
   @Override
   public void periodic() {

@@ -8,8 +8,6 @@ import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Rotations;
 
 import edu.wpi.first.units.measure.Angle;
-import frc.robot.Constants;
-import frc.robot.subsystems.Intake.IntakeConstants;
 import frc.util.PIDFGains;
 import frc.util.MarinersController.MarinersController.ControllerLocation;
 import frc.util.MarinersController.MarinersSparkBase.MotorType;
@@ -33,21 +31,8 @@ public class PivotConstants {
         {
             return this.angle;
         }
-
-        public static PivotStates findNearestPosition(Angle angle)
-        {
-            for(PivotStates position : PivotStates.values())
-            {
-                if (Constants.CALCULATIONS.epsilonEquals(
-                    angle,
-                    position.getAngle(),
-                    IntakeConstants.PositionMotor.POSITION_TOLERANCE)
-                ) return position;
-            }
-            return null;
-        }
-
     }
+
     public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
     public static final int MOTOR_ID = 56;
     public static final boolean IS_BRUSHLESS = true;

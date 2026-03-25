@@ -14,17 +14,13 @@ import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.Intake.IntakeConstants;
-import frc.robot.subsystems.Intake.IntakeIO;
-import frc.robot.subsystems.Intake.IntakeIOReal;
-import frc.robot.subsystems.Intake.IntakeInputsAutoLogged;
 import frc.robot.subsystems.Intake.Pivot.PivotConstants.PivotStates;
 
 public class Pivot extends SubsystemBase {
     public static Alert stallAlert = new Alert("Pivot in stall", AlertType.kWarning);
 
     private final PivotIO io;
-    private final PivotInputsAutoLogged inputs = new IntakeInputsAutoLogged();
+    private final PivotInputsAutoLogged inputs = new PivotInputsAutoLogged();
 
     private PivotStates state;
 
@@ -62,7 +58,7 @@ public class Pivot extends SubsystemBase {
     }
 
     public boolean inStall(){
-        return (RobotState.isEnabled()) && (io.getSupplyCurrent() > IntakeConstants.PositionMotor.STALL_CURRENT);
+        return (RobotState.isEnabled()) && (io.getSupplyCurrent() > PivotConstants.STALL_CURRENT);
     }
 
     public Command moveToStateCommand(PivotStates state){

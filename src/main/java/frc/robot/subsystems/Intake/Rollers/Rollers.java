@@ -15,16 +15,19 @@ public class Rollers extends SubsystemBase {
   public static Alert rollersStall = new Alert("Rollers in stall", AlertType.kWarning);
 
   RollersIO io;
-  RollersInputsAutoLogged inputs = new RollersInputsAutoLogged()
+  RollersInputsAutoLogged inputs = new RollersInputsAutoLogged();
 
   /** Creates a new Rollers. */
   public Rollers() {
     io = new RollersIOReal();
   }
 
-  public void setRollersDutyCycle(double dutyCycle)
+  public void setDutyCycle(double dutyCycle)
   {
     io.setDutyCycle(dutyCycle);
+  }
+  public void stopMotor(){
+    io.setDutyCycle(0);
   }
   
   public boolean inStall(){
