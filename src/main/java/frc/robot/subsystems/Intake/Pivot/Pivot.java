@@ -21,7 +21,7 @@ import frc.robot.subsystems.Intake.IntakeInputsAutoLogged;
 import frc.robot.subsystems.Intake.Pivot.PivotConstants.PivotStates;
 
 public class Pivot extends SubsystemBase {
-    public static Alert pivotStall = new Alert("Intake Pivot in stall", AlertType.kWarning);
+    public static Alert stallAlert = new Alert("Pivot in stall", AlertType.kWarning);
 
     private final PivotIO io;
     private final PivotInputsAutoLogged inputs = new IntakeInputsAutoLogged();
@@ -32,6 +32,7 @@ public class Pivot extends SubsystemBase {
     public Pivot() {
         io = new PivotIOReal();
         state = PivotConstants.RESET;
+        resetPosition();
     }
 
     public void setRotation(Angle rotations)
@@ -64,7 +65,7 @@ public class Pivot extends SubsystemBase {
         return (RobotState.isEnabled()) && (io.getSupplyCurrent() > IntakeConstants.PositionMotor.STALL_CURRENT);
     }
 
-    public Command moveToPositionCommand(PivotStates state){
+    public Command moveToStateCommand(PivotStates state){
         return this.runOnce(() -> setState(state));
     }
 
@@ -84,8 +85,7 @@ public class Pivot extends SubsystemBase {
         Logger.recordOutput("Intake/Pivot Command", (getCurrentCommand() != null ? getCurrentCommand().toString() : "None"));
         Logger.recordOutput("Intake/Pivot in Stall", inStall());
 
-        pivotStall.set(inStall());
-
+        stallAlert.set(inStall());
         // This method will be called once per scheduler run
     }
 }

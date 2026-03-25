@@ -7,8 +7,6 @@ package frc.robot.subsystems.Intake.Pivot;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Rotations;
 
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.units.measure.Angle;
 import frc.robot.Constants;
 import frc.robot.subsystems.Intake.IntakeConstants;
@@ -55,18 +53,17 @@ public class PivotConstants {
     public static final boolean IS_BRUSHLESS = true;
     public static final MotorType MOTOR_TYPE = MotorType.SPARK_FLEX;
     public static final boolean IS_INVERTED = true;
-    public static final Angle POSITION_TOLERANCE = Degrees.of(2);
     public static final double GEAR_RATIO = 60;
+
     public static final double SOFT_MINIMUM = PivotStates.Open.getAngle().in(Rotations);
     public static final double SOFT_MAXIMUM = PivotStates.Closed.getAngle().in(Rotations);
     public static final PivotStates RESET = PivotStates.Open; //TODO: Swap to Closed
+
     public static final PIDFGains PID_GAINS = new PIDFGains(
     600,
     50,
     0,
     0.1);
-    public static final TrapezoidProfile PROFILE = new TrapezoidProfile(
-        new Constraints(3, 1.5)
-    );
+
     public static final double STALL_CURRENT = 40;
 }
