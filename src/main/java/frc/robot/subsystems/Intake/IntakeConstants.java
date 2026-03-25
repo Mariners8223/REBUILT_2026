@@ -22,9 +22,8 @@ public class IntakeConstants
         public enum IntakeStates
         {
             Closed(Degrees.of(0)),
-            Middle(Degrees.of(-40)), //TODO: Test bump heights
-            Open(Degrees.of(-90)),
-            Reset(Degrees.of(-90)); //TODO: Change before competition
+            Middle(Degrees.of(-40)),
+            Open(Degrees.of(-90));
 
             private final Angle angle;
 
@@ -61,6 +60,7 @@ public class IntakeConstants
         public static final double GEAR_RATIO = 60;
         public static final double SOFT_MINIMUM = IntakeStates.Open.getAngle().in(Rotations);
         public static final double SOFT_MAXIMUM = IntakeStates.Closed.getAngle().in(Rotations);
+        public static final IntakeStates RESET = IntakeStates.Open; //TODO: Swap to Closed
         public static final PIDFGains PID_GAINS = new PIDFGains(
         600,
         50,

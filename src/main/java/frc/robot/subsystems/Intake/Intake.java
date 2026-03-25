@@ -1,14 +1,9 @@
 package frc.robot.subsystems.Intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.Constants;
 import frc.robot.Robot;
 
-import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Rotation;
 
 import org.littletonrobotics.junction.Logger;
@@ -33,9 +28,7 @@ public class Intake extends SubsystemBase{
     {
         io = Robot.isReal() ? new IntakeIOReal() : new IntakeIOSim();
         this.resetPivotPosition();
-        state = IntakeStates.Reset; // TODO: Swap to Closed
-
-        // setDefaultCommand(this.moveToPositionCommand());
+        state = IntakeConstants.PositionMotor.RESET;
     }
 
     public void setPivotRotation(Angle rotations)
@@ -71,10 +64,6 @@ public class Intake extends SubsystemBase{
         io.resetPositionMotorEncoder(state.getAngle().in(Rotation));
     }
 
-    public boolean pivotAtState(){
-        return Constants.CALCULATIONS.epsilonEquals(io.getCurrentPosition(), state.getAngle(), Degrees.of(3));
-    }
-
     public boolean rollersInStall(){
         return (RobotState.isEnabled()) && (io.getRollersSetpoint() != 0 && Math.abs(io.getRollersVelocity()) < 1);
     }
@@ -82,16 +71,8 @@ public class Intake extends SubsystemBase{
         return (RobotState.isEnabled()) && (io.getPivotStallCurrent() > IntakeConstants.PositionMotor.STALL_CURRENT);
     }
 
-    public void startPIDTuning(){
-        io.startPIDTuning();
-    }
-
     public Command moveToPositionCommand(IntakeStates position){
         return this.runOnce(() -> setPivotState(position));
-    }
-
-    public Command moveToPositionCommand(){
-        return this.run(() -> this.setPivotState(this.state));
     }
 
     public Command spinRollersCommand(){
@@ -99,19 +80,6 @@ public class Intake extends SubsystemBase{
             () -> setRollersDutyCycle(IntakeConstants.RollersMotor.DUTY_CYCLE),
             () -> setRollersDutyCycle(0)
         );
-    }
-
-    public Command bumpFuelCommand(){
-        return Commands.sequence(
-            new InstantCommand(() -> this.setPivotState(IntakeStates.Middle)),
-            new WaitCommand(IntakeConstants.BUMP_WAIT_TIME),
-            new InstantCommand(() -> this.setPivotState(IntakeStates.Open)),
-            new WaitCommand(IntakeConstants.BUMP_WAIT_TIME)
-        ).withName("Bump Intake");
-        // return Commands.sequence(
-        //     new InstantCommand(() -> this.setPivotState(IntakeStates.Middle)).until(this::pivotAtState),
-        //     new InstantCommand(() -> this.setPivotState(IntakeStates.Open)).until(this::pivotAtState)
-        // ).withName("Bump Intake");
     }
 
     @Override
@@ -122,7 +90,6 @@ public class Intake extends SubsystemBase{
 
         Logger.recordOutput("Intake/State", state);
         Logger.recordOutput("Intake/Command", (getCurrentCommand() != null ? getCurrentCommand().toString() : "None"));
-        Logger.recordOutput("Pivot at State", pivotAtState());
 
         Logger.recordOutput("Intake/Rollers in Stall", rollersInStall());
         Logger.recordOutput("Intake/Pivot in Stall", pivotInStall());

@@ -70,7 +70,7 @@ public class IntakeIOReal implements IntakeIO{
 
     public void resetPositionMotorEncoder()
     {
-        positionMotor.setMotorEncoderPosition(IntakeConstants.PositionMotor.IntakeStates.Reset.getAngle().in(Rotation));
+        positionMotor.setMotorEncoderPosition(IntakeConstants.PositionMotor.RESET.getAngle().in(Rotation));
     }
     public void resetPositionMotorEncoder(double angle){
         positionMotor.setMotorEncoderPosition(angle);
