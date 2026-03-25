@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import java.lang.annotation.Repeatable;
 import java.util.ArrayList;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
@@ -83,7 +84,7 @@ public class Feeder extends SubsystemBase {
         withName("Feeder Eject");
   }
   public Command passEjectCommand(){
-    return setSpeeds(-0.8, -0.6, -0.2, 0).
+    return setSpeeds(-IntakeConstants.RollersMotor.DUTY_CYCLE, -0.6, -0.2, 0).
         withName("Feeder Eject Pass");
   }
 
@@ -97,20 +98,18 @@ public class Feeder extends SubsystemBase {
   }
 
   public Command smartFeedingShootCommand(Supplier<Distance> distanceSupplier, BooleanSupplier withAutoEjecting){
-    return Commands.repeatingSequence(
-      new ContinuousConditionalCommand(
-        ejectCommand().withTimeout(0.4),
-        toShooterCommand(distanceSupplier.get()).withTimeout(0.4),
-        () -> (inStall() && withAutoEjecting.getAsBoolean()))
-    ).withName("Smart Feeding to Shoot");
+    return new ContinuousConditionalCommand(
+      ejectCommand(),
+      toShooterCommand(distanceSupplier.get()),
+      () -> (inStall() && withAutoEjecting.getAsBoolean()))
+    .repeatedly().withName("Smart Feeding to Shoot");
   }
   public Command smartFeedingPassCommand(BooleanSupplier withAutoEjecting){
-    return Commands.repeatingSequence(
-      new ContinuousConditionalCommand(
-        ejectCommand().withTimeout(0.4),
-        toPassCommand(),
-        () -> (inStall() && withAutoEjecting.getAsBoolean()))
-    ).withName("Smart Feeding to Pass");
+    return new ContinuousConditionalCommand(
+      ejectCommand(),
+      toPassCommand(),
+      () -> (inStall() && withAutoEjecting.getAsBoolean()))
+    .repeatedly().withName("Smart Feeding to Pass");
   }
 
   @Override
