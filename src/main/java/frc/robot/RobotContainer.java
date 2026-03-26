@@ -45,6 +45,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.Drive.AimDriving;
@@ -143,7 +144,7 @@ public class RobotContainer {
         shootCommand = () ->
             Commands.parallel(
                 Shoot.ShootDistance(shooter, RobotContainer::distanceFromHub, fuelIncrementer),
-                Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
+                Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub())).andThen(new WaitCommand(0.5))
                         .andThen(feeder.smartFeedingShootCommand(RobotContainer::distanceFromHub, () -> withAutoEject))
             ).withName("Shooting");
 
