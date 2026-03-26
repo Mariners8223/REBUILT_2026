@@ -8,7 +8,6 @@ import static edu.wpi.first.units.Units.Volts;
 
 import java.util.function.Supplier;
 
-
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -19,13 +18,15 @@ import frc.robot.subsystems.Shooter.ShooterConstants;
 public class Shoot extends Command {
   Shooter shooter;
   Supplier<AngularVelocity> velocitySupplier;
+  Runnable fuelIncrementer;
 
   boolean boosting = false;
 
   /** Creates a new Shoot. */
-  public Shoot(Shooter shooter, Supplier<AngularVelocity> velocitySupplier) {
+  public Shoot(Shooter shooter, Supplier<AngularVelocity> velocitySupplier, Runnable fuelIncrementer) {
     this.shooter = shooter;
     this.velocitySupplier = velocitySupplier;
+    this.fuelIncrementer = fuelIncrementer;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
@@ -45,6 +46,8 @@ public class Shoot extends Command {
     if (shooter.getShooterAcceleration().unaryMinus().gte(ShooterConstants.FALL_ACCELERATION)){
       boosting = true;
       shooter.setDutyCycle(1);
+
+      fuelIncrementer.run();
     }
 
     if (shooter.getShooterVelocity().gte(velocitySupplier.get())){
@@ -71,7 +74,7 @@ public class Shoot extends Command {
     return ShooterConstants.requiredAngularVelocity(distance);
   }
 
-  public static Command ShootDistance(Shooter shooter, Supplier<Distance> distanceSupplier){
-    return new Shoot(shooter, () -> requiredSpeed(distanceSupplier.get())).withName("Shoot Distance");
+  public static Command ShootDistance(Shooter shooter, Supplier<Distance> distanceSupplier, Runnable fuelIncrementer){
+    return new Shoot(shooter, () -> requiredSpeed(distanceSupplier.get()), fuelIncrementer).withName("Shoot Distance");
   }
 }

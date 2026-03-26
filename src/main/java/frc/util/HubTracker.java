@@ -125,7 +125,7 @@ public class HubTracker {
             case 'R':
                 return Optional.of(Alliance.Red);
             default:
-                return Optional.empty();
+                return Optional.of(Alliance.Red);
         }
     }
 

@@ -89,6 +89,9 @@ public class RobotContainer {
     public static PathPlannerPath upLeftTrenchPath;
     public static PathPlannerPath upRightTrenchPath;
 
+    public static Runnable fuelIncrementer;
+    public static int fuelApproximation = 0;
+
     //#region Premade Commands
     public static Supplier<Command> warmupShooter;
     public static Supplier<Command> preShooting;
@@ -124,10 +127,12 @@ public class RobotContainer {
 
     //#region Commands
     public static void configureCommands(){
+        fuelIncrementer = () -> fuelApproximation += 3;
+
         warmupShooter = () ->
             Commands.either(
-                Shoot.ShootDistance(shooter, RobotContainer::distanceFromHub),
-                new Shoot(shooter, () -> ShooterConstants.PASSING_VELOCITY),
+                Shoot.ShootDistance(shooter, RobotContainer::distanceFromHub, fuelIncrementer),
+                new Shoot(shooter, () -> ShooterConstants.PASSING_VELOCITY, fuelIncrementer),
                 RobotContainer::inAllianceZone
             ).withName("Warmup Shooter");
 
@@ -137,14 +142,14 @@ public class RobotContainer {
 
         shootCommand = () ->
             Commands.parallel(
-                Shoot.ShootDistance(shooter, RobotContainer::distanceFromHub),
+                Shoot.ShootDistance(shooter, RobotContainer::distanceFromHub, fuelIncrementer),
                 Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
                         .andThen(feeder.smartFeedingShootCommand(RobotContainer::distanceFromHub, () -> withAutoEject))
             ).withName("Shooting");
 
         passCommand = () ->
             Commands.parallel(
-                new Shoot(shooter, () -> ShooterConstants.PASSING_VELOCITY),
+                new Shoot(shooter, () -> ShooterConstants.PASSING_VELOCITY, fuelIncrementer),
                 Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
                 .andThen(feeder.smartFeedingPassCommand(() -> withAutoEject))
             ).withName("Passing");
@@ -380,6 +385,7 @@ public class RobotContainer {
         SmartDashboard.putNumber("Time left in Shift", Math.floor(HubTracker.timeRemainingInCurrentShift().orElseGet(() -> Second.zero()).in(Second) * 100) / 100);
         SmartDashboard.putString("Current Shift", HubTracker.getCurrentShift().orElseGet(() -> HubTracker.Shift.AUTO).toString());
 
+        SmartDashboard.putNumber("Fuel Approximation", fuelApproximation);
         SmartDashboard.putString("Distance to Hub", String.format("%.2f", distanceFromHub().in(Meters)));
         SmartDashboard.putBoolean("In Alliance Zone", inAllianceZone());
         SmartDashboard.putBoolean("Auto Ejecting", withAutoEject);
@@ -390,6 +396,7 @@ public class RobotContainer {
         Logger.recordOutput("Shooting/Distance To Hub", distanceFromHub().in(Meters));
         Logger.recordOutput("Shooting/In Alliance Zone", inAllianceZone());
         Logger.recordOutput("Shooting/Auto Ejecting", withAutoEject);
+        Logger.recordOutput("Shooting/Fuel Approximation", fuelApproximation);
     }
     //#endregion
 }

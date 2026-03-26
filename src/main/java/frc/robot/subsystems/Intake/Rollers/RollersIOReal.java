@@ -14,6 +14,7 @@ public class RollersIOReal implements RollersIO{
         motor = new MarinersTalonFX("Intake/Rollers Motor", RollerConstants.CONTROLLER_LOCATION,
                                     RollerConstants.MOTOR_ID);
 
+        motor.setCurrentLimits(RollerConstants.CURRENT_LIMIT, RollerConstants.CURRENT_THRESHOLD);
         motor.setMotorInverted(RollerConstants.IS_INVERTED);
         motor.getMeasurements().setGearRatio(RollerConstants.GEAR_RATIO);
     }
