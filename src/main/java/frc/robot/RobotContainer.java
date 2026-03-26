@@ -86,6 +86,9 @@ public class RobotContainer {
     public static LoggedDashboardChooser<String> sideChooser;
     public static HashMap<String, Command> mirroredAutoMap = new HashMap<>();
 
+    public static PathPlannerPath upLeftTrenchPath;
+    public static PathPlannerPath upRightTrenchPath;
+
     //#region Premade Commands
     public static Supplier<Command> warmupShooter;
     public static Supplier<Command> preShooting;
@@ -116,6 +119,7 @@ public class RobotContainer {
         configureNamedCommands();
         configureDriveBindings();
         configureChoosers();
+        configureTrenchPaths();
     }
 
     //#region Commands
@@ -325,27 +329,32 @@ public class RobotContainer {
     //#endregion
 
     //#region Auto
+    public static void configureTrenchPaths(){
+        try{
+            upLeftTrenchPath = PathPlannerPath.fromPathFile("UpLeft");
+            upRightTrenchPath = PathPlannerPath.fromPathFile("UpRight");
+        }
+        catch (IOException | ParseException | FileVersionException e){
+            DriverStation.reportError("Error loading trench path", e.getStackTrace());
+            upLeftTrenchPath = PathPlannerPath.fromPathPoints(new ArrayList<>(), PathConstraints.unlimitedConstraints(12.0), new GoalEndState(0, Rotation2d.kZero));
+            upRightTrenchPath = PathPlannerPath.fromPathPoints(new ArrayList<>(), PathConstraints.unlimitedConstraints(12.0), new GoalEndState(0, Rotation2d.kZero));
+        }
+    }
+
     public static Command passTrench(){
         Pose2d pose = driveBase.getPose();
         PathPlannerPath targetPath;
 
         if(Robot.isRedAlliance) pose = FlippingUtil.flipFieldPose(driveBase.getPose());
         Logger.recordOutput("Trench/Flipped Pose", pose);
-        String pathName = pose.getX() <= 4.5 ? "UpLeft" : "UpRight";
-        Logger.recordOutput("Trench/Path Name", pathName);
 
-        try{
-            targetPath = PathPlannerPath.fromPathFile(pathName);
-            targetPath = pose.getY() >= 4 ? targetPath : targetPath.mirrorPath();
-        }
-        catch (IOException | ParseException | FileVersionException e){
-            DriverStation.reportError("Error loading trench path", e.getStackTrace());
-            targetPath = PathPlannerPath.fromPathPoints(new ArrayList<>(), PathConstraints.unlimitedConstraints(12.0), new GoalEndState(0, Rotation2d.kZero));
-        }
-
+        PathPlannerPath path = pose.getX() <= 4.5 ? upLeftTrenchPath : upRightTrenchPath;
+        targetPath = pose.getY() >= 4 ? path : path.mirrorPath();
         Logger.recordOutput("Trench/Trench Path", targetPath.getPathPoses().toArray(new Pose2d[0]));
+
         PathPlannerPath flippedTargetPath = Robot.isRedAlliance ? targetPath.flipPath() : targetPath;
         Logger.recordOutput("Trench/Flipped Trench Path", flippedTargetPath.getPathPoses().toArray(new Pose2d[0]));
+
         return driveBase.pathFindToPathAndFollow(targetPath);
    }
 
