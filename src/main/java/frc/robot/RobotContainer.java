@@ -205,13 +205,13 @@ public class RobotContainer {
         driveController.create().onTrue(new InstantCommand(() -> withAutoEject = !withAutoEject));
         driveController.options().onTrue(swapIntakeStateClosed.get());
 
-        driveController.circle().toggleOnTrue(feeder.intakeCommand());
+        driveController.circle().toggleOnTrue(feeder.intakeCommand().alongWith(Commands.startEnd(DriveCommand::slowSpeed, DriveCommand::fullSpeed)));
         driveController.square().toggleOnTrue(feeder.passEjectCommand());
 
         driveController.triangle().whileTrue(
             Commands.defer(RobotContainer::passTrench, Set.of(driveBase)).withName("Passing Trench")
         );
-        driveController.cross().onTrue(swapIntakeStateMiddle.get());
+        // driveController.cross().toggleOnTrue(Commands.startEnd(DriveCommand::slowSpeed, DriveCommand::fullSpeed));
     }
 
     public static void configureNamedCommands(){
@@ -382,12 +382,14 @@ public class RobotContainer {
 
         SmartDashboard.putString("Distance to Hub", String.format("%.2f", distanceFromHub().in(Meters)));
         SmartDashboard.putBoolean("In Alliance Zone", inAllianceZone());
+        SmartDashboard.putBoolean("Auto Ejecting", withAutoEject);
     }
 
     public static void updateLogging(){
         Logger.recordOutput("Shooting/Angle to Hub", angleToHub());
         Logger.recordOutput("Shooting/Distance To Hub", distanceFromHub().in(Meters));
         Logger.recordOutput("Shooting/In Alliance Zone", inAllianceZone());
+        Logger.recordOutput("Shooting/Auto Ejecting", withAutoEject);
     }
     //#endregion
 }
