@@ -210,7 +210,7 @@ public class RobotContainer {
         driveController.create().onTrue(new InstantCommand(() -> withAutoEject = !withAutoEject));
         driveController.options().onTrue(swapIntakeStateClosed.get());
 
-        driveController.circle().toggleOnTrue(feeder.intakeCommand().alongWith(Commands.startEnd(DriveCommand::slowSpeed, DriveCommand::fullSpeed)));
+        driveController.R1().whileTrue(feeder.intakeCommand().alongWith(Commands.startEnd(DriveCommand::slowSpeed, DriveCommand::fullSpeed)));
         driveController.square().toggleOnTrue(feeder.passEjectCommand());
 
         driveController.triangle().whileTrue(
@@ -229,7 +229,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("shoot to hub", shootWithBump.get().withTimeout(4));
         NamedCommands.registerCommand("warm up shooter", new InstantCommand(() -> shooter.setVelocity(distanceFromHub()), shooter));
         NamedCommands.registerCommand("shoot to pass", passCommand.get());
-        NamedCommands.registerCommand("aim to hub", new AimDriving(driveBase, driveController, RobotContainer::angleToHub).withTimeout(0.5));
+        NamedCommands.registerCommand("aim to hub", new AimDriving(driveBase, driveController, RobotContainer::angleToHub).withTimeout(0.7));
 
         NamedCommands.registerCommand("eject", feeder.ejectCommand());
     }

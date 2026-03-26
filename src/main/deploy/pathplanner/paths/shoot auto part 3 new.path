@@ -8,36 +8,36 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.029100441496995,
-        "y": 0.4147130242817765
+        "x": 8.308719646799116,
+        "y": 0.46795253863134467
       },
       "isLocked": false,
       "linkedName": "start trench low"
     },
     {
       "anchor": {
-        "x": 9.305750551876379,
-        "y": 1.1600662251655627
+        "x": 9.455789183222958,
+        "y": 0.8745088300220756
       },
       "prevControl": {
-        "x": 9.354150110375276,
-        "y": 0.3856732891832234
+        "x": 8.468438189845473,
+        "y": 0.772869757174392
       },
       "nextControl": {
-        "x": 9.256903902938344,
-        "y": 1.9416126081741036
+        "x": 9.923193911765598,
+        "y": 0.9226240226661715
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.676556291390728,
-        "y": 3.691363134657836
+        "x": 9.455789183222958,
+        "y": 3.2073675496688736
       },
       "prevControl": {
-        "x": 8.79755518763797,
-        "y": 3.2702869757174393
+        "x": 9.083112582781457,
+        "y": 2.4474944812362027
       },
       "nextControl": null,
       "isLocked": false,
@@ -51,7 +51,7 @@
     },
     {
       "waypointRelativePos": 1,
-      "rotationDegrees": 102.76766314468286
+      "rotationDegrees": 144.0714975771772
     }
   ],
   "constraintZones": [],
@@ -59,7 +59,7 @@
   "eventMarkers": [
     {
       "name": "start rollers",
-      "waypointRelativePos": 0.5936395759717384,
+      "waypointRelativePos": 0.8800942285041133,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -70,7 +70,7 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 2.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -79,7 +79,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 104.67639313745012
+    "rotation": 136.7899106082462
   },
   "reversed": false,
   "folder": "shoot auto paths",
@@ -87,5 +87,5 @@
     "velocity": 0,
     "rotation": 90.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

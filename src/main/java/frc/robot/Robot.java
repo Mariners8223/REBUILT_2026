@@ -21,6 +21,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.net.WebServer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -54,8 +55,8 @@ public class Robot extends LoggedRobot {
         StatusLogger.disableAutoLogging();
         DataLogManager.stop();
 
-        // isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
-        isRedAlliance = true;
+        isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
+        // isRedAlliance = true;
 
         Logger.start();
         WebServer.start(5800, Filesystem.getDeployDirectory().getPath());
@@ -98,8 +99,8 @@ public class Robot extends LoggedRobot {
     @Override
     public void autonomousInit() {
         Elastic.selectTab("Autonomous");
-        // isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
-        isRedAlliance = true;
+        isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
+        //isRedAlliance = true;
         RobotContainer.pivot.resetPosition(PivotStates.Closed);
 
         autonomousCommand = RobotContainer.getAuto();
