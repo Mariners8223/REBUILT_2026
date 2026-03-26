@@ -75,7 +75,7 @@ public class Feeder extends SubsystemBase {
   }
 
   public Command intakeCommand(){
-    return setSpeeds(RollerConstants.DUTY_CYCLE, FunnelConstants.funnelMotor.FUNNEL_INTAKE_SPEED, 0, 0).
+    return setSpeeds(RollerConstants.DUTY_CYCLE, FunnelConstants.FunnelMotor.FUNNEL_INTAKE_SPEED, 0, 0).
         withName("Feeder Intake");
   }
   public Command ejectCommand(){
@@ -88,11 +88,11 @@ public class Feeder extends SubsystemBase {
   }
 
   public Command toShooterCommand(Distance distanceToHub){
-    return setSpeeds(RollerConstants.DUTY_CYCLE, FunnelConstants.funnelMotor.FUNNEL_SHOOTING_SPEED, FunnelConstants.CenteringMotor.CENTERING_SHOOTING_SPEED, KickerConstants.getDutyCycle(distanceToHub)).
+    return setSpeeds(RollerConstants.DUTY_CYCLE, FunnelConstants.FunnelMotor.FUNNEL_SHOOTING_SPEED, FunnelConstants.CenteringMotor.CENTERING_SHOOTING_SPEED, KickerConstants.getDutyCycle(distanceToHub)).
         withName("Feeder to Shoot");
   }
   public Command toPassCommand(){
-    return setSpeeds(RollerConstants.DUTY_CYCLE, FunnelConstants.funnelMotor.FUNNEL_SHOOTING_SPEED, FunnelConstants.CenteringMotor.CENTERING_SHOOTING_SPEED, 1).
+    return setSpeeds(RollerConstants.DUTY_CYCLE, FunnelConstants.FunnelMotor.FUNNEL_SHOOTING_SPEED, FunnelConstants.CenteringMotor.CENTERING_SHOOTING_SPEED, 1).
         withName("Feeder to Pass");
   }
 

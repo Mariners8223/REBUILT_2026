@@ -12,5 +12,5 @@ public class RollerConstants {
     public static final int MOTOR_ID = 23;
     public static final boolean IS_INVERTED = false;
     public static final double GEAR_RATIO = 3;
-    public static final double DUTY_CYCLE = 0.8;
+    public static final double DUTY_CYCLE = 0.7;
 }

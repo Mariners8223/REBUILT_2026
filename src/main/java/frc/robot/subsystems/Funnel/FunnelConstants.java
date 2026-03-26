@@ -8,7 +8,7 @@ import frc.util.MarinersController.MarinersController.ControllerLocation;
 public class FunnelConstants {
     public static ControllerLocation controllerLocation;
     public static MotorType motorType;
-    public static class funnelMotor{
+    public static class FunnelMotor{
         public static final int Lead_ID = 49;
         public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
         public static final boolean IS_BRUSHLESS = true;
@@ -19,7 +19,7 @@ public class FunnelConstants {
         public static final int LEAD_MOTOR_CURRENT_THRESHOLD = 60;
 
         public static final double FUNNEL_INTAKE_SPEED = 0.3;
-        public static final double FUNNEL_SHOOTING_SPEED = 0.5;
+        public static final double FUNNEL_SHOOTING_SPEED = 0.35;
         public static final boolean IS_INVERTED = false;
     }
 

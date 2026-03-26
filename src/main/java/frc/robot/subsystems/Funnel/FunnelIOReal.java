@@ -20,11 +20,11 @@ public class FunnelIOReal implements FunnelIO{
 
     private MarinersSparkBase configureFunnelMotor(){
         MarinersSparkBase motor;
-        motor = new MarinersSparkBase("Funnel/FunnelingMotor", FunnelConstants.funnelMotor.CONTROLLER_LOCATION,
-         FunnelConstants.funnelMotor.Lead_ID, FunnelConstants.funnelMotor.IS_BRUSHLESS,
-         FunnelConstants.funnelMotor.MOTOR_TYPE);
+        motor = new MarinersSparkBase("Funnel/FunnelingMotor", FunnelConstants.FunnelMotor.CONTROLLER_LOCATION,
+         FunnelConstants.FunnelMotor.Lead_ID, FunnelConstants.FunnelMotor.IS_BRUSHLESS,
+         FunnelConstants.FunnelMotor.MOTOR_TYPE);
 
-         motor.setMotorInverted(FunnelConstants.funnelMotor.IS_INVERTED);
+         motor.setMotorInverted(FunnelConstants.FunnelMotor.IS_INVERTED);
         //  Motor.setCurrentLimits(FunnelConstants.LeadingMotor.LEAD_MOTOR_CURRENT_LIMIT,
         //      FunnelConstants.LeadingMotor.LEAD_MOTOR_CURRENT_THRESHOLD);
          return motor;
