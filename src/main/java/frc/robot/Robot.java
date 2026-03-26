@@ -98,7 +98,7 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void autonomousInit() {
-        Elastic.selectTab("Autonomous");
+        Elastic.selectTab(1);;
         isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
         //isRedAlliance = true;
         RobotContainer.pivot.resetPosition(PivotStates.Closed);
@@ -111,7 +111,7 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void autonomousExit(){
-        Elastic.selectTab("Teleop");
+        Elastic.selectTab(0);
     }
 
     @Override
