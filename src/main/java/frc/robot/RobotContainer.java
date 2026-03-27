@@ -144,7 +144,7 @@ public class RobotContainer {
         shootCommand = () ->
             Commands.parallel(
                 Shoot.ShootDistance(shooter, RobotContainer::distanceFromHub, fuelIncrementer),
-                Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub())).andThen(new WaitCommand(0.5))
+                Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
                         .andThen(feeder.smartFeedingShootCommand(RobotContainer::distanceFromHub, () -> withAutoEject))
             ).withName("Shooting");
 
