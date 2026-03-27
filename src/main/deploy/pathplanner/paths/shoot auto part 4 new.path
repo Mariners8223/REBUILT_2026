@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 9.455789183222958,
-        "y": 3.2073675496688736
+        "x": 9.320270419426048,
+        "y": 2.8104911699779236
       },
       "prevControl": null,
       "nextControl": {
-        "x": 9.494508830022074,
-        "y": 1.5037030905077255
+        "x": 9.358990066225164,
+        "y": 1.1068267108167755
       },
       "isLocked": false,
       "linkedName": "shoot auto part 3 new end"
     },
     {
       "anchor": {
-        "x": 3.6091225165562912,
-        "y": 0.5647516556291385
+        "x": 3.2509657836644594,
+        "y": 0.574431567328918
       },
       "prevControl": {
-        "x": 8.361959161147903,
-        "y": -0.19028145695364274
+        "x": 8.502317880794697,
+        "y": 0.26951434878587066
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "shoot auto part 2 end "
+      "linkedName": "shoot auto part 4 new end"
     }
   ],
   "rotationTargets": [
@@ -72,7 +72,7 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 3.5,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -81,7 +81,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 73.67903626938065
+    "rotation": 62.378925016924406
   },
   "reversed": false,
   "folder": "shoot auto paths",
@@ -89,5 +89,5 @@
     "velocity": 0,
     "rotation": 136.7899106082462
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

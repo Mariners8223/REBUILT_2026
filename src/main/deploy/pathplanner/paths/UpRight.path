@@ -68,7 +68,7 @@
   "reversed": false,
   "folder": "Trench",
   "idealStartingState": {
-    "velocity": 0,
+    "velocity": 3.0,
     "rotation": -122.27564431457762
   },
   "useDefaultConstraints": false
