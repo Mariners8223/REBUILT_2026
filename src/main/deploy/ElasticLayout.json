@@ -30,7 +30,7 @@
           },
           {
             "title": "Gyro",
-            "x": 256.0,
+            "x": 0.0,
             "y": 512.0,
             "width": 256.0,
             "height": 256.0,
@@ -43,9 +43,9 @@
           },
           {
             "title": "Battery Voltage",
-            "x": 1280.0,
+            "x": 1408.0,
             "y": 512.0,
-            "width": 384.0,
+            "width": 256.0,
             "height": 128.0,
             "type": "Voltage View",
             "properties": {
@@ -61,10 +61,10 @@
           },
           {
             "title": "Current Shift",
-            "x": 512.0,
-            "y": 640.0,
-            "width": 256.0,
-            "height": 128.0,
+            "x": 384.0,
+            "y": 512.0,
+            "width": 384.0,
+            "height": 256.0,
             "type": "Large Text Display",
             "properties": {
               "topic": "/SmartDashboard/Current Shift",
@@ -74,9 +74,9 @@
           },
           {
             "title": "In Alliance Zone",
-            "x": 512.0,
-            "y": 512.0,
-            "width": 256.0,
+            "x": 256.0,
+            "y": 640.0,
+            "width": 128.0,
             "height": 128.0,
             "type": "Boolean Box",
             "properties": {
@@ -92,9 +92,9 @@
           {
             "title": "Time left in Shift",
             "x": 768.0,
-            "y": 640.0,
-            "width": 256.0,
-            "height": 128.0,
+            "y": 512.0,
+            "width": 384.0,
+            "height": 256.0,
             "type": "Large Text Display",
             "properties": {
               "topic": "/SmartDashboard/Time left in Shift",
@@ -105,7 +105,7 @@
           {
             "title": "Robot Velocity",
             "x": 0.0,
-            "y": 512.0,
+            "y": 256.0,
             "width": 256.0,
             "height": 256.0,
             "type": "Radial Gauge",
@@ -128,7 +128,7 @@
             "x": 0.0,
             "y": 0.0,
             "width": 256.0,
-            "height": 512.0,
+            "height": 256.0,
             "type": "Alerts",
             "properties": {
               "topic": "/SmartDashboard/Alerts",
@@ -137,8 +137,8 @@
           },
           {
             "title": "Is Hub Active",
-            "x": 1024.0,
-            "y": 640.0,
+            "x": 1152.0,
+            "y": 512.0,
             "width": 256.0,
             "height": 128.0,
             "type": "Boolean Box",
@@ -154,8 +154,8 @@
           },
           {
             "title": "Front Cam",
-            "x": 1024.0,
-            "y": 512.0,
+            "x": 1408.0,
+            "y": 640.0,
             "width": 128.0,
             "height": 128.0,
             "type": "Boolean Box",
@@ -171,8 +171,8 @@
           },
           {
             "title": "Right Cam",
-            "x": 1152.0,
-            "y": 512.0,
+            "x": 1536.0,
+            "y": 640.0,
             "width": 128.0,
             "height": 128.0,
             "type": "Boolean Box",
@@ -188,15 +188,32 @@
           },
           {
             "title": "Distance to Hub",
-            "x": 768.0,
+            "x": 256.0,
             "y": 512.0,
-            "width": 256.0,
+            "width": 128.0,
             "height": 128.0,
             "type": "Large Text Display",
             "properties": {
               "topic": "/SmartDashboard/Distance to Hub",
               "period": 0.06,
               "data_type": "string"
+            }
+          },
+          {
+            "title": "Auto Ejecting",
+            "x": 1152.0,
+            "y": 640.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/SmartDashboard/Auto Ejecting",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
             }
           }
         ]
@@ -310,19 +327,6 @@
             }
           },
           {
-            "title": "chooser",
-            "x": 1280.0,
-            "y": 512.0,
-            "width": 384.0,
-            "height": 128.0,
-            "type": "ComboBox Chooser",
-            "properties": {
-              "topic": "/SmartDashboard/chooser",
-              "period": 0.06,
-              "sort_options": false
-            }
-          },
-          {
             "title": "sideChooser",
             "x": 1280.0,
             "y": 640.0,
@@ -367,6 +371,19 @@
               "false_color": 4294198070,
               "true_icon": "None",
               "false_icon": "None"
+            }
+          },
+          {
+            "title": "chooser",
+            "x": 1280.0,
+            "y": 512.0,
+            "width": 384.0,
+            "height": 128.0,
+            "type": "ComboBox Chooser",
+            "properties": {
+              "topic": "/SmartDashboard/chooser",
+              "period": 0.06,
+              "sort_options": false
             }
           }
         ]

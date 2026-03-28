@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import static edu.wpi.first.units.Units.Meter;
+import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Volts;
 
 import java.util.function.Supplier;
@@ -18,6 +20,7 @@ import frc.robot.subsystems.Shooter.ShooterConstants;
 public class Shoot extends Command {
   Shooter shooter;
   Supplier<AngularVelocity> velocitySupplier;
+  public Supplier<Distance> distanceSupplier = () -> Meter.zero();
   Runnable fuelIncrementer;
 
   boolean boosting = false;
@@ -54,7 +57,7 @@ public class Shoot extends Command {
       boosting = false;
     }
 
-    if (!boosting) shooter.setVelocity(velocitySupplier.get());
+    if (!boosting) shooter.setVelocity(velocitySupplier.get().plus(RPM.of(distanceSupplier.get().lte(Meter.of(2.5)) ? 15 : 5)));
   }
 
   // Called once the command ends or is interrupted.
@@ -75,6 +78,8 @@ public class Shoot extends Command {
   }
 
   public static Command ShootDistance(Shooter shooter, Supplier<Distance> distanceSupplier, Runnable fuelIncrementer){
-    return new Shoot(shooter, () -> requiredSpeed(distanceSupplier.get()), fuelIncrementer).withName("Shoot Distance");
+    Shoot shoot = new Shoot(shooter, () -> requiredSpeed(distanceSupplier.get()), fuelIncrementer);
+    shoot.distanceSupplier = distanceSupplier;
+    return shoot.withName("Shoot Distance");
   }
 }

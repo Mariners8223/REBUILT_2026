@@ -67,6 +67,8 @@ public class Robot extends LoggedRobot {
 
         SmartDashboard.putData("Field", field);
         SmartDashboard.putData("Command Scheduler", CommandScheduler.getInstance());
+
+        Elastic.selectTab(1);
     }
 
     public static void clearObjectPoseField(String name) {
@@ -92,7 +94,7 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void autonomousInit() {
-        Elastic.selectTab(1);;
+        Elastic.selectTab(1);
         isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
         //isRedAlliance = true;
         RobotContainer.pivot.resetPosition(PivotStates.Closed);
@@ -116,7 +118,4 @@ public class Robot extends LoggedRobot {
         }
     }
 
-    @Override
-    public void teleopPeriodic() {
-    }
 }

@@ -150,21 +150,21 @@ public class HubTracker {
      * <ul>
      * <li>{@link Shift#AUTO}</li> (0-20 sec)
      * <li>{@link Shift#TRANSITION}</li> (20-30 sec)
-     * <li>{@link Shift#SHIFT_1}</li> (30-55 sec)
-     * <li>{@link Shift#SHIFT_2}</li> (55-80 sec)
-     * <li>{@link Shift#SHIFT_3}</li> (80-105 sec)
-     * <li>{@link Shift#SHIFT_4}</li> (105-130 sec)
+     * <li>{@link Shift#INACTIVE_1}</li> (30-55 sec)
+     * <li>{@link Shift#ACTIVE_1}</li> (55-80 sec)
+     * <li>{@link Shift#INACTIVE_2}</li> (80-105 sec)
+     * <li>{@link Shift#ACTIVE_2}</li> (105-130 sec)
      * <li>{@link Shift#ENDGAME}</li> (130-160 sec)
      * </ul>
      */
     public enum Shift {
         AUTO(0, 20, ActiveType.BOTH),
         TRANSITION(20, 30, ActiveType.BOTH),
-        SHIFT_1(30, 55, ActiveType.AUTO_LOSER),
-        SHIFT_2(55, 80, ActiveType.AUTO_WINNER),
-        SHIFT_3(80, 105, ActiveType.AUTO_LOSER),
-        SHIFT_4(105, 130, ActiveType.AUTO_WINNER),
-        ENDGAME(130, 160, ActiveType.BOTH);
+        INACTIVE_1(30, 55, ActiveType.AUTO_LOSER),
+        ACTIVE_1(55, 80, ActiveType.AUTO_WINNER),
+        INACTIVE_2(80, 105, ActiveType.AUTO_LOSER),
+        ACTIVE_2(105, 130, ActiveType.AUTO_WINNER),
+        ENDGAME(130, 160, ActiveType.BOTH); //TODO: Return to SHIFTs
 
         final int startTime;
         final int endTime;

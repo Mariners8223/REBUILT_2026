@@ -45,7 +45,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.Drive.AimDriving;
@@ -61,7 +60,6 @@ import frc.robot.subsystems.Shooter.ShooterConstants;
 import frc.robot.subsystems.Funnel.Funnel;
 import frc.robot.subsystems.Intake.Pivot.Pivot;
 import frc.robot.subsystems.Intake.Pivot.PivotConstants.PivotStates;
-import frc.robot.subsystems.Intake.Rollers.RollerConstants;
 import frc.robot.subsystems.Intake.Rollers.Rollers;
 import frc.robot.subsystems.Kicker.Kicker;
 
@@ -165,7 +163,7 @@ public class RobotContainer {
         shootWithBump = () ->
             Commands.parallel(
                 conditionalShootCommand.get(),
-                Commands.waitSeconds(2).andThen(pivot.raisePivot(PivotStates.Middle))
+                Commands.waitSeconds(3).andThen(pivot.raisePivot(PivotStates.Middle))
             ).withName("Shoot with Bump");
 
         swapIntakeStateClosed = () ->
@@ -228,7 +226,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("stop rollers", new InstantCommand(() -> rollers.stopMotor()));
 
         NamedCommands.registerCommand("shoot to hub", shootWithBump.get().withTimeout(4));
-        NamedCommands.registerCommand("warm up shooter", new InstantCommand(() -> shooter.setVelocity(distanceFromHub()), shooter));
+        NamedCommands.registerCommand("warm up shooter", warmupShooter.get());
         NamedCommands.registerCommand("shoot to pass", passCommand.get());
         NamedCommands.registerCommand("aim to hub", new AimDriving(driveBase, driveController, RobotContainer::angleToHub).withTimeout(0.7));
 
