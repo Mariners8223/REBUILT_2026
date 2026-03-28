@@ -57,7 +57,7 @@ public class Shoot extends Command {
       boosting = false;
     }
 
-    if (!boosting) shooter.setVelocity(velocitySupplier.get().plus(RPM.of(distanceSupplier.get().lte(Meter.of(2.5)) ? 15 : 5)));
+    if (!boosting) shooter.setVelocity(velocitySupplier.get().plus(RPM.of(distanceSupplier.get().lte(Meter.of(2.5)) ? 15 : 0)));
   }
 
   // Called once the command ends or is interrupted.
