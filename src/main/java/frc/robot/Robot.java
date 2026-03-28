@@ -91,12 +91,6 @@ public class Robot extends LoggedRobot {
     }
 
     @Override
-    public void disabledInit() {}
-
-    @Override
-    public void disabledPeriodic() {}
-
-    @Override
     public void autonomousInit() {
         Elastic.selectTab(1);;
         isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
@@ -125,18 +119,4 @@ public class Robot extends LoggedRobot {
     @Override
     public void teleopPeriodic() {
     }
-
-    @Override
-    public void testInit() {
-        CommandScheduler.getInstance().cancelAll();
-    }
-
-    @Override
-    public void testPeriodic() {}
-
-    @Override
-    public void simulationInit() {}
-
-    @Override
-    public void simulationPeriodic() {}
 }

@@ -224,7 +224,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("close intake", pivot.moveToStateCommand(PivotStates.Closed));
         NamedCommands.registerCommand("open intake", pivot.moveToStateCommand(PivotStates.Open).andThen(Commands.waitSeconds(0.6)));
 
-        NamedCommands.registerCommand("start rollers", new InstantCommand(() -> rollers.setDutyCycle(RollerConstants.DUTY_CYCLE)));
+        NamedCommands.registerCommand("start rollers", new InstantCommand(() -> rollers.setDutyCycle(1)));
         NamedCommands.registerCommand("stop rollers", new InstantCommand(() -> rollers.stopMotor()));
 
         NamedCommands.registerCommand("shoot to hub", shootWithBump.get().withTimeout(4));

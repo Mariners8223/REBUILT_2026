@@ -22,7 +22,7 @@ public class KickerIOReal implements KickerIO {
             true,
             KickerConstants.MOTOR_CONSTANTS.MOTOR_TYPE);
         leadMotor.setMotorInverted(KickerConstants.MOTOR_CONSTANTS.LEAD_MOTOR_IS_INVERTED);
-        leadMotor.setMotorIdleMode(true);
+        leadMotor.setMotorIdleMode(false);
         // leadMotor.setCurrentLimits(KickerConstants.MOTOR_CONSTANTS.LEAD_MOTOR_CURRENT_LIMIT,
         //    KickerConstants.MOTOR_CONSTANTS.LEAD_MOTOR_CURRENT_THRESHOLD);
 
@@ -32,11 +32,15 @@ public class KickerIOReal implements KickerIO {
             KickerConstants.MOTOR_CONSTANTS.FOLLOW_MOTOR_ID,
             true,
             KickerConstants.MOTOR_CONSTANTS.MOTOR_TYPE);
-        followMotor.setMotorAsFollower(leadMotor, KickerConstants.MOTOR_CONSTANTS.FOLLOW_MOTOR_INVERTED_FROM_LEAD);
+
+        followMotor.setMotorInverted(KickerConstants.MOTOR_CONSTANTS.LEAD_MOTOR_IS_INVERTED);
+        followMotor.setMotorIdleMode(false);
+        // followMotor.setMotorAsFollower(leadMotor, KickerConstants.MOTOR_CONSTANTS.FOLLOW_MOTOR_INVERTED_FROM_LEAD);
     }
 
     public void setDutyCycle(double targetDutyCycle){
         leadMotor.setDutyCycle(targetDutyCycle);
+        followMotor.setDutyCycle(targetDutyCycle);
     }
 
     public double getLeadVelocity(){
@@ -50,7 +54,7 @@ public class KickerIOReal implements KickerIO {
         return followMotor.getVelocity();
     }
     public double getFollowSetpoint(){
-        return leadMotor.getSetpoint(); // Following takes the setpoint of the lead
+        return followMotor.getSetpoint(); // Following takes the setpoint of the lead
     }
 
     public void update(KickerInputs inputs){
