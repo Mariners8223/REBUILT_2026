@@ -239,20 +239,15 @@ public class RobotContainer {
     //#region Choosers
     public static void configureChoosers(){
         List<String> namesOfAutos = AutoBuilder.getAllAutoNames();
-        List<PathPlannerAuto> autosOfAutos = new ArrayList<>();
+        List<PathPlannerAuto> listOfAutos = new ArrayList<>();
 
         autoChooser = new LoggedDashboardChooser<>("chooser");
         for (String autoName : namesOfAutos) {
             PathPlannerAuto auto = new PathPlannerAuto(autoName);
-            autosOfAutos.add(auto);
+           listOfAutos.add(auto);
         }
 
-        // Mirror all autos from right to left
-        for (int i = 0; i < namesOfAutos.size(); i++){
-            mirroredAutoMap.put(namesOfAutos.get(i), autosOfAutos.get(i));
-        }
-
-        autosOfAutos.forEach(auto -> autoChooser.addOption(auto.getName(), auto));
+        listOfAutos.forEach(auto -> autoChooser.addOption(auto.getName(), auto));
 
         autoChooser.addDefaultOption("Do Nothing", new InstantCommand());
         SmartDashboard.putData("chooser", autoChooser.getSendableChooser());
@@ -262,6 +257,16 @@ public class RobotContainer {
 
         //configure the chooser for the side relative to the driver station.
         //the default is right because the routes are planned for right.
+
+        List<PathPlannerAuto> mirroredListOfAutos = new ArrayList<>();
+        for (String autoName : namesOfAutos) {
+            PathPlannerAuto auto = new PathPlannerAuto(autoName, true);
+            mirroredListOfAutos.add(auto);
+         }
+        for (int i = 0; i < namesOfAutos.size(); i++){
+            mirroredAutoMap.put(namesOfAutos.get(i), mirroredListOfAutos.get(i));
+        }
+
         sideChooser = new LoggedDashboardChooser<>("sideChooser");
 
         sideChooser.addDefaultOption("right", "right");
