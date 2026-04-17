@@ -56,15 +56,17 @@ public class ShooterConstants {
         public static final InterpolatingDoubleTreeMap DistanceToRPM = new InterpolatingDoubleTreeMap();
 
         static{
-            DistanceToRPM.put(1.8, 2500.0);
-            DistanceToRPM.put(2.3, 2630.0);
-            DistanceToRPM.put(2.8, 2790.0);
-            DistanceToRPM.put(3.3, 2990.0);
-            DistanceToRPM.put(3.8, 3240.0);
-            DistanceToRPM.put(4.3, 3500.0);
-            DistanceToRPM.put(4.8, 3630.0);
-            DistanceToRPM.put(5.3, 3700.0);
-            DistanceToRPM.put(5.8, 3870.0);
+            //DistanceToRPM.put(1.8, 2500.0);
+            //DistanceToRPM.put(2.3, 2630.0);
+            //DistanceToRPM.put(2.8, 2790.0);
+            //DistanceToRPM.put(3.3, 2990.0);
+            //DistanceToRPM.put(3.8, 3240.0);
+            //DistanceToRPM.put(4.3, 3500.0);
+            //DistanceToRPM.put(4.8, 3630.0);
+            //DistanceToRPM.put(5.3, 3700.0);
+            //DistanceToRPM.put(5.8, 3870.0);
+            
+            DistanceToRPM.put(1.8, 2200.0);
         }
     }
 
