@@ -33,6 +33,8 @@ import frc.util.Elastic;
 public class Robot extends LoggedRobot {
     private Command autonomousCommand;
     public static boolean isRedAlliance = false;
+    
+    
 
     private static final Field2d field = new Field2d();
 

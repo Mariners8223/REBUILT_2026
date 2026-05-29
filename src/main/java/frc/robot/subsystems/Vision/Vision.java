@@ -58,6 +58,8 @@ public class Vision extends SubsystemBase {
         this.poseConsumer = poseConsumer;
     }
 
+
+
     @Override
     public void periodic() {
         ArrayList<Pose3d> allAcceptedPoses = new ArrayList<>();
@@ -187,6 +189,7 @@ public class Vision extends SubsystemBase {
 
         return VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev);
     }
+
 
 
 
