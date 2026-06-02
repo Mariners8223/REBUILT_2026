@@ -18,9 +18,6 @@ public class VisionConstants {
 
     public static final AprilTagFieldLayout FIELD_LAYOUT = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
 
-    
-    public static boolean isVisionConnected = true;
-
     public static final double maxHeightDeviation = 0.1;
     public static final double maxMultiAmbiguity = 0.2;
     public static final double maxSingleAmbiguity = 0.2;

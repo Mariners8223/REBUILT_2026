@@ -15,7 +15,6 @@ import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterConstants;
-import frc.robot.subsystems.Vision.Vision;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Shoot extends Command {
@@ -23,7 +22,7 @@ public class Shoot extends Command {
   Supplier<AngularVelocity> velocitySupplier;
   public Supplier<Distance> distanceSupplier = () -> Meter.zero();
   Runnable fuelIncrementer;
-  
+
   boolean boosting = false;
 
   /** Creates a new Shoot. */

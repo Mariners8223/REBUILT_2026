@@ -53,7 +53,6 @@ import frc.robot.commands.Drive.MinorAdjust;
 import frc.robot.commands.Drive.MinorAdjust.AdjustmentDirection;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.Vision.Vision;
-import frc.robot.subsystems.Vision.VisionConstants;
 import frc.util.HubTracker;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Shooter.Shooter;
@@ -78,6 +77,7 @@ public class RobotContainer {
     public static Rollers rollers;
     public static Shooter shooter;
     public static Kicker kicker;
+
     public static Feeder feeder;
     public static Vision vision;
 
@@ -313,7 +313,6 @@ public class RobotContainer {
 
     //#region Shooting Helpers
     public static Distance distanceFromHub(){
-       if (VisionConstants.isVisionConnected){
         Pose2d hubLocation = Constants.FieldConstants.HUB_POSITION;
         if(Robot.isRedAlliance){
             hubLocation = FlippingUtil.flipFieldPose(hubLocation);
@@ -321,8 +320,6 @@ public class RobotContainer {
         return Meters.of(
             driveBase.getPose().getTranslation().getDistance(hubLocation.getTranslation())
         );
-    }
-    return Meters.of(1);
     }
 
     public static double angleToHub(){
