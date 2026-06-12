@@ -11,6 +11,7 @@ import frc.robot.subsystems.Vision.VisionConstants.CameraConstants;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -37,12 +38,9 @@ public class VisionIOPhoton implements VisionIO {
     @Override
     public void update(VisionInputsAutoLogged inputs) {
         inputs.isConnected = camera.isConnected();
-        
-      
 
         if(!inputs.isConnected){
             inputs.visionFrames = emptyFrame;
-            VisionConstants.isVisionConnected = false;
             return;
         }
 
