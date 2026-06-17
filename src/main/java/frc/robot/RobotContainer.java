@@ -90,6 +90,7 @@ public class RobotContainer {
 
     public static Runnable fuelIncrementer;
     public static int fuelApproximation = 0;
+    public static boolean isRobotXMod = false;
 
     //#region Premade Commands
     public static Supplier<Command> warmupShooter;
@@ -215,6 +216,10 @@ public class RobotContainer {
         driveController.triangle().whileTrue(
             Commands.defer(RobotContainer::passTrench, Set.of(driveBase)).withName("Passing Trench")
         );
+
+        driveController.L2().onTrue(driveBase.wheelsInXOPose().andThen(()->{isRobotXMod=true;}));
+
+        
         // driveController.cross().toggleOnTrue(Commands.startEnd(DriveCommand::slowSpeed, DriveCommand::fullSpeed));
     }
 
