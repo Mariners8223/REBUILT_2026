@@ -3,49 +3,36 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.3138852097130247,
-        "y": 0.5357119205298022
+        "x": 3.9043598233995587,
+        "y": 0.5018322295805717
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.876092715231788,
-        "y": 0.26951434878587066
+        "x": 8.192560706401766,
+        "y": 0.17271523178807807
       },
       "isLocked": false,
-      "linkedName": "shoot auto part 4 new end"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.272969094922738,
-        "y": 2.73305187637969
+        "x": 7.936043046357616,
+        "y": 2.9944094922737294
       },
       "prevControl": {
-        "x": 7.432687637969095,
-        "y": 0.3469536423841042
+        "x": 7.853763796909494,
+        "y": 2.108697571743928
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "shoot auto part 1 end"
+      "linkedName": "nz collect part 1 end"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.019370460048427515,
-      "rotationDegrees": 90.0
-    },
-    {
-      "waypointRelativePos": 0.184826472962071,
-      "rotationDegrees": 90.0
-    },
-    {
-      "waypointRelativePos": 0.553672316384177,
-      "rotationDegrees": 74.86677197106411
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.5889281507655998,
+      "minWaypointRelativePos": 0.4994110718492355,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.5,
@@ -60,8 +47,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "start rollers",
-      "waypointRelativePos": 0.258186101295643,
+      "name": "collect",
+      "waypointRelativePos": 0.3769140164899923,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -72,22 +59,22 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 6.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0.0,
-    "rotation": 72.59069725304327
+    "velocity": 0,
+    "rotation": 85.60129464500432
   },
   "reversed": false,
-  "folder": "shoot auto paths",
+  "folder": "Trench",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 68.96248897457822
+    "rotation": 88.61408214918777
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

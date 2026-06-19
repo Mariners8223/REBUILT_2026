@@ -13,13 +13,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "solo auto part 1"
+            "pathName": "nz collect part 1"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "aim to hub"
+            "name": "stop rollers"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "nz collect part 2"
           }
         },
         {
@@ -31,25 +37,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "solo auto part 2 line"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "solo auto part 3 line"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "aim to hub"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot to hub"
+            "pathName": "nz collect part 3"
           }
         }
       ]

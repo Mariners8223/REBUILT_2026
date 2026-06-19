@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.9003863636368274,
-        "y": 5.787159090912426
+        "x": 7.936043046357616,
+        "y": 2.9944094922737294
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2587748344320597,
-        "y": 3.8220419426045815
+        "x": 5.230507726269316,
+        "y": 2.45717439293598
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "nz collect part 1 end"
     },
     {
       "anchor": {
-        "x": 0.46,
-        "y": 0.55
+        "x": 3.062207505518763,
+        "y": 2.263576158940397
       },
       "prevControl": {
-        "x": 1.6005408388470705,
-        "y": 1.4891832229577826
+        "x": 3.3073526744414936,
+        "y": 2.214547125155852
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "nz collect part 2 end"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 48.540405824964
   },
   "reversed": false,
-  "folder": "start mid - collect depot - shoot - outpost",
+  "folder": "Trench",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -32.00538320813838
+    "rotation": 85.60129464500432
   },
   "useDefaultConstraints": true
 }
