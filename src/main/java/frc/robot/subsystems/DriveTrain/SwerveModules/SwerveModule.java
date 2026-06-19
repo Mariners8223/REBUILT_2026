@@ -115,9 +115,4 @@ public class SwerveModule {
     public void resetDriveEncoder() {
         io.resetDriveEncoder();
     }
-
-    public void lockAtAngle(Rotation2d angle) {
-        io.setDriveMotorReference(0);               
-        io.setSteerMotorReference(angle.getRotations());     
-    }
 }

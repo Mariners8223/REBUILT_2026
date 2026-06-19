@@ -2,11 +2,9 @@ package frc.robot.commands.Drive;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import frc.robot.Robot;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 
 import frc.robot.subsystems.DriveTrain.SwerveModules.DevBotConstants;
@@ -56,9 +54,6 @@ public class DriveCommand extends Command {
 
     @Override
     public void execute() {
-        if (controller.getLeftX()!=0 || controller.getRightX()!=0){
-            RobotContainer.isRobotXMod = false;
-        }
         //calculates a value from 1 to the max wheel speed based on the R2 axis
         // double R2Axis = (1 - (0.5 + controller.getR2Axis() / 2)) * (driveBase.MAX_FREE_WHEEL_SPEED - 1) + 1;
         // double R2Axis  = 1 - (0.5 + controller.getRightTriggerAxis() / 2);

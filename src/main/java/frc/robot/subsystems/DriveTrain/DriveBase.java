@@ -36,7 +36,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Robot;
-import frc.robot.RobotContainer;
 
 import java.util.function.DoubleSupplier;
 
@@ -89,6 +88,7 @@ public class DriveBase extends SubsystemBase {
      */
     private SwerveModuleState[] targetStates =
             new SwerveModuleState[]{new SwerveModuleState(), new SwerveModuleState(), new SwerveModuleState(), new SwerveModuleState()};
+
 
     /**
      * the current pose of the robot (the position and rotation of the robot)
@@ -176,17 +176,6 @@ public class DriveBase extends SubsystemBase {
             poseEstimator.resetPosition(currentPose.getRotation(), positions, currentPose);
 
         }).withName("Reset Only Direction").ignoringDisable(true);
-    }
-
-
-    public Command wheelsInXOPose(){
-        return new InstantCommand(()->{
-            modules[0].lockAtAngle(Rotation2d.fromDegrees( 45));  
-            modules[1].lockAtAngle(Rotation2d.fromDegrees(-45));                                    
-            modules[2].lockAtAngle(Rotation2d.fromDegrees(-45));  
-            modules[3].lockAtAngle(Rotation2d.fromDegrees( 45));       
-            setModulesBrakeMode(true);
-        });
     }
 
     public void setModulesBrakeMode(boolean isBrake) {
@@ -330,8 +319,6 @@ public class DriveBase extends SubsystemBase {
      * @param chassisSpeeds the target chassis speeds of the robot
      */
     public void drive(ChassisSpeeds chassisSpeeds) {
-        if (RobotContainer.isRobotXMod) return;
-        
         ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(chassisSpeeds, 0.02);
 
         targetStates = driveTrainKinematics.toSwerveModuleStates(discreteSpeeds);
