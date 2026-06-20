@@ -31,6 +31,12 @@
         {
           "type": "named",
           "data": {
+            "name": "aim to hub"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "shoot to hub"
           }
         },
