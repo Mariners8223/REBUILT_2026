@@ -198,8 +198,9 @@ public class RobotContainer {
         driveController.povUpRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.FRONT_RIGHT));
         driveController.povDownLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_LEFT));
         driveController.povDownRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_RIGHT));
+        
 
-        driveController.L1().toggleOnTrue(
+        driveController.R1().toggleOnTrue(
             Commands.parallel(
                 new AimDriving(driveBase, driveController, RobotContainer::getShootingAngle),
                 preShooting.get().andThen(shootWithBump.get())
@@ -209,13 +210,14 @@ public class RobotContainer {
         driveController.create().onTrue(new InstantCommand(() -> withAutoEject = !withAutoEject));
         driveController.options().onTrue(swapIntakeStateClosed.get());
 
-        driveController.R1().whileTrue(feeder.intakeCommand().alongWith(Commands.startEnd(DriveCommand::slowSpeed, DriveCommand::fullSpeed)));
+        driveController.L1().whileTrue(feeder.intakeCommand()/* .alongWith(Commands.startEnd(DriveCommand::slowSpeed, DriveCommand::fullSpeed))*/);
         driveController.square().toggleOnTrue(feeder.passEjectCommand());
 
         driveController.triangle().whileTrue(
             Commands.defer(RobotContainer::passTrench, Set.of(driveBase)).withName("Passing Trench")
         );
         // driveController.cross().toggleOnTrue(Commands.startEnd(DriveCommand::slowSpeed, DriveCommand::fullSpeed));
+        driveController.circle().toggleOnTrue(warmupShooter.get());
     }
 
     public static void configureNamedCommands(){
