@@ -24,7 +24,7 @@ public class VisionConstants {
     public static final double maxDistanceFromTargetSingle = 2.5;
     public static final double maxDistanceFromTargetMulti = 4; // If there is a season where you can see one tag real close and one far fix this.
 
-    public enum CameraConstants{
+    public enum CameraConstants{//TODO: change stdfactors!!!!!!!!!!!!!!!!!!!!!!!!!
         FRONT_CAMERA("Front Camera",
             new Transform3d(
                 0.11143, 0.281, 0.52,

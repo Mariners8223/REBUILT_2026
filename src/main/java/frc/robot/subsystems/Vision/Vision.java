@@ -115,7 +115,7 @@ public class Vision extends SubsystemBase {
             }
 
             allAcceptedPoses.addAll(acceptedPoses);
-            allRejectedPoses.addAll(allRejectedPoses);
+            allRejectedPoses.addAll(rejectedPoses);
 
             Logger.recordOutput("Vision/" + camera.cameraName + "/Accepted Poses", acceptedPoses.toArray(new Pose3d[0]));
             Logger.recordOutput("Vision/" + camera.cameraName + "/Rejected Poses", rejectedPoses.toArray(new Pose3d[0]));
@@ -181,8 +181,8 @@ public class Vision extends SubsystemBase {
         double linearStdDev = camera.constants.XYstdFactor * stdDevFactor;
         double angularStdDev = camera.constants.thetaStdFactor * stdDevFactor;
         if (estimationType == VisionIO.EstimationType.MULTIPLE_TARGETS) {
-            linearStdDev *= camera.constants.XYstdFactor;
-            angularStdDev *= camera.constants.thetaStdFactor;
+            linearStdDev *= 0.5;
+            angularStdDev *= 0.5;
         }
 
         return VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev);

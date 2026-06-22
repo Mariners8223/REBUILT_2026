@@ -200,7 +200,7 @@ public class RobotContainer {
         driveController.povDownRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_RIGHT));
         
 
-        driveController.R1().toggleOnTrue(
+        driveController.R1().whileTrue(
             Commands.parallel(
                 new AimDriving(driveBase, driveController, RobotContainer::getShootingAngle),
                 preShooting.get().andThen(shootWithBump.get())
