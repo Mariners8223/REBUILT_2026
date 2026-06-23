@@ -23,7 +23,7 @@ public class RollersIOReal implements RollersIO{
                                     RollerConstants.MOTOR_ID);
 
         SecMotor.setCurrentLimits(RollerConstants.CURRENT_LIMIT, RollerConstants.CURRENT_THRESHOLD);
-        SecMotor.setMotorInverted(RollerConstants.IS_INVERTED);
+        SecMotor.setMotorInverted(RollerConstants.IS_SEC_INVERTED);
         SecMotor.getMeasurements().setGearRatio(RollerConstants.GEAR_RATIO);
     }
 
