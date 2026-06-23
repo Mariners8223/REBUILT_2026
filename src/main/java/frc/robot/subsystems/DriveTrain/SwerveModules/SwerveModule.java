@@ -57,6 +57,10 @@ public class SwerveModule {
         return targetState;
     }
 
+    public void pointTo(double angle){
+        io.setSteerMotorReference(angle);
+    }
+
     public SwerveModuleState run(SwerveModuleState targetState, double acceleration) {
         double inputtedVelocity = targetState.speedMetersPerSecond;
 

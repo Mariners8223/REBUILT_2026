@@ -68,9 +68,10 @@ public class AimDriving extends Command {
         if(Robot.isRedAlliance) gyroAngle = gyroAngle.plus(Rotation2d.fromDegrees(180));
 
         ChassisSpeeds robotRelativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, gyroAngle);
-
+        
         //drives the robot with the values
-        driveBase.drive(robotRelativeSpeeds);
+        //driveBase.drive(robotRelativeSpeeds);
+        driveBase.makeX();
     }
 
     @Override
