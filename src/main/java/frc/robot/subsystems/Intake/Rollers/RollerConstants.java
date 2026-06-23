@@ -10,6 +10,7 @@ import frc.util.MarinersController.MarinersController.ControllerLocation;
 public class RollerConstants {
     public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
     public static final int MOTOR_ID = 23;
+    public static final int SEC_MOTOR_ID = 24;
     public static final boolean IS_INVERTED = false;
     public static final boolean IS_SEC_INVERTED = true; // we need to check it but for now its inverted
     public static final double GEAR_RATIO = 3;
