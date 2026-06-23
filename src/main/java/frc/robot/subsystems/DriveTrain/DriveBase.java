@@ -334,6 +334,12 @@ public class DriveBase extends SubsystemBase {
         Logger.processInputs(getName(), inputs);
     }
 
+    public void makeX(){
+         for (int i = 0; i < 4; i++) {
+            modules[i].pointTo((i*180)+45);
+        }
+    }
+
     /**
      * drives the robot
      * made for pathplanner driving
