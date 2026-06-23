@@ -100,7 +100,6 @@ public class RobotContainer {
     public static Supplier<Command> shootWithBump;
     public static Supplier<Command> swapIntakeStateClosed;
     public static Supplier<Command> swapIntakeStateMiddle;
-    public static Supplier<Command> resetPositionPivot;
     //#endregion
 
     public static boolean withAutoEject = false;
@@ -180,11 +179,6 @@ public class RobotContainer {
                 pivot.moveToStateCommand(PivotStates.Open),
                 () -> pivot.getState() == PivotStates.Open
             ).withName("Swap Pivot State to and from Middle");
-
-        resetPositionPivot = () ->
-            Commands.parallel(
-                pivot.resetPivot()
-            ).withName("reseting");
     }
 
 
@@ -216,7 +210,7 @@ public class RobotContainer {
         driveController.create().onTrue(new InstantCommand(() -> withAutoEject = !withAutoEject));
         driveController.options().onTrue(swapIntakeStateClosed.get());
 
-        driveController.L1().whileTrue(feeder.intakeCommand().alongWith(Commands.startEnd(DriveCommand::slowSpeed, DriveCommand::fullSpeed)).alongWith(resetPositionPivot.get()));
+        driveController.L1().whileTrue(feeder.intakeCommand().alongWith(Commands.startEnd(DriveCommand::slowSpeed, DriveCommand::fullSpeed)));
         driveController.square().toggleOnTrue(feeder.passEjectCommand());
 
         driveController.triangle().whileTrue(
@@ -266,7 +260,7 @@ public class RobotContainer {
 
         List<PathPlannerAuto> mirroredListOfAutos = new ArrayList<>();
         for (String autoName : namesOfAutos) {
-            PathPlannerAuto auto = new PathPlannerAuto(autoName, false);
+            PathPlannerAuto auto = new PathPlannerAuto(autoName, true);
             mirroredListOfAutos.add(auto);
          }
         for (int i = 0; i < namesOfAutos.size(); i++){
