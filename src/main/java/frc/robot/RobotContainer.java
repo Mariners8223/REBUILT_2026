@@ -163,7 +163,7 @@ public class RobotContainer {
         shootWithBump = () ->
             Commands.parallel(
                 conditionalShootCommand.get(),
-                Commands.waitSeconds(3).andThen(pivot.raisePivot(PivotStates.Middle))
+                Commands.waitSeconds(1.5).andThen(pivot.raisePivot(PivotStates.Middle))
             ).withName("Shoot with Bump");
 
         swapIntakeStateClosed = () ->

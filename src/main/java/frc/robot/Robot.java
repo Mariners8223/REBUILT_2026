@@ -59,7 +59,7 @@ public class Robot extends LoggedRobot {
         // isRedAlliance = true;
 
         Logger.start();
-        WebServer.start(5800, Filesystem.getDeployDirectory().getPath());
+        // WebServer.start(5800, Filesystem.getDeployDirectory().getPath());
 
         new RobotContainer();
         PathPlannerLogging.setLogTargetPoseCallback(pose -> Logger.recordOutput("Pathplanner/Current Path Target", pose));
@@ -81,6 +81,11 @@ public class Robot extends LoggedRobot {
 
     public static void setRobotPoseOnField(Pose2d pose) {
         field.setRobotPose(pose);
+    }
+
+    @Override
+    public void robotInit(){
+        WebServer.start(5800, Filesystem.getDeployDirectory().getPath());
     }
 
     @Override

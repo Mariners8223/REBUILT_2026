@@ -28,7 +28,7 @@ public class VisionConstants {
         FRONT_CAMERA("Front Camera",
             new Transform3d(
                 0.11143, 0.281, 0.52,
-                new Rotation3d(0, Units.degreesToRadians(-12), Units.degreesToRadians(0))),
+                new Rotation3d(0, Units.degreesToRadians(-12), Units.degreesToRadians(10))),
                 0, 0),
     //    BACK_CAMERA("Back Camera",
     //        new Transform3d(

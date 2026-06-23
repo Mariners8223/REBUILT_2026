@@ -66,6 +66,7 @@ public class Feeder extends SubsystemBase {
     return Commands.startEnd(
       runMotors(rollersSpeed, funnellingSpeed, centeringSpeed, kickerSpeed),
       stopMotors(),
+      
       requirementsArray
     );
   }
