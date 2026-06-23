@@ -45,7 +45,7 @@ public class PivotConstants {
     public static final PivotStates RESET = PivotStates.Closed;
 
     public static final PIDFGains PID_GAINS = new PIDFGains(
-    600,
+    500, // was 600 but its really fucking violent so i lowered it a bit
     50,
     0,
     0.1);

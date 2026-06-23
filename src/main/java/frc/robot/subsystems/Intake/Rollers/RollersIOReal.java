@@ -8,26 +8,35 @@ import frc.util.MarinersController.MarinersTalonFX;
 
 /** Add your docs here. */
 public class RollersIOReal implements RollersIO{
-    private final MarinersTalonFX motor;
+    private final MarinersTalonFX FirstMotor;
+    private final MarinersTalonFX SecMotor;
 
     public RollersIOReal(){
-        motor = new MarinersTalonFX("Intake/Rollers Motor", RollerConstants.CONTROLLER_LOCATION,
+        FirstMotor = new MarinersTalonFX("Intake/First Rollers Motor", RollerConstants.CONTROLLER_LOCATION,
                                     RollerConstants.MOTOR_ID);
 
-        motor.setCurrentLimits(RollerConstants.CURRENT_LIMIT, RollerConstants.CURRENT_THRESHOLD);
-        motor.setMotorInverted(RollerConstants.IS_INVERTED);
-        motor.getMeasurements().setGearRatio(RollerConstants.GEAR_RATIO);
+        FirstMotor.setCurrentLimits(RollerConstants.CURRENT_LIMIT, RollerConstants.CURRENT_THRESHOLD);
+        FirstMotor.setMotorInverted(RollerConstants.IS_INVERTED);
+        FirstMotor.getMeasurements().setGearRatio(RollerConstants.GEAR_RATIO);
+
+        SecMotor = new MarinersTalonFX("Intake/Sec Rollers Motor", RollerConstants.CONTROLLER_LOCATION,
+                                    RollerConstants.MOTOR_ID);
+
+        SecMotor.setCurrentLimits(RollerConstants.CURRENT_LIMIT, RollerConstants.CURRENT_THRESHOLD);
+        SecMotor.setMotorInverted(RollerConstants.IS_INVERTED);
+        SecMotor.getMeasurements().setGearRatio(RollerConstants.GEAR_RATIO);
     }
 
     public void setDutyCycle(double dutyCycle){
-        motor.setDutyCycle(dutyCycle);
+        FirstMotor.setDutyCycle(dutyCycle);
+        SecMotor.setDutyCycle(dutyCycle);
     }
 
     public double getSetpoint(){
-        return motor.getSetpoint();
+        return FirstMotor.getSetpoint();
     }
     public double getVelocity(){
-        return motor.getVelocity();
+        return FirstMotor.getVelocity();
     }
 
     public void update(RollersInputs inputs){}
