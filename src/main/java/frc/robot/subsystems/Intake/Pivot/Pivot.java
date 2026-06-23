@@ -72,6 +72,13 @@ public class Pivot extends SubsystemBase {
         );
     }
 
+    public Command resetPivot(){
+        return this.startEnd(
+            () -> resetPosition(),
+            () -> resetPosition()
+        );
+    }
+
     @Override
     public void periodic() {
         io.update(inputs);
