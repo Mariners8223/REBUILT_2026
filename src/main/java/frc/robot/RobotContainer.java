@@ -266,7 +266,7 @@ public class RobotContainer {
 
         List<PathPlannerAuto> mirroredListOfAutos = new ArrayList<>();
         for (String autoName : namesOfAutos) {
-            PathPlannerAuto auto = new PathPlannerAuto(autoName, false);
+            PathPlannerAuto auto = new PathPlannerAuto(autoName, true);
             mirroredListOfAutos.add(auto);
          }
         for (int i = 0; i < namesOfAutos.size(); i++){
