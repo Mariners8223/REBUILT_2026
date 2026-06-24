@@ -28,18 +28,12 @@ public class VisionConstants {
         FRONT_CAMERA("Front Camera",
             new Transform3d(
                 0.11143, 0.281, 0.52,
-                new Rotation3d(0, Units.degreesToRadians(-12), Units.degreesToRadians(10))),
-                0, 0),
-    //    BACK_CAMERA("Back Camera",
-    //        new Transform3d(
-    //            -0.23554, 0.15, 0.51,
-    //            new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(-14), Units.degreesToRadians(180))),
-    //            0, 0),
+                new Rotation3d(Units.degreesToRadians(-7), Units.degreesToRadians(-8), Units.degreesToRadians(5))),
+                0.2, 9999),
         RIGHT_CAMERA("Right Camera",
             new Transform3d(-0.23554, -0.15, 0.46,
                 new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(-10), Units.degreesToRadians(-90))),
-            0, 0);
-
+            0.2, 9999);
 
         public final String cameraName;
         public final double XYstdFactor;

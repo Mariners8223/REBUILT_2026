@@ -217,7 +217,7 @@ public class RobotContainer {
         driveController.options().onTrue(swapIntakeStateClosed.get());
 
         driveController.L1().whileTrue(feeder.intakeCommand().alongWith(Commands.startEnd(DriveCommand::slowSpeed, DriveCommand::fullSpeed)).alongWith(resetPositionPivot.get()));
-        driveController.square().toggleOnTrue(feeder.passEjectCommand());
+        driveController.square().whileTrue(feeder.passEjectCommand());
 
         driveController.triangle().whileTrue(
             Commands.defer(RobotContainer::passTrench, Set.of(driveBase)).withName("Passing Trench")
