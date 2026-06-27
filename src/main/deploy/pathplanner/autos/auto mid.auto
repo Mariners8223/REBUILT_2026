@@ -44,6 +44,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "old shit",
+  "folder": null,
   "choreoAuto": false
 }

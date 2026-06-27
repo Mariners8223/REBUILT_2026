@@ -216,14 +216,8 @@ public class RobotContainer {
         driveController.create().onTrue(new InstantCommand(() -> withAutoEject = !withAutoEject));
         driveController.options().onTrue(swapIntakeStateClosed.get());
 
-        driveController.L1().whileTrue(feeder.intakeCommand().alongWith(Commands.startEnd(DriveCommand::slowSpeed, DriveCommand::fullSpeed)).alongWith(resetPositionPivot.get()));
+        driveController.L1().whileTrue(feeder.intakeCommand().alongWith(Commands.startEnd(DriveCommand::slowSpeed, DriveCommand::fullSpeed)));
         driveController.square().whileTrue(feeder.passEjectCommand());
-
-        driveController.triangle().whileTrue(
-            Commands.defer(RobotContainer::passTrench, Set.of(driveBase)).withName("Passing Trench")
-        );
-        // driveController.cross().toggleOnTrue(Commands.startEnd(DriveCommand::slowSpeed, DriveCommand::fullSpeed));
-        driveController.circle().toggleOnTrue(warmupShooter.get());
     }
 
     public static void configureNamedCommands(){

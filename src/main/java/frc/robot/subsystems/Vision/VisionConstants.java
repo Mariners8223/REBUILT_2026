@@ -24,18 +24,18 @@ public class VisionConstants {
     public static final double maxDistanceFromTargetSingle = 2.5;
     public static final double maxDistanceFromTargetMulti = 2; // If there is a season where you can see one tag real close and one far fix this.
 
-    public enum CameraConstants{//TODO: change stdfactors!!!!!!!!!!!!!!!!!!!!!!!!!
+    public enum CameraConstants{
         FRONT_CAMERA("Front Camera",
             new Transform3d(
                 0.11143, 0.221, 0.574,
                 new Rotation3d(0, Units.degreesToRadians(7), Units.degreesToRadians(16))),
-                0, 0),
+                0.2, 9999),
 
        POINTING_OUT_CAMERA("pointing_out_camera", //this camera will be placed on the side of the shooter, pointing backwards
            new Transform3d(
                0.23554, -0.26835, 0.47246,
                new Rotation3d(Units.degreesToRadians(-15), Units.degreesToRadians(0), Units.degreesToRadians(0))),
-               0, 0);
+               0.2, 9999);
 
         public final String cameraName;
         public final double XYstdFactor;
