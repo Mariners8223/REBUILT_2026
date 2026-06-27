@@ -21,7 +21,7 @@
       },
       "prevControl": {
         "x": 8.284519867549669,
-        "y": 0.11463576158940336
+        "y": 0.11463576158940342
       },
       "nextControl": null,
       "isLocked": false,
@@ -81,13 +81,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 73.67903626938065
+    "rotation": 89.31793960682738
   },
   "reversed": false,
   "folder": "shoot auto paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 104.67639313745012
+    "rotation": 104.67639313745013
   },
   "useDefaultConstraints": true
 }

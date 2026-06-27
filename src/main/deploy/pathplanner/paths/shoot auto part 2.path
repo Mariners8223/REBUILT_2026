@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.834403973509934,
-        "y": 3.4348454746136863
+        "x": 7.674685430463576,
+        "y": 3.415485651214127
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.181009933774835,
-        "y": 0.3421136865342169
+        "x": 7.248769315673289,
+        "y": 0.4582726269315658
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "shoot auto part 1 end"
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 0.5647516556291385
       },
       "prevControl": {
-        "x": 5.549944812357922,
-        "y": 0.4050331125819969
+        "x": 5.438625827814571,
+        "y": 0.5599116997792499
       },
       "nextControl": null,
       "isLocked": false,
@@ -53,17 +53,6 @@
           "name": "stop rollers"
         }
       }
-    },
-    {
-      "name": "warm up shooter",
-      "waypointRelativePos": 0.5975935828877023,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "warm up shooter"
-        }
-      }
     }
   ],
   "globalConstraints": {
@@ -76,7 +65,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 73.67903626938065
+    "rotation": 89.3179396068274
   },
   "reversed": false,
   "folder": "shoot auto paths",

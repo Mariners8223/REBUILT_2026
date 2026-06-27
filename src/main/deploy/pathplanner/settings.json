@@ -3,18 +3,12 @@
   "robotLength": 0.808,
   "holonomicMode": true,
   "pathFolders": [
-    "delayed auto",
-    "Trench",
+    "mid auto",
     "auto nz shoot and nz clean",
-    "new mid auto work here",
-    "shoot auto paths",
-    "shoot climb auto paths",
-    "solo auto",
-    "start mid - collect depot - shoot - outpost"
+    "delayed auto",
+    "shoot auto paths"
   ],
-  "autoFolders": [
-    "old shit"
-  ],
+  "autoFolders": [],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,
