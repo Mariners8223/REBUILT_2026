@@ -228,7 +228,7 @@ public class RobotContainer {
 
     public static void configureNamedCommands(){
         NamedCommands.registerCommand("close intake", pivot.moveToStateCommand(PivotStates.Closed));
-        NamedCommands.registerCommand("open intake", pivot.moveToStateCommand(PivotStates.Open).andThen(Commands.waitSeconds(0.6)));
+        NamedCommands.registerCommand("open intake", pivot.moveToStateCommand(PivotStates.Open).andThen(Commands.waitSeconds(1)));
 
         NamedCommands.registerCommand("start rollers", new InstantCommand(() -> rollers.setDutyCycle(1)));
         NamedCommands.registerCommand("stop rollers", new InstantCommand(() -> rollers.stopMotor()));
