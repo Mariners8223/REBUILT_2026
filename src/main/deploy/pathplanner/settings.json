@@ -3,9 +3,10 @@
   "robotLength": 0.808,
   "holonomicMode": true,
   "pathFolders": [
-    "new mid auto work here",
+    "delayed auto",
     "Trench",
     "auto nz shoot and nz clean",
+    "new mid auto work here",
     "shoot auto paths",
     "shoot climb auto paths",
     "solo auto",
