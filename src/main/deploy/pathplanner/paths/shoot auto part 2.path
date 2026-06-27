@@ -1,0 +1,88 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.834403973509934,
+        "y": 3.4348454746136863
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.181009933774835,
+        "y": 0.3421136865342169
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.6091225165562912,
+        "y": 0.5647516556291385
+      },
+      "prevControl": {
+        "x": 5.549944812357922,
+        "y": 0.4050331125819969
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "shoot auto part 2 end "
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [
+    {
+      "fieldPosition": {
+        "x": 4.6,
+        "y": 4.0
+      },
+      "rotationOffset": 0.0,
+      "minWaypointRelativePos": 0.5574866310160422,
+      "maxWaypointRelativePos": 1.0,
+      "name": "Point Towards Zone"
+    }
+  ],
+  "eventMarkers": [
+    {
+      "name": "stop collecting",
+      "waypointRelativePos": 0.12165775401069534,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "stop rollers"
+        }
+      }
+    },
+    {
+      "name": "warm up shooter",
+      "waypointRelativePos": 0.5975935828877023,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "warm up shooter"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 73.67903626938065
+  },
+  "reversed": false,
+  "folder": "shoot auto paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 93.98252057182886
+  },
+  "useDefaultConstraints": true
+}
