@@ -16,16 +16,32 @@
     },
     {
       "anchor": {
+        "x": 6.943852097130242,
+        "y": 0.7438300220750558
+      },
+      "prevControl": {
+        "x": 6.717099855193136,
+        "y": 0.6385521954614
+      },
+      "nextControl": {
+        "x": 7.485927152317882,
+        "y": 0.9955077262693157
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
         "x": 7.713405077262692,
         "y": 1.7408609271523163
       },
       "prevControl": {
-        "x": 7.480267605481157,
-        "y": 1.3604787363508635
+        "x": 7.471407284768212,
+        "y": 0.9325883002207502
       },
       "nextControl": {
-        "x": 7.897323399558498,
-        "y": 2.040938189845475
+        "x": 7.814353357119044,
+        "y": 2.0780281818725324
       },
       "isLocked": false,
       "linkedName": null
@@ -78,23 +94,23 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.13882163034712613,
+      "waypointRelativePos": 0.3,
       "rotationDegrees": 90.0
     },
     {
-      "waypointRelativePos": 0.34140435835351646,
+      "waypointRelativePos": 0.7,
       "rotationDegrees": 47.668878612578226
     },
     {
-      "waypointRelativePos": 1.7820823244551907,
+      "waypointRelativePos": 2.7820823244551907,
       "rotationDegrees": 174.75285072526734
     },
     {
-      "waypointRelativePos": 2.3,
+      "waypointRelativePos": 3.3,
       "rotationDegrees": -94.21208513139264
     },
     {
-      "waypointRelativePos": 3.5125100887812652,
+      "waypointRelativePos": 4.512510088781266,
       "rotationDegrees": 90.0
     }
   ],
@@ -103,7 +119,7 @@
   "eventMarkers": [
     {
       "name": "collecting",
-      "waypointRelativePos": 0.41176470588235264,
+      "waypointRelativePos": 0.8,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -114,7 +130,7 @@
     },
     {
       "name": "stop collecting",
-      "waypointRelativePos": 2.828877005347592,
+      "waypointRelativePos": 3.828877005347592,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -125,7 +141,7 @@
     },
     {
       "name": "warm up shooter",
-      "waypointRelativePos": 3.497326203208566,
+      "waypointRelativePos": 4.497326203208566,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
