@@ -13,31 +13,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "solo auto part 1"
+            "pathName": "hub to outpost"
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "aim to hub"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot to hub"
+            "waitTime": 3.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "solo auto part 2 line"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "solo auto part 3 line"
+            "pathName": "outposthub"
           }
         },
         {
@@ -56,6 +44,6 @@
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "old shit",
   "choreoAuto": false
 }
