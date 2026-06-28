@@ -9,19 +9,19 @@
       "prevControl": null,
       "nextControl": {
         "x": 3.217086092715231,
-        "y": 0.9616280353200851
+        "y": 0.961628035320085
       },
       "isLocked": false,
       "linkedName": "delay part 1 start"
     },
     {
       "anchor": {
-        "x": 3.6091225165562912,
-        "y": 0.5647516556291385
+        "x": 3.134806843267108,
+        "y": 0.5599116997792499
       },
       "prevControl": {
-        "x": 3.0525275938189846,
-        "y": 0.918068432671082
+        "x": 2.5782119205298013,
+        "y": 0.9132284768211933
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 89.31793960682738
+    "rotation": -1.397181027296403
   },
   "reversed": false,
   "folder": "delayed auto",

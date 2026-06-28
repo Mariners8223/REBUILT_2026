@@ -16,32 +16,26 @@
     },
     {
       "anchor": {
-        "x": 3.6091225165562912,
-        "y": 0.5647516556291385
+        "x": 3.134806843267108,
+        "y": 0.5599116997792499
       },
       "prevControl": {
-        "x": 5.438625827814571,
-        "y": 0.5599116997792499
+        "x": 4.964310154525389,
+        "y": 0.5550717439293613
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "shoot auto part 2 end "
     }
   ],
-  "rotationTargets": [],
-  "constraintZones": [],
-  "pointTowardsZones": [
+  "rotationTargets": [
     {
-      "fieldPosition": {
-        "x": 4.6,
-        "y": 4.0
-      },
-      "rotationOffset": 0.0,
-      "minWaypointRelativePos": 0.5574866310160422,
-      "maxWaypointRelativePos": 1.0,
-      "name": "Point Towards Zone"
+      "waypointRelativePos": 0.6931742876076872,
+      "rotationDegrees": 0.0
     }
   ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
   "eventMarkers": [
     {
       "name": "stop collecting",
@@ -65,7 +59,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 89.3179396068274
+    "rotation": -1.397181027296403
   },
   "reversed": false,
   "folder": "shoot auto paths",

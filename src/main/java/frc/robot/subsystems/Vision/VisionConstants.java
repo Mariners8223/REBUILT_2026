@@ -28,7 +28,7 @@ public class VisionConstants {
         FRONT_CAMERA("Front Camera",
             new Transform3d(
                 0.11143, 0.221, 0.574,
-                new Rotation3d(0, Units.degreesToRadians(7), Units.degreesToRadians(16))),
+                new Rotation3d(0, Units.degreesToRadians(7), Units.degreesToRadians(-10))),
                 0.2, 9999),
 
        POINTING_OUT_CAMERA("Right Camera", //this camera will be placed on the side of the shooter, pointing backwards

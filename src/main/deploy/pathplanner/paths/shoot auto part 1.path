@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.6091225165562912,
-        "y": 0.5647516556291385
+        "x": 3.894679911699779,
+        "y": 0.43891280353200957
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.886931567328918,
-        "y": 0.5327041942604832
+        "x": 7.172488962472405,
+        "y": 0.40686534216335424
       },
       "isLocked": false,
-      "linkedName": "shoot auto part 2 end "
+      "linkedName": null
     },
     {
       "anchor": {
@@ -30,14 +30,6 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.06618240516546006,
-      "rotationDegrees": 90.0
-    },
-    {
-      "waypointRelativePos": 0.184826472962071,
-      "rotationDegrees": 90.0
-    },
-    {
       "waypointRelativePos": 0.553672316384177,
       "rotationDegrees": 69.26256649524906
     }
@@ -45,7 +37,7 @@
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.4588928150765547,
+      "minWaypointRelativePos": 0.40713615023474253,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 2.0,
@@ -87,7 +79,7 @@
   "folder": "shoot auto paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 89.3179396068274
+    "rotation": 90.33703010985784
   },
   "useDefaultConstraints": true
 }

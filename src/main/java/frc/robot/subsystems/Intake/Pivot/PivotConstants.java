@@ -18,7 +18,7 @@ public class PivotConstants {
     {
         Closed(Degrees.of(0)),
         Middle(Degrees.of(-45)),
-        Open(Degrees.of(-90));
+        Open(Degrees.of(-92));
 
         private final Angle angle;
 
