@@ -9,34 +9,30 @@ import frc.util.MarinersController.MarinersController.ControlMode;
 
 /** Add your docs here. */
 public class PivotIOReal implements PivotIO {
-     private final MarinersTalonFX motor;
+    private final MarinersTalonFX motor;
 
     public PivotIOReal(){
-         motor = new MarinersTalonFX("Intake/Pivot Motor", PivotConstants.CONTROLLER_LOCATION,
-                                     PivotConstants.MOTOR_ID, PivotConstants.PID_GAINS,
-                                      PivotConstants.GEAR_RATIO);
-         motor.setMotorInverted(PivotConstants.IS_INVERTED);
-         motor.enableSoftLimits(PivotConstants.SOFT_MINIMUM, PivotConstants.SOFT_MAXIMUM);
-         motor.setMotorIdleMode(true);
+        motor = new MarinersTalonFX("Intake/Pivot Motor", PivotConstants.CONTROLLER_LOCATION,
+                                    PivotConstants.MOTOR_ID, PivotConstants.PID_GAINS,
+                                     PivotConstants.GEAR_RATIO);
+        motor.setMotorInverted(PivotConstants.IS_INVERTED);
+        motor.enableSoftLimits(PivotConstants.SOFT_MINIMUM, PivotConstants.SOFT_MAXIMUM);
+        motor.setMotorIdleMode(true);
     }
 
     public void setRotation(double rotation){
-         motor.setReference(rotation, ControlMode.Position);
+        motor.setReference(rotation, ControlMode.Position);
     }
     public double getRotation(){
-         return motor.getPosition();
-        //return 3.4;
+        return motor.getPosition();
     }
 
     public double getSupplyCurrent(){
-         return motor.getMotor().getSupplyCurrent().getValueAsDouble();
-        //return 4.5;
+        return motor.getMotor().getSupplyCurrent().getValueAsDouble();
     }
     public void resetPositionMotorEncoder(double angle){
-         motor.setMotorEncoderPosition(angle);
+        motor.setMotorEncoderPosition(angle);
     }
 
-    public void update(PivotInputs inputs){ 
-         //inputs.pivotstate = 
-    }
+    public void update(PivotInputs inputs){ }
 }

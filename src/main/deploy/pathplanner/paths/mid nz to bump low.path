@@ -1,0 +1,70 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.674685430463576,
+        "y": 3.415485651214127
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.014580573951434,
+        "y": 2.46201434878587
+      },
+      "isLocked": false,
+      "linkedName": "nz mid"
+    },
+    {
+      "anchor": {
+        "x": 2.747610375275938,
+        "y": 2.524933774834436
+      },
+      "prevControl": {
+        "x": 4.698112582781457,
+        "y": 2.384575055187637
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.011299435028258588,
+      "rotationDegrees": 153.35869006647073
+    },
+    {
+      "waypointRelativePos": 0.8918482647296176,
+      "rotationDegrees": 127.0611036605613
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "warm up shooter",
+      "waypointRelativePos": 0.277031802120142,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 51.78897457443877
+  },
+  "reversed": false,
+  "folder": "delayed auto",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 93.98252057182886
+  },
+  "useDefaultConstraints": true
+}
