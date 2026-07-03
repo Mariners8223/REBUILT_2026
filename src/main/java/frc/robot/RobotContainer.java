@@ -164,7 +164,7 @@ public class RobotContainer {
         shootWithBump = () ->
             Commands.parallel(
                 conditionalShootCommand.get(),
-                Commands.waitSeconds(0.5).andThen(pivot.raisePivot(PivotStates.Middle))
+                Commands.waitSeconds(1.5).andThen(pivot.raisePivot(PivotStates.Middle))
             ).withName("Shoot with Bump");
 
         swapIntakeStateClosed = () ->
@@ -218,11 +218,17 @@ public class RobotContainer {
 
         driveController.L1().whileTrue(feeder.intakeCommand().alongWith(Commands.startEnd(DriveCommand::slowSpeed, DriveCommand::fullSpeed)));
         driveController.square().whileTrue(feeder.passEjectCommand());
+
+        driveController.triangle().whileTrue(
+            Commands.defer(RobotContainer::passTrench, Set.of(driveBase)).withName("Passing Trench")
+        );
+        // driveController.cross().toggleOnTrue(Commands.startEnd(DriveCommand::slowSpeed, DriveCommand::fullSpeed));
+        driveController.circle().toggleOnTrue(warmupShooter.get());
     }
 
     public static void configureNamedCommands(){
         NamedCommands.registerCommand("close intake", pivot.moveToStateCommand(PivotStates.Closed));
-        NamedCommands.registerCommand("open intake", pivot.moveToStateCommand(PivotStates.Open).andThen(Commands.waitSeconds(1)));
+        NamedCommands.registerCommand("open intake", pivot.moveToStateCommand(PivotStates.Open).andThen(Commands.waitSeconds(0.6)));
 
         NamedCommands.registerCommand("start rollers", new InstantCommand(() -> rollers.setDutyCycle(1)));
         NamedCommands.registerCommand("stop rollers", new InstantCommand(() -> rollers.stopMotor()));
