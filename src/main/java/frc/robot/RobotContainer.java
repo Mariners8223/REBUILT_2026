@@ -227,10 +227,10 @@ public class RobotContainer {
         NamedCommands.registerCommand("start rollers", new InstantCommand(() -> rollers.setDutyCycle(1)));
         NamedCommands.registerCommand("stop rollers", new InstantCommand(() -> rollers.stopMotor()));
 
-        NamedCommands.registerCommand("shoot to hub", shootWithBump.get().withTimeout(5.5));
+        NamedCommands.registerCommand("shoot to hub", shootWithBump.get().withTimeout(6));
         NamedCommands.registerCommand("warm up shooter", warmupShooter.get());
         NamedCommands.registerCommand("shoot to pass", passCommand.get());
-        NamedCommands.registerCommand("aim to hub", new AimDriving(driveBase, driveController, RobotContainer::angleToHub).withTimeout(0.7));
+        NamedCommands.registerCommand("aim to hub", new AimDriving(driveBase, driveController, RobotContainer::angleToHub).withTimeout(0.5));
 
         NamedCommands.registerCommand("eject", feeder.ejectCommand());
     }
