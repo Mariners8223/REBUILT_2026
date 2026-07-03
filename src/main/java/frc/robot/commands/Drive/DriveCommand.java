@@ -40,7 +40,7 @@ public class DriveCommand extends Command {
     }
 
     public static void slowSpeed(){
-        MAX_FREE_WHEEL_SPEED = 1.0;
+        MAX_FREE_WHEEL_SPEED = 0.5;
 
         MAX_OMEGA_RAD_PER_SEC = MAX_FREE_WHEEL_SPEED / driveBaseRadius;
     }
