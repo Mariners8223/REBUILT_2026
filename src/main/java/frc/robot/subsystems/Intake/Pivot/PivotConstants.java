@@ -17,7 +17,7 @@ public class PivotConstants {
     public enum PivotStates
     {
         Closed(Degrees.of(0)),
-        Middle(Degrees.of(-45)),
+        Middle(Degrees.of(-30)),
         Open(Degrees.of(-92));
 
         private final Angle angle;

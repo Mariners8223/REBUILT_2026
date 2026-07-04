@@ -40,7 +40,7 @@ public class DriveCommand extends Command {
     }
 
     public static void slowSpeed(){
-        MAX_FREE_WHEEL_SPEED = 1.0;
+        MAX_FREE_WHEEL_SPEED = DevBotConstants.MAX_WHEEL_LINEAR_VELOCITY * 0.63;//3ms
 
         MAX_OMEGA_RAD_PER_SEC = MAX_FREE_WHEEL_SPEED / driveBaseRadius;
     }
@@ -59,8 +59,8 @@ public class DriveCommand extends Command {
         // double R2Axis  = 1 - (0.5 + controller.getRightTriggerAxis() / 2);
         double R2Axis  = 1 - controller.getR2Axis();
 
-        if(R2Axis <= 0.1) {
-            R2Axis = 0.1;
+        if(R2Axis <= 0.5) {
+            R2Axis = 0.5;
         }
 
         //sets the value of the 3 vectors we need (accounting for drift)
