@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.894679911699779,
-        "y": 0.43891280353200957
+        "x": 4.223796909492274,
+        "y": 0.5695916114790294
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.172488962472405,
-        "y": 0.40686534216335424
+        "x": 7.5016059602649,
+        "y": 0.537544150110374
       },
       "isLocked": false,
       "linkedName": null
@@ -30,6 +30,10 @@
   ],
   "rotationTargets": [
     {
+      "waypointRelativePos": 0.17296222664016186,
+      "rotationDegrees": 160.0
+    },
+    {
       "waypointRelativePos": 0.553672316384177,
       "rotationDegrees": 78.28635862575594
     }
@@ -40,7 +44,7 @@
       "minWaypointRelativePos": 0.49502347417841336,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 1.5,
+        "maxVelocity": 2.0,
         "maxAcceleration": 3.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
@@ -64,8 +68,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 4.5,
+    "maxAcceleration": 4.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -79,7 +83,7 @@
   "folder": "shoot auto paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.33703010985784
+    "rotation": 159.62919706398066
   },
   "useDefaultConstraints": true
 }
