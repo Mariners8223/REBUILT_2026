@@ -21,6 +21,7 @@ import org.littletonrobotics.conduit.ConduitApi;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
+import com.ctre.phoenix6.controls.StaticBrake;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -101,6 +102,7 @@ public class RobotContainer {
     public static Supplier<Command> swapIntakeStateClosed;
     public static Supplier<Command> swapIntakeStateMiddle;
     public static Supplier<Command> resetPositionPivot;
+    public static Supplier<Command> shootCommandWithNoVision;
     //#endregion
 
     public static boolean withAutoEject = false;
@@ -146,6 +148,14 @@ public class RobotContainer {
                 Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
                         .andThen(feeder.smartFeedingShootCommand(RobotContainer::distanceFromHub, () -> withAutoEject))
             ).withName("Shooting");
+        
+            
+            shootCommandWithNoVision = () ->
+            Commands.parallel(
+                Shoot.ShootDistance(shooter,RobotContainer::glida, fuelIncrementer),
+                Commands.waitUntil(() -> shooter.isAtRequiredVelocity(glida()))
+                        .andThen(feeder.smartFeedingShootCommand(RobotContainer::glida, () -> withAutoEject))
+            ).withName("ShootingWithoutVision");
 
         passCommand = () ->
             Commands.parallel(
@@ -211,6 +221,11 @@ public class RobotContainer {
                 new AimDriving(driveBase, driveController, RobotContainer::getShootingAngle),
                 preShooting.get().andThen(shootWithBump.get())
             ).withName("Full Shooting")
+        );
+        driveController.cross().whileTrue(
+            Commands.parallel(
+                shootCommandWithNoVision.get()
+            )
         );
 
         driveController.create().onTrue(new InstantCommand(() -> withAutoEject = !withAutoEject));
@@ -323,6 +338,10 @@ public class RobotContainer {
             driveBase.getPose().getTranslation().getDistance(hubLocation.getTranslation())
         );
     }
+    public static Distance glida()
+        {
+            return Meters.of(2);
+        }
 
     public static double angleToHub(){
         Pose2d hubLocation = Constants.FieldConstants.HUB_POSITION;
