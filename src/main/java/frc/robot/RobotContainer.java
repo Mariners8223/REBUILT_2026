@@ -103,6 +103,8 @@ public class RobotContainer {
     public static Supplier<Command> swapIntakeStateMiddle;
     public static Supplier<Command> resetPositionPivot;
     public static Supplier<Command> shootCommandWithNoVision;
+    public static Supplier<Command> preShootingNV;
+    public static Supplier<Command> warmUpShooterNV;
     //#endregion
 
     public static boolean withAutoEject = false;
@@ -138,9 +140,18 @@ public class RobotContainer {
                 RobotContainer::inAllianceZone
             ).withName("Warmup Shooter");
 
+        warmUpShooterNV = () ->
+        Shoot.ShootDistance(shooter, RobotContainer::glida, fuelIncrementer)
+        .withName("Warmup Shooter NV");
+                
+
         preShooting = () ->
             warmupShooter.get().alongWith(feeder.ejectCommand()).withTimeout(0.5)
             .withName("Pre Shooting");
+
+        preShootingNV = () ->
+        warmUpShooterNV.get().alongWith(feeder.ejectCommand()).withTimeout(0.5)
+        .withName("pre shoot NV");
 
         shootCommand = () ->
             Commands.parallel(
@@ -150,12 +161,14 @@ public class RobotContainer {
             ).withName("Shooting");
         
             
-            shootCommandWithNoVision = () ->
-            Commands.parallel(
-                Shoot.ShootDistance(shooter,RobotContainer::glida, fuelIncrementer),
-                Commands.waitUntil(() -> shooter.isAtRequiredVelocity(glida()))
-                        .andThen(feeder.smartFeedingShootCommand(RobotContainer::glida, () -> withAutoEject))
-            ).withName("ShootingWithoutVision");
+        shootCommandWithNoVision = () ->
+        Commands.parallel(
+            Shoot.ShootDistance(shooter,RobotContainer::glida, fuelIncrementer),
+            Commands.waitUntil(() -> shooter.isAtRequiredVelocity(glida()))
+                    .andThen(feeder.smartFeedingShootCommand(RobotContainer::glida, () -> withAutoEject)),
+            Commands.waitSeconds(0.5).andThen(pivot.raisePivot(PivotStates.Middle))
+        ).withName("ShootingWithoutVision");
+
 
         passCommand = () ->
             Commands.parallel(
@@ -224,7 +237,7 @@ public class RobotContainer {
         );
         driveController.cross().whileTrue(
             Commands.parallel(
-                shootCommandWithNoVision.get()
+                preShooting.get().andThen(shootCommandWithNoVision.get())
             )
         );
 
