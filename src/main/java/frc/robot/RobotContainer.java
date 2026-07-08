@@ -103,6 +103,7 @@ public class RobotContainer {
     public static Supplier<Command> swapIntakeStateMiddle;
     public static Supplier<Command> resetPositionPivot;
     public static Supplier<Command> shootCommandWithNoVision;
+    public static Supplier<Command> shootCommandWithNoVision2;
     public static Supplier<Command> preShootingNV;
     public static Supplier<Command> warmUpShooterNV;
     //#endregion
@@ -166,6 +167,14 @@ public class RobotContainer {
             Shoot.ShootDistance(shooter,RobotContainer::glida, fuelIncrementer),
             Commands.waitUntil(() -> shooter.isAtRequiredVelocity(glida()))
                     .andThen(feeder.smartFeedingShootCommand(RobotContainer::glida, () -> withAutoEject)),
+            Commands.waitSeconds(0.5).andThen(pivot.raisePivot(PivotStates.Middle))
+        ).withName("ShootingWithoutVision");
+
+        shootCommandWithNoVision2 = () ->
+        Commands.parallel(
+            Shoot.ShootDistance(shooter,RobotContainer::glida2, fuelIncrementer),
+            Commands.waitUntil(() -> shooter.isAtRequiredVelocity(glida2()))
+                    .andThen(feeder.smartFeedingShootCommand(RobotContainer::glida2, () -> withAutoEject)),
             Commands.waitSeconds(0.5).andThen(pivot.raisePivot(PivotStates.Middle))
         ).withName("ShootingWithoutVision");
 
@@ -235,11 +244,9 @@ public class RobotContainer {
                 preShooting.get().andThen(shootWithBump.get())
             ).withName("Full Shooting")
         );
-        driveController.cross().whileTrue(
-            Commands.parallel(
-                preShooting.get().andThen(shootCommandWithNoVision.get())
-            )
-        );
+        driveController.cross().whileTrue(preShooting.get().andThen(shootCommandWithNoVision.get()));
+
+        driveController.circle().whileTrue(preShooting.get().andThen(shootCommandWithNoVision2.get()));
 
         driveController.create().onTrue(new InstantCommand(() -> withAutoEject = !withAutoEject));
         driveController.options().onTrue(swapIntakeStateClosed.get());
@@ -250,12 +257,12 @@ public class RobotContainer {
 
     public static void configureNamedCommands(){
         NamedCommands.registerCommand("close intake", pivot.moveToStateCommand(PivotStates.Closed));
-        NamedCommands.registerCommand("open intake", pivot.moveToStateCommand(PivotStates.Open).andThen(Commands.waitSeconds(0.6)));
+        NamedCommands.registerCommand("open intake", pivot.moveToStateCommand(PivotStates.Open).andThen(Commands.waitSeconds(0.3))); // was .6 but matan calistenics said it was too much but i dont know i dont want to destroy the intake so its not my responsibility 
 
         NamedCommands.registerCommand("start rollers", new InstantCommand(() -> rollers.setDutyCycle(1)));
         NamedCommands.registerCommand("stop rollers", new InstantCommand(() -> rollers.stopMotor()));
 
-        NamedCommands.registerCommand("shoot to hub", shootWithBump.get().withTimeout(6));
+        NamedCommands.registerCommand("shoot to hub", shootWithBump.get().withTimeout(5));
         NamedCommands.registerCommand("warm up shooter", warmupShooter.get());
         NamedCommands.registerCommand("shoot to pass", passCommand.get());
         NamedCommands.registerCommand("aim to hub", new AimDriving(driveBase, driveController, RobotContainer::angleToHub).withTimeout(0.5));
@@ -352,9 +359,14 @@ public class RobotContainer {
         );
     }
     public static Distance glida()
-        {
-            return Meters.of(2);
-        }
+    {
+        return Meters.of(2.15);
+    }
+
+    public static Distance glida2()
+    {
+        return Meters.of(3);
+    }
 
     public static double angleToHub(){
         Pose2d hubLocation = Constants.FieldConstants.HUB_POSITION;

@@ -42,9 +42,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "shoot to hub"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoot to hub"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 3.0
+                }
+              }
+            ]
           }
         },
         {

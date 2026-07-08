@@ -27,16 +27,16 @@ public class VisionConstants {
     public enum CameraConstants{
         FRONT_CAMERA("Front Camera",
             new Transform3d(
-                //0.11143, 0.221, 0.574,
-                0.13,0.32,0.52,
+                0.11143, 0.221, 0.52,
+                //0.13,0.32,0.52,
                 //0,7,16
-                new Rotation3d(0, Units.degreesToRadians(8), Units.degreesToRadians(-10))),
+                new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(-8), Units.degreesToRadians(-10))),
                 0.2, 999),
 
        POINTING_OUT_CAMERA("Right Camera", //this camera will be placed on the side of the shooter, pointing backwards
            new Transform3d(
                0.23554, -0.26835, 0.47246,
-               new Rotation3d(Units.degreesToRadians(-15), Units.degreesToRadians(0), Units.degreesToRadians(0))),
+               new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(-10), Units.degreesToRadians(0))),
                0.2, 999);
 
         public final String cameraName;
