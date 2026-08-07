@@ -1,0 +1,43 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "open intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "depot part 1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "aim to hub"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot to hub"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "depot part 2"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

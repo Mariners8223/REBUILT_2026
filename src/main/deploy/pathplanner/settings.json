@@ -3,9 +3,10 @@
   "robotLength": 0.808,
   "holonomicMode": true,
   "pathFolders": [
-    "mid auto",
+    "depot mid parts",
     "auto nz shoot and nz clean",
     "delayed auto",
+    "mid auto",
     "shoot auto paths"
   ],
   "autoFolders": [],

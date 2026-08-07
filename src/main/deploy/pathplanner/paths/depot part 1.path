@@ -1,0 +1,66 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.5897626931567324,
+        "y": 4.044679911699779
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.3715268226224167,
+        "y": 4.166635251116015
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.7844591611479026,
+        "y": 4.9594315673289175
+      },
+      "prevControl": {
+        "x": 2.374933774834437,
+        "y": 4.591594922737305
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "depot part 1 end"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "warm up shooter",
+      "waypointRelativePos": 0.4912676056338052,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "warm up shooter"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.5,
+    "maxAcceleration": 4.5,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -17.64612255912414
+  },
+  "reversed": false,
+  "folder": "depot mid parts",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -90.0
+  },
+  "useDefaultConstraints": true
+}

@@ -257,12 +257,12 @@ public class RobotContainer {
 
     public static void configureNamedCommands(){
         NamedCommands.registerCommand("close intake", pivot.moveToStateCommand(PivotStates.Closed));
-        NamedCommands.registerCommand("open intake", pivot.moveToStateCommand(PivotStates.Open).andThen(Commands.waitSeconds(0.3))); // was .6 but matan calistenics said it was too much but i dont know i dont want to destroy the intake so its not my responsibility 
+        NamedCommands.registerCommand("open intake", pivot.moveToStateCommand(PivotStates.Open).andThen(Commands.waitSeconds(0.6))); // was .6 but matan calistenics said it was too much but i dont know i dont want to destroy the intake so its not my responsibility 
 
         NamedCommands.registerCommand("start rollers", new InstantCommand(() -> rollers.setDutyCycle(1)));
         NamedCommands.registerCommand("stop rollers", new InstantCommand(() -> rollers.stopMotor()));
 
-        NamedCommands.registerCommand("shoot to hub", shootWithBump.get().withTimeout(5));
+        NamedCommands.registerCommand("shoot to hub", shootWithBump.get().withTimeout(6));
         NamedCommands.registerCommand("warm up shooter", warmupShooter.get());
         NamedCommands.registerCommand("shoot to pass", passCommand.get());
         NamedCommands.registerCommand("aim to hub", new AimDriving(driveBase, driveController, RobotContainer::angleToHub).withTimeout(0.5));

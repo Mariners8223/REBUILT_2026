@@ -17,7 +17,7 @@ public class PivotIOReal implements PivotIO {
                                      PivotConstants.GEAR_RATIO);
         motor.setMotorInverted(PivotConstants.IS_INVERTED);
         motor.enableSoftLimits(PivotConstants.SOFT_MINIMUM, PivotConstants.SOFT_MAXIMUM);
-        motor.setMotorIdleMode(false);
+        motor.setMotorIdleMode(true);
     }
 
     public void setRotation(double rotation){

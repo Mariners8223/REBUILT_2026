@@ -3,49 +3,61 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.8608002207505514,
-        "y": 0.4921523178807956
+        "x": 1.7844591611479026,
+        "y": 4.9594315673289175
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.138765933369755,
-        "y": 0.4921523178807956
+        "x": 1.7940674416732043,
+        "y": 5.209246860986746
+      },
+      "isLocked": false,
+      "linkedName": "depot part 1 end"
+    },
+    {
+      "anchor": {
+        "x": 1.7844591611479026,
+        "y": 7.3745695364238415
+      },
+      "prevControl": {
+        "x": 1.659718049931166,
+        "y": 7.157913922205299
+      },
+      "nextControl": {
+        "x": 1.914441769436058,
+        "y": 7.600328803450637
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.573046357615894,
-        "y": 3.3332064017660037
+        "x": 7.452047461368653,
+        "y": 7.621407284768212
       },
       "prevControl": {
-        "x": 7.335888520971303,
-        "y": 0.29855408388521054
+        "x": 7.176169977924944,
+        "y": 7.582687637969094
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "shoot auto part 1 end"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.0,
-      "rotationDegrees": 90.0
-    },
-    {
-      "waypointRelativePos": 0.553672316384177,
-      "rotationDegrees": 78.28635862575594
+      "waypointRelativePos": 0.933068257123923,
+      "rotationDegrees": 0.0
     }
   ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.49502347417841336,
-      "maxWaypointRelativePos": 1.0,
+      "minWaypointRelativePos": 1.4107042253521005,
+      "maxWaypointRelativePos": 1.9951173708920162,
       "constraints": {
-        "maxVelocity": 2.0,
-        "maxAcceleration": 3.0,
+        "maxVelocity": 2.5,
+        "maxAcceleration": 4.5,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -56,8 +68,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "start rollers",
-      "waypointRelativePos": 0.29210836277974095,
+      "name": "intake",
+      "waypointRelativePos": 1.3956807511737126,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -77,13 +89,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 73.61045966596531
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "shoot auto paths",
+  "folder": "depot mid parts",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": -17.64612255912414
   },
   "useDefaultConstraints": true
 }
