@@ -31,6 +31,7 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.FileVersionException;
 import com.pathplanner.lib.util.FlippingUtil;
 
+import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.Distance;
@@ -121,7 +122,7 @@ public class RobotContainer {
         kicker = new Kicker();
 
         feeder = new Feeder(rollers, funnel, kicker);
-        vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
+        vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose, driveBase::reset);
 
         configureCommands();
         configureNamedCommands();

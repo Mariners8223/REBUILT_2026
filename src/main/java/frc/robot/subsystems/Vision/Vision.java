@@ -7,6 +7,7 @@ package frc.robot.subsystems.Vision;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import edu.wpi.first.math.Matrix;
@@ -32,15 +33,17 @@ import frc.robot.subsystems.Vision.VisionConstants.CameraConstants;
 public class Vision extends SubsystemBase {
     private final HashMap<VisionCamera, Alert> disconnectedAlerts = new HashMap<>();
 
+    private final Consumer<Pose2d> resetOdometryCallback;
+
     private final VisionCamera[] cameras;
 
     private final VisionConsumer poseConsumer;
-
+    private double lastOdometryResetTime = -1.0;
 
     /**
      * Creates a new Vision.
      */
-    public Vision(VisionConsumer poseConsumer, Supplier<Pose2d> referencePoseSupplier) {
+    public Vision(VisionConsumer poseConsumer, Supplier<Pose2d> referencePoseSupplier, Consumer<Pose2d> resetOdometryCallback) {
 
         int numOfCameras = CameraConstants.values().length;
 
@@ -54,6 +57,7 @@ public class Vision extends SubsystemBase {
 
             disconnectedAlerts.put(cameras[i], new Alert(cameras[i].cameraName + " Disconnected", AlertType.kWarning));
         }
+        this.resetOdometryCallback = resetOdometryCallback;
 
         this.poseConsumer = poseConsumer;
     }
@@ -105,7 +109,10 @@ public class Vision extends SubsystemBase {
                     if (!rejectionReason.contains("Distance from Tag")) rejectionReason.concat("Distance from Tag");
                     continue;
                 }
-
+                if ( frame.tagCount() > 2 && frame.timeStamp() - lastOdometryResetTime > 2.5 ) {
+                    lastOdometryResetTime = frame.timeStamp();
+                    resetOdometryCallback.accept(frame.robotPose().toPose2d());
+                }
 
                 var stdDevs = getStdDevs(frame.averageTargetDistance(), frame.tagCount(), frame.estimationType(), camera);
 
