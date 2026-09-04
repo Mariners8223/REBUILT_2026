@@ -24,13 +24,13 @@ import frc.util.ContinuousConditionalCommand;
 public class Feeder extends SubsystemBase {
   private final Rollers rollers;
   private final Funnel funnel;
-  private final Kicker kicker;
+  //private final Kicker kicker;
 
   /** Creates a new Feeder. */
-  public Feeder(Rollers rollers, Funnel funnel, Kicker kicker) {
+  public Feeder(Rollers rollers, Funnel funnel) {
     this.rollers = rollers;
     this.funnel = funnel;
-    this.kicker = kicker;
+    //this.kicker = kicker;
   }
 
   public ArrayList<Subsystem> requiredSubsystems(double rollersSpeed, double funnellingSpeed, double centeringSpeed, double kickerSpeed){
@@ -38,7 +38,7 @@ public class Feeder extends SubsystemBase {
 
     if (rollersSpeed != 0) requiredSubsystems.add(rollers);
     if (funnellingSpeed != 0 || centeringSpeed != 0) requiredSubsystems.add(funnel);
-    if (kickerSpeed != 0) requiredSubsystems.add(kicker);
+    //if (kickerSpeed != 0) requiredSubsystems.add(kicker);
 
     return requiredSubsystems;
   }
@@ -48,7 +48,7 @@ public class Feeder extends SubsystemBase {
         rollers.setDutyCycle(rollersSpeed);
         funnel.setFunnelDutyCycle(funnellingSpeed);
         funnel.setCenteringDutyCycle(centeringSpeed);
-        kicker.setDutyCycle(kickerSpeed);
+       // kicker.setDutyCycle(kickerSpeed);
       };
   }
 
@@ -56,7 +56,7 @@ public class Feeder extends SubsystemBase {
       return () -> {
         rollers.stopMotor();
         funnel.stopAllMotors();
-        kicker.stopMotors();
+       // kicker.stopMotors();
       };
   }
 
@@ -72,7 +72,8 @@ public class Feeder extends SubsystemBase {
   }
 
   public boolean inStall(){
-    return funnel.funnelInStall() || funnel.centeringInStall() || kicker.leadInStall() || kicker.followInStall();
+    //return funnel.funnelInStall() || funnel.centeringInStall() || kicker.leadInStall() || kicker.followInStall();
+    return true;
   }
 
   public Command intakeCommand(){

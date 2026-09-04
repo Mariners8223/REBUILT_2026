@@ -77,8 +77,8 @@ public class RobotContainer {
     public static Funnel funnel;
     public static Pivot pivot;
     public static Rollers rollers;
-    public static Shooter shooter;
-    public static Kicker kicker;
+    //public static Shooter shooter;
+    //public static Kicker kicker;
 
     public static Feeder feeder;
     public static Vision vision;
@@ -94,20 +94,20 @@ public class RobotContainer {
     public static int fuelApproximation = 0;
 
     //#region Premade Commands
-    public static Supplier<Command> warmupShooter;
-    public static Supplier<Command> preShooting;
-    public static Supplier<Command> shootCommand;
-    public static Supplier<Command> passCommand;
-    public static Supplier<Command> conditionalShootCommand;
-    public static Supplier<Command> shootWithBump;
-    public static Supplier<Command> swapIntakeStateClosed;
-    public static Supplier<Command> swapIntakeStateMiddle;
-    public static Supplier<Command> resetPositionPivot;
-    public static Supplier<Command> shootCommandWithNoVision;
-    public static Supplier<Command> shootCommandWithNoVision2;
-    public static Supplier<Command> preShootingNV;
-    public static Supplier<Command> warmUpShooterNV;
-    //#endregion
+    // public static Supplier<Command> warmupShooter;
+    // public static Supplier<Command> preShooting;
+    // public static Supplier<Command> shootCommand;
+    // public static Supplier<Command> passCommand;
+    // public static Supplier<Command> conditionalShootCommand;
+    // public static Supplier<Command> shootWithBump;
+    // public static Supplier<Command> swapIntakeStateClosed;
+    // public static Supplier<Command> swapIntakeStateMiddle;
+    // public static Supplier<Command> resetPositionPivot;
+    // public static Supplier<Command> shootCommandWithNoVision;
+    // public static Supplier<Command> shootCommandWithNoVision2;
+    // public static Supplier<Command> preShootingNV;
+    // public static Supplier<Command> warmUpShooterNV;
+    // //#endregion
 
     public static boolean withAutoEject = false;
 
@@ -118,10 +118,10 @@ public class RobotContainer {
         funnel = new Funnel();
         pivot = new Pivot();
         rollers = new Rollers();
-        shooter = new Shooter();
-        kicker = new Kicker();
+        // shooter = new Shooter();
+        // kicker = new Kicker();
 
-        feeder = new Feeder(rollers, funnel, kicker);
+        feeder = new Feeder(rollers, funnel);
         vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose, driveBase::reset);
 
         configureCommands();
@@ -135,89 +135,89 @@ public class RobotContainer {
     public static void configureCommands(){
         fuelIncrementer = () -> fuelApproximation += 3;
 
-        warmupShooter = () ->
-            Commands.either(
-                Shoot.ShootDistance(shooter, RobotContainer::distanceFromHub, fuelIncrementer),
-                new Shoot(shooter, () -> ShooterConstants.PASSING_VELOCITY, fuelIncrementer),
-                RobotContainer::inAllianceZone
-            ).withName("Warmup Shooter");
+        // warmupShooter = () ->
+        //     Commands.either(
+        //         Shoot.ShootDistance(shooter, RobotContainer::distanceFromHub, fuelIncrementer),
+        //         new Shoot(shooter, () -> ShooterConstants.PASSING_VELOCITY, fuelIncrementer),
+        //         RobotContainer::inAllianceZone
+        //     ).withName("Warmup Shooter");
 
-        warmUpShooterNV = () ->
-        Shoot.ShootDistance(shooter, RobotContainer::glida, fuelIncrementer)
-        .withName("Warmup Shooter NV");
+        // warmUpShooterNV = () ->
+        // Shoot.ShootDistance(shooter, RobotContainer::glida, fuelIncrementer)
+        // .withName("Warmup Shooter NV");
                 
 
-        preShooting = () ->
-            warmupShooter.get().alongWith(feeder.ejectCommand()).withTimeout(0.5)
-            .withName("Pre Shooting");
+        // preShooting = () ->
+        //     warmupShooter.get().alongWith(feeder.ejectCommand()).withTimeout(0.5)
+        //     .withName("Pre Shooting");
 
-        preShootingNV = () ->
-        warmUpShooterNV.get().alongWith(feeder.ejectCommand()).withTimeout(0.5)
-        .withName("pre shoot NV");
+        // preShootingNV = () ->
+        // warmUpShooterNV.get().alongWith(feeder.ejectCommand()).withTimeout(0.5)
+        // .withName("pre shoot NV");
 
-        shootCommand = () ->
-            Commands.parallel(
-                Shoot.ShootDistance(shooter, RobotContainer::distanceFromHub, fuelIncrementer),
-                Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
-                        .andThen(feeder.smartFeedingShootCommand(RobotContainer::distanceFromHub, () -> withAutoEject))
-            ).withName("Shooting");
+        // shootCommand = () ->
+        //     Commands.parallel(
+        //         Shoot.ShootDistance(shooter, RobotContainer::distanceFromHub, fuelIncrementer),
+        //         Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
+        //                 .andThen(feeder.smartFeedingShootCommand(RobotContainer::distanceFromHub, () -> withAutoEject))
+        //     ).withName("Shooting");
         
             
-        shootCommandWithNoVision = () ->
-        Commands.parallel(
-            Shoot.ShootDistance(shooter,RobotContainer::glida, fuelIncrementer),
-            Commands.waitUntil(() -> shooter.isAtRequiredVelocity(glida()))
-                    .andThen(feeder.smartFeedingShootCommand(RobotContainer::glida, () -> withAutoEject)),
-            Commands.waitSeconds(0.5).andThen(pivot.raisePivot(PivotStates.Middle))
-        ).withName("ShootingWithoutVision");
+        // shootCommandWithNoVision = () ->
+        // Commands.parallel(
+        //     Shoot.ShootDistance(shooter,RobotContainer::glida, fuelIncrementer),
+        //     Commands.waitUntil(() -> shooter.isAtRequiredVelocity(glida()))
+        //             .andThen(feeder.smartFeedingShootCommand(RobotContainer::glida, () -> withAutoEject)),
+        //     Commands.waitSeconds(0.5).andThen(pivot.raisePivot(PivotStates.Middle))
+        // ).withName("ShootingWithoutVision");
 
-        shootCommandWithNoVision2 = () ->
-        Commands.parallel(
-            Shoot.ShootDistance(shooter,RobotContainer::glida2, fuelIncrementer),
-            Commands.waitUntil(() -> shooter.isAtRequiredVelocity(glida2()))
-                    .andThen(feeder.smartFeedingShootCommand(RobotContainer::glida2, () -> withAutoEject)),
-            Commands.waitSeconds(0.5).andThen(pivot.raisePivot(PivotStates.Middle))
-        ).withName("ShootingWithoutVision");
+        // shootCommandWithNoVision2 = () ->
+        // Commands.parallel(
+        //     Shoot.ShootDistance(shooter,RobotContainer::glida2, fuelIncrementer),
+        //     Commands.waitUntil(() -> shooter.isAtRequiredVelocity(glida2()))
+        //             .andThen(feeder.smartFeedingShootCommand(RobotContainer::glida2, () -> withAutoEject)),
+        //     Commands.waitSeconds(0.5).andThen(pivot.raisePivot(PivotStates.Middle))
+        // ).withName("ShootingWithoutVision");
 
 
-        passCommand = () ->
-            Commands.parallel(
-                new Shoot(shooter, () -> ShooterConstants.PASSING_VELOCITY, fuelIncrementer),
-                Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
-                .andThen(feeder.smartFeedingPassCommand(() -> withAutoEject))
-            ).withName("Passing");
+        // passCommand = () ->
+        //     Commands.parallel(
+        //         new Shoot(shooter, () -> ShooterConstants.PASSING_VELOCITY, fuelIncrementer),
+        //         Commands.waitUntil(() -> shooter.isAtRequiredVelocity(RobotContainer.distanceFromHub()))
+        //         .andThen(feeder.smartFeedingPassCommand(() -> withAutoEject))
+        //     ).withName("Passing");
 
-        conditionalShootCommand = () ->
-            Commands.either(
-                shootCommand.get(),
-                passCommand.get(),
-                RobotContainer::inAllianceZone
-            ).withName("Conditional Shooting");
+        // conditionalShootCommand = () ->
+        //     Commands.either(
+        //         shootCommand.get(),
+        //         passCommand.get(),
+        //         RobotContainer::inAllianceZone
+        //     ).withName("Conditional Shooting");
 
-        shootWithBump = () ->
-            Commands.parallel(
-                conditionalShootCommand.get(),
-                Commands.waitSeconds(0.5).andThen(pivot.raisePivot(PivotStates.Middle))
-            ).withName("Shoot with Bump");
+        // shootWithBump = () ->
+        //     Commands.parallel(
+        //         conditionalShootCommand.get(),
+        //         Commands.waitSeconds(0.5).andThen(pivot.raisePivot(PivotStates.Middle))
+        //     ).withName("Shoot with Bump");
 
-        swapIntakeStateClosed = () ->
-            Commands.either(
-                pivot.moveToStateCommand(PivotStates.Closed),
-                pivot.moveToStateCommand(PivotStates.Open),
-                () -> pivot.getState() == PivotStates.Open
-            ).withName("Swap Pivot State to and from Closed");
+        // swapIntakeStateClosed = () ->
+        //     Commands.either(
+        //         pivot.moveToStateCommand(PivotStates.Closed),
+        //         pivot.moveToStateCommand(PivotStates.Open),
+        //         () -> pivot.getState() == PivotStates.Open
+        //     ).withName("Swap Pivot State to and from Closed");
 
-        swapIntakeStateMiddle = () ->
-            Commands.either(
-                pivot.moveToStateCommand(PivotStates.Middle),
-                pivot.moveToStateCommand(PivotStates.Open),
-                () -> pivot.getState() == PivotStates.Open
-            ).withName("Swap Pivot State to and from Middle");
+        // swapIntakeStateMiddle = () ->
+        //     Commands.either(
+        //         pivot.moveToStateCommand(PivotStates.Middle),
+        //         pivot.moveToStateCommand(PivotStates.Open),
+        //         () -> pivot.getState() == PivotStates.Open
+        //     ).withName("Swap Pivot State to and from Middle");
 
-        resetPositionPivot = () ->
-            Commands.parallel(
-                pivot.resetPivot()
-            ).withName("reseting");
+        // resetPositionPivot = () ->
+        //     Commands.parallel(
+        //         pivot.resetPivot()
+        //     ).withName("reseting");
     }
 
 
@@ -239,36 +239,36 @@ public class RobotContainer {
         driveController.povDownRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_RIGHT));
         
 
-        driveController.R1().whileTrue(
-            Commands.parallel(
-                new AimDriving(driveBase, driveController, RobotContainer::getShootingAngle),
-                preShooting.get().andThen(shootWithBump.get())
-            ).withName("Full Shooting")
-        );
-        driveController.cross().whileTrue(preShooting.get().andThen(shootCommandWithNoVision.get()));
+        // driveController.R1().whileTrue(
+        //     Commands.parallel(
+        //         new AimDriving(driveBase, driveController, RobotContainer::getShootingAngle),
+        //         preShooting.get().andThen(shootWithBump.get())
+        //     ).withName("Full Shooting")
+        // );
+        // driveController.cross().whileTrue(preShooting.get().andThen(shootCommandWithNoVision.get()));
 
-        driveController.circle().whileTrue(preShooting.get().andThen(shootCommandWithNoVision2.get()));
+        // driveController.circle().whileTrue(preShooting.get().andThen(shootCommandWithNoVision2.get()));
 
-        driveController.create().onTrue(new InstantCommand(() -> withAutoEject = !withAutoEject));
-        driveController.options().onTrue(swapIntakeStateClosed.get());
+        // driveController.create().onTrue(new InstantCommand(() -> withAutoEject = !withAutoEject));
+        // driveController.options().onTrue(swapIntakeStateClosed.get());
 
-        driveController.L1().whileTrue(feeder.intakeCommand().alongWith(Commands.startEnd(DriveCommand::slowSpeed, DriveCommand::fullSpeed)));
-        driveController.square().whileTrue(feeder.passEjectCommand());
+        // driveController.L1().whileTrue(feeder.intakeCommand().alongWith(Commands.startEnd(DriveCommand::slowSpeed, DriveCommand::fullSpeed)));
+        // driveController.square().whileTrue(feeder.passEjectCommand());
     }
 
     public static void configureNamedCommands(){
-        NamedCommands.registerCommand("close intake", pivot.moveToStateCommand(PivotStates.Closed));
-        NamedCommands.registerCommand("open intake", pivot.moveToStateCommand(PivotStates.Open).andThen(Commands.waitSeconds(0.6))); // was .6 but matan calistenics said it was too much but i dont know i dont want to destroy the intake so its not my responsibility 
+        // NamedCommands.registerCommand("close intake", pivot.moveToStateCommand(PivotStates.Closed));
+        // NamedCommands.registerCommand("open intake", pivot.moveToStateCommand(PivotStates.Open).andThen(Commands.waitSeconds(0.6))); // was .6 but matan calistenics said it was too much but i dont know i dont want to destroy the intake so its not my responsibility 
 
-        NamedCommands.registerCommand("start rollers", new InstantCommand(() -> rollers.setDutyCycle(1)));
-        NamedCommands.registerCommand("stop rollers", new InstantCommand(() -> rollers.stopMotor()));
+        // NamedCommands.registerCommand("start rollers", new InstantCommand(() -> rollers.setDutyCycle(1)));
+        // NamedCommands.registerCommand("stop rollers", new InstantCommand(() -> rollers.stopMotor()));
 
-        NamedCommands.registerCommand("shoot to hub", shootWithBump.get().withTimeout(6));
-        NamedCommands.registerCommand("warm up shooter", warmupShooter.get());
-        NamedCommands.registerCommand("shoot to pass", passCommand.get());
-        NamedCommands.registerCommand("aim to hub", new AimDriving(driveBase, driveController, RobotContainer::angleToHub).withTimeout(0.5));
+    //    NamedCommands.registerCommand("shoot to hub", shootWithBump.get().withTimeout(6));
+      //  NamedCommands.registerCommand("warm up shooter", warmupShooter.get());
+        //NamedCommands.registerCommand("shoot to pass", passCommand.get());
+       // NamedCommands.registerCommand("aim to hub", new AimDriving(driveBase, driveController, RobotContainer::angleToHub).withTimeout(0.5));
 
-        NamedCommands.registerCommand("eject", feeder.ejectCommand());
+      //  NamedCommands.registerCommand("eject", feeder.ejectCommand());
     }
     //#endregion
 
@@ -443,11 +443,11 @@ public class RobotContainer {
     }
 
     public static void updateLogging(){
-        Logger.recordOutput("Shooting/Angle to Hub", angleToHub());
-        Logger.recordOutput("Shooting/Distance To Hub", distanceFromHub().in(Meters));
-        Logger.recordOutput("Shooting/In Alliance Zone", inAllianceZone());
-        Logger.recordOutput("Shooting/Auto Ejecting", withAutoEject);
-        Logger.recordOutput("Shooting/Fuel Approximation", fuelApproximation);
+        // Logger.recordOutput("Shooting/Angle to Hub", angleToHub());
+        // Logger.recordOutput("Shooting/Distance To Hub", distanceFromHub().in(Meters));
+        // Logger.recordOutput("Shooting/In Alliance Zone", inAllianceZone());
+        // Logger.recordOutput("Shooting/Auto Ejecting", withAutoEject);
+        // Logger.recordOutput("Shooting/Fuel Approximation", fuelApproximation);
     }
     //#endregion
 }
