@@ -49,6 +49,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.commands.Shoot;
+import frc.robot.commands.liran;
 import frc.robot.commands.Drive.AimDriving;
 import frc.robot.commands.Drive.DriveCommand;
 import frc.robot.commands.Drive.MinorAdjust;
@@ -64,6 +65,8 @@ import frc.robot.subsystems.Intake.Pivot.Pivot;
 import frc.robot.subsystems.Intake.Pivot.PivotConstants.PivotStates;
 import frc.robot.subsystems.Intake.Rollers.Rollers;
 import frc.robot.subsystems.Kicker.Kicker;
+import frc.robot.subsystems.Liran.kicker;
+import frc.robot.subsystems.Liran.kickerconstants;
 
 
 public class RobotContainer {
@@ -82,6 +85,7 @@ public class RobotContainer {
 
     public static Feeder feeder;
     public static Vision vision;
+    public static liran klkL;
 
     public static LoggedDashboardChooser<Command> autoChooser;
     public static LoggedDashboardChooser<String> sideChooser;
@@ -120,7 +124,7 @@ public class RobotContainer {
         rollers = new Rollers();
         // shooter = new Shooter();
         // kicker = new Kicker();
-
+        klkL=new liran();
         feeder = new Feeder(rollers, funnel);
         vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose, driveBase::reset);
 
@@ -134,6 +138,11 @@ public class RobotContainer {
     //#region Commands
     public static void configureCommands(){
         fuelIncrementer = () -> fuelApproximation += 3;
+
+        
+
+        driveController.L1().whileTrue(klkL);
+        //driveController.PS().onTrue(driveBase.resetOnlyDirection());
 
         // warmupShooter = () ->
         //     Commands.either(

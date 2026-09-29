@@ -32,7 +32,7 @@ public class KickerIOReal implements KickerIO {
             KickerConstants.MOTOR_CONSTANTS.FOLLOW_MOTOR_ID,
             true,
             KickerConstants.MOTOR_CONSTANTS.MOTOR_TYPE);
-
+ 
         followMotor.setMotorInverted(KickerConstants.MOTOR_CONSTANTS.LEAD_MOTOR_IS_INVERTED);
         followMotor.setMotorIdleMode(false);
         // followMotor.setMotorAsFollower(leadMotor, KickerConstants.MOTOR_CONSTANTS.FOLLOW_MOTOR_INVERTED_FROM_LEAD);
