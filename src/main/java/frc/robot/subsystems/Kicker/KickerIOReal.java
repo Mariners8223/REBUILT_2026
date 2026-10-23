@@ -43,7 +43,7 @@ public class KickerIOReal implements KickerIO {
         followMotor.setDutyCycle(targetDutyCycle);
     }
 
-    public double getLeadVelocity(){
+    public double    getLeadVelocity(){
         return leadMotor.getVelocity();
     }
     public double getLeadSetpoint(){
