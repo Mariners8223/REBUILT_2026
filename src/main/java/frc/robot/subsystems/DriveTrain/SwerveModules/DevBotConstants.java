@@ -7,25 +7,25 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.util.PIDFGains;
 
 public enum DevBotConstants {
-    FRONT_LEFT(3, 37, 8,
+    FRONT_LEFT(60, 5, 9,
             false, false, -0.359619,
             new PIDFGains(50, 0, 0), //Drive motor PID
             new PIDFGains(25, 20, 0, 0, 0.001, 0.05), //Steer motor PID
             0.12069, 2.4564, 0.50368, 0.40371, 1.7422, 0.25834),
 
-    FRONT_RIGHT(4, 40, 14,
+    FRONT_RIGHT(7, 4, 11,
     false, false, 0.081299,
             new PIDFGains(50, 0, 0), //Drive motor PID
             new PIDFGains(25, 20, 0, 0,  0.001, 0.05), //Steer motor PID
             0.045019, 2.4174, 0.76547, 0.3149, 1.7429, 0.10638),
 
-    BACK_LEFT(12, 5, 50,
+    BACK_LEFT(32, 12, 14,
     false, false, 0.003174,
             new PIDFGains(50, 0, 0), //Drive motor PID
             new PIDFGains(25, 20, 0, 0, 0.001, 0.05), //Steer motor PID
             0.061361, 2.5147, 0.54424, 0.35616, 1.6894, 0.1793),
 
-    BACK_RIGHT(9, 44, 11,
+    BACK_RIGHT(33, 22, 50,
     false, false, -0.08252,
             new PIDFGains(50, 0, 0), //Drive motor PID
             new PIDFGains(25, 20, 0, 0, 0.001, 0.05), //Steer motor PID
@@ -35,7 +35,7 @@ public enum DevBotConstants {
     public static final double STEER_GEAR_RATIO = 12.8;
     public static final double WHEEL_RADIUS_METERS = 0.0508;
     public static final double WHEEL_CIRCUMFERENCE_METERS = 2 * Math.PI * WHEEL_RADIUS_METERS;
-    public static final double MAX_WHEEL_LINEAR_VELOCITY = 4.7;
+    public static final double MAX_WHEEL_LINEAR_VELOCITY = 3.5;
     public static final int DRIVE_MOTOR_CURRENT_LIMIT = 60;//112
     public static final int DRIVE_MOTOR_CURRENT_THRESHOLD = 20;//70-s
 
